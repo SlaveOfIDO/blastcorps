@@ -13,3 +13,19 @@ assets/
 build/
 expected/
 junk/
+
+# IntelliJ ignores
+.idea/
+
+# CMake ignores. Only necessary to enable CLion to scan code
+CMakeFiles
+.cmake
+CMakeLists.txt
+CMakeCache.txt
+cmake_install.cmake
+
+# other code for inspiration
+other/
+
+# custom ignores
+web-tools

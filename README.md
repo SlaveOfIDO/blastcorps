@@ -17,7 +17,7 @@ A prior copy of the game is required to extract the assets.
 
 # Clone the repo
 
-Clone recursivley to initialize the splat submodule.
+Clone recursively to initialize the splat submodule.
 
 ```
 git clone https://github.com/retroplastic/blastcorps.git --recursive
@@ -98,6 +98,10 @@ ninja -C build-tools
 ```
 
 # Related
+
+* retroplatic's [blastcorps](https://github.com/retroplastic/blastcorps)
+
+  The base of this repo
 
 * mkst's [blastcorps](https://github.com/mkst/blastcorps)
 
