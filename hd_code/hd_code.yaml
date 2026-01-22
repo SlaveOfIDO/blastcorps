@@ -24,7 +24,7 @@ segments:
     - [0x14B30, c, hd_code/14B30] # done
     - [0x168B0, c, hd_code/168B0] # done
     - [0x17210, c, hd_code/17210] # done
-    - [0x17A70, asm, hd_code/17A70]
+    - [0x17A70, c, hd_code/17A70] # done
     - [0x17E10, asm, hd_code/17E10]
     - [0x1C460, asm, hd_code/1C460]
     - [0x1D990, asm, hd_code/1D990]
@@ -207,7 +207,8 @@ segments:
     - [0xC4520, .rodata, hd_code/14B30] # done
     - [0xC4720, .rodata, hd_code/168B0] # done
     - [0xC47D0, .rodata, hd_code/17210] # done
-    - [0xC4870, bin, hd_code/hd_code_rodata_rest2]
+    - [0xC4870, .rodata, hd_code/17A70] # done
+    - [0xC48B0, bin, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]
