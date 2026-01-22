@@ -74,13 +74,12 @@ void func_hd_code_802CFB00();                          /* extern */
 void func_hd_code_802AB670(u8);                                /* extern */
 void func_hd_code_802A467C(u8*, void*, void*, s32);
 void* func_hd_code_802D4E20(s32);
-void func_hd_code_8025BBE8(u8, s32, s32);                   /* extern */
+void func_hd_code_8025BBE8(u16 arg0, s8 arg1, s8 arg2);
 void func_hd_code_80260D7C(f32);                       /* extern */
 f32 func_hd_code_80260DF0();                        /* extern */
 void func_hd_code_80275270(u64, s32);                   /* extern */
 void func_hd_code_80285EF4(s32);                       /* extern */
 void func_hd_code_8028B240();                          /* extern */
-void func_hd_code_8029A7E4(const char*, ...);            /* extern */
 void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2);
 void func_hd_code_8024F520(Gfx**, struct Model1*);                        /* extern */
 void func_hd_code_8024FC2C(Gfx**, u8);                         /* extern */
@@ -259,7 +258,6 @@ extern void guFrustumF(float mf[4][4], float l, float r, float b, float t,
 
 void func_hd_code_8026B8F8();                          /* extern */
 s32 func_hd_code_8026F92C(u64);                 /* extern */
-s32 areWeFading();                        /* extern */
 void func_hd_code_80285110(s32);                         /* extern */
 u8 func_hd_code_80285814();                         /* extern */
 void func_hd_code_80285A78(s32*, s32*);                /* extern */
@@ -608,7 +606,6 @@ extern u8 saveIt[]; // safe name
 extern u8 saveLevel; // safe name: saveLevel
 extern u8 D_8039C541;
 extern s16 D_8039CAA0;
-extern u8 D_hd_code_802E8BD0;
 extern u8 D_hd_code_802E8BD8;
 extern s32 levelno;
 extern s32 D_hd_code_802E8BEC;
@@ -664,7 +661,6 @@ extern u8 D_80364A6C;
 extern u8 D_80364A6D;
 extern u8 D_80364A84;
 extern u8 D_80364A86;
-extern u64 D_hd_code_80364A90;
 extern u64 D_80364A98;
 extern f32 D_80364AB4;
 extern f32 D_80364AB8;
@@ -715,7 +711,6 @@ extern u8 D_80370C1E;
 extern u8 D_80370C21;
 extern u8 D_80370C24;
 extern u8 D_80370C27;
-extern u8 D_hd_code_802E8BD0;
 extern f64 D_hd_code_80308B48;
 extern f64 D_hd_code_80308B50;
 extern f64 D_hd_code_80308B58;
@@ -768,7 +763,6 @@ extern s32 D_803FCD48;
 extern s32 D_803FCD4C;
 extern s32 D_803FCD50;
 extern s16 D_803FCD68;
-extern u8 D_hd_code_802E8BD0;
 extern s32 levelno;
 extern f32 D_hd_code_802E8BE0;
 extern u8 D_hd_code_802E8BE4;
@@ -834,7 +828,6 @@ extern f64 D_hd_code_80308A98;
 extern u32 D_hd_code_80358060;
 extern u8 D_hd_code_803643D6;
 extern u8 D_hd_code_803643D7;
-extern u8 D_hd_code_803643DB;
 extern s32 D_hd_code_803643E0;
 extern s32 D_hd_code_803643E4;
 extern s32 D_hd_code_803643E8;
@@ -928,7 +921,6 @@ extern s16 D_80367BD6;
 extern Gfx* D_8036E694;
 extern s8 D_803B9888;
 extern void* D_803FF600;
-extern u8 D_hd_code_802E8BD0;
 extern s32 levelno;
 extern Gfx* D_80358070;
 extern u8 D_803BE739;
@@ -1002,7 +994,6 @@ extern u8 D_80364A6A;
 extern u8 D_80364A6C;
 extern u8 D_80364A84;
 extern u8 D_80364A86;
-extern u64 D_hd_code_80364A90;
 extern u8 D_80364AC1;
 extern u8 playerNumber;
 extern u8 D_80364B81[];
@@ -1030,7 +1021,6 @@ extern s32* D_803F7824;
 extern u8 D_hd_code_803643DB;
 extern s32 D_80364A58;
 extern s16 D_8036BB18;
-extern u8 D_hd_code_802E8BD0;
 extern s32 levelno;
 extern u8 playerNumber;
 extern struct S_802F5804 D_hd_code_802F5804[0x1DA];
@@ -1079,7 +1069,6 @@ u64 D_80364AA0;
 u64 D_hd_code_80364A90;
 u64 D_80364A98;
 u64 D_80364AD0;
-u64 D_hd_code_80364A90;
 u64 D_80364A98;
 u64 D_80364A98;
 u64 D_80364A98; // bss or data?

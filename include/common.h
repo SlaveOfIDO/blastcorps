@@ -41,4 +41,7 @@ typedef s32   qs205_t;
 #define qs1616(n)                     ((qs1616_t)((n)*0x00010000))
 #define qs205(n)                      ((qs205_t)((n)*0x00000020))
 
+
+void func_hd_code_8029A7E4(const char*, ...);            /* extern */
+
 #endif

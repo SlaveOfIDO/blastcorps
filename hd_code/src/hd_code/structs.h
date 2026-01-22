@@ -227,4 +227,13 @@ struct S_803F4030 {
   /* 0xEC */ u8 padEC[0xFC - 0xEC];
 };
 
+
+struct S_803669AC {
+  /* 0x00 */ u8 unk0;
+  /* 0x01 */ u8 unk1;
+  /* 0x02 */ u8 unk2;
+  /* 0x03 */ s8 unk3;
+  /* 0x04 */ s8 unk4;
+};
+
 #endif
