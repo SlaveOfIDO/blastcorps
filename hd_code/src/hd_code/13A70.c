@@ -1,24 +1,8 @@
 #include <ultra64.h>
 #include "common.h"
 #include "structs.h"
-
-u8 func_hd_code_8027EED8(s32, s32, s16*);           /* extern */
-u8 func_hd_code_802ABEDC(s32, s32, s32);            /* extern */
-void func_hd_code_802D4F68(Mtx*, f32, f32, f32);                    /* extern */
-void func_hd_code_80284E54(Gfx*, s32, s32, s32, s32, s32); /* extern */
-extern s32 D_803EBBF8;
-extern Gfx D_803650B0[];
-extern Mtx D_803651F0;
-extern Mtx D_80365230;
-extern Mtx D_80365270;
-extern Mtx D_803652B0;
-extern Mtx D_803652F0;
-extern struct Textures D_803643C8;
-extern s32 D_80365330;
-extern struct S_803F4030 D_803F4030[];
-extern struct S_803F4030* D_803F7654;
-extern struct Model1 D_2000000;
-extern s32 levelno;
+#include "functions.h"
+#include "variables.h"
 
 Vp D_hd_code_802E8C60 = {
   {
@@ -26,7 +10,6 @@ Vp D_hd_code_802E8C60 = {
     {0x0080, 0x0080, 0x01FF, 0x0000}
   }
 };
-
 
 void func_hd_code_80258230(u8 arg0, s32 arg1, s16 arg2, s16 arg3) {
   D_803643C8.end->unk1022 = arg0;

@@ -1,77 +1,9 @@
 #include "common.h"
+#include "functions.h"
 #include "structs.h"
+#include "variables.h"
 
-void func_hd_code_802A1040(u16, void*, s32);             /* extern */
-void proutSprintf(u8*, const char*, ...);                       /* extern */
-void func_hd_code_80275270(u64, s32);                   /* extern */
-void func_hd_code_80275390(u64);                      /* extern */
-s32 areWeFading();                                /* extern */
-void func_hd_code_802AFC28(s32);                       /* extern */
-void func_hd_code_802B0D70(s32);                       /* extern */
-void func_hd_code_802B2988(s32);                       /* extern */
-void func_hd_code_802B40D4(s32);                       /* extern */
-void func_hd_code_802B58C8(s32);                       /* extern */
-void func_hd_code_802B7308(s32);                       /* extern */
-void func_hd_code_802C80A0(s32);                       /* extern */
-void func_hd_code_802CB660(s32);                       /* extern */
-void func_hd_code_802D2524(s32);                       /* extern */
-void func_hd_code_802B2D7C();                          /* extern */
-void func_hd_code_802AFFD4();                          /* extern */
-void func_hd_code_802B1228();                          /* extern */
-void func_hd_code_802D0C68();                          /* extern */
-void func_hd_code_802B448C();                          /* extern */
-void func_hd_code_802B5CD8();                          /* extern */
-void func_hd_code_802C5714();                          /* extern */
-void func_hd_code_802C9F54();                          /* extern */
-s32 func_hd_code_8025B300(u8*);                     /* extern */
-void InitiateDma(void*, void*, s32*, u8, s32, s32);           /* extern */
-void func_hd_code_80257490(u8** arg0, s32 arg1);
-s8 func_hd_code_80272C5C(s32*, s32, s32, s32, s32, f32);    /* extern */
-
-extern f32 D_hd_code_802E8C84[2];
-extern u8 D_80365458[];
-extern u8 D_8036698C;
-extern u8* D_803669B0;
 u8 D_8039CAF0[0x50 * 0x200];
-extern u8 D_80365360[];
-extern u16 D_803653B0[];
-extern u8 D_8036698C;
-extern s32 D_803669A0;
-extern u16 D_80370C30;
-extern s8 D_80370C32;
-extern s8 D_80370C33;
-extern u64 D_hd_code_80364A90;
-extern u8 D_hd_code_802E8BD8;
-extern u8 D_hd_code_803643DB;
-extern u8 D_hd_code_802E8BD0;
-extern s16 D_8036BB1C;
-extern s8 D_80364A50;
-extern u8 D_hd_code_803643D6;
-extern u16 D_80365558[];
-extern s32 D_803649E8;
-extern u8 D_hd_code_80364456;
-extern s32 D_803669B4;
-extern s32 D_6A9F10; // attract.raw
-extern s32 D_6AD3F0; // 6AD3F0.bin
-extern u8 D_8036698C;
-extern s32 D_803669A0;
-extern u8* D_80358070;
-extern u16 D_80366A04;
-extern s32 D_80366990;
-extern u8 D_803669A8;
-extern u8 D_80365580;
-extern struct S_803669AC D_80365588[];
-extern s32 D_80366990;
-extern s32 D_803669A0;
-extern struct S_803669AC* D_803669AC;
-extern s32 D_hd_code_802E8CB0;
-extern struct S_803669AC D_80365588[];
-extern s32 D_80366990;
-extern s32 D_8036699C;
-extern u16 D_803669A4;
-extern s8 D_803669A6;
-extern s8 D_803669A7;
-extern u64 D_80364A98;
 
 void func_hd_code_8025B070(void) {
   s32 sp4;

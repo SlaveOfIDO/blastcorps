@@ -24,4 +24,18 @@
 		((height)-1) << G_TEXTURE_IMAGE_FRAC)			\
 }
 
+
+#define SET_COLOR_VERTEX(VERT, x,y,z, tx, ty, r, g, b, a) (VERT).v.ob[0] = (x);\
+(VERT).v.ob[1] = (y);\
+(VERT).v.ob[2] = (z);\
+(VERT).v.flag = 0;\
+(VERT).v.tc[0] = (tx);\
+(VERT).v.tc[1] = (ty);\
+(VERT).v.cn[0] = (r);\
+(VERT).v.cn[1] = (g);\
+(VERT).v.cn[2] = (b);\
+(VERT).v.cn[3] = (a)
+
+#define ASPECT_RATIO 1.33333333f
+
 #endif

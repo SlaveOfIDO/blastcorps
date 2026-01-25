@@ -227,6 +227,20 @@ struct S_803F4030 {
   /* 0xEC */ u8 padEC[0xFC - 0xEC];
 };
 
+typedef struct {
+  s32 unk0;
+  s16 unk4;
+  s16 unk6;
+  u8 unk8;
+  u8 unk9;
+  s16 pad;
+} UnknownStruct_80364A00;
+
+
+struct S_802F8BE4 {
+  u32 unk0;
+  u8 pad4[0x1C - 0x04];
+};
 
 struct S_803669AC {
   /* 0x00 */ u8 unk0;
@@ -235,5 +249,43 @@ struct S_803669AC {
   /* 0x03 */ s8 unk3;
   /* 0x04 */ s8 unk4;
 };
+
+struct S_80366BC4 {
+  u8 unk0;
+  u8 unk1;
+};
+struct S_802FA8B0 {
+  Vtx unk00;
+  Vtx unk10;
+  Vtx unk20;
+  Vtx unk30;
+};
+
+
+struct S_8020C070 {
+  /* 0x00 */ u16 unk0;
+  /* 0x02 */ u16 unk2;
+  /* 0x04 */ u16 unk4;
+  /* 0x06 */ u16 unk6;
+  /* 0x08 */ u16 unk8;
+  /* 0x0A */ char* unkA; // e.g. "QUIT GAME!"
+  /* 0x0E */ s32* unkE;
+  /* 0x10 */ s32* unk10;
+  /* 0x14 */ u32 unk14;
+  ///* 0x18 */ u8 unk18;
+}; // Size unsure
+
+struct S_80365340 {
+  u16 unk0;
+  u16 unk2;
+  s32 unk4;
+  s32 unk8;
+};
+
+struct S_802D4E10 {
+  u8 pad0[0x2C];
+  s32 unk2C;
+};
+
 
 #endif

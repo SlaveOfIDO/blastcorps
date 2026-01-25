@@ -1,43 +1,13 @@
 #include <ultra64.h>
 #include "common.h"
 #include "structs.h"
-
-struct S_80365340 {
-  u16 unk0;
-  u16 unk2;
-  s32 unk4;
-  s32 unk8;
-};
-
-void func_hd_code_8025B070();
-s32 func_hd_code_8025B0B8(u16);                     /* extern */
-s32 func_hd_code_8025B498(s32, u32, u8*, u16*);     /* extern */
-void func_hd_code_802597D8(u8*, u8*, s32);               /* extern */
-void func_hd_code_8025946C(Gfx**, struct Model1*);     /* extern */
-void func_hd_code_80259824(Gfx**, struct Model1*);   /* extern */
-void func_hd_code_80259EC4(s32 arg0, u8* sp44_a1, u16* sp48_a2, u8 arg3, s32 arg4, f32 arg5, s32 arg6, f32 arg7, s32 arg8, u8 sp67, u8 sp44_a10, u8 sp44_a11, u8 sp44_a12, u8 sp44_a13, u8 sp44_a14, u8 sp44_a15, u8 sp44_a16, u8 sp44_a17, u8 sp44_a18, u8 sp44_a19, u8 sp48_a20, u8 sp48_a21, u8 sp48_a22, u8 sp48_a23, u8 sp48_a24, u8 sp48_a25);
+#include "functions.h"
+#include "variables.h"
 
 s32 D_80364A9C;
-extern u32 D_80358070;
 Vtx* D_80365348[2];
-extern u8 D_8035805C;
 s32 D_80365350;
-extern struct S_80365340 *D_80365340;
-extern s32 maxCharacters;
-extern s32 characterIndex;
-extern s32 D_hd_code_802E8C78;
-extern f32 D_hd_code_802E8C84[2];
-extern s16 D_hd_code_802E8C8C[2];
-extern s16 D_hd_code_802E8C90[2];
-extern u16 D_hd_code_802E8C94[2];
-extern s8 D_hd_code_80308CE0;
-extern s32 D_hd_code_802E8C70;
-extern s32 D_hd_code_802E8C78;
-extern s32 characterIndex;
-
 s32 D_80364A9C;
-extern u64 D_80364A98;
-extern s32 levelno;
 
 void func_hd_code_802592F0() {
   s32 sp1C;
@@ -179,7 +149,7 @@ void func_hd_code_80259C24(Gfx** arg0, struct Model1* arg1) {
 }
 
 
-void func_hd_code_80259CCC(struct Model1* arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11, s32 arg12, s32 arg13) {
+void func_hd_code_80259CCC(struct Model1* arg0, const char* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11, s32 arg12, s32 arg13) {
   func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13);
 }
 
