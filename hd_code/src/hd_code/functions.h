@@ -308,7 +308,7 @@ Gfx* func_hd_code_8024C414(struct Model1*, s32*);             /* extern */
 void func_hd_code_802559F8(Gfx*, s32*);                 /* extern */
 void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, s32 *arg5, s32 *arg6, s32 *arg7);
 void func_hd_code_8025C5D0();                          /* extern */
-s32 func_hd_code_8025C878(s32, void*, u8, s32*);    /* extern */
+s32 func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3);    /* extern */
 void func_hd_code_80261570(f32);                         /* extern */
 void func_hd_code_80262BF4();                          /* extern */
 s32 func_hd_code_802639B4(s32, void*, s32*);        /* extern */
@@ -459,5 +459,12 @@ s32 func_hd_code_8025B300(u8*);                     /* extern */
 void InitiateDma(void*, void*, s32*, u8, s32, s32);           /* extern */
 void func_hd_code_80257490(u8** arg0, s32 arg1);
 s8 func_hd_code_80272C5C(s32*, s32, s32, s32, s32, f32);    /* extern */
+s32 func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2);
+void func_hd_code_8025E1E0(Gfx**);                      /* extern */
+void func_hd_code_802609F0();                          /* extern */
+void func_hd_code_80260A10();                          /* extern */
+void func_hd_code_80260E2C();                          /* extern */
+s32 func_hd_code_8026205C(s32);                        /* extern */
+void func_hd_code_80278318();                          /* extern */
 
 #endif

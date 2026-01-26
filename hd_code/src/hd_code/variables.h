@@ -720,5 +720,27 @@ extern void* D_803156D8;
 extern void* D_8035806C;
 extern void* D_803FF600;
 extern void* func_init_8021ED00;
+extern s8 D_80366A10;
+extern s8 D_80366A11;
+extern s32 D_80366BA4;
+extern s32 D_80366BA8;
+extern u32 D_80366BBC;
+extern struct S_802FA8B0* D_80366BA0;
+extern s16 D_80366A00;
+extern s16 D_80366A02;
+extern s16 D_80366A14;
+extern s16 D_80366A16;
+extern s32 D_487050; // titlelogo_usa
+extern s32 D_489E70; // titlepicture_usa
+extern s32 D_48F5A0; // nink.raw
+extern s32 D_80366BB0[];
+extern s16 D_80366A00;
+extern s16 D_80366A02;
+extern s16 D_80366A14;
+extern s16 D_80366A16;
+extern s32 D_80366BB0[];
+extern struct S_80366BC0 D_80366BC0;
+extern u32 D_hd_code_802E8CD0[2];
+
 
 #endif

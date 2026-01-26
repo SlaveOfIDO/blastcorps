@@ -255,10 +255,7 @@ struct S_80366BC4 {
   u8 unk1;
 };
 struct S_802FA8B0 {
-  Vtx unk00;
-  Vtx unk10;
-  Vtx unk20;
-  Vtx unk30;
+  Vtx v[4];
 };
 
 
@@ -285,6 +282,12 @@ struct S_80365340 {
 struct S_802D4E10 {
   u8 pad0[0x2C];
   s32 unk2C;
+};
+
+struct S_80366BC0 {
+  u8 unk0;
+  u8 pad1;
+  u16 unk2;
 };
 
 
