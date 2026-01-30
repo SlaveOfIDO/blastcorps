@@ -251,3 +251,36 @@ __osCurrentTime = 0x803FF310;
 __osBaseCounter = 0x803FF318;
 
 guNormalize = 0x802DB900;
+
+// from banjo kazooie decomp
+alHeapDBAlloc = 0x802D6B10;
+alEvtqNew = 0x802D6E3C;
+alLink = 0x802D6EE0;
+alSynAddPlayer = 0x802D6F70;
+alEvtqPostEvent = 0x802D6C8C;
+alEvtqNextEvent = 0x802D6DB0;
+g_sndPlayerPtr = 0x802E8CEC;
+alGlobals = 0x803065C0;
+sndNewPlayerInit = 0x8025EDF0;
+g_sndSfxSlotVolume = 0x80366C28;
+sndPlayerVoiceHandler = 0x8025F044;
+sndHandleEvent = 0x8025F0F0;
+
+sndDisposeSound = 0x8026005C;
+sndCreatePitchEvent = 0x802600D8;
+sndRemoveEvents = 0x80260148;
+sndCountAllocList = 0x80260210;
+alSynSetVol = 0x802D71F0;
+alSynStartVoice = 0x802D7290;
+alSynSetPan = 0x802D7320;
+alSynSetPitch = 0x802D73B0;
+alSynSetFXMix = 0x802D7440;
+sndPlaySfx = 0x80260650;
+alSynAllocVoice = 0x802D70A8;
+g_sndAllocatedVoicesCount = 0x802E8CF0;
+sndSetupSound = 0x80260300;
+sndDeactivate = 0x802608C8;
+sndUnlinkClearSound = 0x802604FC;
+sndSetPriority = 0x80260618;
+sndGetPlayingState = 0x80260634;
+sndCreatePostEvent = 0x80260AB8;

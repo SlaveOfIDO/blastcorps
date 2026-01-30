@@ -442,7 +442,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
             func_hd_code_8026AF6C(D_80366BC0.unk2 | 0x8000 | 0x2000);
             D_8036BB1A = -1;
             if (D_80366BC0.unk2 == 5) {
-                func_hd_code_80260650(D_80367738, func_hd_code_8026205C(2), NULL);
+                sndPlaySfx(D_80367738, func_hd_code_8026205C(2), NULL);
             }
         }
         D_80366BC0.unk0 = D_hd_code_803643D7;
@@ -484,7 +484,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
             func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
             switch (levelno) {                      /* switch 1; irregular */
             case 49:                                /* switch 1 */
-                func_hd_code_80260650(D_80367738, 0x31U, NULL);
+                sndPlaySfx(D_80367738, 0x31U, NULL);
                 func_hd_code_80261570(0.0f);
                 break;
             case 50:                                /* switch 1 */
@@ -493,7 +493,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 func_hd_code_80261570(0.0f);
                 break;
             default:                                /* switch 1 */
-                func_hd_code_80260650(D_80367738, 0x31U, NULL);
+                sndPlaySfx(D_80367738, 0x31U, NULL);
                 D_hd_code_802E8BD8 = 1;
                 if ((D_8036BB18 != -1) || (func_hd_code_8026B10C() != 0)) {
                     func_hd_code_8026AF6C(0x4000U);
@@ -510,7 +510,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
             switch (levelno) {                      /* switch 2; irregular */
             case 49:                                /* switch 2 */
                 if (D_80366BC4.unk1 == 0) {
-                    func_hd_code_80260650(D_80367738, 0x32U, NULL);
+                    sndPlaySfx(D_80367738, 0x32U, NULL);
                     D_80366BC4.unk1 = 1U;
                 }
                 break;
@@ -525,7 +525,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 break;
             default:                                /* switch 2 */
                 if (D_80366BC4.unk1 == 0) {
-                    func_hd_code_80260650(D_80367738, 0x32U, NULL);
+                    sndPlaySfx(D_80367738, 0x32U, NULL);
                     D_80366BC4.unk1 = 1U;
                 }
 

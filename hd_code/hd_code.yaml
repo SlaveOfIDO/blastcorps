@@ -210,7 +210,7 @@ segments:
     - [0xC47D0, .rodata, hd_code/17210] # done
     - [0xC4870, .rodata, hd_code/17A70] # done
     - [0xC48B0, .rodata, hd_code/17E10] # done
-    - [0xC48E0, bin, hd_code/1A630]
+    - [0xC48E0, .rodata, hd_code/1A630]
     - [0xC4A30, bin, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]

@@ -903,6 +903,7 @@ typedef struct {
     ALEventQueue        evtq;
     ALEvent             nextEvent;
     ALSynth             *drvr;          /* reference to the client driver   */
+    s32 pad;
     s32                 target;
     void                *sndState;
     s32                 maxSounds;

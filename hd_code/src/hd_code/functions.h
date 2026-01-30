@@ -26,7 +26,7 @@ u8 func_hd_code_802CFA58();                          /* extern */
 u8 func_hd_code_802D0B90();                          /* extern */
 s32 func_hd_code_8024B418(u8);                       /* extern */
 u8 func_hd_code_8024B4B8();                         /* extern */
-s32 func_hd_code_80260634(s32);                     /* extern */
+s32 sndGetPlayingState(s32);                     /* extern */
 void func_hd_code_802794E4();                          /* extern */
 void func_hd_code_8028B720();                          /* extern */
 void func_hd_code_8028F93C();                          /* extern */
@@ -368,7 +368,7 @@ void func_hd_code_802C2054();                          /* extern */
 void func_hd_code_802CF1A4();                          /* extern */
 void func_hd_code_802D291C();                          /* extern */
 s32 func_hd_code_802D4E10(struct S_802D4E10* arg0);                     /* extern */
-void func_hd_code_802608C8(s32);                       /* extern */
+void sndDeactivate(s32);                       /* extern */
 void func_hd_code_80260DFC();                          /* extern */
 void func_hd_code_80261040();                          /* extern */
 s32 func_hd_code_8026A610(s32, s32, s32, s32);      /* extern */
@@ -377,8 +377,8 @@ void func_hd_code_8026AF6C(u16);                         /* extern */
 s32 func_hd_code_8026B10C();                        /* extern */
 void func_hd_code_80277EDC(s32, s32, s32, s32);                /* extern */
 u8 func_hd_code_8024AFA8(s32);                              /* extern */
-s32 func_hd_code_80260634(s32);                             /* extern */
-void func_hd_code_80260650(s32, u8, s32*);                      /* extern */
+s32 sndGetPlayingState(s32);                             /* extern */
+void sndPlaySfx(s32, u8, s32*);                      /* extern */
 void func_hd_code_802794E4();                                  /* extern */
 void func_hd_code_8028B720();                                  /* extern */
 void func_hd_code_8028F6B4(u8);                                /* extern */
@@ -389,7 +389,7 @@ void func_hd_code_802AE860();                                  /* extern */
 void func_hd_code_8026AF6C(u16);                         /* extern */
 void func_hd_code_802609D0();                          /* extern */
 void func_hd_code_802C1DD0(s32);                       /* extern */
-void func_hd_code_80260650(s32, u8, s32*);                      /* extern */
+void sndPlaySfx(s32, u8, s32*);                      /* extern */
 void func_hd_code_80261570(f32);                         /* extern */
 s32 func_hd_code_8026B10C();                        /* extern */
 s32 areWeFading();                                /* extern */
