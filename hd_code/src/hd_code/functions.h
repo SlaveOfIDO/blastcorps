@@ -240,8 +240,8 @@ void func_hd_code_8025B9D0(s32, s32*);                 /* extern */
 void func_hd_code_8025BB38();                          /* extern */
 void func_hd_code_8025BB50();                          /* extern */
 void func_hd_code_8025D184();                          /* extern */
-void func_hd_code_802609D0();                          /* extern */
-void func_hd_code_80260B40(s32, s32);                      /* extern */
+void sndDeactivateAllSfxByFlag_1();                          /* extern */
+void sndSetSfxSlotVolume(s32, s32);                      /* extern */
 void func_hd_code_80260E80();                          /* extern */
 void func_hd_code_80260EE0(s32);                         /* extern */
 void func_hd_code_8026101C();                          /* extern */
@@ -387,7 +387,7 @@ void func_hd_code_802AB478(u8);                                /* extern */
 s32 func_hd_code_802AB878(u8);                              /* extern */
 void func_hd_code_802AE860();                                  /* extern */
 void func_hd_code_8026AF6C(u16);                         /* extern */
-void func_hd_code_802609D0();                          /* extern */
+void sndDeactivateAllSfxByFlag_1();                          /* extern */
 void func_hd_code_802C1DD0(s32);                       /* extern */
 void sndPlaySfx(s32, u8, s32*);                      /* extern */
 void func_hd_code_80261570(f32);                         /* extern */
@@ -461,8 +461,8 @@ void func_hd_code_80257490(u8** arg0, s32 arg1);
 s8 func_hd_code_80272C5C(s32*, s32, s32, s32, s32, f32);    /* extern */
 s32 func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2);
 void func_hd_code_8025E1E0(Gfx**);                      /* extern */
-void func_hd_code_802609F0();                          /* extern */
-void func_hd_code_80260A10();                          /* extern */
+void sndDeactivateAllSfxByFlag_11();                          /* extern */
+void sndDeactivateAllSfxByFlag_3();                          /* extern */
 void func_hd_code_80260E2C();                          /* extern */
 s32 func_hd_code_8026205C(s32);                        /* extern */
 void func_hd_code_80278318();                          /* extern */

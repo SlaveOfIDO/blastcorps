@@ -136,7 +136,7 @@ void Thread3(void* arg0) {
           }
           case 0x0020000000000000:
           {
-            func_hd_code_802609D0();
+            sndDeactivateAllSfxByFlag_1();
             func_hd_code_80255DC8();
             func_hd_code_802A0700();
             func_hd_code_8025D184();
@@ -733,7 +733,7 @@ void Thread3(void* arg0) {
           case 0x0000001000000000:
           {
             func_hd_code_80260EE0(0x18);
-            func_hd_code_80260B40(0, 0);
+            sndSetSfxSlotVolume(0, 0);
             func_hd_code_80297ECC();
             func_hd_code_8026AF6C(0x8015);
             D_hd_code_802E8BD8 = 1;
@@ -977,7 +977,7 @@ void func_hd_code_802475D8(void) {
     case 0: {
         if (((u8) D_hd_code_802E8BD8 != 0) && ((D_hd_code_802E8BD0 = 1, D_hd_code_802E8BD4 = 0, D_hd_code_802E8BD8 = 0, D_803156F4 = D_8035805C ^ 1, (0 != 0)) || (D_hd_code_80364A90 & 0x104))) {
             if (D_8036EB99 == 0) {
-                func_hd_code_80260B40(0, 0);
+                sndSetSfxSlotVolume(0, 0);
             }
             func_hd_code_80261570(0.5f);
             if (D_hd_code_80364A90 == 4 && ((D_hd_code_803643DB != 0) || (D_80364AC1 != 0)) && (D_8036BB18 == 0)) {
@@ -1427,8 +1427,8 @@ block_275:
             case 0x2:
                 if (D_80366A18 != 0) {
                     sndPlaySfx(D_80367738, 0x1EU, NULL);
-                    func_hd_code_80260B40(0, 0);
-                    func_hd_code_80260B40(5, 0);
+                    sndSetSfxSlotVolume(0, 0);
+                    sndSetSfxSlotVolume(5, 0);
                     func_hd_code_80275390(0x20000000000000);
                 }
                 break;

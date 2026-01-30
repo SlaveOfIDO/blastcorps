@@ -233,6 +233,7 @@ typedef union ALSndpEvent_u {
 // Maybe: currently initializing state?
 #define AL_UNKOWN_5     5
 
+#define DEFAULT_SETUP_PITCH_SHIFT (-0x1770)
 
 struct S_802E8CE4 {
   // address 800243E4 and 800243E8

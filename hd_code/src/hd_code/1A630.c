@@ -7,7 +7,7 @@
 ALMicroTime sndPlayerVoiceHandler(void *node);
 void sndDisposeSound(ALSoundState*);                     /* extern */
 void sndCreatePitchEvent(ALSoundState*);                     /* extern */
-void sndRemoveEvents(ALEventQueue *evtq, ALSoundState *state, u16 eventType);           /* extern */
+void sndRemoveEvents(ALEventQueue *evtq, ALSoundState *state, u16 eventType);
 s32 sndCountAllocList(s16 *allocListCount, s16 *freeListCount);                /* extern */
 void alSynStartVoice(ALSynth *s, ALVoice *voice, ALWaveTable *w);           /* extern */
 void alSynSetPan(ALSynth *s, ALVoice *voice, ALPan pan);            /* extern */
@@ -17,12 +17,13 @@ ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 soundIndex, ALSoundS
 void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event);
 ALSoundState *sndSetupSound(struct ALBankAlt_s *, ALSound *);            /* extern */
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
+void sndUnlinkClearSound(ALSoundState *state);
 
-extern struct S_802E8CE8 D_hd_code_802E8CE0;
 extern ALSndPlayer *g_sndPlayerPtr;
 extern s16* g_sndSfxSlotVolume;
-extern struct S_802E8CE4 D_hd_code_802E8CE4;
 extern s16 g_sndAllocatedVoicesCount;
+ALLink D_hd_code_802E8CE0;
+extern ALLink *D_hd_code_802E8CE8;
 
 void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig)
 {
@@ -46,7 +47,7 @@ void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig)
   ptr = alHeapAlloc(sfxSeqpConfig->heap, 1, sfxSeqpConfig->maxEvents * sizeof(ALEventListItem));
   alEvtqNew(&g_sndPlayerPtr->evtq, (ALEventListItem *)ptr, sfxSeqpConfig->maxEvents);
 
-  D_hd_code_802E8CE0.g_sndPlayerSoundStatePtr = g_sndPlayerPtr->sndState;
+  D_hd_code_802E8CE8 = g_sndPlayerPtr->sndState;
 
   for(i = 1; i < sfxSeqpConfig->maybeSndStateCount; i++)
   {
@@ -82,10 +83,7 @@ void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig)
   g_sndPlayerPtr->nextDelta = alEvtqNextEvent(&g_sndPlayerPtr->evtq, &g_sndPlayerPtr->nextEvent);
 }
 
-
 /**
- * 89DC    70007DDC
- *
  * Almost identical to \n64devkit\ultra\usr\src\pr\libsrc\libultra\audio\sndplayer.c
  * method ALMicroTime _sndpVoiceHandler(void *node).
  */
@@ -116,7 +114,6 @@ ALMicroTime sndPlayerVoiceHandler(void *node)
 
   return sndp->nextDelta;
 }
-
 
 void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
 {
@@ -208,7 +205,7 @@ void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
 
                         if (compare_result)
                         {
-                            tstate = (ALSoundState*)D_hd_code_802E8CE4.node.next;
+                            tstate = (ALSoundState*)D_hd_code_802E8CE0.prev;
                             do
                             {
                                 if (!(tstate->unk3e & 0x52)
@@ -490,22 +487,241 @@ void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
     }
 }
 
+void sndDisposeSound(ALSoundState* state) {
+  if (state->unk3e & 4)
+  {
+    alSynStopVoice(g_sndPlayerPtr->drvr, &state->voice);
+    alSynFreeVoice(g_sndPlayerPtr->drvr, &state->voice);
+  }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndDisposeSound.s")
+  sndUnlinkClearSound(state);
+  sndRemoveEvents(&g_sndPlayerPtr->evtq, state, 0xffff);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndCreatePitchEvent.s")
+void sndCreatePitchEvent(ALSoundState *state)
+{
+  ALSndpEvent evt;
+  f32 pitch;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndRemoveEvents.s")
+  pitch = (f32) (alCents2Ratio(state->sound->keyMap->detune) * (f32)state->pitch_2c.f);
+  evt.pitch.state = state;
+  evt.pitch.type = AL_SNDP_PITCH_EVT;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndCountAllocList.s")
+  // TODO: surely there's a better way to match target, especially since there's already a union type used with f32 for pitch.
+  evt.unks32.val8 = *(s32*)&pitch;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndSetupSound.s")
+  alEvtqPostEvent(&g_sndPlayerPtr->evtq, (ALEvent *)&evt, DELTA_33_MS);
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndUnlinkClearSound.s")
+void sndRemoveEvents(ALEventQueue *evtq, ALSoundState *state, u16 eventType)
+{
+  ALLink              *thisNode;
+  ALLink              *nextNode;
+  ALEventListItem     *thisItem;
+  ALEventListItem     *nextItem;
+  ALSndpEvent         *thisEvent;
+  OSIntMask           mask;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndSetPriority.s")
+  mask = osSetIntMask(OS_IM_NONE);
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/sndGetPlayingState.s")
+  thisNode = evtq->allocList.next;
+
+  while(thisNode != NULL)
+  {
+    nextNode = thisNode->next;
+    thisItem = (ALEventListItem *)thisNode;
+    nextItem = (ALEventListItem *)nextNode;
+    thisEvent = (ALSndpEvent *)&thisItem->evt;
+
+    if (thisEvent->common.state == state && (((u16)thisItem->evt.type & (u16)eventType) != 0))
+    {
+      if (nextItem != NULL)
+      {
+        nextItem->delta += thisItem->delta;
+      }
+
+      alUnlink(thisNode);
+      alLink(thisNode, &evtq->freeList);
+    }
+
+    thisNode = nextNode;
+  }
+
+  osSetIntMask(mask);
+}
+
+s32 sndCountAllocList(s16 *allocListCount, s16 *freeListCount)
+{
+  OSIntMask           mask;
+  u16 i;
+  u16 j;
+  u16 k;
+  ALLink *freeListNodeForward;
+  ALLink *freeListNodeBackward;
+  ALLink *allocListNodeForward;
+
+  mask = osSetIntMask(OS_IM_NONE);
+
+  freeListNodeForward = D_hd_code_802E8CE0.next;
+  freeListNodeBackward =  D_hd_code_802E8CE8;
+  allocListNodeForward =  D_hd_code_802E8CE0.prev;
+
+  for (i = 0; freeListNodeForward != NULL; freeListNodeForward = freeListNodeForward->next)
+  {
+    i++;
+  }
+
+
+  for (j = 0; freeListNodeBackward != NULL; freeListNodeBackward = freeListNodeBackward->next)
+  {
+    j++;
+  }
+
+  for (k = 0; allocListNodeForward != NULL; allocListNodeForward = allocListNodeForward->prev)
+  {
+    k++;
+  }
+
+
+  *allocListCount = (s16) j;
+  *freeListCount = (s16) i;
+
+  osSetIntMask(mask);
+
+  return k;
+}
+
+ALSoundState *sndSetupSound(struct ALBankAlt_s *soundBank, ALSound* sound)
+{
+  ALSoundState *state;
+  ALKeyMap *keymap;
+  s32 decayTimeFlag;
+  OSIntMask mask;
+
+  keymap = sound->keyMap;
+  state = (ALSoundState *)D_hd_code_802E8CE8;
+
+  if (state != NULL)
+  {
+    mask = osSetIntMask(OS_IM_NONE);
+
+    D_hd_code_802E8CE8 = (void *)state->link.next;
+    alUnlink(&state->link);
+
+    if (D_hd_code_802E8CE0.next != NULL)
+    {
+      state->link.next = (void *)D_hd_code_802E8CE0.next;
+      state->link.prev = NULL;
+      D_hd_code_802E8CE0.next->prev = (void *)state;
+      D_hd_code_802E8CE0.next = (void *)state;
+    }
+    else
+    {
+      state->link.prev = NULL;
+      state->link.next = state->link.prev;
+      D_hd_code_802E8CE0.next = (void *)state;
+      D_hd_code_802E8CE0.prev = (void *)state;
+    }
+
+
+
+    decayTimeFlag = (sound->envelope->decayTime == -1);
+
+    state->sound = sound;
+    state->priority = decayTimeFlag + 0x40;
+    state->playingState = AL_UNKOWN_5;
+    state->pitch_2c.f = 1.0f;
+    state->unk38 = 2;
+    state->unk3e = (keymap->keyMax & (u8)0xf0);
+    state->state = NULL;
+
+    if ((state->unk3e & 0x20) != 0)
+    {
+      state->pitch_28 = alCents2Ratio(((keymap->keyBase * 100) + DEFAULT_SETUP_PITCH_SHIFT));
+    }
+    else
+    {
+      state->pitch_28 = alCents2Ratio((((keymap->keyBase * 100) + keymap->detune) + DEFAULT_SETUP_PITCH_SHIFT));
+    }
+
+    if (decayTimeFlag)
+    {
+      state->unk3e |= 2;
+    }
+
+    state->fxMix = (u8)AL_DEFAULT_FXMIX;
+    state->pan = (u8)AL_PAN_CENTER;
+    state->vol = (u16)0x7fff;
+
+    osSetIntMask(mask);
+  }
+
+  return state;
+}
+
+void sndUnlinkClearSound(ALSoundState *state)
+{
+  if (state == (ALSoundState *)D_hd_code_802E8CE0.next)
+  {
+    D_hd_code_802E8CE0.next = state->link.next;
+  }
+
+  if (state == (ALSoundState *)D_hd_code_802E8CE0.prev)
+  {
+    D_hd_code_802E8CE0.prev = state->link.prev;
+  }
+
+  alUnlink(&state->link);
+
+  if (D_hd_code_802E8CE8 != NULL)
+  {
+    state->link.next = D_hd_code_802E8CE8;
+    state->link.prev = NULL;
+    D_hd_code_802E8CE8->prev = (void *)state;
+    D_hd_code_802E8CE8 = state;
+  }
+  else
+  {
+    state->link.prev = NULL;
+    state->link.next = state->link.prev;
+    D_hd_code_802E8CE8 = state;
+  }
+
+  if ((state->unk3e & 4) != 0)
+  {
+    g_sndAllocatedVoicesCount--;
+  }
+
+  state->playingState = AL_STOPPED;
+
+  if (state->state != NULL)
+  {
+    if (state == (ALSoundState *)state->state->link.next)
+    {
+      state->state->link.next = NULL;
+    }
+
+    state->state = NULL;
+  }
+}
+
+void sndSetPriority(ALSoundState *state, u8 priority)
+{
+  if (state != NULL)
+  {
+    state->priority = (s16)priority;
+  }
+}
+
+u8 sndGetPlayingState(ALSoundState *state)
+{
+  if (state != NULL)
+  {
+    return state->playingState;
+  }
+
+  return AL_STOPPED;
+}
 
 ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 sndId, ALSoundState *pendingState) {
     ALSoundState *newState;  // sp 0x54
@@ -611,15 +827,62 @@ void sndDeactivate(ALSoundState *state)
   }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_80260934.s")
+void sndDeactivateAllSfxByFlag(u8 flag)
+{
+  OSIntMask mask;
+  ALSndpEvent evt;
+  ALSoundState *item;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_802609D0.s")
+  mask = osSetIntMask(OS_IM_NONE);
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_802609F0.s")
+  item = (ALSoundState *)D_hd_code_802E8CE0.next;
+  while (item != NULL)
+  {
+    evt.common.type = AL_SNDP_DEACTIVATE_EVT;
+    evt.common.state = item;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_80260A10.s")
+    if ((item->unk3e & flag) == flag)
+    {
+      item->unk3e = (item->unk3e & (~(s16)(0x10)));
+      alEvtqPostEvent(&g_sndPlayerPtr->evtq, (ALEvent *)&evt, 0);
+    }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_80260A30.s")
+    item = (ALSoundState *)item->link.next;
+  }
+
+  osSetIntMask(mask);
+}
+
+void sndDeactivateAllSfxByFlag_1(void)
+{
+  sndDeactivateAllSfxByFlag(1);
+}
+
+void sndDeactivateAllSfxByFlag_11(void)
+{
+  sndDeactivateAllSfxByFlag(0x11);
+}
+
+void sndDeactivateAllSfxByFlag_3(void)
+{
+  sndDeactivateAllSfxByFlag(3);
+}
+
+void func_hd_code_80260A30(u8 arg0) {
+  OSIntMask sp24;
+  ALSoundState* sp20;
+  s32 sp1C;
+
+  sp24 = osSetIntMask(1U);
+  sp1C = 0;
+  for(sp20 = (ALSoundState*)D_hd_code_802E8CE0.next; sp20 != NULL; sp20 = sp20->link.next) {
+    if ((sp20->sound->keyMap->keyMin & 0x3F) == arg0) {
+      sndDeactivate(sp20);
+    }
+    sp1C += 1;
+  }
+  osSetIntMask(sp24);
+}
 
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2) {
   ALSndpEvent evt;
@@ -636,6 +899,29 @@ void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2) {
   func_hd_code_8029A7E4("WARNING: Attempt to modify NULL sound aborted\n");
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_80260B24.s")
+u16 sndGetSfxSlotVolume(u8 sfxIndex)
+{
+  return g_sndSfxSlotVolume[sfxIndex];
+}
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1A630/func_hd_code_80260B40.s")
+void sndSetSfxSlotVolume(u8 arg0, u16 arg1) {
+  OSIntMask sp34;
+  ALSoundState* sp30;
+  s32 sp2C;
+  ALEvent event;
+
+  sp34 = osSetIntMask(1U);
+  sp30 = (ALSoundState*)D_hd_code_802E8CE0.next;
+  g_sndSfxSlotVolume[arg0] = (s16) arg1;
+  sp2C = 0;
+  while (sp30 != NULL) {
+    if ((sp30->sound->keyMap->keyMin & 0x3F) == arg0) {
+      event.type = 0x800;
+      event.msg.spseq.seq = sp30;
+      alEvtqPostEvent(&g_sndPlayerPtr->evtq, &event, 0);
+    }
+    sp2C += 1;
+    sp30 = sp30->link.next;
+  }
+  osSetIntMask(sp34);
+}

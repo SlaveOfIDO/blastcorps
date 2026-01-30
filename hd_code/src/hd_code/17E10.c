@@ -409,8 +409,8 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
             func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
             D_80366BB8 = 0;
             if ((D_80364AF0[playerNumber].unk18[levelno] > 0 && D_80364AF0[playerNumber].unk18[levelno] < 6)?1:0 != 0) {
-                func_hd_code_802609F0();
-                func_hd_code_80260A10();
+                sndDeactivateAllSfxByFlag_11();
+                sndDeactivateAllSfxByFlag_3();
                 D_80366BC0.unk2 = 5;
                 D_80366BC4.unk0 = 0;
                 if (D_80364AA8 != 1) {
@@ -420,19 +420,19 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
             } else {
                 switch (levelno) {                  /* irregular */
                 case 40:
-                    func_hd_code_80260A10();
+                    sndDeactivateAllSfxByFlag_3();
                     func_hd_code_80260DFC();
                     D_80366BC0.unk2 = 0x1E;
                     D_80366BC4.unk0 = 0;
                     break;
                 case 50:
-                    func_hd_code_80260A10();
+                    sndDeactivateAllSfxByFlag_3();
                     func_hd_code_80260EE0(0x25);
                     D_80366BC0.unk2 = 0x23;
                     D_80366BC4.unk0 = 0;
                     break;
                 default:
-                    func_hd_code_80260A10();
+                    sndDeactivateAllSfxByFlag_3();
                     D_80366BC0.unk2 = 5;
                     func_hd_code_80260E2C();
                     D_80366BC4.unk0 = 1;
@@ -480,7 +480,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
     sp60 = D_803156C4;
     if (D_hd_code_803643D6 != 0) {
         if (D_803643D8 == 0) {
-            func_hd_code_802609D0();
+            sndDeactivateAllSfxByFlag_1();
             func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
             switch (levelno) {                      /* switch 1; irregular */
             case 49:                                /* switch 1 */

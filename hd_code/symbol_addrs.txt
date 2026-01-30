@@ -284,3 +284,14 @@ sndUnlinkClearSound = 0x802604FC;
 sndSetPriority = 0x80260618;
 sndGetPlayingState = 0x80260634;
 sndCreatePostEvent = 0x80260AB8;
+
+alSynStopVoice = 0x802D74E0;
+alSynFreeVoice = 0x802D7560;
+alCents2Ratio = 0x802D7610;
+alUnlink = 0x802D6EB0;
+sndDeactivateAllSfxByFlag = 0x80260934;
+sndDeactivateAllSfxByFlag_1 = 0x802609D0;
+sndDeactivateAllSfxByFlag_11 = 0x802609F0;
+sndDeactivateAllSfxByFlag_3 = 0x80260A10;
+sndGetSfxSlotVolume = 0x80260B24;
+sndSetSfxSlotVolume = 0x80260B40;
