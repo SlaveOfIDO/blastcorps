@@ -2,6 +2,7 @@
 #define _FUNCTIONS_H
 
 #include <ultra64.h>
+#include "snd.h"
 #include "structs.h"
 
 void Thread1(void*);
@@ -243,7 +244,7 @@ void func_hd_code_8025D184();                          /* extern */
 void sndDeactivateAllSfxByFlag_1();                          /* extern */
 void sndSetSfxSlotVolume(s32, s32);                      /* extern */
 void func_hd_code_80260E80();                          /* extern */
-void func_hd_code_80260EE0(s32);                         /* extern */
+void func_hd_code_80260EE0(u8);                         /* extern */
 void func_hd_code_8026101C();                          /* extern */
 u8 func_hd_code_80261A44(u64);                 /* extern */
 void func_hd_code_80261E9C(u64);                  /* extern */
@@ -378,7 +379,7 @@ s32 func_hd_code_8026B10C();                        /* extern */
 void func_hd_code_80277EDC(s32, s32, s32, s32);                /* extern */
 u8 func_hd_code_8024AFA8(s32);                              /* extern */
 s32 sndGetPlayingState(s32);                             /* extern */
-void sndPlaySfx(s32, u8, s32*);                      /* extern */
+ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, u16 soundIndex, ALSoundState *pendingState);
 void func_hd_code_802794E4();                                  /* extern */
 void func_hd_code_8028B720();                                  /* extern */
 void func_hd_code_8028F6B4(u8);                                /* extern */
@@ -389,7 +390,6 @@ void func_hd_code_802AE860();                                  /* extern */
 void func_hd_code_8026AF6C(u16);                         /* extern */
 void sndDeactivateAllSfxByFlag_1();                          /* extern */
 void func_hd_code_802C1DD0(s32);                       /* extern */
-void sndPlaySfx(s32, u8, s32*);                      /* extern */
 void func_hd_code_80261570(f32);                         /* extern */
 s32 func_hd_code_8026B10C();                        /* extern */
 s32 areWeFading();                                /* extern */

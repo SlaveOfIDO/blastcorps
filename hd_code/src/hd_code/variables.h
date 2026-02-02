@@ -1,9 +1,9 @@
 #ifndef _VARIABLES_H
 #define _VARIABLES_H
 
-#include <PR/os.h>
+#include <PR/libaudio.h>
 #include "structs.h"
-
+#include <PR/os.h>
 
 extern Gfx D_1000010[];
 extern Gfx D_1000038[];
@@ -276,12 +276,7 @@ extern s32 D_803669E8;
 extern s32 D_803669EC;
 extern s32 D_803669F0;
 extern struct S_802D4E10* D_80367734;
-extern s32 D_80367738;
-extern s32 D_80367738;
-extern s32 D_80367738;
-extern s32 D_80367738;
-extern s32 D_80367738;
-extern s32 D_80367738;
+extern ALBank* D_80367738;
 extern s32 D_80367740;
 extern s32 D_8036B8B4;
 extern s32 D_8036B8B8;
