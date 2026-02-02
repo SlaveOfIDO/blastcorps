@@ -279,11 +279,6 @@ struct S_80365340 {
   s32 unk8;
 };
 
-struct S_802D4E10 {
-  u8 pad0[0x2C];
-  s32 unk2C;
-};
-
 struct S_80366BC0 {
   u8 unk0;
   u8 pad1;

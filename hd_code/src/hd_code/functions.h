@@ -368,7 +368,7 @@ s32 func_hd_code_802C1B9C();                        /* extern */
 void func_hd_code_802C2054();                          /* extern */
 void func_hd_code_802CF1A4();                          /* extern */
 void func_hd_code_802D291C();                          /* extern */
-s32 func_hd_code_802D4E10(struct S_802D4E10* arg0);                     /* extern */
+s32 func_hd_code_802D4E10(ALSeqPlayer* arg0);                     /* extern */
 void sndDeactivate(s32);                       /* extern */
 void func_hd_code_80260DFC();                          /* extern */
 void func_hd_code_80261040();                          /* extern */
