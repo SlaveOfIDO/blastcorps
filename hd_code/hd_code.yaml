@@ -196,9 +196,14 @@ segments:
     - [0xA0A30, asm, hd_code/A0A30]
     - [0xA0A40, asm, hd_code/A0A40]
     - [0xA0AA0, asm, hd_code/A0AA0]
-    - [0xA0C30, bin, hd_code/00000] # has data for later segments?
+    - [0xA0C30, bin, hd_code/00000] # has data for later segments
     - [0xA44A0, .data, hd_code/13A70] # done
-    - [0xA44B0, bin, hd_code/hd_code_data_rest2 ]
+    - [0xA44B0, .data, hd_code/14B30] # done
+    - [0xA44F0, .data, hd_code/17210] # done
+    - [0xA4510, .data, hd_code/17E10] # done
+    - [0xA4520, .data, hd_code/1A630] # done
+    - [0xA4540, .data, hd_code/1C460] # done
+    - [0xA4770, bin, hd_code/hd_code_data_rest2 ]
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, bin, hd_code/hd_code_data_rest3 ]

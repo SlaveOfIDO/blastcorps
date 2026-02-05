@@ -4,6 +4,19 @@
 #include "functions.h"
 #include "variables.h"
 
+// Data
+s32 D_hd_code_802E8C70 = 0;
+s32 characterIndex = 0;
+s32 D_hd_code_802E8C78 = 0;
+s32 pad1 = 0; // unused struct data?
+s32 pad2 = 0x20200000; // unused struct data?
+f32 D_hd_code_802E8C84[2] = { 0.6f, 0.95f };
+s16 D_hd_code_802E8C8C[2] = { 0x002A, 0x1000 };
+s16 D_hd_code_802E8C90[2] = { 0x0026, 0x1005 };
+u16 D_hd_code_802E8C94[2] = { 0x0020, 0x1002 };
+u16 D_hd_code_802E8C98[2] = { 0x0000, 0x0FFE };
+u16 D_hd_code_802E8C9C[4] = { 0x0023, 0x1001, 0x1003, 0x0FFE };
+
 s32 D_80364A9C;
 Vtx* D_80365348[2];
 s32 D_80365350;

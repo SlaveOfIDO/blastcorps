@@ -19,11 +19,15 @@ ALSoundState *sndSetupSound(struct ALBankAlt_s *, ALSound *);            /* exte
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
 void sndUnlinkClearSound(ALSoundState *state);
 
-extern ALSndPlayer *g_sndPlayerPtr;
 extern s16* g_sndSfxSlotVolume;
-extern s16 g_sndAllocatedVoicesCount;
-ALLink D_hd_code_802E8CE0;
-extern ALLink *D_hd_code_802E8CE8;
+
+// Data
+ALLink D_hd_code_802E8CE0 = { NULL, NULL };
+ALLink *D_hd_code_802E8CE8 = NULL;
+ALSndPlayer *g_sndPlayerPtr = (ALSndPlayer *)0x80366BD0; // TODO: find correct bss var?
+s16 g_sndAllocatedVoicesCount = 0;
+
+
 
 void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig)
 {

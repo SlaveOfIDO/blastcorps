@@ -5,6 +5,9 @@
 #include <PR/gbi.h>
 #include <PR/mbi.h>
 
+// Data
+u32 D_hd_code_802E8CD0[2] = { 0x1E, 0x50 };
+
 void func_hd_code_8025C5D0(void) {
     switch (D_hd_code_802E8BEC) {
     case 0:

@@ -3,6 +3,11 @@
 #include "structs.h"
 #include "variables.h"
 
+// Data
+char D_hd_code_802E8CB0[16] = "\t \0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+s32 D_hd_code_802E8CC0 = 8;
+s32 D_hd_code_802E8CC4 = 0;
+
 s32 D_80366994;
 s32 D_80366998;
 
@@ -48,7 +53,7 @@ void func_hd_code_8025BB50(void) {
   D_80366998 = D_80366990;
   D_80366994 = 0;
   D_803669AC = D_80365588;
-  D_80365580 = func_hd_code_80272C5C(&D_hd_code_802E8CB0, 0, 1, 1, 1, 1.0f);
+  D_80365580 = func_hd_code_80272C5C(D_hd_code_802E8CB0, 0, 1, 1, 1, 1.0f);
   D_803669A0 = (s32) D_803669AC[D_80366994].unk2;
 }
 
