@@ -312,7 +312,7 @@ void func_hd_code_8025C5D0();                          /* extern */
 s32 func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3);    /* extern */
 void func_hd_code_80261570(f32);                         /* extern */
 void func_hd_code_80262BF4();                          /* extern */
-s32 func_hd_code_802639B4(s32, void*, s32*);        /* extern */
+Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2);
 void func_hd_code_8026420C();                          /* extern */
 void func_hd_code_8026510C();                          /* extern */
 void func_hd_code_802683E0();                          /* extern */
@@ -379,7 +379,7 @@ s32 func_hd_code_8026B10C();                        /* extern */
 void func_hd_code_80277EDC(s32, s32, s32, s32);                /* extern */
 u8 func_hd_code_8024AFA8(s32);                              /* extern */
 s32 sndGetPlayingState(s32);                             /* extern */
-ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, u16 soundIndex, ALSoundState *pendingState);
+ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 soundIndex, ALSoundState *pendingState);
 void func_hd_code_802794E4();                                  /* extern */
 void func_hd_code_8028B720();                                  /* extern */
 void func_hd_code_8028F6B4(u8);                                /* extern */
@@ -466,5 +466,11 @@ void sndDeactivateAllSfxByFlag_3();                          /* extern */
 void func_hd_code_80260E2C();                          /* extern */
 s32 func_hd_code_8026205C(s32);                        /* extern */
 void func_hd_code_80278318();                          /* extern */
+s32 func_hd_code_8026205C(s32 arg0);                       /* extern */
+u8 func_hd_code_802C1B1C();                        /* extern */
+s32 func_hd_code_8026394C(s32, s32, u16, u16, s32, s32); /* extern */
+void func_hd_code_80264A34(u8*, u16, s32);           /* extern */
+s32 func_hd_code_802D8260(ALSeqPlayer*);            /* extern */
+void func_hd_code_802D82A0(ALSeqPlayer*, s32);         /* extern */
 
 #endif

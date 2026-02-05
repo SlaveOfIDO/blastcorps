@@ -295,3 +295,6 @@ sndDeactivateAllSfxByFlag_11 = 0x802609F0;
 sndDeactivateAllSfxByFlag_3 = 0x80260A10;
 sndGetSfxSlotVolume = 0x80260B24;
 sndSetSfxSlotVolume = 0x80260B40;
+
+D_80367BF9 = 0x80367BF9;
+D_80367D53 = 0x80367D53;

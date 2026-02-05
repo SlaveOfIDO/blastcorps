@@ -417,7 +417,7 @@ extern s8 D_803A7426;
 extern s8 D_803A7430;
 extern s8 D_803B9888;
 extern s8 D_803ED40C;
-extern s8 D_803F7806;
+extern u8 D_803F7806;
 extern s8 D_hd_code_802FDB14;
 extern s8 D_hd_code_80307FD4;
 extern s8 D_hd_code_8030802C;
@@ -438,7 +438,6 @@ extern struct S_802E8F94 D_hd_code_802E8F94[];
 extern struct S_802E8F94 D_hd_code_802E8F94[];
 extern struct S_802E8F94 D_hd_code_802E8F94[];
 extern struct S_802E8FCA D_hd_code_802E8FCA[60];
-extern struct S_802F5804 D_hd_code_802F5804[0x1DA];
 extern struct S_802F5804 D_hd_code_802F5804[0x1DA];
 extern struct S_802F8BDC D_hd_code_802F8BDC[0x7A]; // 8 bytes 122 = 0x7A
 extern struct S_802F8BE4 D_hd_code_802F8BE4[10]; // Struct of size 0x1C, length of array is wrong
@@ -736,6 +735,34 @@ extern s16 D_80366A16;
 extern s32 D_80366BB0[];
 extern struct S_80366BC0 D_80366BC0;
 extern u32 D_hd_code_802E8CD0[2];
+extern u8 D_80367B54;
+extern u16 D_80367B56[];
+extern u16 D_80367B58[];
+extern u8 D_80367B60[4][0x14];
+extern s32 D_80367BBC;
+extern struct S_80367BF8 D_80367BF8;
+extern u8 D_80367BFA;
+extern u8 D_80367BFB;
+extern u16 D_80367BFC;
+extern u8 D_80367D10;
+extern s32 D_80367D28;
+extern u8 D_8036DCD4;
+extern s32 D_80364A9C;
+extern s32 D_80367BC0;
+extern u32 D_80367BC4;
+extern struct S_80367C04 *D_80367C04;
+extern s32 D_80367C08;
+extern u8 D_80367C18;
+extern u8 D_80367C40;
+extern s16 D_80367C68[];
+extern s16 D_80367CB8[];
+extern u8 D_hd_code_802E9FA0[2];
+extern s32 D_80367B50;
+extern u8 D_80367BFE;
+extern u32 D_80367BDC[];
+extern u8 D_80367C01;
+extern s16 D_80367D50;
+extern struct S_80367D52 D_80367D52;
 
 
 #endif

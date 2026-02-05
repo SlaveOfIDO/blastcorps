@@ -54,7 +54,8 @@
     - addiu is used with arrays
     - lw is used with pointers
 - passing zero to a function: generates *move* instruction if integer, *li* instruction if float
--
+- useless loads are often generated when using s32 instead of u32
+
 ## stack placement
 
 - if the stack size is still wrong even if all temporaries are deleted, then 64 bit arithmetic could potentially create shadow 64 bit stack variables. Try to fold 64 bit arithmetic together

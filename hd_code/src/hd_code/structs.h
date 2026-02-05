@@ -93,8 +93,7 @@ struct S_802F5804 {
   u16 unk2;
   s32 unk4;
   s32 unk8;
-  s16 unkC;
-  s16 unkE;
+  u8* unkC;
   void* unk10;  // some kind of address
   s32 unk14;
   u8 unk18; // safe type
@@ -285,5 +284,37 @@ struct S_80366BC0 {
   u16 unk2;
 };
 
+
+struct S_80367C04
+{
+  u16 pad0;
+  u16 unk2;
+  u16 unk4;
+  u16 unk6;
+  u16 unk8;
+  u16 unkA;
+  u16 unkC;
+  u16 unkE;
+  u16 unk10;
+  u8 unk12[4];
+  u8 pad16[2];
+  u32 unk18;
+  u8 pad1C[0x24 - 0x1C];
+  s16 unk24;
+  s16 pad26;
+  u8 pad28[0x36 - 0x28];
+  u16 unk36;
+};
+
+struct S_80367BF8 {
+  u8 unk0;
+  u8 unk1;
+};
+
+struct S_80367D52
+{
+  u8 unk0;
+  u8 unk1;
+};
 
 #endif
