@@ -165,10 +165,10 @@ void func_hd_code_802A0700();                          /* extern */
 void LoadLevel(u32 arg0, void* arg1, s32* arg2);                         /* extern */
 void func_hd_code_80257234();                          /* extern */
 void func_hd_code_8025BD98();                          /* extern */
-s32 func_hd_code_80262150(s32);                       /* extern */
+void func_hd_code_80262150(u8);                       /* extern */
 s32 func_hd_code_802621DC(s32);                       /* extern */
-s32 func_hd_code_80262238(s32);                       /* extern */
-s32 func_hd_code_80262320(s32);                       /* extern */
+void func_hd_code_80262238(u8);                       /* extern */
+void func_hd_code_80262320(u8);                       /* extern */
 s32 func_hd_code_80264C20(s32);                       /* extern */
 s32 func_hd_code_80268664(s32);                       /* extern */
 s32 func_hd_code_8026A988();                          /* extern */
@@ -467,7 +467,7 @@ void func_hd_code_80278318();                          /* extern */
 s32 func_hd_code_8026205C(s32 arg0);                       /* extern */
 u8 func_hd_code_802C1B1C();                        /* extern */
 s32 func_hd_code_8026394C(s32, s32, u16, u16, s32, s32); /* extern */
-void func_hd_code_80264A34(u8*, u16, s32);           /* extern */
+void func_hd_code_80264A34(char*, u16, u16);           /* extern */
 s32 func_hd_code_802D8260(ALSeqPlayer*);            /* extern */
 void func_hd_code_802D82A0(ALSeqPlayer*, s32);         /* extern */
 

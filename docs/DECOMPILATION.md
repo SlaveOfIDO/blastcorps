@@ -69,6 +69,10 @@
 
 - early returns hinder dead code elimination (at least in O1)
 
+## jump tables
+
+- target has jump table but source has not even if all cases are written down?
+  -> try to insert more empty cases with a sole break; After a certain amount of cases IDO chooses to use jump tables, even if the cases could be optimized away
 
 ## unsorted
 - byte-aligned comparison of highest bit: gets optimized into signed comparison, even if unsigned (e.g. (fp->x191_flag_b0) becomes lb at,0x191(fp); bgez at, lbl)

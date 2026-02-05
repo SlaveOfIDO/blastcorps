@@ -102,18 +102,6 @@ struct S_802F5804 {
   u8 pad1B;
 }; // size: 0x1C / 28
 
-
-// This is a struct of size 0x44
-struct S_802E8F94 {
-  u8 unk0;
-  u8 unk[0x25];
-  s16 unk26;
-  s16 unk28;
-  s16 unk2A;
-  u8 unk2[24];
-};
-
-
 struct Texture {
   u8 data[0x1000];
   f32 unk1000;
@@ -285,9 +273,11 @@ struct S_80366BC0 {
 };
 
 
+
 struct S_80367C04
 {
-  u16 pad0;
+  u8 unk0;
+  u8 pad1;
   u16 unk2;
   u16 unk4;
   u16 unk6;
@@ -299,11 +289,20 @@ struct S_80367C04
   u8 unk12[4];
   u8 pad16[2];
   u32 unk18;
-  u8 pad1C[0x24 - 0x1C];
+  s16 unk1C;
+  s16 unk1E;
+  u8 pad20[0x24 - 0x20];
   s16 unk24;
-  s16 pad26;
-  u8 pad28[0x36 - 0x28];
+  s16 unk26;
+  s16 unk28;
+  s16 unk2A;
+  u8 pad2C[0x36 - 0x2C];
   u16 unk36;
+  u8 unk38;
+  u8 pad39[0x3C - 0x39];
+  u32 unk3C;
+  u16 unk40;
+  u16 unk42;
 };
 
 struct S_80367BF8 {
@@ -316,5 +315,39 @@ struct S_80367D52
   u8 unk0;
   u8 unk1;
 };
+
+struct S_802E8F74 {
+  u8 unk0;
+  u8 pad1;
+  s16 unk2;
+  s16 unk4;
+  s16 unk6;
+};
+
+struct S_80367BCC {
+  s32 pad0;
+  u8 unk4;
+  u8 pad5;
+  char unk6[0x1A - 0x6];
+  u8 unk1A;
+  u8 unk1B[0x26 - 0x1B];
+  u8 unk26;
+  u8 pad27;
+  float unk28;
+  u8 unk2C;
+  u8 unk2D;
+  u8 pad2E;
+  u8 pad2F;
+};
+
+struct S_802E8F68 {
+  u8 unk0;
+  u8 pad1;
+  s16 unk2;
+  s16 unk4;
+  s16 unk6;
+  s16 unk8;
+};
+
 
 #endif

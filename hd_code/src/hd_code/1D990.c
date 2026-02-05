@@ -3,31 +3,196 @@
 #include "functions.h"
 #include "structs.h"
 
+void func_hd_code_80262840();                          /* extern */
+void func_hd_code_80262FD0();                          /* extern */
+void func_hd_code_8026303C();                          /* extern */
+void func_hd_code_80263140();                          /* extern */
+void func_hd_code_80263358();                          /* extern */
+void func_hd_code_802633E0();                          /* extern */
+void sndDeactivateAllSfxByFlag_11();                   /* extern */
+void sndDeactivateAllSfxByFlag_3();                    /* extern */
 Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1);
 s32 func_hd_code_80272ED8(s32, s32, u8, s32, s32, s32, f32); /* extern */
 s32 func_hd_code_80274868(s32);                     /* extern */
 s32 func_hd_code_80274AA4(s32);                     /* extern */
 extern u8 D_80367BB0[];
-struct S_80367BCC {
-  u8 pad0[0x1A];
-  u8 unk1A;
-  u8 unk1B[0x26 - 0x1B];
-  u8 unk26;
-};
 extern struct S_80367BCC* D_80367BCC;
 extern struct S_80367BCC* D_80367BD0;
 extern u8 D_80367BD4;
 extern u8 D_80367BD5;
 extern s16 D_80367BD8;
 extern u16 D_80367BF4;
+extern u16 D_80367D08;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80262150.s")
 
+u8 func_hd_code_8026FA38(Gfx**, s32*);                /* extern */
+extern s32 D_6A32B0;
+extern s32 D_6A8DA0;
+extern u32 D_80367BE0[];
+extern s32 D_80367C0C;
+extern s32 D_803F7C10;
+extern s32 D_803F7C14;
+extern s32 D_803EFEB0;
+extern s32 D_803EFEB4;
+extern s32 D_803EFEB8;
+extern s32 D_803EFEBC;
+extern s8 D_803EFEC8;
+extern struct S_802E8F68 D_hd_code_802E8F68[];
+
+extern struct S_802E8F74 D_hd_code_802E8F74[];
+extern Gfx* D_hd_code_802E9F90;
+extern s32 D_hd_code_802E9F9C;
+extern struct S_80367BCC D_hd_code_802F49F4[];
+extern u32 D_80364AA8;
+extern struct S_80367C04 *D_80367C04;
+extern struct S_80367C04 D_hd_code_802E8F94[];
+
+extern u8 D_80367C10;
+extern u8 D_hd_code_802E8F30[];
+
+void func_hd_code_80262150(u8 arg0) {
+  s32 sp4;
+
+  D_80364438 = 45.0f;
+  sp4 = 0;
+  D_80367C10 = 0;
+  while(sp4 < 5 && !D_80367C10) {
+    if (D_hd_code_802E8F30[sp4] == arg0) {
+      D_80364438 = 80.0f;
+      D_80367C10 = 1;
+    } else {
+      sp4 += 1;
+    }
+  }
+}
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_802621DC.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80262238.s")
+void func_hd_code_80262238(u8 arg0) {
+  s32 sp4;
+  u8 sp3;
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80262320.s")
+  sp4 = 0;
+  sp3 = 0;
+  D_803EFEC8 = 0;
+  while((sp3 == 0) && (sp4 <= 0)) {
+    if (D_hd_code_802E8F68[sp4].unk0 == (arg0)) {
+      sp3 = 1;
+    } else {
+      sp4 += 1;
+    }
+  }
+  if (sp3 != 0) {
+    D_803EFEC8 = 1;
+    D_803EFEB0 = D_hd_code_802E8F68[sp4].unk2 << 5;
+    D_803EFEB4 = D_hd_code_802E8F68[sp4].unk4 << 5;
+    D_803EFEB8 = D_hd_code_802E8F68[sp4].unk6 << 5;
+    D_803EFEBC = D_hd_code_802E8F68[sp4].unk8 << 5;
+  }
+}
+
+void func_hd_code_80262320(u8 arg0) {
+    s32 sp34;
+    u8 sp33;
+    s8 sp32;
+    u8 sp31;
+    s32 sp2C;
+
+    sp34 = 0;
+    sp33 = 0;
+    sp32 = 0;
+    sp31 = 0;
+    while((sp31 == 0) && (sp34 < 4)) {
+        if (D_hd_code_802E8F74[sp34].unk0 == arg0) {
+            sp31 = 1;
+        } else {
+            sp34 += 1;
+        }
+    }
+    if (sp31 != 0) {
+        D_hd_code_80364410 = 1;
+        D_hd_code_80364404 = D_hd_code_802E8F74[sp34].unk2 << 0x10;
+        D_hd_code_80364408 = D_hd_code_802E8F74[sp34].unk4 << 0x10;
+        D_hd_code_8036440C = D_hd_code_802E8F74[sp34].unk6 << 0x10;
+    } else {
+        D_hd_code_80364410 = 0;
+    }
+    D_80367C04 = &D_hd_code_802E8F94[arg0];
+    D_803F7C10 = D_hd_code_802E8F94[arg0].unk1C << 5;
+    D_803F7C14 = D_hd_code_802E8F94[arg0].unk1E << 5;
+    D_hd_code_80364424 = D_hd_code_802E8F94[arg0].unk38;
+    D_hd_code_80364428 = D_hd_code_802E8F94[arg0].unk3C << 5;
+    D_hd_code_8036442C = D_hd_code_802E8F94[arg0].unk40;
+    D_hd_code_80364430 = D_hd_code_802E8F94[arg0].unk42 << 5;
+    D_80367BC0 = D_803156C4;
+    D_80367BC4 = -1;
+    D_80367BD8 = 0;
+    switch (D_80364AA8) {
+    case 0x4:
+    case 0x80:
+        sp33 = 6;
+        break;
+    case 0x20:
+        sp33 = func_hd_code_8026FA38(&D_80367C08, &D_80367C0C);
+        D_80367BD8 = 2;
+        break;
+    case 0x40:
+    case 0x10:
+        sp33 = 9;
+        D_80367BD8 = -2;
+        break;
+    case 0x1:
+    case 0x2:
+        break;
+    }
+    if (sp33 == 6) {
+        D_80367BD8 = 6;
+        D_80367C08 = &D_hd_code_802E9F90;
+        D_80367C0C = D_hd_code_802E9F9C;
+        sp32 = 0;
+    }
+    if (D_80364AA8 != 1) {
+        sp2C = (s32)&D_6A8DA0 - (s32)&D_6A32B0;
+        if ((D_80364AA8 != 0x80) && (D_80364A98 == 0x2000)) {
+            InitiateDma(&D_6A32B0, D_80358070, &sp2C, 0xAU, 0, 1);
+            for(sp34 = 0; sp34 < 5; sp34++) {
+                D_80367BE0[sp34] = (sp34 << 0xF) + D_80358070;
+            }
+            D_80358070 = &D_80358070[sp2C];
+        }
+        if ((D_80364A98 == 0x40)) {
+            D_80367BC8 = 0;
+        } else {
+            D_80367BC8 = 1;
+        }
+    } else {
+        D_80367BC8 = 0;
+    }
+    D_80367C01 = 0;
+    D_80367C00 = 0;
+    if ((D_80364A98 == 0x40)) {
+        D_80367BFF = 0;
+    } else {
+        D_80367BFF = 0;
+        D_80367BFE = 0;
+    }
+    D_80367BCC = &D_hd_code_802F49F4[sp33];
+    if (D_hd_code_802E8F94[(u8) arg0].unk0 == 0x20) {
+        D_80367BD0 = NULL;
+        D_80367BD4 = func_hd_code_80272C5C(D_80367BCC->unk6, 0, (s32) D_80367BCC->unk4, (s32) D_80367BCC->unk2C, (s32) D_80367BCC->unk2D, (f32) ((f64) D_80367BCC->unk28 * 0.5));
+    } else {
+        D_80367BD0 = NULL;
+        if (sp33 != 0) {
+            D_80367BD4 = func_hd_code_80272C5C(D_80367BCC->unk6, 0, (s32) D_80367BCC->unk4, (s32) D_80367BCC->unk2C, (s32) D_80367BCC->unk2D, 1.0f);
+        } else {
+            D_80367BCC = NULL;
+        }
+    }
+    if ((D_80364A98 & 0x440)) {
+        func_hd_code_80264A34(D_80367BB0, D_80367C04->unk36 - D_80367BF6, 0);
+        return;
+    }
+    D_80367B54 = 0;
+}
 
 void func_hd_code_80262840(void) {
     s32 sp34;
@@ -97,7 +262,74 @@ void func_hd_code_80262840(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80262BF4.s")
+void func_hd_code_80262BF4(void) {
+    if ((D_hd_code_803643D7 == 0) && (D_hd_code_803643D6 == 0)) {
+        D_80367BF6 = D_80367C04->unk36 - MIN(D_80367C04->unk36, func_hd_code_8028604C(D_803156C0 - D_80364A58));
+    }
+    func_hd_code_80264A34(D_80367BB0, D_80367BF6, 1);
+    switch(D_hd_code_80364A90) {
+        case 0x2000:
+            func_hd_code_80262840();
+            break;
+        case 0x04000000:
+            if ((D_hd_code_803643D6 != 0) && (areWeFading() == 0) && (D_8036BB1C == 1)) {
+                if (((D_80364AF0[playerNumber].unk18[levelno] > 0 && D_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
+                    func_hd_code_80275270(0x08000000, 0x3E800000);
+                    break;
+                }
+                func_hd_code_80275270(0x40, 0x3E800000);
+            }
+            break;
+        default:
+            if (D_80367BF6 == 0) {
+                D_803643D9 = 1;
+            } else {
+                D_80367BF4 = (u16) D_80367BF6 / 10;
+                if (((D_80367BF4) < 0xA) && ((D_80367BF4) != D_80367D08)) {
+                    sndPlaySfx(D_80367738, 0xA3 - (D_80367BF4), 0);
+                }
+                D_80367D08 = D_80367BF4;
+            }
+            if ((D_803BE738 != 0) && (D_80364AA8 == 0x40)) {
+                sndPlaySfx(D_80367738, 0x3C, 0);
+            }
+            if (D_803BE738 != 0) {
+                D_803643D9 = 1;
+            }
+            if (D_hd_code_803643D6 != 0) {
+                sndDeactivateAllSfxByFlag_3();
+                sndDeactivateAllSfxByFlag_11();
+                func_hd_code_8026AF6C(0xA00EU);
+                D_8036BB1A = -1;
+                D_80364A98 = 0x04000000;
+                break;
+            }
+            if (D_hd_code_803643D7 != 0) {
+                D_80364A98 = 0x04000000;
+                break;
+            }
+            switch ((u32) D_80364AA8) {             /* irregular */
+            case 0x2:
+                func_hd_code_802633E0();
+                break;
+            case 0x4:
+                func_hd_code_8026303C();
+                break;
+            case 0x20:
+            case 0x80:
+                func_hd_code_80263140();
+                break;
+            case 0x8:
+                func_hd_code_80263358();
+                break;
+            case 0x10:
+            case 0x40:
+                func_hd_code_80262FD0();
+                break;
+            }
+            break;
+    }
+}
 
 void func_hd_code_80262FD0(void) {
   if ((u16) D_8036EA7C >= (u32) D_80367C04->unk18) {
@@ -161,7 +393,6 @@ void func_hd_code_80263140(void) {
       return;
   }
 }
-
 
 void func_hd_code_80263358(void) {
   s32 sp1C;
@@ -241,7 +472,6 @@ void func_hd_code_802633E0(void) {
 }
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_8026394C.s")
-
 
 Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
     Gfx* entry; // sp64
@@ -416,9 +646,39 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
     return entry;
 }
 
+void func_hd_code_80264A34(char* arg0, u16 arg1, u16 arg2) {
+  arg0[0] = '0' + (arg1 / 6000);
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80264A34.s")
+  arg1 %= 6000;
+  arg0[1] = '0' + (arg1 / 600);
+  arg0[2] = ':';
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80264AEC.s")
+  arg1 %= 600;
+  arg0[3] = '0' + arg1 / 100;
+
+  arg1 %= 100;
+  arg0[4] = '0' + arg1 / 10;
+
+  arg1 %= 10;
+  arg0[5] = '.';
+  arg0[6] = '0' + arg1;
+  arg0[7] = 0;
+}
+
+void func_hd_code_80264AEC(void) {
+  s32 sp4;
+  u16 sp2;
+
+  sp2 = 0;
+  if ((D_80364AA8 == 2) && ((s32) D_80367B54 >= 2)) {
+    for(sp4 = 0; sp4 < D_80367B54 - 1; sp4++) {
+      sp2 += D_80367B58[sp4];
+    }
+    D_80367BF6 = D_80367C04->unk36 - sp2;
+  }
+  if ((s32) D_80367BF6 >= 0xEA60) {
+    D_80367BF6 = 0;
+  }
+}
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/1D990/func_hd_code_80264BA4.s")
