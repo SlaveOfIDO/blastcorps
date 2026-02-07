@@ -19,7 +19,7 @@ void func_hd_code_802D9670(ALSeqPlayer*, s32*);  /* extern */
 void func_hd_code_802D97E0(ALSeqPlayer*, ALBank*); /* extern */
 void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig);
 void func_hd_code_80260A30(s32);                         /* extern */
-s32 func_hd_code_80264BA4(s32);                     /* extern */
+u8 func_hd_code_80264BA4(u8);
 void sndDeactivateAllSfxByFlag_11();                   /* extern */
 void sndDeactivateAllSfxByFlag_3();                    /* extern */
 void func_hd_code_80260C20(u8, f32);                   /* extern */
