@@ -51,7 +51,7 @@ struct Model1 {
   /* 0x00180 */ void* unk180;
   /* 0x00184 */ u8 pad184[0x001C0 - 0x00184];
   /* 0x001C0 */ Mtx modelview;
-  /* 0x00200 */ u8 pad200[0x00240 - 0x00200];
+  /* 0x00200 */ Mtx unk200;
   /* 0x00240 */ Mtx unk240;
   /* 0x00280 */ Mtx unk280;
   /* 0x002C0 */ Mtx unk2C0[(0xE00 - 0x2C0) / 0x40]; // length could be smaller
@@ -63,7 +63,7 @@ struct Model1 {
   /* 0x01540 */ Mtx unk1540; // another modelview
   /* 0x01580 */ Vtx unk1580[(0x18C0 - 0x1580)/0x10]; // length could be smaller, possibly only 0x4?
   /* 0x018C0 */ Vtx unk18C0[4];
-  /* 0x01900 */ u8 pad1900[0x38C0 - 0x1900];
+  /* 0x01900 */ Vtx unk1900[(0x38C0 - 0x1900)/0x10];
   /* 0x038C0 */ Vtx unk38C0[0x40 / 0x10];
   /* 0x03900 */ Vtx unk3900[(0x03C00 - 0x03900)/0x10];
   /* 0x03C00 */ LookAt lookAt;

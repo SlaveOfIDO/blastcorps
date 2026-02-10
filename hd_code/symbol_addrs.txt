@@ -50,6 +50,7 @@ guAlignF = 0x802D5410; // segment:hd_code
 guAlign = 0x802D55A4; // segment:hd_code
 guMtxCatF = 0x802D56A0; // segment:hd_code
 guMtxF2L = 0x802D5810; // segment:hd_code
+guMtxXFMF = 0x802D5600; // segment:hd_code
 
 proutSprintf = 0x802D6A60; // segment:hd_code
 sprintf = 0x802D6ACC; // segment:hd_code
