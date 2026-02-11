@@ -52,43 +52,21 @@ extern s32 D_8036803C;
 extern s32 D_803EF308;
 extern s32 D_803EF30C;
 extern u8 D_803EF32D;
-extern Vtx D_hd_code_802E9FB0[4];
-extern u8 D_hd_code_802E9FF0[0x500];
-extern u8 D_hd_code_802EA4F0[0x500]; // 20 * 32 * 2bytes texture
-extern u8 D_hd_code_802EA9F0[0x500];
-extern u8 D_hd_code_802EAEF0[0x500];
-extern u8 D_hd_code_802EB3F0[0x500];
-extern u8 D_hd_code_802EB8F0[0x500];
-extern u8 D_hd_code_802EBDF0[0x500];
-extern u8 D_hd_code_802EC2F0[0x500];
-extern u8 D_hd_code_802EC7F0[0x500];
-extern u8 D_hd_code_802ECCF0[0x500];
-extern u8 D_hd_code_802ED1F0[0x500];
-extern u8 D_hd_code_802ED6F0[0x500];
-extern u8 D_hd_code_802EDBF0[0x500];
-extern u8 D_hd_code_802EE0F0[0x500];
-extern u8 D_hd_code_802EE5F0[0x500];
-extern u8 D_hd_code_802EEAF0[0x500];
-extern u8 D_hd_code_802EEFF0[0x500];
-extern u8 D_hd_code_802EF4F0[0x500];
-extern u8 D_hd_code_802EF9F0[0x500];
-extern u8 D_hd_code_802EFEF0[0x500];
-extern u8 D_hd_code_802F03F0[0x500];
-extern u8 D_hd_code_802F08F0[0x500];
-extern u8 D_hd_code_802F0DF0[0x500];
-extern u8 D_hd_code_802F12F0[0x500];
-extern u8 D_hd_code_802F17F0[0x500];
-extern u8 D_hd_code_802F1CF0[0x500];
-extern u8 D_hd_code_802F21F0[0x500];
-extern u8 D_hd_code_802F26F0[0x500];
-extern u8 D_hd_code_802F2BF0[0x500];
-extern u8 D_hd_code_802F30F0[0x500];
-extern u8 D_hd_code_802F35F0[0x500];
 extern u16 D_803C30A8[];
 extern s32 D_80368040;
 extern u32 D_8036B968;
 extern s32 D_80368044;
 extern s32 D_80368048;
+
+// Data
+Vtx D_hd_code_802E9FB0[4] = {
+  { 6, 20, 6, 0, 0, 992, 0xFF, 0xFF, 0xFF, 0xFF },
+  {-6, 20, -6, 0, 608, 992, 0xFF, 0xFF, 0xFF, 0xFF  },
+  {-6, 0, -6, 0, 0x0260, 0,  0xFF, 0xFF, 0xFF, 0xFF  },
+{ 6, 0, 6, 0, 0, 0,   0xFF, 0xFF, 0xFF, 0xFF }
+};
+#include "20460_textures.h"
+
 
 void func_hd_code_80264C20(s32 arg0) {
   s32 sp1C;
