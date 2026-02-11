@@ -205,7 +205,7 @@ segments:
     - [0xA4520, .data, hd_code/1A630] # done
     - [0xA4540, .data, hd_code/1C460] # done
     - [0xA4770, .data, hd_code/1D990] # done
-    - [0xA57D0, bin, hd_code/hd_code_data_rest2 ]
+    - [0xA57F0, bin, hd_code/hd_code_data_rest2 ]
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, bin, hd_code/hd_code_data_rest3 ]

@@ -40,9 +40,6 @@ extern s32 D_803EFEB8;
 extern s32 D_803EFEBC;
 extern s8 D_803EFEC8;
 
-
-extern Gfx* D_hd_code_802E9F90;
-extern s32 D_hd_code_802E9F9C;
 extern struct S_80367BCC D_hd_code_802F49F4[];
 extern u32 D_80364AA8;
 extern struct S_80367C04 *D_80367C04;
@@ -50,7 +47,7 @@ extern struct S_80367C04 *D_80367C04;
 extern u8 D_80367C10;
 
 // Data
-u8 D_hd_code_802E8F30[5] = { 0x28, 0x2B, 0x2C, 0x2D, 0x2E }; // TOCHECK: could be 8 instead of 5 with leading zeros
+u8 D_hd_code_802E8F30[5] = { 0x28, 0x2B, 0x2C, 0x2D, 0x2E };
 u8 D_hd_code_802E8F38[] = {
   0x0A, 0x00, 0x0F, 0x84, 0x00, 0x2C, 0x09, 0xAE, 0x11, 0x00, 0x0F, 0xDF, 0x00,
   0x64, 0x05, 0x7A, 0x21, 0x00, 0x04, 0x3D, 0x00, 0xA3, 0x09, 0x77, 0x0E, 0x00,
@@ -494,6 +491,11 @@ struct S_80367C04 D_hd_code_802E8F94[] = {
     0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
   },
 };
+
+u8 __alignmentIssue[12] = {0};
+char D_hd_code_802E9F90[] = "BUILDINGS";
+void* D_hd_code_802E9F9C = (void*)0x8030480C; // TODO: D_hd_code_8030480C
+u8 D_hd_code_802E9FA0[2] = { 0x20, 0x53 };
 
 
 void func_hd_code_80262150(u8 arg0) {
