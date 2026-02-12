@@ -56,6 +56,8 @@ typedef struct OSScTask_s {
     OSTask              list;
     OSMesgQueue         *msgQ;
     OSMesg              msg;
+    s32 pad1; // TODO: this can be wrong
+    s32 pad2; // TODO: this can be wrong
 #ifndef _FINALROM                       /* all #ifdef items should    */
     OSTime              startTime;      /* remain at the end!!, or    */
     OSTime              totalTime;      /* possible conflict if       */

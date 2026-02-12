@@ -4,6 +4,7 @@
 #include <PR/libaudio.h>
 #include "structs.h"
 #include <PR/os.h>
+#include <PR/sched.h>
 
 extern Gfx D_1000010[];
 extern Gfx D_1000038[];
@@ -706,7 +707,7 @@ extern u8* D_803669C0;
 extern void* D_787F40;
 extern void* D_788000;
 extern void* D_80000400;
-extern void* D_80315440;
+extern OSSched sc; // 0x80315440
 extern void* D_803156D8;
 extern void* D_8035806C;
 extern void* D_803FF600;
@@ -760,6 +761,37 @@ extern u32 D_80367BDC[];
 extern u8 D_80367C01;
 extern s16 D_80367D50;
 extern struct S_80367D52 D_80367D52;
+extern s32 D_8036772C;
+extern u8 D_350950;
+extern u8 D_3539A0;
+extern u8 D_3A1920;
+extern u8 D_3A48C0;
+extern u8 D_44F5C0;
+extern f32 D_80367710;
+extern ALHeap D_80367718;
+extern s32 D_8036771C;
+extern s32 D_80367720;
+extern ALBank* D_8036773C;
+extern void* D_80370C80;
+extern s32 D_80367408[];
+extern ALBank* D_80367738;
+extern s32 D_80367408[];
+extern void* D_80367510;
+extern ALSeqFile *D_80367514;
+extern struct S_80367518 D_80367518[];
+extern u8 D_80367708;
+extern f32 D_8036770C;
+extern u8 D_8036772A;
+extern struct S_80367400* D_80367400;
+extern u8 D_80367708;
+extern u8 D_80367728;
+extern u8 D_80367729;
+extern s8 D_80367730;
+extern struct S_80367400 D_80366C30;
+extern struct S_80367400 *D_80367400;
+extern u8 D_80367708;
+extern f32 D_80367714;
+extern s8 D_80367730;
 
 
 #endif

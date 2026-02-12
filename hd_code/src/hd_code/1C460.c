@@ -5,76 +5,6 @@
 #include "structs.h"
 #include "variables.h"
 
-s32 func_hd_code_802D8260(ALSeqPlayer*);            /* extern */
-void func_hd_code_802D76C0(ALSeqPlayer*);        /* extern */
-void func_hd_code_802D7C4C(void*, void*);              /* extern */
-void func_hd_code_802D81B0(ALSeqPlayer*, void*); /* extern */
-void func_hd_code_802D81F0(ALSeqPlayer*);        /* extern */
-void func_hd_code_802D8220(ALSeqPlayer*, s32);   /* extern */
-void func_hd_code_802D76F0(void*, u32*);                 /* extern */
-void func_hd_code_802676A0(s32*, u8);                   /* extern */
-void func_hd_code_80267A74();                          /* extern */
-void func_hd_code_802D8320(ALHeap*, void*, u32);            /* extern */
-void func_hd_code_802D9670(ALSeqPlayer*, s32*);  /* extern */
-void func_hd_code_802D97E0(ALSeqPlayer*, ALBank*); /* extern */
-void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig);
-void func_hd_code_80260A30(s32);                         /* extern */
-u8 func_hd_code_80264BA4(u8);
-void sndDeactivateAllSfxByFlag_11();                   /* extern */
-void sndDeactivateAllSfxByFlag_3();                    /* extern */
-void func_hd_code_80260C20(u8, f32);                   /* extern */
-void func_hd_code_802D7790(struct S_80367518*, u8*);   /* extern */
-void func_hd_code_802D82A0(ALSeqPlayer*, s32);   /* extern */
-s32 func_hd_code_802D8310(ALSeqPlayer*);            /* extern */
-extern s32 D_8036772C;
-
-extern s32 D_8036772C;
-extern u8 D_350950;
-extern u8 D_3539A0;
-extern u8 D_3A1920;
-extern u8 D_3A48C0;
-extern u8 D_44F5C0;
-extern f32 D_80367710;
-extern ALHeap D_80367718;
-extern s32 D_8036771C;
-extern s32 D_80367720;
-extern ALBank* D_8036773C;
-extern void* D_80370C80;
-extern s32 D_80367408[];
-extern ALBank* D_80367738;
-extern s32 D_80367408[];
-extern void* D_80367510;
-extern ALSeqFile *D_80367514;
-
-struct S_80367518 {
-  u8 unk0[0xF8];
-};
-
-struct S_802E8EB4 {
-  u32 unk0[0x18 / 4];
-};
-
-extern struct S_80367518 D_80367518[];
-struct S_80367400 {
-  u32 unk0[0x1EC / 4];
-  /* 0x1EC */ s32 unk1EC;
-  /* 0x1F0 */ u8  unk1F0;
-  u8 pad[3];
-};
-extern u8 D_80367708;
-extern f32 D_8036770C;
-extern u8 D_8036772A;
-extern struct S_80367400* D_80367400;
-extern u8 D_80367708;
-extern u8 D_80367728;
-extern u8 D_80367729;
-extern s8 D_80367730;
-extern struct S_80367400 D_80366C30;
-extern struct S_80367400 *D_80367400;
-extern u8 D_80367708;
-extern f32 D_80367714;
-extern s8 D_80367730;
-
 // Data
 s16 D_hd_code_802E8D00[66] = {
   0x6590,
@@ -692,7 +622,7 @@ void func_hd_code_80261588(void) {
     sp60 = 6;
     sp5C = 0;
     sp58 = &D_80367718;
-    func_hd_code_802676A0(&sp44, 0xC);
+    amCreateAudioManager(&sp44, 0xC);
     // TODO: find matching struct
     sp68 = 0x18;
     sp6C = 0x20;
@@ -716,7 +646,7 @@ void func_hd_code_80261588(void) {
     D_80367710 = D_8036770C = 1.0f;
     D_80367730 = 1;
     D_80367400 = &D_80366C30;
-    func_hd_code_80267A74();
+    amStartAudioThread();
 }
 
 void func_hd_code_802619D0(u32 effectId) {

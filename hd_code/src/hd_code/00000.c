@@ -30,7 +30,6 @@ u64 D_80364A98;
 u64 D_80364A98;
 u64 D_80364A98; // bss or data?
 u8 D_8039CA60;
-s32 D_80000300;
 struct Model1 D_2000000;
 u64 D_hd_code_803649D8;
 
@@ -3990,9 +3989,9 @@ void func_hd_code_80255AD0(void) {
     D_hd_code_80364A90 = 0x20;
     osCreateMesgQueue(&D_803150A0, &D_803150B8, 0x32);
     osCreateMesgQueue(&D_80315180, &D_80315198, 0x90);
-    func_hd_code_80270D20(&D_80315440, &D_80312D80 + 0x800, 0xD, D_80000300 != 1 ? 16 : 2, 1);
+    func_hd_code_80270D20(&sc, &D_80312D80 + 0x800, 0xD, osTvType != 1 ? 16 : 2, 1);
     osCreateMesgQueue(&D_803153D8, &D_803153F8, 0x10);
-    func_hd_code_80270E50(&D_80315440, &D_803156D8, &D_803153D8, 1, 1);
+    func_hd_code_80270E50(&sc, &D_803156D8, &D_803153D8, 1, 1);
     sp2F = func_hd_code_8028A370();
     func_hd_code_80261588();
     func_hd_code_8029A7E4("audio inited\n");
@@ -4449,7 +4448,7 @@ void func_hd_code_80256A34(s32* arg0) {
         if (D_80219F58 != 0) {
             func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "MQ_IS_EMPTY(&pakToGameMessageQ)", "hd.c", 0x1043);
         }
-        func_hd_code_80270ECC(&D_80315440, &D_80218EE0);
+        func_hd_code_80270ECC(&sc, &D_80218EE0);
         osDestroyThread(&D_80218D30);
     }
     D_8039CA62 = 0;

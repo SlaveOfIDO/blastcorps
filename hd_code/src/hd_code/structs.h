@@ -352,4 +352,18 @@ struct S_802E8F68 {
 };
 
 
+struct S_80367518 {
+  u8 unk0[0xF8];
+};
+
+struct S_802E8EB4 {
+  u32 unk0[0x18 / 4];
+};
+struct S_80367400 {
+  u32 unk0[0x1EC / 4];
+  /* 0x1EC */ s32 unk1EC;
+  /* 0x1F0 */ u8  unk1F0;
+  u8 pad[3];
+};
+
 #endif

@@ -55,6 +55,7 @@
     - lw is used with pointers
 - passing zero to a function: generates *move* instruction if integer, *li* instruction if float
 - useless loads are often generated when using s32 instead of u32
+- useless loads are often generated when using early returns or breaks
 
 ## stack placement
 

@@ -471,4 +471,26 @@ void func_hd_code_80264A34(char*, u16, u16);           /* extern */
 s32 func_hd_code_802D8260(ALSeqPlayer*);            /* extern */
 void func_hd_code_802D82A0(ALSeqPlayer*, s32);         /* extern */
 
+s32 func_hd_code_802D8260(ALSeqPlayer*);            /* extern */
+void func_hd_code_802D76C0(ALSeqPlayer*);        /* extern */
+void func_hd_code_802D7C4C(void*, void*);              /* extern */
+void func_hd_code_802D81B0(ALSeqPlayer*, void*); /* extern */
+void func_hd_code_802D81F0(ALSeqPlayer*);        /* extern */
+void func_hd_code_802D8220(ALSeqPlayer*, s32);   /* extern */
+void func_hd_code_802D76F0(void*, u32*);                 /* extern */
+void amCreateAudioManager(ALSynConfig*, s32);                   /* extern */
+void amStartAudioThread();                          /* extern */
+void func_hd_code_802D8320(ALHeap*, void*, u32);            /* extern */
+void func_hd_code_802D9670(ALSeqPlayer*, s32*);  /* extern */
+void func_hd_code_802D97E0(ALSeqPlayer*, ALBank*); /* extern */
+void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig);
+void func_hd_code_80260A30(s32);                         /* extern */
+u8 func_hd_code_80264BA4(u8);
+void sndDeactivateAllSfxByFlag_11();                   /* extern */
+void sndDeactivateAllSfxByFlag_3();                    /* extern */
+void func_hd_code_80260C20(u8, f32);                   /* extern */
+void func_hd_code_802D7790(struct S_80367518*, u8*);   /* extern */
+void func_hd_code_802D82A0(ALSeqPlayer*, s32);   /* extern */
+s32 func_hd_code_802D8310(ALSeqPlayer*);            /* extern */
+
 #endif
