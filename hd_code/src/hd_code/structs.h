@@ -152,9 +152,9 @@ struct UnknownStruct_803644BC {
   /* 0x58 */ s32 pad58;
   /* 0x5C */ s32 unk5C; // Texture Index?
   /* 0x60 */ s32 unk60; // Some kind of env color?
-  /* 0x64 */ s32 pad64;
-  /* 0x68 */ s32 pad68;
-  /* 0x6C */ s32 pad6C;
+  /* 0x64 */ s32 unk64;
+  /* 0x68 */ s32 unk68;
+  /* 0x6C */ s32 unk6C;
   /* 0x70 */ s32 unk70;
 };
 

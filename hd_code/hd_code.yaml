@@ -31,7 +31,7 @@ segments:
     - [0x1D990, c, hd_code/1D990] # done
     - [0x20460, c, hd_code/20460] # done
     - [0x22EE0, c, hd_code/22EE0] # done: audi.c
-    - [0x23C20, asm, hd_code/23C20]
+    - [0x23C20, c, hd_code/23C20]
     - [0x26570, asm, hd_code/26570]
     - [0x2E490, asm, hd_code/2E490]
     - [0x30430, asm, hd_code/30430]
@@ -224,7 +224,8 @@ segments:
     - [0xC4AF0, .rodata, hd_code/1D990] # done
     - [0xC4E80, .rodata, hd_code/20460] # done
     - [0xC4F40, .rodata, hd_code/22EE0] # audi.c
-    - [0xC5070, bin, hd_code/hd_code_rodata_rest]
+    - [0xC5070, .rodata, hd_code/23C20]
+    - [0xC5210, bin, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]
