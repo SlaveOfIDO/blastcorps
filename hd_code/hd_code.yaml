@@ -31,7 +31,7 @@ segments:
     - [0x1D990, c, hd_code/1D990] # done
     - [0x20460, c, hd_code/20460] # done
     - [0x22EE0, c, hd_code/22EE0] # done: audi.c
-    - [0x23C20, c, hd_code/23C20]
+    - [0x23C20, c, hd_code/23C20] # done
     - [0x26570, asm, hd_code/26570]
     - [0x2E490, asm, hd_code/2E490]
     - [0x30430, asm, hd_code/30430]
@@ -40,7 +40,7 @@ segments:
     - [0x37530, asm, hd_code/37530]
     - [0x39050, asm, hd_code/39050]
     - [0x3E4C0, asm, hd_code/3E4C0]
-    - [0x405F0, asm, hd_code/405F0]
+    - [0x405F0, asm, hd_code/405F0] # uses data from 00000
     - [0x409D0, asm, hd_code/409D0]
     - [0x41930, asm, hd_code/41930]
     - [0x42240, asm, hd_code/42240]
@@ -197,7 +197,7 @@ segments:
     - [0xA0A30, asm, hd_code/A0A30]
     - [0xA0A40, asm, hd_code/A0A40]
     - [0xA0AA0, asm, hd_code/A0AA0]
-    - [0xA0C30, bin, hd_code/00000] # has data for later segments
+    - [0xA0C30, bin, hd_code/00000] # has data for later segments and contains rsp boot ucode
     - [0xA44A0, .data, hd_code/13A70] # done
     - [0xA44B0, .data, hd_code/14B30] # done
     - [0xA44F0, .data, hd_code/17210] # done
@@ -207,7 +207,8 @@ segments:
     - [0xA4770, .data, hd_code/1D990] # done
     - [0xA57F0, .data, hd_code/20460] # done
     - [0xAF330, .data, hd_code/22EE0] # done
-    - [0xAF450, bin, hd_code/hd_code_data_rest2 ]
+    - [0xAF450, .data, hd_code/23C20] # done
+    - [0xAFF00, bin, hd_code/hd_code_data_rest2 ]
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, bin, hd_code/hd_code_data_rest3 ]

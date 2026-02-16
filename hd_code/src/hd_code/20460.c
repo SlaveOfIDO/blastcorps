@@ -29,8 +29,8 @@ struct S_80367D60 {
 s32 func_hd_code_80265A0C(s32);                     /* extern */
 void func_hd_code_80265B7C(s32);                       /* extern */
 s32 func_hd_code_80267614(struct S_80367D60*);                   /* extern */
-void func_hd_code_8026A5CC(void*, void*, u32);              /* extern */
-s32 func_hd_code_8026A8E0(s16, s16);                /* extern */
+void func_hd_code_8026A5CC(u64*, u64*, u32);              /* extern */
+s32 func_hd_code_8026A8E0(s32, s32);                /* extern */
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
 s16 func_hd_code_802D9830(s32);                     /* extern */
 s16 func_hd_code_802D98A0(s32);                     /* extern */
@@ -527,7 +527,7 @@ void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
             gDPPipeSync(entry++);
             gDPLoadTextureBlock(entry++, sp150, G_IM_FMT_RGBA, G_IM_SIZ_16b, 20, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            func_hd_code_8026A5CC(&arg1->unk1900[sp168], &D_hd_code_802E9FB0, 0x40);
+            func_hd_code_8026A5CC((u64*)&arg1->unk1900[sp168], (u64*)&D_hd_code_802E9FB0, 0x40);
             for(sp15C = 0; sp15C < 4; sp15C++) {
                 arg1->unk1900[sp168 + sp15C].v.ob[0] = spFC[sp15C] + D_80367D60[sp164].unk0;
                 arg1->unk1900[sp168 + sp15C].v.ob[1] = spEC[sp15C] + D_80367D60[sp164].unk2;
@@ -674,7 +674,7 @@ void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
             gDPPipeSync(entry++);
             gDPLoadTextureBlock(entry++, sp150, G_IM_FMT_RGBA, G_IM_SIZ_16b, 20, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            func_hd_code_8026A5CC(&arg1->unk1900[sp168], &D_hd_code_802E9FB0, 0x40);
+            func_hd_code_8026A5CC((u64*)&arg1->unk1900[sp168], (u64*)&D_hd_code_802E9FB0, 0x40);
             if (sp14F != 0) {
                 arg1->unk1900[sp168].v.tc[0] = 0x260;
                 arg1->unk1900[sp168+1].v.tc[0] = 0;
@@ -702,7 +702,7 @@ void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
                 gDPPipeSync(entry++);
                 gDPLoadTextureBlock(entry++, osVirtualToPhysical(&D_hd_code_802E9FF0), G_IM_FMT_RGBA, G_IM_SIZ_16b, 20, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-                func_hd_code_8026A5CC(&arg1->unk1900[sp168], &D_hd_code_802E9FB0, 0x40);
+                func_hd_code_8026A5CC((u64*)&arg1->unk1900[sp168], (u64*)&D_hd_code_802E9FB0, 0x40);
                 for(sp15C = 0; sp15C < 4; sp15C++) {
                     arg1->unk1900[sp168 + sp15C].v.ob[0] = spFC[sp15C];
                     arg1->unk1900[sp168 + sp15C].v.ob[1] = spEC[sp15C];

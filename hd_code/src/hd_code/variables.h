@@ -20,16 +20,32 @@ extern Mtx D_80365230;
 extern Mtx D_80365270;
 extern Mtx D_803652B0;
 extern Mtx D_803652F0;
+
+
 extern OSMesg D_803150B8;
+extern OSMesgQueue D_80315180;
+extern OSMesgQueue D_80315180;
+extern s32 D_80315188; // Potentially a message queue for textures?
 extern OSMesg D_80315198;
+extern OSMesgQueue D_803153D8;
+extern u8 D_803153F0;
 extern OSMesg D_803153F8;
+extern u8 D_80315438;
+extern OSSched sc; // 0x80315440
+extern s32 D_803156C0;
+extern u32 D_803156C4;
+extern void* D_803156D8;
+extern s32 D_803156E8;
+extern s32 D_803156EC;
+extern s32 D_803156F0;
+extern u8 D_803156F4;
+extern u8 D_803156F5;
+extern struct Model1 D_803156F8[];
+
+
 extern OSMesg D_8039C4B4;
 extern OSMesgQueue D_80219EF8;
 extern OSMesgQueue D_80219F50;
-extern OSMesgQueue D_803150A0;
-extern OSMesgQueue D_80315180;
-extern OSMesgQueue D_80315180;
-extern OSMesgQueue D_803153D8;
 extern UnknownData8024C414 D_80364AF0[];
 extern UnknownData8024C414 D_80364AF0[];
 extern UnknownData8024C414 D_80364B04[];
@@ -210,11 +226,7 @@ extern s32 D_6AD3F0; // 6AD3F0.bin
 extern s32 D_80218D30;
 extern s32 D_80218EE0;
 extern s32 D_80219F58;
-extern s32 D_80315188; // Potentially a message queue for textures?
-extern s32 D_803156C0;
-extern s32 D_803156E8;
-extern s32 D_803156EC;
-extern s32 D_803156F0;
+
 extern s32 D_80358058;
 extern s32 D_80358058;
 extern s32 D_80358064;
@@ -393,7 +405,7 @@ extern s32 levelno;
 extern s32 maxCharacters;
 extern s32 nextdma;
 extern s32 no_palette_dmas;
-extern s32* D_80312D80;
+
 extern s32* D_803F7820;
 extern s32* D_803F7824;
 extern s64 D_8036BF38;
@@ -431,8 +443,7 @@ extern s8 D_hd_code_80308CE0;
 extern struct Model1 D_2000000;
 extern struct Model1 D_2000000;
 extern struct Model1 D_2000000;
-extern struct Model1 D_803156F8[];
-extern struct Model1 D_803156F8[];
+
 extern struct S_8020C070 D_8020C070[];
 extern struct S_80367C04 D_hd_code_802E8F94[];
 extern struct S_802E8FCA D_hd_code_802E8FCA[60];
@@ -491,8 +502,6 @@ extern u16 D_hd_code_802E8C94[2];
 extern u16 D_hd_code_8036442C;
 extern u32 *D_80358050[]; // Texture image data addresses?
 extern u32 *D_80358050[]; // Texture image data addresses?
-extern u32 D_803156C4;
-extern u32 D_803156C4;
 extern u32 D_80364AA8;
 extern u32 D_80364AC8;
 extern u32 D_80364ACC;
@@ -517,11 +526,6 @@ extern u64 D_80364A98;
 extern u64 D_hd_code_80364A90;
 extern u64 D_hd_code_80364A90;
 extern u64 D_hd_code_80364A90;
-extern u8 D_803153F0;
-extern u8 D_80315438;
-extern u8 D_803156F4;
-extern u8 D_803156F5;
-extern u8 D_803156F5;
 extern u8 D_8035805C;
 extern u8 D_8035805C;
 extern u8 D_8035805C;
@@ -707,8 +711,6 @@ extern u8* D_803669C0;
 extern void* D_787F40;
 extern void* D_788000;
 extern void* D_80000400;
-extern OSSched sc; // 0x80315440
-extern void* D_803156D8;
 extern void* D_8035806C;
 extern void* D_803FF600;
 extern void* func_init_8021ED00;

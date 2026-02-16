@@ -366,4 +366,73 @@ struct S_80367400 {
   u8 pad[3];
 };
 
+
+struct S_802F3C24 {
+  s32 unk0;
+  f32 unk4;
+  u8 unk8;
+  u8 pad9;
+  u8 padA;
+  u8 padB;
+}; // size: 0xC
+
+struct S_802F3C48 {
+  s32 unk0;
+  u8 unk4;
+  u8 pad5;
+  s16 unk6;
+  s16 unk8;
+  s16 unkA;
+  u8 unkC;
+  u8 padD;
+  u8 padE;
+  u8 padF;
+}; // size: 0x10
+
+struct S_802F41F0 {
+  s32 unk0;
+  u8 unk4;
+  u8 unk5;
+  s16 unk6;
+  f32 unk8;
+  s16 unkC;
+  s16 unkE;
+  u8 unk10;
+  u8 unk11;
+  u8 unk12;
+  u8 unk13;
+}; // size: 0x14
+
+struct S_802F4224 {
+  s32 unk0;
+  u8 unk4;
+  u8 unk5;
+  s16 unk6;
+  s16 unk8;
+  s16 unkA;
+  s16 unkC;
+  s16 unkE;
+  s16 unk10;
+  u8 unk12;
+  u8 unk13;
+  u8 unk14;
+  u8 pad15;
+  u8 pad16;
+  u8 pad17;
+}; // size: 0x18
+
+struct S_802F3C10 {
+  u8 unk0;
+  u8 unk1;
+  s16 unk2;
+  s16 unk4;
+  s16 unk6;
+  s16 unk8;
+  s16 unkA;
+  s16 unkC;
+  s16 unkE;
+  s16 unk10;
+  s16 unk12;
+}; // size: 0x14
+
 #endif

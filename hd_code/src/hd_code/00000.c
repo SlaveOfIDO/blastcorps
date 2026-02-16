@@ -15,10 +15,12 @@ u8 bss_pad_1[0x80310820 - 0x8030F66C];
 OSThread D_80310820; // bss
 void* D_803109D0; // bss
 OSThread D_80310BD0; // bss
-s64 D_80310D80[0x200]; // bss
+s64 D_80310D80[0x400]; // bss, size 0x2000
+s32 D_80312D80[0x800]; // bss, size 0x2000
 OSMesgQueue D_80314D80; // bss
 OSMesg D_80314D98; // bss
-
+u8 bss_pad_2[0x803150A0 - 0x80314D98];
+OSMesgQueue D_803150A0; // bss
 
 s16 D_8036BB18;
 u64 D_80364A88;
@@ -3989,7 +3991,7 @@ void func_hd_code_80255AD0(void) {
     D_hd_code_80364A90 = 0x20;
     osCreateMesgQueue(&D_803150A0, &D_803150B8, 0x32);
     osCreateMesgQueue(&D_80315180, &D_80315198, 0x90);
-    func_hd_code_80270D20(&sc, &D_80312D80 + 0x800, 0xD, osTvType != 1 ? 16 : 2, 1);
+    func_hd_code_80270D20(&sc, D_80312D80 + 0x800, 0xD, osTvType != 1 ? 16 : 2, 1);
     osCreateMesgQueue(&D_803153D8, &D_803153F8, 0x10);
     func_hd_code_80270E50(&sc, &D_803156D8, &D_803153D8, 1, 1);
     sp2F = func_hd_code_8028A370();

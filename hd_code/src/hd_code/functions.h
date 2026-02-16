@@ -171,7 +171,7 @@ void func_hd_code_80262238(u8);                       /* extern */
 void func_hd_code_80262320(u8);                       /* extern */
 void func_hd_code_80264C20(s32);                       /* extern */
 void func_hd_code_80268664(s32);                       /* extern */
-s32 func_hd_code_8026A988();                          /* extern */
+void func_hd_code_8026A988();                          /* extern */
 s32 func_hd_code_8026F92C(u64);                 /* extern */
 s32 func_hd_code_80270ECC(s32*, s32*);                    /* extern */
 s32 func_hd_code_802729F0(s32, s32);                  /* extern */
@@ -492,5 +492,11 @@ void func_hd_code_80260C20(u8, f32);                   /* extern */
 void func_hd_code_802D7790(struct S_80367518*, u8*);   /* extern */
 void func_hd_code_802D82A0(ALSeqPlayer*, s32);   /* extern */
 s32 func_hd_code_802D8310(ALSeqPlayer*);            /* extern */
+f32 func_hd_code_802DA58C(s64);                /* extern */
+f32 func_hd_code_80268D84(f32, f32, f32, f32, f32, f32, f32); /* extern */
+f32 func_hd_code_8026A184(f32, f32, f32, f32, f32, f32, f32); /* extern */
+void func_hd_code_8026A2E8(f32, f32*);                 /* extern */
+s32 func_hd_code_8026A6F0(s32, s32, s32, s32, s32, s32); /* extern */
+s32 func_hd_code_802AB3C0(s32);                     /* extern */
 
 #endif
