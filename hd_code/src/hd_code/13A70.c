@@ -4,23 +4,36 @@
 #include "functions.h"
 #include "variables.h"
 
+// Data begin
 Vp D_hd_code_802E8C60 = {
   {
     {0x0080, 0x0080, 0x01FF, 0x0000},
     {0x0080, 0x0080, 0x01FF, 0x0000}
   }
 };
+// Data end
+
+// BSS begin
+
+Gfx D_hd_code_803650B0[40];
+Mtx D_hd_code_803651F0;
+Mtx D_hd_code_80365230;
+Mtx D_hd_code_80365270;
+Mtx D_hd_code_803652B0;
+Mtx D_hd_code_803652F0;
+s32 D_hd_code_80365330;
+// BSS end
 
 void func_hd_code_80258230(u8 arg0, s32 arg1, s16 arg2, s16 arg3) {
-  D_803643C8.end->unk1022 = arg0;
-  D_803643C8.end->unk1023 = 0;
-  D_803643C8.end->unk1000 = (f32) arg1;
-  D_803643C8.end->unk1018 = arg2;
-  D_803643C8.end->unk101A = arg3;
-  D_803643C8.end->unk101C = 0;
-  D_803643C8.end->unk101E = 0;
-  D_803643C8.end->unk1020 = 0;
-  D_803643C8.end++;
+  D_hd_code_803643C8.end->unk1022 = arg0;
+  D_hd_code_803643C8.end->unk1023 = 0;
+  D_hd_code_803643C8.end->unk1000 = (f32) arg1;
+  D_hd_code_803643C8.end->unk1018 = arg2;
+  D_hd_code_803643C8.end->unk101A = arg3;
+  D_hd_code_803643C8.end->unk101C = 0;
+  D_hd_code_803643C8.end->unk101E = 0;
+  D_hd_code_803643C8.end->unk1020 = 0;
+  D_hd_code_803643C8.end++;
 }
 
 void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
@@ -47,23 +60,23 @@ void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
       sp24 = arg4 - (sp2A << 5);
       sp1C = arg4 - arg2;
       if (sp2F != 0) {
-        sp20 = arg4 - D_803EBBF8;
+        sp20 = arg4 - D_hd_code_803EBBF8;
       } else {
         sp20 = 0x98967F;
       }
       if ((sp24 > 0) && (sp24 < sp20) && (sp24 < sp1C)) {
-        D_803EBBF8 = sp2A << 5;
+        D_hd_code_803EBBF8 = sp2A << 5;
         sp2E = 2;
       }
     }
   }
-  sp30 = D_803643C8.textures;
+  sp30 = D_hd_code_803643C8.textures;
   if (sp37 == 0) {
     do {
       if (sp30->unk1022 == arg0) {
         sp30->unk1004 = arg1;
         if (sp2E != 0) {
-          sp30->unk1008 = D_803EBBF8;
+          sp30->unk1008 = D_hd_code_803EBBF8;
         } else {
           sp30->unk1008 = arg2;
         }
@@ -85,7 +98,7 @@ void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
 s32 func_hd_code_802584BC(u8 arg0) {
   struct Texture* sp4;
 
-  sp4 = D_803643C8.textures;
+  sp4 = D_hd_code_803643C8.textures;
   while(1) { // ... internship?
     if(sp4->unk1022 == arg0) {
       return sp4->unk1008;
@@ -98,7 +111,7 @@ s32 func_hd_code_802584BC(u8 arg0) {
 s32 func_hd_code_80258500(u8 arg0) {
   struct Texture* sp4;
 
-  sp4 = D_803643C8.textures;
+  sp4 = D_hd_code_803643C8.textures;
   while(1) { // ... internship?
     if(sp4->unk1022 == arg0) {
       return sp4->unk1014;
@@ -125,7 +138,7 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
     u16 sp9A;
     u32 pad;
 
-    entry = &D_803650B0[0];
+    entry = &D_hd_code_803650B0[0];
 
     gSPViewport(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_802E8C60));
     gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
@@ -146,26 +159,26 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
     gDPSetRenderMode(entry++, G_RM_OPA_CI, G_RM_OPA_CI2);
     gDPSetCombineMode(entry++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
 
-    guPerspective(&D_803651F0, &sp9A, 45.0f, 1.0f, 1.0f, 1000.0f, 1.0f);
-    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_803651F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    guPerspective(&D_hd_code_803651F0, &sp9A, 45.0f, 1.0f, 1.0f, 1000.0f, 1.0f);
+    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803651F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPPerspNormalize_old(entry++, sp9A);
 
-    func_hd_code_802D4F68(&D_803652F0, 0.0f, 0.0f, -arg4);
-    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_803652F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_hd_code_802D4F68(&D_hd_code_803652F0, 0.0f, 0.0f, -arg4);
+    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803652F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    guAlign(&D_80365270, -90.0f, 1.0f, 0.0f, 0.0f);
-    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_80365270), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    guAlign(&D_hd_code_80365270, -90.0f, 1.0f, 0.0f, 0.0f);
+    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_80365270), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    guAlign(&D_803652B0, 180.0f, 0.0f, 1.0f, 0.0f);
-    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_803652B0), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    guAlign(&D_hd_code_803652B0, 180.0f, 0.0f, 1.0f, 0.0f);
+    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803652B0), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    func_hd_code_802D4F68(&D_80365230, -(arg1 / 32.0f), -(arg2 / 32.0f), -(arg3 / 32.0f));
-    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_80365230), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    func_hd_code_802D4F68(&D_hd_code_80365230, -(arg1 / 32.0f), -(arg2 / 32.0f), -(arg3 / 32.0f));
+    gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_80365230), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPDisplayList(entry++, VIRTUAL_TO_PHYSICAL(arg5));
     gSPEndDisplayList(entry++);
 
-    osWritebackDCache(&D_803651F0, 0x140);
-    func_hd_code_80284E54(&D_803650B0, entry - D_803650B0, 1, 0, 0x61F, 0);
+    osWritebackDCache(&D_hd_code_803651F0, 0x140);
+    func_hd_code_80284E54(&D_hd_code_803650B0, entry - D_hd_code_803650B0, 1, 0, 0x61F, 0);
 }
 
 void func_hd_code_80258B78(Gfx** arg0, struct Model1* arg1) {
@@ -192,20 +205,20 @@ void func_hd_code_80258B78(Gfx** arg0, struct Model1* arg1) {
     gDPSetPrimColor(entry++, 0, 0, 0xC8, 0xC8, 0xC8, 0xC8);
 
 
-    while (&D_803F4030[sp70] != D_803F7654) {
-        if (!D_803F4030[sp70].unkEA) {
+    while (&D_hd_code_803F4030[sp70] != D_hd_code_803F7654) {
+        if (!D_hd_code_803F4030[sp70].unkEA) {
 
-            switch (D_803F4030[sp70].unk30) {
+            switch (D_hd_code_803F4030[sp70].unk30) {
                 case 0xBA:
                 case 0xBB:
                 case 0xBC:
-                    sp68 = 0x3C - ((s32) (D_803F4030[sp70].unk14 - D_803F4030[sp70].unk44) / 800);
+                    sp68 = 0x3C - ((s32) (D_hd_code_803F4030[sp70].unk14 - D_hd_code_803F4030[sp70].unk44) / 800);
                     if (sp68 < 0) {
                         sp68 = 0;
                     }
-                    sp66 = (s16)((s32) D_803F4030[sp70].unk10 >> 5);
-                    sp64 = (s16) ((s32) D_803F4030[sp70].unk44 >> 5);
-                    sp62 = (s16) ((s32) D_803F4030[sp70].unk18 >> 5);
+                    sp66 = (s16)((s32) D_hd_code_803F4030[sp70].unk10 >> 5);
+                    sp64 = (s16) ((s32) D_hd_code_803F4030[sp70].unk44 >> 5);
+                    sp62 = (s16) ((s32) D_hd_code_803F4030[sp70].unk18 >> 5);
 
                     arg1->unk3900[sp6C].v.ob[0] = sp66 - sp68;
                     arg1->unk3900[sp6C].v.ob[1] = sp64;
@@ -236,7 +249,7 @@ void func_hd_code_80258B78(Gfx** arg0, struct Model1* arg1) {
                     sp6C++;
 
                     if (sp60 == 0) {
-                        gDPLoadTextureBlock(entry++, D_80365330 + 0x80000000, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                        gDPLoadTextureBlock(entry++, D_hd_code_80365330 + 0x80000000, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                         sp60 = 1;
                     }
 

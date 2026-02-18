@@ -88,6 +88,7 @@ typedef struct SCClient_s {
     OSMesgQueue         *msgQ;  /* where to send the frame msg  */
 } OSScClient;
 
+// TODO: This struct is in some way off. This should be fixed when we get to sched.c
 typedef struct {
     OSScMsg     retraceMsg;
     OSScMsg     prenmiMsg;
@@ -104,7 +105,8 @@ typedef struct {
     OSScTask    *curRSPTask;
     OSScTask    *curRDPTask;
     u32         frameCount;
-    s32         doAudio;
+    s32         unk803156C0;
+    u32         unk803156C4; // safe type: u32
 } OSSched;
 
 void            osCreateScheduler(OSSched *s, void *stack, OSPri priority,

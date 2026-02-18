@@ -35,7 +35,7 @@ void func_hd_code_80261528();                          /* extern */
 #define AUDIO_FRAME_MESSAGE_QUEUE_SIZE      8
 #define AUDIO_REPLY_MESSAGE_QUEUE_SIZE      8
 #define AUDIO_DMA_IO_QUEUE_SIZE            72
-#define AUDIO_DMA_QUEUE_SIZE               66
+#define AUDIO_DMA_QUEUE_SIZE               72
 #define AUDIO_DMA_MAX_BUFFER_LENGTH     0x200
 
 #define NUMBER_OUTPUT_BUFFERS               3
@@ -184,66 +184,6 @@ s32 CUSTOM_FX_PARAMS_N[CUSTOM_FX_SECTION_COUNT * CUSTOM_FX_SECTION_SIZE + 2] = {
 
 s32 g_FirstTime = 1;
 
-/*bss needs fixing */
-/*bss*/ extern s32 dword_CODE_bss_8005E4B0[2];
-
-/**
- * Address 8005E4B8.
- * (type is u64)
- * Used in amMain.
- * This looks like it stores the largest sDeltaTime between
- * counts of AUDIO_MANAGER_COUNT_INTERVAL.
- */
-/*bss*/ extern OSTime g_LargestDeltaTime;
-
-/**
- * Address 8005E4C0.
- * (type is u64)
- * Used in amMain.
- * Stores the elpased time of main loop (difference between sEndTime and sStartTime).
- */
-/*bss*/ extern OSTime g_DeltaTime;
-
-
-/**
- * Address 8005E4C8.
- * Every AUDIO_MANAGER_COUNT_INTERVAL number of events, the average for sDeltaTimeSum
- * is computed and stored here.
- */
-/*bss*/ extern u64 g_DeltaAverage;
-
-
-/**
- * Address 8005E4D0.
- * Tracks the sum total elapsed time. Reset every AUDIO_MANAGER_COUNT_INTERVAL.
- */
-/*bss*/ extern u64 g_DeltaTimeSum;
-
-/**
- * Address 8005E4D8.
- * (type is u64)
- * Used in amMain.
- * Stores the time at the start of the loop.
- */
-/*bss*/ OSTime g_StartTime;
-
-/**
- * Address 8005E4E0.
- * (type is u64)
- * Used in amMain.
- * Stores the time after primary processing is done.
- */
-/*bss*/ OSTime g_EndTime;
-
-/**
- * Unknown / unused
- */
-/*bss*/ extern char dword_CODE_bss_8005E4E8[0x30];
-
-/**
- * Address 8005e518.
- * sizeof(struct AudioManager_s) == 0x288 (648)
- */
 struct AudioManager_s {
 
     /**
@@ -291,38 +231,31 @@ struct AudioManager_s {
      */
     ALGlobals g;
 
-} g_AudioManager;
-
-/**
- * Address 0x8005e7a0.
- */
-/*bss*/ extern OSScClient g_AudioClient[2];
-
-/**
- * Address 0x8005e7b0.
- */
-/*bss*/ extern DMAState g_DmaState;
-
-/*bss*/ extern DMABuffer g_DmaBuffers[NUMBER_DMA_BUFFERS];
-
-/*bss*/ extern u32 g_MinFrameSize;
-/*bss*/ extern s32 g_FrameSize;
-/*bss*/ extern u32 g_MaxFrameSize;
-/*bss*/ extern s32 g_CommandLength;
-
-/*bss*/ extern OSIoMesg g_DmaIOMessageBuffer[AUDIO_DMA_IO_QUEUE_SIZE];
-
-/*bss*/ extern OSMesgQueue g_DmaMessageQueue;
-
-/*bss*/ extern OSMesg g_DmaMessageBuffer[AUDIO_DMA_QUEUE_SIZE];
+};
 
 extern s32 D_hd_code_80306E3C;
-extern s32 D_8036AFA0;
+extern s32 D_hd_code_803156A4;
+extern s32 D_hd_code_8036772C;
 
-extern s32 D_803156A4;
-extern s32 D_8036772C;
+// BSS Begin
+u64 pad_80368050;
 u64 D_80368058;
-extern u8 D_80368308; // stack for amMain / also called sp_audi
+OSTime g_StartTime;
+OSTime g_EndTime;
+struct AudioManager_s g_AudioManager;
+OSScClient g_AudioClient[2]; // TODO: could be wrong size. Is only 0x10?
+u8 D_80368308[0x2000]; // stack for amMain / also called sp_audi
+DMAState g_DmaState;
+DMABuffer g_DmaBuffers[NUMBER_DMA_BUFFERS];
+u32 g_MinFrameSize;
+s32 g_FrameSize;
+u32 g_MaxFrameSize;
+s32 g_CommandLength;
+OSIoMesg g_DmaIOMessageBuffer[AUDIO_DMA_IO_QUEUE_SIZE];
+OSMesgQueue g_DmaMessageQueue;
+OSMesg g_DmaMessageBuffer[AUDIO_DMA_QUEUE_SIZE];
+s32 D_hd_code_8036AFA0;
+// BSS End
 
 // Forward declarations
 s32 amDmaCallback(s32 addr, s32 len, void* state);
@@ -390,7 +323,7 @@ void amCreateAudioManager(ALSynConfig* alconf, s32 arg1) {
     osCreateMesgQueue(&g_AudioManager.replyMessageQueue, g_AudioManager.replyMessageBuffer, 8);
     osCreateMesgQueue(&g_AudioManager.frameMessageQueue, g_AudioManager.frameMessageBuffer, 8);
     osCreateMesgQueue(&g_DmaMessageQueue, g_DmaMessageBuffer, AUDIO_DMA_IO_QUEUE_SIZE);
-    osCreateThread(&g_AudioManager.audioThread, 4, amMain, NULL, &D_80368308 + 0x2000, arg1);
+    osCreateThread(&g_AudioManager.audioThread, 4, amMain, NULL, D_80368308 + 0x2000, arg1);
 }
 
 void amStartAudioThread(void)
@@ -417,7 +350,7 @@ void amMain(void* arg) {
         case 4:
             break;
         case 5:
-            if (D_803156A4 != 0) {
+            if (sc.audioListHead != 0) {
                 osSendMesg((OSMesgQueue* ) &sc, (void* )0x29E, 1);
             }
             g_StartTime = osGetTime();
@@ -430,19 +363,19 @@ void amMain(void* arg) {
                 amHandleDoneMessage(sp34);
             }
             sp30 = 0;
-            if (D_8036772A != 0) {
+            if (D_hd_code_8036772A != 0) {
                 func_hd_code_802613C8();
             }
-            if (D_80367728 != 0) {
+            if (D_hd_code_80367728 != 0) {
                 func_hd_code_80261068();
             }
-            if (D_80367729 != 0) {
+            if (D_hd_code_80367729 != 0) {
                 func_hd_code_80261284();
             }
-            if ((u8) D_80367730 == 0) {
+            if ((u8) D_hd_code_80367730 == 0) {
                 func_hd_code_802611F0();
             }
-            if (D_8036772C != 0) {
+            if (D_hd_code_8036772C != 0) {
                 func_hd_code_80261528();
             }
             break;
@@ -546,8 +479,8 @@ s32 amDmaCallback(s32 addr, s32 len, void* state) {
 
     }
 
-    if (sp28 > D_8036AFA0) {
-        D_8036AFA0 = sp28;
+    if (sp28 > D_hd_code_8036AFA0) {
+        D_hd_code_8036AFA0 = sp28;
     }
     dmaPtr = g_DmaState.firstFree;
     if (g_DmaState.firstFree == NULL) {

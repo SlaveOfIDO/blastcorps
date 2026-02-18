@@ -13,12 +13,14 @@ typedef struct UnknownData8024C414_s {
   /* 0x0A */ u16 unkA;
   /* 0x0C */ u32 pad2;
   /* 0x10 */ s32 unk10;
-  /* 0x14 */ s32 pad3;
+  /* 0x14 */ s32 unk14;
   /* 0x18 */ u8 unk18[0x4A - 0x18]; // flags? often check >0 and <6
   /* 0x4A */ u8 unk4A;
   /* 0x4B */ u8 pad4B[0x91 - 0x4B]; // -1 byte alignment
   /* 0x91 */ u8 unk91;
-  /* 0x92 */ u8 pad92[0xF0 - 0x92];
+  /* 0x92 */ u8 pad92[0x98 - 0x92];
+  /* 0x98 */ s16 unk98;
+  /* 0x9A */ u8 pad9A[0xF0 - 0x9A];
   /* 0xF0 */ s32 unkF0;
   /* 0xF4 */ u8 padF4[0xFF - 0xF4];
 } UnknownData8024C414;
@@ -266,6 +268,11 @@ struct S_80365340 {
   s32 unk8;
 };
 
+struct S_80365340_Wrapper {
+  struct S_80365340 *unk0;
+  s32 pad4;
+};
+
 struct S_80366BC0 {
   u8 unk0;
   u8 pad1;
@@ -364,7 +371,7 @@ struct S_80367400 {
   /* 0x1EC */ s32 unk1EC;
   /* 0x1F0 */ u8  unk1F0;
   u8 pad[3];
-};
+}; // size: 0x1F4
 
 
 struct S_802F3C24 {
@@ -434,5 +441,17 @@ struct S_802F3C10 {
   s16 unk10;
   s16 unk12;
 }; // size: 0x14
+
+
+struct S_80367BD0
+{
+  struct S_80367BCC* unk0; // 0x80367BD0
+  u8 unk4; // 0x80367BD4
+  u8 unk5; // 0x80367BD5
+  s16 unk6; // 0x80367BD6
+  s16 unk8; // 0x80367BD8
+  u32 unkC[6]; // 0x80367BDC
+};
+
 
 #endif

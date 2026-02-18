@@ -334,3 +334,8 @@ sndSetSfxSlotVolume = 0x80260B40;
 D_80367BF9 = 0x80367BF9;
 D_80367D53 = 0x80367D53;
 D_80368308 = 0x80368308; // stack pointer for 22EE0
+
+
+
+
+

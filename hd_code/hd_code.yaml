@@ -10,13 +10,13 @@ options:
   undefined_funcs_auto_path: undefined_funcs_auto.txt
   undefined_syms_auto_path: undefined_syms_auto.txt
   ld_legacy_generation: True # change this when ready to False
-  symbol_name_format: $SEG_$VRAM
+  symbol_name_format: hd_code_$VRAM
 segments:
 - name:  hd_code
   type: code
   start: 0x00000
   vram:  0x802447C0
-  # bss_size: 0x55448
+  bss_size: 0x5B950 # bss_size is 0xF09A0
   subsegments:
     - [0x00000, c, hd_code/00000] # done
     - [0x12D80, c, hd_code/12D80] # done
@@ -230,6 +230,18 @@ segments:
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]
-    - [0xCAEA0, .bss, hd_code/00000 ]
+    - { start: 0xCAEA0, type: .bss, name: hd_code/00000, vram: 0x8030F660 } # done
+    - [0xCAEA0, .bss, hd_code/12D80] # done
+    - [0xCAEA0, .bss, hd_code/13A70] # done
+    - [0xCAEA0, .bss, hd_code/14B30] # done
+    - [0xCAEA0, .bss, hd_code/168B0] # done
+    - [0xCAEA0, .bss, hd_code/17210] # done
+    - [0xCAEA0, .bss, hd_code/17A70] # done
+    - [0xCAEA0, .bss, hd_code/17E10] # done
+    - [0xCAEA0, .bss, hd_code/1A630] # done
+    - [0xCAEA0, .bss, hd_code/1C460] # done
+    - [0xCAEA0, .bss, hd_code/1D990] # done
+    - [0xCAEA0, .bss, hd_code/20460] # done
+    #- { start: 0xCAEA0, type: bss, subalign: 1, name: hd_code/hd_code_bss_rest, vram: 0x8036AFB0 }
   #- { start: 0xCAEA0, type: bss, vram: 0x8030F660 }
 - [0xCAEA0]

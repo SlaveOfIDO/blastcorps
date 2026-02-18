@@ -3,13 +3,18 @@
 #include "structs.h"
 #include "variables.h"
 
-u8 D_8039CAF0[0x50 * 0x200];
+// BSS Begin
+u8 D_hd_code_80365360[0x50];
+u16 D_hd_code_803653B0[0x54];
+u8 D_hd_code_80365458[0x100];
+u16 D_hd_code_80365558[0x14];
+// BSS End
 
 void func_hd_code_8025B070(void) {
   s32 sp4;
   for(sp4 = 0; sp4 < 0x50; sp4++) {
-    D_80365360[sp4] = 0;
-    D_803653B0[sp4] = 0;
+    D_hd_code_80365360[sp4] = 0;
+    D_hd_code_803653B0[sp4] = 0;
   }
 }
 
@@ -20,7 +25,7 @@ void* func_hd_code_8025B0B8(u16 arg0) {
   found = 0;
   sp1C = 0;
   while((sp1C < 0x50) && !found) {
-    if (D_803653B0[sp1C] == arg0) {
+    if (D_hd_code_803653B0[sp1C] == arg0) {
       found = 1;
     } else {
       sp1C++;
@@ -29,9 +34,9 @@ void* func_hd_code_8025B0B8(u16 arg0) {
   if (!found) {
     sp1C = 0;
     while ((sp1C < 0x50) && !found) {
-      if (D_803653B0[sp1C] == 0) {
-        func_hd_code_802A1040(arg0, &D_8039CAF0[sp1C * 0x200], 0);
-        D_803653B0[sp1C] = arg0;
+      if (D_hd_code_803653B0[sp1C] == 0) {
+        func_hd_code_802A1040(arg0, &D_hd_code_8039CAF0[sp1C * 0x200], 0);
+        D_hd_code_803653B0[sp1C] = arg0;
         found = 1;
       } else {
         sp1C++;
@@ -41,9 +46,9 @@ void* func_hd_code_8025B0B8(u16 arg0) {
   if (!found) {
     sp1C = 0;
     while (sp1C < 0x50 && !found) {
-      if (D_80365360[sp1C] == 0) {
-        func_hd_code_802A1040(arg0, &D_8039CAF0[sp1C * 0x200], 0);
-        D_803653B0[sp1C] = arg0;
+      if (D_hd_code_80365360[sp1C] == 0) {
+        func_hd_code_802A1040(arg0, &D_hd_code_8039CAF0[sp1C * 0x200], 0);
+        D_hd_code_803653B0[sp1C] = arg0;
         found = 1;
       } else {
         sp1C++;
@@ -54,16 +59,16 @@ void* func_hd_code_8025B0B8(u16 arg0) {
     func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "font.c", 0x51);
   }
   if (found) {
-    D_80365360[sp1C] = 3;
+    D_hd_code_80365360[sp1C] = 3;
   }
-  return &D_8039CAF0[sp1C * 0x200];
+  return &D_hd_code_8039CAF0[sp1C * 0x200];
 }
 
 void func_hd_code_8025B2B8(void) {
   s32 i;
   for (i = 0; i < 0x50; i++) {
-    if (D_80365360[i] != 0) {
-      D_80365360[i]--;
+    if (D_hd_code_80365360[i] != 0) {
+      D_hd_code_80365360[i]--;
     }
   }
 }
@@ -126,10 +131,10 @@ u8* func_hd_code_8025B558(u16* arg0) {
 
   sp4 = 0;
   while(arg0[sp4] != 0 && sp4 < 0xFF) {
-    D_80365458[sp4++] = (u8) arg0[sp4];
+    D_hd_code_80365458[sp4++] = (u8) arg0[sp4];
   }
-  D_80365458[sp4] = 0;
-  return D_80365458;
+  D_hd_code_80365458[sp4] = 0;
+  return D_hd_code_80365458;
 }
 
 u16* func_hd_code_8025B5D4(u16 *arg0, u16 *arg1, u16* arg2, s32 arg3) {
@@ -171,31 +176,31 @@ u16* func_hd_code_8025B7AC(u8* arg0) {
   for (sp1C = 0; sp1C < func_hd_code_8025B300(arg0); sp1C++) {
     switch (arg0[sp1C]) {
       case 0x20:
-        D_80365558[sp1C] = 0x1002;
+        D_hd_code_80365558[sp1C] = 0x1002;
         break;
       case 0x2E:
-        D_80365558[sp1C] = 0x3C;
+        D_hd_code_80365558[sp1C] = 0x3C;
         break;
       case 0x31:
       case 0x32:
       case 0x33:
       case 0x34:
-        D_80365558[sp1C] = arg0[sp1C] - 0x20;
+        D_hd_code_80365558[sp1C] = arg0[sp1C] - 0x20;
         break;
       default:
-        D_80365558[sp1C] = arg0[sp1C] - 0x27;
+        D_hd_code_80365558[sp1C] = arg0[sp1C] - 0x27;
         break;
       case 0x2F:
-        D_80365558[sp1C] = 0x3D;
+        D_hd_code_80365558[sp1C] = 0x3D;
         break;
       case 0x3A:
-        D_80365558[sp1C] = 0x3E;
+        D_hd_code_80365558[sp1C] = 0x3E;
         break;
     }
   }
-  D_80365558[sp1C] = 0xFFE;
+  D_hd_code_80365558[sp1C] = 0xFFE;
 
-  return D_80365558;
+  return D_hd_code_80365558;
 }
 
 void func_hd_code_8025B918(u16* arg0, u16* arg1) {
