@@ -27,7 +27,7 @@ void func_hd_code_80259BD4(Gfx**, struct Model1*);     /* extern */
 void func_hd_code_80259DC8(struct Model1*, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32); /* extern */
 void func_hd_code_8026EF70(struct S_802F8BDC*);        /* extern */
 u8* func_hd_code_8026F004(struct S_802F8BDC*, u16, s32); /* extern */
-u8 func_hd_code_8026F644(struct S_802F8BDC*, struct S_8036BB10*, s16); /* extern */
+u8 func_hd_code_8026F644(struct S_802F8BDC*, struct S_8020C070*, s16); /* extern */
 u16 func_hd_code_8026F82C(u16, u16, u16);             /* extern */
 u16 func_hd_code_8026F8A8(u16, u16, u16, u16);        /* extern */
 void func_hd_code_8026FB50(struct S_802F8BDC*);        /* extern */
@@ -67,7 +67,7 @@ extern f32 D_8036BB08;
 extern s16 D_8036BB0C;
 extern u8 D_8036BB0D;
 extern s8 D_8036BB0E;
-extern struct S_8036BB10* D_8036BB10;
+extern struct S_8020C070* D_8036BB10;
 extern u16 D_8036BB14;
 extern s16 D_8036BB1E;
 extern s16 D_8036BB20;
@@ -105,7 +105,7 @@ extern u32 D_hd_code_803156C4;
 extern u8 D_hd_code_8035805C;
 extern u8 D_8036BAA2[];
 extern u8 D_hd_code_802F499A[];
-extern struct S_8036BB10* D_8036BB24;
+extern struct S_8020C070* D_8036BB24;
 
 s32 func_hd_code_8026AD30(s16 arg0) {
   struct S_802F48D0* sp2C;
@@ -341,7 +341,7 @@ void func_hd_code_8026BA7C(struct S_802F8BDC* arg0) {
   struct S_80367BCC* sp2C;
   s32 sp28;
   u8 sp27;
-  struct S_8036BB10* sp20;
+  struct S_8020C070* sp20;
 
   sp27 = 4;
   func_hd_code_8026FB50(arg0);
@@ -383,7 +383,7 @@ Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
 // part of yoshi.c
 Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     struct S_802F8BDC* sp14C;
-    struct S_8036BB10* sp148;
+    struct S_8020C070* sp148;
     s32 sp144;
     s32 sp140;
     Gfx* entry;
@@ -910,7 +910,7 @@ void func_hd_code_8026EF70(struct S_802F8BDC* arg0) {
 }
 
 u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
-    struct S_8036BB10* sp3C;
+    struct S_8020C070* sp3C;
     u8 sp3B;
     u8* sp34;
     u16* sp30;
@@ -1024,7 +1024,7 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
 
 }
 
-u8 func_hd_code_8026F644(struct S_802F8BDC* arg0, struct S_8036BB10* arg1, s16 arg2) {
+u8 func_hd_code_8026F644(struct S_802F8BDC* arg0, struct S_8020C070* arg1, s16 arg2) {
   if (arg1->unk0 & 0x1000) {
     return MAX(0x00, MIN(0xFF, 0x200 - (((ABS(arg2)) << 9) / (arg0->unk2 / 3))));
   }

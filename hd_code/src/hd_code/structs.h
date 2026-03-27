@@ -4,12 +4,6 @@
 #include <PR/gbi.h>
 
 
-// TODO:
-// The following could be the same
-// * S_8036BB10
-// * S_8020C070
-// * S_802F5804
-
 
 // Perhaps some kind of Scene struct?
 typedef struct UnknownData8024C414_s {
@@ -32,24 +26,6 @@ typedef struct UnknownData8024C414_s {
   /* 0xF0 */ s32 unkF0;
   /* 0xF4 */ u8 padF4[0xFF - 0xF4];
 } UnknownData8024C414;
-
-struct S_802F8BDC {
-  /* 0x00 */ u16 unk0;  // maybe u16
-  /* 0x02 */ u16 unk2;
-  /* 0x04 */ s16 unk4; // safe type
-  /* 0x06 */ s16 unk6;
-  /* 0x08 */ s32 unk8;
-  /* 0x0C */ u16 unkC;
-  /* 0x0E */ u16 unkE; // safe type
-  /* 0x10 */ u16 unk10; // safe type
-  /* 0x12 */ u16 unk12;
-  /* 0x14 */ u16 unk14;
-  /* 0x16 */ u16 unk16;
-  /* 0x18 */ u16 unk18; // safe type
-  /* 0x1A */ u8 unk1A;
-  /* 0x1B */ u8 unk1B;
-
-}; // size: 0x1C / 28
 
 #define TOPLEVEL_DL_SIZE (0xB5E)
 
@@ -248,6 +224,7 @@ struct S_80366BC4 {
   u8 unk0;
   u8 unk1;
 };
+
 struct S_802FA8B0 {
   Vtx v[4];
 };
@@ -269,8 +246,6 @@ struct S_80366BC0 {
   u8 pad1;
   u16 unk2;
 };
-
-
 
 struct S_80367C04
 {
@@ -446,10 +421,28 @@ struct S_80367BD0
 };
 
 
+struct S_802F8BDC {
+  /* 0x00 */ u16 unk0;  // maybe u16
+  /* 0x02 */ u16 unk2;
+  /* 0x04 */ s16 unk4; // safe type
+  /* 0x06 */ s16 unk6;
+  /* 0x08 */ s32 unk8;
+  /* 0x0C */ u16 unkC;
+  /* 0x0E */ u16 unkE; // safe type
+  /* 0x10 */ u16 unk10; // safe type
+  /* 0x12 */ u16 unk12;
+  /* 0x14 */ u16 unk14;
+  /* 0x16 */ u16 unk16;
+  /* 0x18 */ u16 unk18; // safe type
+  /* 0x1A */ u8 unk1A;
+  /* 0x1B */ u8 unk1B;
+
+}; // size: 0x1C / 28
+
 struct S_8020C070 {
   /* 0x00 */ u16 unk0;
-  /* 0x02 */ u16 unk2;
-  /* 0x04 */ u16 unk4;
+  /* 0x02 */ s16 unk2;
+  /* 0x04 */ s16 unk4;
   /* 0x06 */ u16 unk6;
   /* 0x08 */ u16 unk8;
   /* 0x0A */ u16 padA;
@@ -457,43 +450,12 @@ struct S_8020C070 {
   /* 0x10 */ void* unk10; // Safe type
   /* 0x14 */ u8 unk14;
   /* 0x15 */ u8 pad15;
-  /* 0x16 */ u16 pad16;
-  /* 0x18 */ s32 pad18;
+  /* 0x16 */ u16 unk16;
+  /* 0x18 */ u8 unk18;
+  /* 0x19 */ u8 unk19;
+  /* 0x1A */ u8 unk1A;
+  /* 0x1B */ u8 unk1B;
 }; // Size: 0x1C -> This is safe
 
-struct S_8036BB10 {
-  u16 unk0;
-  s16 unk2;
-  s16 unk4;
-  u16 unk6;
-  u16 unk8;
-  s16 padA;
-  u8* unkC;
-  u16* unk10;
-  u8 unk14;
-  u8 pad15;
-  u16 unk16;
-  u8 unk18;
-  u8 unk19;
-  u8 unk1A;
-  u8 unk1B;
-}; // Size: 0x1C
-
-struct S_802F5804 {
-  u16 unk0;  // maybe u16
-  u16 unk2;
-  s32 unk4;
-  s32 unk8;
-  u8* unkC;
-  void* unk10;  // some kind of address
-  u8 unk14;
-  u8 pad15;
-  u8 pad16;
-  u8 pad17;
-  u8 unk18; // safe type
-  u8 pad19;
-  u8 pad1A;
-  u8 pad1B;
-}; // size: 0x1C / 28
 
 #endif

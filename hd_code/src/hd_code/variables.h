@@ -357,7 +357,7 @@ extern struct S_80367BCC D_hd_code_802F49F4[];
 extern struct S_8020C070 D_8020C070[];
 extern struct S_80367C04 D_hd_code_802E8F94[];
 extern struct S_802E8FCA D_hd_code_802E8FCA[60];
-extern struct S_802F5804 D_hd_code_802F5804[0x1DA];
+extern struct S_8020C070 D_hd_code_802F5804[0x1DA];
 extern struct S_802F8BDC D_hd_code_802F8BDC[0x7A]; // 8 bytes 122 = 0x7A
 extern struct S_802F8BE4 D_hd_code_802F8BE4[10]; // Struct of size 0x1C, length of array is wrong
 extern struct S_802FA8B0 D_hd_code_802FA8B0[];
