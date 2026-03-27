@@ -889,8 +889,8 @@ void Thread3(void* arg0) {
           {
             func_hd_code_80255DC8();
             func_80200714(1);
-            D_8020C070[0x09].unkA = "QUIT GAME!",
-            D_8020C070[0x09].unkE = &D_hd_code_803047CC,
+            D_8020C070[0x09].unkC = "QUIT GAME!",
+            D_8020C070[0x09].unk10 = &D_hd_code_803047CC,
             D_8020C070[0x09].unk8 = 0x16U,
             D_8020C070[0x09].unk6 = D_8020C070[0x09].unk8;
             func_hd_code_8026AF6C(0x800C);
@@ -927,8 +927,8 @@ void Thread3(void* arg0) {
             {
               func_hd_code_8025D184();
               func_80200714(1);
-              D_8020C070[0x09].unkA = "ERASE SAVED GAME!",
-              D_8020C070[0x09].unkE = &D_hd_code_803047B4,
+              D_8020C070[0x09].unkC = "ERASE SAVED GAME!",
+              D_8020C070[0x09].unk10 = &D_hd_code_803047B4,
               D_8020C070[0x09].unk8 = 0x14U,
               D_8020C070[0x09].unk6 = D_8020C070[0x09].unk8;
               func_hd_code_8026AF6C(0x800C);
@@ -941,8 +941,8 @@ void Thread3(void* arg0) {
           }
           case 0x0100000000000000:
           {
-            D_8020C070[0x09].unkA = "BECOME GUEST PLAYER:",
-            D_8020C070[0x09].unkE = &D_hd_code_803047DC,
+            D_8020C070[0x09].unkC = "BECOME GUEST PLAYER:",
+            D_8020C070[0x09].unk10 = &D_hd_code_803047DC,
             D_8020C070[0x09].unk8 = 0x14U,
             D_8020C070[0x09].unk6 = D_8020C070[0x09].unk8;
             func_hd_code_8026AF6C(0x800C);

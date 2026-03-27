@@ -35,7 +35,7 @@ extern s32 D_hd_code_803EFEB8;
 extern s32 D_hd_code_803EFEBC;
 extern s8 D_hd_code_803EFEC8;
 
-extern struct S_80367BCC D_hd_code_802F49F4[];
+
 extern u32 D_hd_code_80364AA8;
 extern struct S_80367C04 *D_hd_code_80367C04;
 

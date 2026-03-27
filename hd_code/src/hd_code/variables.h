@@ -353,7 +353,7 @@ extern s8 D_hd_code_80308254;
 extern s8 D_hd_code_80308264;
 extern s8 D_hd_code_80308CE0;
 extern struct Model1 D_2000000;
-
+extern struct S_80367BCC D_hd_code_802F49F4[];
 extern struct S_8020C070 D_8020C070[];
 extern struct S_80367C04 D_hd_code_802E8F94[];
 extern struct S_802E8FCA D_hd_code_802E8FCA[60];
@@ -418,10 +418,6 @@ extern u32 D_hd_code_80364420;
 extern u32 D_hd_code_80364420;
 extern u32 D_hd_code_80364428;
 extern u64 D_8021A830;
-extern u64 D_hd_code_80364A98;
-extern u64 D_hd_code_80364A98;
-extern u64 D_hd_code_80364A98;
-extern u64 D_hd_code_80364A98;
 extern u64 D_hd_code_80364A98;
 extern u64 D_hd_code_80364A90;
 extern u64 D_hd_code_80364A90;
@@ -640,6 +636,7 @@ extern f32 D_hd_code_80367714;
 extern s8 D_hd_code_80367730;
 extern s16 D_hd_code_8036BB18;
 extern struct S_80367BD0 D_hd_code_80367BD0;
+extern u16 D_8036BB14;
 
 
 #endif
