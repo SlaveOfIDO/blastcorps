@@ -182,9 +182,8 @@ struct Struct8036BED8 {
   s16 y;
   s16 z;
   s8 unk6;
-  s8 unk7;
-  u8 unk8[0x40];
-  u8 unk48[0x40];
+  u8 unk7;
+  Vtx unk8[2][4];
 };
 
 struct S_802E8FCA {
