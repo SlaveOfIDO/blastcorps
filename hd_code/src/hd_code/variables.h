@@ -194,7 +194,7 @@ extern s32 D_6A9F10; // attract.raw
 extern s32 D_6A9F10; // attract.raw
 extern s32 D_6AD3F0; // 6AD3F0.bin
 extern s32 D_6AD3F0; // 6AD3F0.bin
-extern s32 D_80218D30;
+extern OSThread D_80218D30;
 extern s32 D_80218EE0;
 extern s32 D_80219F58;
 

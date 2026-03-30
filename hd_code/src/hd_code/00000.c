@@ -12,11 +12,11 @@ u8 D_hd_code_8030F660;
 s32 D_hd_code_8030F664;
 struct UnknownStruct8030F668 D_hd_code_8030F668;
 u8 bss_pad_1[0x11AC];
-OSThread D_hd_code_80310820; // bss
-s32 D_hd_code_803109D0[0x80]; // bss, size 0x200
-OSThread D_hd_code_80310BD0; // bss
-s64 D_hd_code_80310D80[0x400]; // bss, size 0x2000
-s32 D_hd_code_80312D80[0x800]; // bss, size 0x2000
+OSThread g_Thread1;
+u8 g_Thread1Stack[0x200];
+OSThread g_Thread3;
+s64 g_Thread3Stack[0x400]; // size 0x2000
+s32 g_SchedulerStack[0x800]; // bss, size 0x2000
 OSMesgQueue D_hd_code_80314D80; // bss
 OSMesg D_hd_code_80314D98[0xC2]; // bss
 OSMesgQueue D_hd_code_803150A0; // bss
@@ -214,18 +214,18 @@ void MainJump() {
     osPiRawReadIo((u32)sp68, &sp28[sp74]);
   }
   func_hd_code_80270AE0(sp28);
-  osCreateThread(&D_hd_code_80310820, 1, Thread1, NULL, D_hd_code_803109D0 + 0x80, 0xA);
-  osStartThread(&D_hd_code_80310820);
+  osCreateThread(&g_Thread1, 1, Thread1, NULL, g_Thread1Stack + 0x200, 0xA);
+  osStartThread(&g_Thread1);
 }
 
 void Thread1(void* arg0) {
   u8 pad[2];
-  osDpSetStatus(4U);
-  osCreatePiManager(0x96, &D_hd_code_80314D80, &D_hd_code_80314D98, 0xC2);
-  osCreateThread(&D_hd_code_80310BD0, 3, Thread3, arg0, D_hd_code_80310D80 + 0x400, 0xA);
-  osStartThread(&D_hd_code_80310BD0);
+  osDpSetStatus(DPC_CLR_FREEZE);
+  osCreatePiManager(150, &D_hd_code_80314D80, D_hd_code_80314D98, 0xC2);
+  osCreateThread(&g_Thread3, 3, Thread3, arg0, g_Thread3Stack + 0x400, 0xA);
+  osStartThread(&g_Thread3);
   if (D_hd_code_802FA254 == 0) {
-    osStartThread(&D_hd_code_80310BD0);
+    osStartThread(&g_Thread3);
   }
   osSetThreadPri(0, 0);
   while(1);
@@ -234,7 +234,7 @@ void Thread1(void* arg0) {
 void Thread3(void* arg0) {
     s32 sp64;
     s32 sp60;
-    s32 sp5C;
+    OSMesg sp5C;
     u8 sp5B;
     s32 sp54;
 
@@ -280,7 +280,7 @@ void Thread3(void* arg0) {
             func_hd_code_80255DC8();
             func_hd_code_8025D184();
             func_80200714(1);
-            osSendMesg(&D_80219EF8, 0x01000001, 1);
+            osSendMesg(&D_80219EF8, (OSMesg)0x01000001, OS_MESG_BLOCK);
             func_hd_code_8026AF6C(0x8011);
             break;
           }
@@ -295,7 +295,7 @@ void Thread3(void* arg0) {
           }
           case 0x0000000010000000:
           {
-            osSendMesg(&D_80219EF8, 0x01000001, 1);
+            osSendMesg(&D_80219EF8, (OSMesg)0x01000001, OS_MESG_BLOCK);
             func_801E8DCC(4U);
             func_hd_code_8026AF6C(0x8011);
             break;
@@ -307,35 +307,31 @@ void Thread3(void* arg0) {
             func_hd_code_802A0700();
             func_hd_code_8025D184();
             func_80200714(1);
-            osSendMesg(&D_80219EF8, 0x0100000F, 1);
-            osRecvMesg(&D_80219F50, &sp5C, 1);
-            if ((sp5C != 0) || (D_hd_code_8039C541 != 0))
-            {
+            osSendMesg(&D_80219EF8, (OSMesg)0x0100000F, OS_MESG_BLOCK);
+            osRecvMesg(&D_80219F50, &sp5C, OS_MESG_BLOCK);
+            if (sp5C != 0 || D_hd_code_8039C541 != 0) {
               D_hd_code_802E8BF8 = 1;
             }
-            else
-            {
+            else {
               D_hd_code_802E8BF8 = 0;
             }
             D_hd_code_8039C541 = 0;
-            if (D_hd_code_802E8BF8 == 0)
-            {
+            if (D_hd_code_802E8BF8 == 0) {
               func_801E8C40(4U);
               D_hd_code_80364AA0 = 0x10000000;
             }
-            else
-            {
+            else {
               playerNumber = 0U;
               D_hd_code_80364AE9 = 0U;
               D_hd_code_80364AEA = 0,
-              osSendMesg(&D_80219EF8, 0x01000010, 1);
-              osRecvMesg(&D_80219F50, &D_hd_code_8039C4B4, 1);
+              osSendMesg(&D_80219EF8, (OSMesg)0x01000010, OS_MESG_BLOCK);
+              osRecvMesg(&D_80219F50, &D_hd_code_8039C4B4, OS_MESG_BLOCK);
               if (D_hd_code_8039C4B4 == 0)
               {
                 func_hd_code_8029A7E4("NO EE PRESENT! - USING DUMMY EE\n");
               }
-              osSendMesg(&D_80219EF8, 0x01000006, 1);
-              osRecvMesg(&D_80219F50, &sp5C, 1);
+              osSendMesg(&D_80219EF8, (OSMesg)0x01000006, OS_MESG_BLOCK);
+              osRecvMesg(&D_80219F50, &sp5C, OS_MESG_BLOCK);
               if (sp5C == 0)
               {
                 sp5C = func_80201E80();
@@ -440,7 +436,7 @@ void Thread3(void* arg0) {
             }
             func_hd_code_80255DC8();
             func_801ECC8C();
-            osViBlack(1);
+            osViBlack(TRUE);
             func_hd_code_802A0700();
             func_801F8530(levelno);
             break;
@@ -573,7 +569,7 @@ void Thread3(void* arg0) {
             }
             func_hd_code_80255DC8();
             if (sp5B != 0) {
-              osSendMesg(&D_80219EF8, (levelno << 8) | 0xD | (playerNumber << 0x10), 1);
+              osSendMesg(&D_80219EF8, (OSMesg)((levelno << 8) | 0xD | (playerNumber << 0x10)), OS_MESG_BLOCK);
             }
 
             D_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~1;
@@ -603,9 +599,9 @@ void Thread3(void* arg0) {
           {
             func_hd_code_80255DC8();
             if (D_hd_code_80364A90 == 0x4000) {
-              osRecvMesg(&D_80219F50, NULL, 1);
+              osRecvMesg(&D_80219F50, NULL, OS_MESG_BLOCK);
             }
-            osViBlack(1);
+            osViBlack(TRUE);
             func_hd_code_80256A34(NULL);
             func_hd_code_802661EC();
             if (levelno == 0x32) {
@@ -861,9 +857,9 @@ void Thread3(void* arg0) {
             func_hd_code_80255DC8();
             if (D_hd_code_80364A90 == 0x4000)
             {
-              osRecvMesg(&D_80219F50, NULL, 1);
+              osRecvMesg(&D_80219F50, NULL, OS_MESG_BLOCK);
             }
-            osViBlack(1);
+            osViBlack(TRUE);
             func_hd_code_802A0700();
             if (func_801E7000() != 0)
             {
@@ -877,8 +873,8 @@ void Thread3(void* arg0) {
           }
           case 0x0000000000040000:
           {
-            osSendMesg(&D_80219EF8, (playerNumber << 0x10) | 0x14 | 0x01000000, 1);
-            osRecvMesg(&D_80219F50, NULL, 1);
+            osSendMesg(&D_80219EF8, (OSMesg)((playerNumber << 0x10) | 0x14 | 0x01000000), OS_MESG_BLOCK);
+            osRecvMesg(&D_80219F50, NULL, OS_MESG_BLOCK);
             func_801EA93C("ENTER NAME!", &D_hd_code_803047A0, 7, 0x1E, &D_hd_code_80364AF0[playerNumber]);
             func_hd_code_8026AF6C(0x800B);
             func_hd_code_8025D184();
@@ -912,17 +908,17 @@ void Thread3(void* arg0) {
             func_hd_code_80255DC8();
             func_hd_code_80299C20();
             if (D_hd_code_80364A90 == 0x4000 || levelno == 0x2F) {
-              osRecvMesg(&D_80219F50, NULL, 1);
+              osRecvMesg(&D_80219F50, NULL, OS_MESG_BLOCK);
             }
-            osViBlack(1);
+            osViBlack(TRUE);
             func_hd_code_80256A34(NULL);
             break;
           }
           case 0x0040000000000000:
           {
             func_hd_code_80255DC8();
-            osSendMesg(&D_80219EF8, 0x01000010, 1);
-            osRecvMesg(&D_80219F50, &D_hd_code_8039C4B4, 1);
+            osSendMesg(&D_80219EF8, (OSMesg)0x01000010, OS_MESG_BLOCK);
+            osRecvMesg(&D_80219F50, &D_hd_code_8039C4B4, OS_MESG_BLOCK);
             if (D_hd_code_8039C4B4 != 0)
             {
               func_hd_code_8025D184();
@@ -1642,7 +1638,7 @@ block_275:
     }
     func_hd_code_802559F8(sp5C, &D_hd_code_80358078);
     for(sp68 = 0; sp68 < nextdma; sp68++) {
-        osRecvMesg(&D_hd_code_80315180, NULL, 1);
+        osRecvMesg(&D_hd_code_80315180, NULL, OS_MESG_BLOCK);
     }
 
     if (!MQ_IS_EMPTY(&D_hd_code_80315180)) {
@@ -4122,15 +4118,16 @@ u8 func_hd_code_80255628(void) {
 }
 
 void func_hd_code_802558C8(Gfx* gfx, s32* arg1) {
-  Gfx *gfx2 = gfx;
-  gDPPipeSync(gfx2++);
-  gDPSetCycleType(gfx2++, G_CYC_FILL);
-  gDPSetColorImage(gfx2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358050[D_hd_code_8035805C]);
-  gDPSetFillColor(gfx2++, 0x00010001);
-  gDPPipeSync(gfx2++);
-  gDPFillRectangle(gfx2++, 0, 0, 319, 239);
+  Gfx *entry = gfx;
 
-  *arg1 += (s32) (gfx2 - gfx);
+  gDPPipeSync(entry++);
+  gDPSetCycleType(entry++, G_CYC_FILL);
+  gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358050[D_hd_code_8035805C]);
+  gDPSetFillColor(entry++, 0x00010001);
+  gDPPipeSync(entry++);
+  gDPFillRectangle(entry++, 0, 0, 319, 239);
+
+  *arg1 += entry - gfx;
 }
 
 void func_hd_code_802559F8(Gfx* gfx, s32* length) {
@@ -4154,10 +4151,10 @@ void func_hd_code_80255AD0(void) {
 
     sp40 = 1.0f;
     D_hd_code_80364A90 = 0x20;
-    osCreateMesgQueue(&D_hd_code_803150A0, &D_hd_code_803150B8, 0x32);
-    osCreateMesgQueue(&D_hd_code_80315180, &D_hd_code_80315198, 0x90);
-    func_hd_code_80270D20(&sc, D_hd_code_80312D80 + 0x800, 0xD, osTvType != 1 ? 16 : 2, 1);
-    osCreateMesgQueue(&D_hd_code_803153D8, &D_hd_code_803153F8, 0x10);
+    osCreateMesgQueue(&D_hd_code_803150A0, D_hd_code_803150B8, 0x32);
+    osCreateMesgQueue(&D_hd_code_80315180, D_hd_code_80315198, 0x90);
+    osCreateScheduler(&sc, g_SchedulerStack + 0x800, 0xD, osTvType != OS_TV_NTSC ? OS_VI_PAL_LAN1 : OS_VI_NTSC_LAN1, 1);
+    osCreateMesgQueue(&D_hd_code_803153D8, D_hd_code_803153F8, 0x10);
     func_hd_code_80270E50(&sc, &D_hd_code_803156D8, &D_hd_code_803153D8, 1, 1);
     sp2F = func_hd_code_8028A370();
     func_hd_code_80261588();
@@ -4168,7 +4165,7 @@ void func_hd_code_80255AD0(void) {
     D_hd_code_80358050[1] = VIRTUAL_TO_PHYSICAL(&D_80000400 + 0x9600);
     D_hd_code_80358058 = VIRTUAL_TO_PHYSICAL(&func_init_8021ED00);
     func_hd_code_80284DB0();
-    osWriteBackDCacheAll();
+    osWritebackDCacheAll();
     func_hd_code_8028FC10();
     if (!(sp2F & 1)) {
         D_hd_code_80364A98 = 0x0800000000000000;
@@ -4180,7 +4177,7 @@ void func_hd_code_80255AD0(void) {
         D_hd_code_80364A98 = 0x10;
     }
     for(sp44 = 0x1FF; sp44 >= 0; sp44--) {
-        D_hd_code_80310D80[sp44] = 0x1122334455667788;
+        g_Thread3Stack[sp44] = 0x1122334455667788;
     }
 }
 
@@ -4190,7 +4187,7 @@ void func_hd_code_80255D34(void) {
 
   sp1F = 0;
   for(sp18 = 0x1FF; sp18 >= 0 && sp1F == 0; sp18--) {
-    if (D_hd_code_80310D80[sp18] != 0x1122334455667788) {
+    if (g_Thread3Stack[sp18] != 0x1122334455667788) {
       sp1F = 1;
       func_hd_code_8029A7E4("stack end =%d\n", sp18);
     }
@@ -4198,15 +4195,15 @@ void func_hd_code_80255D34(void) {
 }
 
 void func_hd_code_80255DC8(void) {
-    void* sp2C;
+    s32 sp2C;
     s32 pad;
     s32 sp24;
     Gfx* sp20;
 
     sp24 = (s32)&D_788000 - (s32)&D_787F40;
-    osViBlack(1);
+    osViBlack(TRUE);
     D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
-    osWriteBackDCacheAll();
+    osWritebackDCacheAll();
     osInvalDCache(0x80000000, 0x400000);
     D_hd_code_803649F4 = 0;
     D_hd_code_80358068 = 0;
@@ -4226,7 +4223,7 @@ void func_hd_code_80255DC8(void) {
     func_hd_code_802558C8(D_hd_code_803156F8[D_hd_code_8035805C].dp, &D_hd_code_80358078);
     func_hd_code_802559F8(D_hd_code_803156F8[D_hd_code_8035805C].dp, &D_hd_code_80358078);
     D_hd_code_80358070 = (u8*)0x8004B400;
-    func_hd_code_80257490((u8**)(&D_hd_code_80358070), 0x10); // TODO: Crazy convert
+    func_hd_code_80257490(&D_hd_code_80358070, 0x10);
     D_hd_code_8036E694 = D_hd_code_80358070;
     D_hd_code_80358070 += 0x1400 * 8;
     if ((D_hd_code_802E8F94[levelno].unk0 == 2) && !(D_hd_code_80364A98 & 0x0000100000000002)) {

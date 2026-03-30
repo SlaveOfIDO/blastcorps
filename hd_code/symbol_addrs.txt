@@ -96,7 +96,7 @@ osSpTaskLoad = 0x802DAE1C; // segment:hd_code
 osSpTaskStartGo = 0x802DAF7C; // segment:hd_code
 osSpTaskYield = 0x802DAFC0; // segment:hd_code
 osSendMesg = 0x802D47C0; // segment:hd_code
-osWriteBackDCacheAll = 0x802D6710; // segment:hd_code
+osWritebackDCacheAll = 0x802D6710; // segment:hd_code
 osCreateViManager = 0x802DA610; // segment:hd_code
 __osViDevMgrMain = 0x802DA794; // segment:hd_code
 osViSetMode = 0x802DA970; // segment:hd_code
@@ -335,7 +335,7 @@ D_80367BF9 = 0x80367BF9;
 D_80367D53 = 0x80367D53;
 D_80368308 = 0x80368308; // stack pointer for 22EE0
 
-
+osCreateScheduler = 0x80270D20;
 
 
 
