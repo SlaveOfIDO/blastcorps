@@ -438,10 +438,10 @@ void func_hd_code_80260EC0(void) {
 
 void func_hd_code_80260EE0(u8 arg0) {
   if (D_hd_code_80367728 != 0) {
-    func_hd_code_8029A7E4("OH DEAR - pushing tune but we're still popping!\n");
+    rmonPrintf("OH DEAR - pushing tune but we're still popping!\n");
     return;
   }
-  func_hd_code_8029A7E4("push tune %d\n", (u8) arg0);
+  rmonPrintf("push tune %d\n", (u8) arg0);
   D_hd_code_80367400->unk1F0 = D_hd_code_80367708;
   D_hd_code_80367708 = arg0;
   D_hd_code_80367730 = 0;
@@ -449,7 +449,7 @@ void func_hd_code_80260EE0(u8 arg0) {
 }
 
 void func_hd_code_80260F60(f32 arg0) {
-  func_hd_code_8029A7E4("1 pop tune");
+  rmonPrintf("1 pop tune");
   if (&D_hd_code_80366C30[0] == D_hd_code_80367400) {
     return;
   }
@@ -458,7 +458,7 @@ void func_hd_code_80260F60(f32 arg0) {
   if (&D_hd_code_80366C30[0] == D_hd_code_80367400) {
     D_hd_code_80367730 = 1;
   }
-  func_hd_code_8029A7E4("2 pop tune %d\n", D_hd_code_80367400->unk1F0);
+  rmonPrintf("2 pop tune %d\n", D_hd_code_80367400->unk1F0);
   D_hd_code_80367708 = D_hd_code_80367400->unk1F0;
   func_hd_code_802D76C0(D_hd_code_80367734);
   D_hd_code_80367728 = 2;
@@ -514,7 +514,7 @@ void func_hd_code_802611F0(void) {
 
   func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &sp1C);
   if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (func_hd_code_802D4E10(D_hd_code_80367734) == 0) && (sp20 != 0)) {
-    func_hd_code_8029A7E4("auto popping\n");
+    rmonPrintf("auto popping\n");
     func_hd_code_8026101C();
   }
 }
@@ -662,7 +662,7 @@ void func_hd_code_80261588(void) {
     sp84.slotCount = 8;
     sp84.heap = &D_hd_code_80367718;
     sndNewPlayerInit(&sp84);
-    func_hd_code_8029A7E4("%d bytes audio heap left over\n", D_hd_code_80367718.len - ((s32)D_hd_code_80367718.cur - (s32)D_hd_code_80367718.base));
+    rmonPrintf("%d bytes audio heap left over\n", D_hd_code_80367718.len - ((s32)D_hd_code_80367718.cur - (s32)D_hd_code_80367718.base));
     D_hd_code_8036772A = 0;
     D_hd_code_80367728 = 0;
     D_hd_code_80367710 = D_hd_code_8036770C = 1.0f;
@@ -673,7 +673,7 @@ void func_hd_code_80261588(void) {
 
 void func_hd_code_802619D0(u32 effectId) {
   if (effectId >= 0x1CU) {
-    func_hd_code_8029A7E4("effect id %d out of range!\n", effectId);
+    rmonPrintf("effect id %d out of range!\n", effectId);
     return;
   }
 

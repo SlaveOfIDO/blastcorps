@@ -143,7 +143,6 @@ void func_hd_code_802D62A8(s32, f32, f32, f32, f32, f32, f32, f32, f32, f32); /*
 u8 func_hd_code_80255628();                         /* extern */
 s32 func_hd_code_802AC4C4(s32, s32, s32, s32, s32, s32, s32, s32); /* extern */
 void func_hd_code_80261588();                          /* extern */
-void func_hd_code_80270E50(void*, void*, void*, s32, s32);        /* extern */
 void func_hd_code_80284DB0();                          /* extern */
 u8 func_hd_code_8028A370();                         /* extern */
 void func_hd_code_8028FC10();                          /* extern */
@@ -173,7 +172,6 @@ void func_hd_code_80264C20(s32);                       /* extern */
 void func_hd_code_80268664(s32);                       /* extern */
 void func_hd_code_8026A988();                          /* extern */
 s32 func_hd_code_8026F92C(u64);                 /* extern */
-s32 func_hd_code_80270ECC(OSSched*, s32*);                    /* extern */
 s32 func_hd_code_802729F0(s32, s32);                  /* extern */
 s32 func_hd_code_80275430();                          /* extern */
 s32 func_hd_code_802775C0();                          /* extern */

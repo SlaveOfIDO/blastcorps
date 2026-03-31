@@ -487,10 +487,10 @@ void func_hd_code_80259EC4(s32 arg0, u8* sp44_a1, u16* sp48_a2, u8 arg3, s32 arg
                 D_hd_code_80365340.unk0[characterIndex].unk8 = func_hd_code_8025B0B8(sp3E);
                 characterIndex++;
                 if (characterIndex >= maxCharacters) {
-                    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "index<maxCharacters", "drawtext.c", 0x1B3);
+                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "index<maxCharacters", "drawtext.c", 0x1B3);
                 }
                 if (characterIndex >= maxCharacters) {
-                    func_hd_code_8029A7E4("%d %d\n", characterIndex, maxCharacters);
+                    rmonPrintf("%d %d\n", characterIndex, maxCharacters);
                 }
             }
             if (arg3 == 1) {

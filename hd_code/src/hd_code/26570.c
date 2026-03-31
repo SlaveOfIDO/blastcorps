@@ -42,48 +42,60 @@ void func_hd_code_8026BA7C(struct S_802F8BDC*);        /* extern */
 s32 func_hd_code_80297EF8(s32);                     /* extern */
 u8 func_hd_code_8026FA38(char** arg0, s32* arg1);
 
-extern u32 D_hd_code_80364AA8;
-extern struct S_802F48D0 D_hd_code_802F48D0[];
-extern struct S_802F4A22 D_hd_code_802F4A22[];
-extern u64 D_hd_code_80364A98;
-extern u8 D_8036BAE8[];
-extern u8 D_hd_code_802F4878[];
-extern u32 D_8036BB00;
-extern u16 D_8036BB06;
-extern u16 D_8036BB48[];
-extern u16 D_8036BB4A[];
 extern u16 D_hd_code_802E8C98[];
 extern u16 D_hd_code_802E8C9C[];
+extern u8 D_hd_code_802F4878[];
+extern struct S_802F48D0 D_hd_code_802F48D0[];
+extern struct S_802F4A22 D_hd_code_802F4A22[];
+extern struct S_802F9934 D_hd_code_802F9934[7]; // Buildings data?
 extern s32 D_hd_code_8030BE64;
 extern s32 D_hd_code_8030BE90;
 extern s32 D_hd_code_8030BE94;
-extern s32 D_803F7684;
-extern struct S_802F9934 D_hd_code_802F9934[7]; // Buildings data?
-extern u8 D_8036BA48[];
-extern u8 D_8036BA98[];
-extern u32 D_8036BAFC;
-extern u16 D_8036BB04;
-extern f32 D_8036BB08;
-extern s16 D_8036BB0C;
-extern u8 D_8036BB0D;
-extern s8 D_8036BB0E;
-extern struct S_8020C070* D_8036BB10;
-extern u16 D_8036BB14;
-extern s16 D_8036BB1E;
-extern s16 D_8036BB20;
-extern f32 D_8036BB28;
-extern f32 D_8036BB2C;
-extern s32 D_8036BB30;
-extern f32 D_8036BB34; // safe type
-extern f32 D_8036BB38;
-extern u16 D_8036BB3C;
-extern u16 D_8036BB3E;
-extern s32 D_8036BB40;
-extern s32 D_8036BB44;
+extern u64 D_hd_code_80364A98;
+extern u32 D_hd_code_80364AA8;
+
+u8 bss_pad_8036B980[0x8036B9A8 - 0x8036B980];
+char D_hd_code_8036B9A8[0x8036BA48 - 0x8036B9A8];
+u8 D_8036BA48[0x50];
+u8 D_8036BA98[0x8];
+u8 D_8036BAA0[0x48];
+u8 D_8036BAE8[0x14];
+u32 D_8036BAFC;
+u32 D_8036BB00;
+u16 D_8036BB04;
+u16 D_8036BB06;
+f32 D_8036BB08;
+s16 D_8036BB0C;
+s8 D_8036BB0E;
+s8 bss_pad_8036BB0F;
+struct S_8020C070* D_8036BB10;
+u16 D_8036BB14;
+u16 D_8036BB16;
+s16 D_8036BB18;
+s16 D_8036BB1A;
+s16 D_hd_code_8036BB1C;
+s16 D_8036BB1E;
+s16 D_8036BB20;
+s16 bss_pad_8036BB22;
+struct S_8020C070* D_hd_code_8036BB24;
+f32 D_8036BB28;
+f32 D_8036BB2C;
+s32 D_8036BB30;
+f32 D_8036BB34; // safe type
+f32 D_8036BB38;
+u16 D_8036BB3C;
+u16 D_8036BB3E;
+s32 D_8036BB40;
+s32 D_8036BB44;
+u16 D_8036BB48[0x34];
+
 extern s8 D_80370C11;
 extern s8 D_80370C12;
 extern s8 D_80370C13;
 extern s8 D_80370C14;
+
+extern s32 D_803F7684;
+
 /*
 u64 D_hd_code_802F46C0[] = {
 
@@ -105,7 +117,6 @@ extern u32 D_hd_code_803156C4;
 extern u8 D_hd_code_8035805C;
 extern u8 D_8036BAA2[];
 extern u8 D_hd_code_802F499A[];
-extern struct S_8020C070* D_8036BB24;
 
 s32 func_hd_code_8026AD30(s16 arg0) {
   struct S_802F48D0* sp2C;
@@ -129,11 +140,11 @@ s32 func_hd_code_8026AD30(s16 arg0) {
         if (sp2C->unk2[sp20] == arg0) {
           sp1C = D_hd_code_80364AF0[playerNumber].unk88[arg0] < (s32) D_hd_code_802F499A[arg0];
           sp18 = levelno == 0;
-          if (!D_8036BAA2[arg0] && ((sp18 != 0) || (sp1C != 0))) {
+          if (!D_8036BAA0[arg0+2] && ((sp18 != 0) || (sp1C != 0))) {
             if ((sp1C != 0) && (sp18 == 0)) {
               D_hd_code_80364AF0[playerNumber].unk88[arg0] += 1;
             }
-            D_8036BAA2[arg0] = 1;
+            D_8036BAA0[arg0+2] = 1;
             func_hd_code_8026AF6C((s16) arg0 | 0x8000 | 0x2000);
             sp2B = 1;
           }
@@ -154,26 +165,26 @@ void func_hd_code_8026AF6C(u16 arg0) {
   sp1C = arg0 & 0xFF;
   if (D_8036BB14) {
     if (D_8036BB14 != 0) {
-      func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x520);
+      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x520);
     }
-    func_hd_code_8029A7E4("NEW: %x OLD:%x\n", arg0, D_8036BB14);
+    rmonPrintf("NEW: %x OLD:%x\n", arg0, D_8036BB14);
   }
   if ((arg0 & 0x4000) && (arg0 != 0x4000)) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
   }
   if ((sp1C == 0x1E) || (sp1C == 0x23) || (sp1C == 5) || (sp1C == 0xE)) {
     D_8036BB1A = -1;
   }
   if ((sp1E == 0x1E) || (sp1E == 0x23) || (sp1E == 5) || (sp1E == 0xE)) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "yoshi.c", 0x52C);
-    func_hd_code_8029A7E4("OH MY GOD!\n");
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "yoshi.c", 0x52C);
+    rmonPrintf("OH MY GOD!\n");
     return;
   }
   if (D_8036BB14) {
     if (D_8036BB14 != 0) {
-      func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x533);
+      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x533);
     }
-    func_hd_code_8029A7E4("GOING FOR NEW: %x OLD:%x\n", arg0, D_8036BB14);
+    rmonPrintf("GOING FOR NEW: %x OLD:%x\n", arg0, D_8036BB14);
   }
   D_8036BB14 = arg0;
 }
@@ -189,7 +200,7 @@ void func_hd_code_8026B118(s32 arg0) {
     s32 sp38;
     s32 sp34;
 
-    D_8036BB1C = 1;
+    D_hd_code_8036BB1C = 1;
     D_8036BB16 = 0;
     D_8036BB14 = 0;
     D_8036BB1A = -1;
@@ -368,12 +379,12 @@ Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
   Gfx* entry;                                       /* compiler-managed */
 
   entry = arg0;
-  if ((D_8036BB1C == 1) && (D_8036BB18 != -1)) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x61F);
+  if ((D_hd_code_8036BB1C == 1) && (D_8036BB18 != -1)) {
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x61F);
   }
   entry = func_hd_code_8026BCE0(entry, arg1, arg2);
-  if ((D_8036BB1C == 1) && (D_8036BB18 != -1)) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x623);
+  if ((D_hd_code_8036BB1C == 1) && (D_8036BB18 != -1)) {
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x623);
   }
   gDPPipeSync(entry++);
   *arg2 += entry - arg0;
@@ -425,24 +436,24 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
 
     sp12C = D_hd_code_802F47B0[0x12];
     sp12C[0] = sp12C[1] = (0xFF - D_8036BB0C);
-    sp12C[4] = sp12C[5] = (0x00 + D_8036BB0D);
+    sp12C[4] = sp12C[5] = (0x00 + (u8)D_8036BB0C);
 
 
     sp12C = D_hd_code_802F47B0[0x13];
     sp12C[2] = sp12C[1] = (0xFF - D_8036BB0C);
-    sp12C[6] = sp12C[5] = (0x00 + D_8036BB0D);
+    sp12C[6] = sp12C[5] = (0x00 + (u8)D_8036BB0C);
 
 
     sp12C = D_hd_code_802F47B0[0x14];
     sp12C[2] = (0xFF - D_8036BB0C);
     sp12C[6] = (D_8036BB0C);
 
-    if ((D_hd_code_80364A90 == 0x200) && (D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((D_8036BB1A = -1, (D_8036BB1C == 4)) || (D_8036BB1C == 2))) {
-        func_hd_code_8029A7E4("putting off!\n");
+    if ((D_hd_code_80364A90 == 0x200) && (D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((D_8036BB1A = -1, (D_hd_code_8036BB1C == 4)) || (D_hd_code_8036BB1C == 2))) {
+        rmonPrintf("putting off!\n");
         func_hd_code_8026AF6C(0x4000U);
     }
     if ((D_8036BB18 == -1) && (D_8036BB14 & 0x4000)) {
-        func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "yoshi.c", 0x65B);
+        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "yoshi.c", 0x65B);
         D_8036BB14 = 0;
         return gfx;
     }
@@ -450,20 +461,20 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
         sp126 = D_8036BB14 & 0xFF;
         sp124 = D_8036BB14 & 0x2000;
         sp120 = 0;
-        func_hd_code_8029A7E4("yoshiDemand=%x\n", D_8036BB14);
+        rmonPrintf("yoshiDemand=%x\n", D_8036BB14);
         if (D_8036BB14 & 0x8000) {
             D_8036BB1A = -1;
             if (D_8036BB18 != -1) {
                 sp120 = D_hd_code_802F8BE4[D_8036BB18].unk0 & 0x08000000;
             }
-            if ((D_8036BB1C == 1) || (sp124 != 0) || (sp120 != 0)) {
+            if ((D_hd_code_8036BB1C == 1) || (sp124 != 0) || (sp120 != 0)) {
                 D_8036BB18 = (s16) sp126;
-                D_8036BB1C = 1;
+                D_hd_code_8036BB1C = 1;
             } else {
                 D_8036BB1A = (s16) sp126;
             }
         }
-        if (D_8036BB1C != 8) {
+        if (D_hd_code_8036BB1C != 8) {
             sp130 = 1;
         }
         D_8036BB14 = 0;
@@ -478,7 +489,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     }
     sp14C = &D_hd_code_802F8BDC[D_8036BB18];
     func_hd_code_8026FB50(sp14C);
-    if ((sp14C->unk8 & 0x20) && (D_8036BB1C == 2)) {
+    if ((sp14C->unk8 & 0x20) && (D_hd_code_8036BB1C == 2)) {
         if ((((D_80370C28 & 0x8000) && !(D_80370C2A & 0x8000)) || ((sp14C->unk8 & 0x80000000) && (D_80370C28 & 0x1000) && !(D_80370C2A & 0x1000))) && (sp14C->unk1A != 0)) {
             sp13A = D_8036BB10[sp14C->unk18].unk16;
             if (sp13A != 0) {
@@ -505,11 +516,11 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     }
     if (sp130 != 0) {
         D_8036BAFC = D_hd_code_803156C4;
-        switch(D_8036BB1C) {
+        switch(D_hd_code_8036BB1C) {
             case 8:
                 D_8036BAFC = D_hd_code_803156C4 - D_8036BB08 * D_8036BB38 * D_8036BB34;
             case 1:
-                D_8036BB1C = 4;
+                D_hd_code_8036BB1C = 4;
                 D_8036BB34 = 1.0f;
                 if (sp14C->unk8 & 0x18) {
                     D_8036BB08 = 40.0f;
@@ -555,7 +566,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             case 4:
                 D_8036BAFC = (D_8036BB38 - sp128) * D_8036BB08 + D_hd_code_803156C4;
             case 2:
-                D_8036BB1C = 8;
+                D_hd_code_8036BB1C = 8;
                 sp13A = sp14C->unk14;
                 if (sp13A != 0) {
                     sndPlaySfx(D_hd_code_80367738, (s16) sp13A, NULL);
@@ -569,7 +580,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
                 break;
         }
     }
-    switch (D_8036BB1C) {
+    switch (D_hd_code_8036BB1C) {
     case 2:
         if (sp14C->unk8 & 0x100000) {
             sp11F = D_8036BB2C < (sp14C->unk2 / 8 - D_8036BB10[sp14C->unkE + sp14C->unk10 - 1].unk4);
@@ -587,7 +598,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             if (sp14C->unk8 & 0x2000) {
                 func_hd_code_80261570(0.0f);
             }
-            D_8036BB1C = 8;
+            D_hd_code_8036BB1C = 8;
             D_8036BAFC = D_hd_code_803156C4;
         }
         break;
@@ -597,7 +608,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             D_8036BB38 = (f32)(D_hd_code_803156C4 - D_8036BAFC) / D_8036BB08;
             if (sp128 < D_8036BB38) {
                 D_8036BAFC = D_hd_code_803156C4;
-                D_8036BB1C = 2;
+                D_hd_code_8036BB1C = 2;
                 D_8036BB38 = sp128;
 
                 if (sp14C->unk8 & 0x40) {
@@ -623,7 +634,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             D_8036BB38 = sp128 - (D_hd_code_803156C4 - D_8036BAFC) / D_8036BB08;
             if (D_8036BB38 < 0.001) {
                 D_8036BB38 = 0;
-                D_8036BB1C = 1;
+                D_hd_code_8036BB1C = 1;
                 if (sp14C->unk8 & 0x02000000) {
                     D_hd_code_802E8BD4 = 1;
                 }
@@ -638,10 +649,10 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
         }
     }
 
-    if (D_8036BB1C != 1) {
+    if (D_hd_code_8036BB1C != 1) {
         D_8036BB20 = (func_hd_code_802574F0(4.71 + ((D_8036BB38 * D_8036BB34) / sp128) * 1.57) + 1.0) * 255.0;
     }
-    if (D_8036BB1C != 1 && D_8036BB38 * D_8036BB34 > 0.1) {
+    if (D_hd_code_8036BB1C != 1 && D_8036BB38 * D_8036BB34 > 0.1) {
         sp136 = (u16) sp14C->unk0 / 2;
         sp134 = (u16) sp14C->unk2 / 2;
         guOrtho(&arg1->unk1240, (f32) (-sp14C->unk4 - (sp136)), (f32) ((-sp14C->unk4 - (sp136)) + 0x13F), (f32) ((-(s16) sp14C->unk6 - (sp134)) + 0xEF), (f32) (-(s16) sp14C->unk6 - (sp134)), -256.0f, 256.0f, 256.0f);
@@ -678,7 +689,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             guRotateRPY(&arg1->unk1280, D_8036BB38, D_8036BB38, 1.0f);
             gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->unk1280), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         }
-        if ((sp14C->unk8 & 0x20) && (D_8036BB1C == 2)) {
+        if ((sp14C->unk8 & 0x20) && (D_hd_code_8036BB1C == 2)) {
             s32 spD8 = 0;
             s32 spD4 = 0;
 
@@ -935,7 +946,7 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
         }
         return sp34;
     case 1:
-        if (D_8036BB1C == 2) {
+        if (D_hd_code_8036BB1C == 2) {
             D_8036BB1E = 2;
             D_8036BB00 = D_hd_code_803156C4;
         }
@@ -965,11 +976,11 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
             }
             if ((u8) arg2 != 0) {
                 if (sp30 == 0) {
-                    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "jtext", "./vidiPrint.h", 0x46);
+                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "jtext", "./vidiPrint.h", 0x46);
                 }
             } else {
                 if (sp34 == 0) {
-                    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "text", "./vidiPrint.h", 0x46);
+                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "text", "./vidiPrint.h", 0x46);
                 }
             }
             sp28 = 0;
@@ -989,7 +1000,7 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
                 sp26 = func_hd_code_8026F8A8(arg0->unkE, arg0->unk10, D_8036BB04, 0x100);
                 if (sp26 == D_8036BB04) {
                     D_8036BB1E = 0;
-                    if ((arg0->unk8 & 0x400000) && (D_8036BB1C == 2)) {
+                    if ((arg0->unk8 & 0x400000) && (D_hd_code_8036BB1C == 2)) {
                         D_8036BAFC = D_hd_code_803156C4;
                     }
                 } else {
@@ -1001,7 +1012,7 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
                 (D_8036BB48)[D_8036BB06] = D_hd_code_802E8C98[sp3B];
                 if (!(sp3C->unk0 & 0x4000) && ((u32) ((u32) D_hd_code_803156C4 % 10U) >= 6U)) {
                     D_8036BB48[D_8036BB06] = D_hd_code_802E8C9C[sp3B];
-                    D_8036BB4A[D_8036BB06] = D_hd_code_802E8C98[sp3B];
+                    D_8036BB48[D_8036BB06+1] = D_hd_code_802E8C98[sp3B];
                 }
             }
             if ((u8) arg2 != 0) {
@@ -1058,7 +1069,7 @@ s32 func_hd_code_8026F92C(u64 arg) {
   s64 sp1C;
 
   if ((arg == 0)) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "in", "yoshi.c", 0x8DE);
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "in", "yoshi.c", 0x8DE);
   }
   if ((arg == 0)) {
     return -1;
@@ -1076,7 +1087,7 @@ u8 func_hd_code_8026FA38(char** arg0, s32* arg1) {
   s32 sp18;
 
   sp18 = 0;
-  func_hd_code_8029A7E4("path builing=%d\n", D_803F7684);
+  rmonPrintf("path builing=%d\n", D_803F7684);
   sp1C = 0;
   if (sp18 == 0) {
     loop_1:
@@ -1103,7 +1114,7 @@ u8 func_hd_code_8026FA38(char** arg0, s32* arg1) {
 
 void func_hd_code_8026FB50(struct S_802F8BDC* arg0) {
   if (arg0->unk8 & 0x8000) {
-    D_8036BB10 = D_8036BB24;
+    D_8036BB10 = D_hd_code_8036BB24;
     return;
   }
   if (arg0->unk8 & 0x800) {

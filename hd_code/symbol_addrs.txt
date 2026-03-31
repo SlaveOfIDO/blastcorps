@@ -37,7 +37,6 @@ g_CommandLength = 0x8036A8C4;
 g_DmaBuffers = 0x8036A318;
 g_DmaIOMessageBuffer = 0x8036A8C8;
 LoadLevelRdus = 0x8026FBB0; // segment:hd_code
-Thread5 = 0x80270F7C; // segment:hd_code
 InitiateDma = 0x8028B4C4; // segment:hd_code
 LoadLevelAmmo = 0x8028C190; // segment:hd_code
 LoadLevelTnt = 0x8028D4C0; // segment:hd_code
@@ -89,7 +88,7 @@ proutSprintf = 0x802D6A60; // segment:hd_code
 sprintf = 0x802D6ACC; // segment:hd_code
 osCreateMesgQueue = 0x802D64E0; // segment:hd_code
 osSetEventMesg = 0x802DA9E0; // segment:hd_code
-osViSetEventMsg = 0x802DAA50; // segment:hd_code
+osViSetEventMesg = 0x802DAA50; // segment:hd_code
 osRecvMesg = 0x802D4910; // segment:hd_code
 osSpTaskDunno = 0x802DAD00; // segment:hd_code
 osSpTaskLoad = 0x802DAE1C; // segment:hd_code
@@ -336,6 +335,9 @@ D_80367D53 = 0x80367D53;
 D_80368308 = 0x80368308; // stack pointer for 22EE0
 
 osCreateScheduler = 0x80270D20;
-
-
+osScAddClient = 0x80270E50;
+osScRemoveClient = 0x80270ECC;
+__scMain = 0x80270F7C;
+osViModeTable = 0x80306E70;
+rmonPrintf = 0x8029A7E4;
 

@@ -56,7 +56,7 @@ void* func_hd_code_8025B0B8(u16 arg0) {
     }
   }
   if (!found) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "font.c", 0x51);
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "font.c", 0x51);
   }
   if (found) {
     D_hd_code_80365360[sp1C] = 3;

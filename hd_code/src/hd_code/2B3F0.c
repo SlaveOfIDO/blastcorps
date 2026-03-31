@@ -8,24 +8,29 @@ s32 func_hd_code_8026AD30(s16);                         /* extern */
 void func_hd_code_802AC544(s16, s16, s16);             /* extern */
 s32 func_hd_code_80270A54(struct Struct8036BED8*);  /* extern */
 
-extern u8 D_hd_code_802F9A00[]; // This is a 16 x 16 32 bits texture image
-extern u8*D_hd_code_802F9E00[]; // This is a 16 x 16 32 bits texture image
 extern Vtx D_hd_code_802F99C0[];
-extern u16 D_8036BBB2[];
+extern u8 D_hd_code_802F9A00[]; // This is a 16 x 16 32 bits texture image
+extern u8* D_hd_code_802F9E00[]; // This is a 16 x 16 32 bits texture image
 extern s32 D_hd_code_802FA200[];
-extern s32 D_8036BED4;
-extern f32 D_8036BEDC;
-extern u8 D_8036BEE0;
-extern s32 D_803BE70C;
-extern s32 D_803BE710;
-extern s16 D_803BE714;
-extern u16 D_803C30A8[];
 extern s32 D_hd_code_802FA250;
 extern s32 D_hd_code_802FA258;
 extern s32 D_hd_code_802FA25C;
 extern s32 D_hd_code_802FA260;
 extern s32 D_hd_code_802FA264;
 extern s32 D_hd_code_802FA26C;
+
+// BSS Begin
+u16 D_8036BBB0[0x192];
+s32 D_8036BED4;
+struct Struct8036BED8 *D_8036BED8;
+f32 D_8036BEDC;
+u8  D_8036BEE0;
+// BSS End
+
+extern s32 D_803BE70C;
+extern s32 D_803BE710;
+extern s16 D_803BE714;
+extern u16 D_803C30A8[];
 
 void LoadLevelRdus(struct vec3s* arg0, struct vec3s* arg1) {
   s32 pad1;
@@ -81,7 +86,7 @@ void func_hd_code_8026FEC4(void) {
           func_hd_code_8026AD30(0x46);
         }
         if (D_hd_code_80364A90 != 0x40) {
-          D_8036BBB0[D_8036BED4] = D_8036BBB2[D_8036BED4] = sp34;
+          D_8036BBB0[D_8036BED4] = D_8036BBB0[D_8036BED4+1] = sp34;
           D_8036BED4++;
         }
         func_hd_code_802AC544(D_8036BED8[sp34].x, D_8036BED8[sp34].y + 5, D_8036BED8[sp34].z);

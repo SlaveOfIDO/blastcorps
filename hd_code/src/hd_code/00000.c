@@ -28,10 +28,6 @@ u8 D_hd_code_803153F0;
 OSMesg D_hd_code_803153F8[0x10];
 u8 D_hd_code_80315438;
 OSSched sc; // 0x80315440
-s32 pad_803156C8;
-s32 pad_803156CC;
-s32 pad_803156D0;
-s32 pad_803156D4;
 void* D_hd_code_803156D8;
 u8 bss_pad_4[0x4 * 2];
 s32 D_hd_code_803156E8;
@@ -243,7 +239,7 @@ void Thread3(void* arg0) {
     {
       D_hd_code_80364A70 = 0;
       do {
-        func_hd_code_8029A7E4("game mode switch from %d to %d\n", func_hd_code_8026F92C(D_hd_code_80364A90), func_hd_code_8026F92C(D_hd_code_80364A98));
+        rmonPrintf("game mode switch from %d to %d\n", func_hd_code_8026F92C(D_hd_code_80364A90), func_hd_code_8026F92C(D_hd_code_80364A98));
 
         D_hd_code_80364AA0 = 0ULL;
 
@@ -328,7 +324,7 @@ void Thread3(void* arg0) {
               osRecvMesg(&D_80219F50, &D_hd_code_8039C4B4, OS_MESG_BLOCK);
               if (D_hd_code_8039C4B4 == 0)
               {
-                func_hd_code_8029A7E4("NO EE PRESENT! - USING DUMMY EE\n");
+                rmonPrintf("NO EE PRESENT! - USING DUMMY EE\n");
               }
               osSendMesg(&D_80219EF8, (OSMesg)0x01000006, OS_MESG_BLOCK);
               osRecvMesg(&D_80219F50, &sp5C, OS_MESG_BLOCK);
@@ -415,7 +411,7 @@ void Thread3(void* arg0) {
               playerNumber = (u8) D_hd_code_80364AEA;
             }
             func_hd_code_8028B3E0();
-            func_hd_code_8029A7E4("World screen centred on level %d\n", levelno);
+            rmonPrintf("World screen centred on level %d\n", levelno);
             playerNumber = (u8) D_hd_code_80364AEA;
             func_801ECE9C();
             if (D_hd_code_80365065 == 0) {
@@ -424,7 +420,7 @@ void Thread3(void* arg0) {
               D_hd_code_803643D5 = 0;
               func_801FE018(8);
               levelno = D_hd_code_80364AF0[playerNumber].unk8;
-              func_hd_code_8029A7E4("going to level %d\n", levelno);
+              rmonPrintf("going to level %d\n", levelno);
             }
 
             if (D_hd_code_8039CA60 = 0, ((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0)) {
@@ -524,14 +520,14 @@ void Thread3(void* arg0) {
                   D_hd_code_802E8BD4 &= !func_hd_code_8026AD30(0x57);
 
                 D_hd_code_802E8BD8 = !D_hd_code_802E8BD4;
-                func_hd_code_8029A7E4("Unpause at start = %d\n", D_hd_code_802E8BD4);
+                rmonPrintf("Unpause at start = %d\n", D_hd_code_802E8BD4);
                 D_hd_code_80364A58 = sc.unk803156C0;
                 D_hd_code_80358064 = 0;
                 func_hd_code_8025BB38();
-                func_hd_code_8029A7E4("snew ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA70, D_hd_code_8036EA74, D_hd_code_8036EA78, (s32) D_hd_code_8036EA79, (s32) D_hd_code_8036EA7C, (s32) D_hd_code_8036EA7A, (s32) D_hd_code_8036EA7B);
-                func_hd_code_8029A7E4("sold ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA60, D_hd_code_8036EA64, D_hd_code_8036EA68, (s32) D_hd_code_8036EA69, (s32) D_hd_code_8036EA6C, (s32) D_hd_code_8036EA6A, (s32) D_hd_code_8036EA6B);
-                func_hd_code_8029A7E4("sres ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA80, D_hd_code_8036EA84, D_hd_code_8036EA88, (s32) D_hd_code_8036EA89, (s32) D_hd_code_8036EA8C, (s32) D_hd_code_8036EA8A, (s32) D_hd_code_8036EA8B);
-                func_hd_code_8029A7E4("srs2 ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA90,  D_hd_code_8036EA94, D_hd_code_8036EA98, (s32) D_hd_code_8036EA99, (s32) D_hd_code_8036EA9C, (s32) D_hd_code_8036EA9A, (s32) D_hd_code_8036EA9B);
+                rmonPrintf("snew ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA70, D_hd_code_8036EA74, D_hd_code_8036EA78, (s32) D_hd_code_8036EA79, (s32) D_hd_code_8036EA7C, (s32) D_hd_code_8036EA7A, (s32) D_hd_code_8036EA7B);
+                rmonPrintf("sold ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA60, D_hd_code_8036EA64, D_hd_code_8036EA68, (s32) D_hd_code_8036EA69, (s32) D_hd_code_8036EA6C, (s32) D_hd_code_8036EA6A, (s32) D_hd_code_8036EA6B);
+                rmonPrintf("sres ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA80, D_hd_code_8036EA84, D_hd_code_8036EA88, (s32) D_hd_code_8036EA89, (s32) D_hd_code_8036EA8C, (s32) D_hd_code_8036EA8A, (s32) D_hd_code_8036EA8B);
+                rmonPrintf("srs2 ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA90,  D_hd_code_8036EA94, D_hd_code_8036EA98, (s32) D_hd_code_8036EA99, (s32) D_hd_code_8036EA9C, (s32) D_hd_code_8036EA9A, (s32) D_hd_code_8036EA9B);
                 break;
               }
             }
@@ -560,7 +556,7 @@ void Thread3(void* arg0) {
               {
                 if (playerNumber != D_hd_code_80364AE9) {
                   D_hd_code_80364AE9 = playerNumber,
-                  func_hd_code_8029A7E4("switching to new player ...........\n");
+                  rmonPrintf("switching to new player ...........\n");
                   func_hd_code_80285814();
                 }
                 break;
@@ -662,7 +658,7 @@ void Thread3(void* arg0) {
               {
                 if (playerNumber != D_hd_code_80364AE9)
                 {
-                  func_hd_code_8029A7E4(
+                  rmonPrintf(
                     "switching to new player ...........\n");
                   D_hd_code_80364AE9 = (u8)playerNumber;
                   D_hd_code_803643D5 = 0;
@@ -686,7 +682,7 @@ void Thread3(void* arg0) {
               {
                 if (saveIt[playerNumber] && saveIt[playerNumber] != levelno + 1)
                 {
-                  func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!saveIt[playerNumber] || saveIt[playerNumber]==levelno+1", "./master_switch.c", 0x1E8U);
+                  rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!saveIt[playerNumber] || saveIt[playerNumber]==levelno+1", "./master_switch.c", 0x1E8U);
                 }
                 saveIt[playerNumber] = levelno + 1;
                 if (D_hd_code_803643D7 != 0)
@@ -712,7 +708,7 @@ void Thread3(void* arg0) {
                 {
                   if (recordStatus(&pakBuffer) >= 0x3D)
                   {
-                    func_hd_code_8029A7E4(
+                    rmonPrintf(
                       "\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n",
                       "record_status(pakBuffer)<=LEVEL_SAVE_SIZE-4",
                       "./master_switch.c",
@@ -721,7 +717,7 @@ void Thread3(void* arg0) {
                   if ((saveLevel != 0) &&
                       (saveLevel != (levelno + 1)))
                   {
-                    func_hd_code_8029A7E4(
+                    rmonPrintf(
                       "\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n",
                       "!saveLevel || saveLevel==levelno+1",
                       "./master_switch.c",
@@ -749,7 +745,7 @@ void Thread3(void* arg0) {
                 }
                 if (D_hd_code_8036EA74 == 0)
                 {
-                  func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n",
+                  rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n",
                                         "nss.tc",
                                         "./master_switch.c",
                                         0x212U);
@@ -1016,7 +1012,7 @@ void Thread3(void* arg0) {
         func_hd_code_8025BBE8(0, 0, 0);
       }
       if (areWeFading()) {
-        func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n",
+        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n",
           "!areWeFading()", "hd.c", 0x273U);
       }
       switch (D_hd_code_80364A98)
@@ -1156,7 +1152,7 @@ void func_hd_code_802475D8(void) {
             D_hd_code_802E8BD8 = 0, D_hd_code_802E8BD4 = 0, D_hd_code_802E8BD0 = 0;
             if(D_hd_code_80364A90 & 0x104) {
                 if (D_hd_code_80358064 != 0) {
-                    func_hd_code_8029A7E4("LOCKING KEYS!\n");
+                    rmonPrintf("LOCKING KEYS!\n");
                     D_hd_code_80370C38 = 1;
                 }
                 func_hd_code_80261E9C(D_hd_code_80364A90);
@@ -1405,7 +1401,7 @@ void func_hd_code_802475D8(void) {
     } else {
 block_275:
         if ((D_hd_code_80364AA8 == 1) && (D_hd_code_80364A5C == 0)) {
-            func_hd_code_8029A7E4("TIME IN LEVEL=%d\n", D_hd_code_80364A5C = sc.unk803156C0 - D_hd_code_80364A58);
+            rmonPrintf("TIME IN LEVEL=%d\n", D_hd_code_80364A5C = sc.unk803156C0 - D_hd_code_80364A58);
         }
     }
     LoadLevelTodo40(D_hd_code_80358074);
@@ -1642,10 +1638,10 @@ block_275:
     }
 
     if (!MQ_IS_EMPTY(&D_hd_code_80315180)) {
-        func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "MQ_IS_EMPTY(&textureDmaMessageQ)", "hd.c", 0x5E5);
+        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "MQ_IS_EMPTY(&textureDmaMessageQ)", "hd.c", 0x5E5);
     }
     if (!(nextdma - no_palette_dmas < 0x90)) {
-        func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "nextdma-no_palette_dmas<NUM_TEXTURE_DMAS", "hd.c", 0x5E6);
+        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "nextdma-no_palette_dmas<NUM_TEXTURE_DMAS", "hd.c", 0x5E6);
     }
     for(sp68 = 0; sp68 < (nextdma - no_palette_dmas); sp68++) {
         func_hd_code_802A57AC();
@@ -1658,7 +1654,7 @@ block_275:
     if ((D_hd_code_803643D7 == 0) && (D_hd_code_803643D6 == 0)) {
         if (D_hd_code_803643DA != 0) {
             if (D_hd_code_803643D9 != 0) {
-                func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!cmo_hit_request", "hd.c", 0x5F9);
+                rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!cmo_hit_request", "hd.c", 0x5F9);
             }
             D_hd_code_803643D7 = 1;
         } else if (D_hd_code_803643D9 != 0) {
@@ -1799,7 +1795,7 @@ void func_hd_code_8024A92C(u32 arg0) {
     if (D_hd_code_80364A6F != D_hd_code_803153F0) {
         if ((D_hd_code_803153F0 == 0) && (func_hd_code_8026A610(D_hd_code_803EF6DC, D_hd_code_803EF6E4, D_hd_code_803643E0, D_hd_code_803643E8) >= 0x4E21)) {
             func_hd_code_80277EDC(1, 1, 7, 0x6C);
-            func_hd_code_8029A7E4("TOO FAR AWAY FROM CMO\n");
+            rmonPrintf("TOO FAR AWAY FROM CMO\n");
         }
         switch (D_hd_code_80364A6F) {                       /* switch 1; irregular */
         case 1:                                     /* switch 1 */
@@ -1825,10 +1821,10 @@ void func_hd_code_8024A92C(u32 arg0) {
         case 0:                                     /* switch 1 */
             sndDeactivate(D_hd_code_803156E8);
             if ((D_hd_code_802E8F94[levelno].unk0 != 0x80) || (func_hd_code_802C1AA0() == 0)) {
-                func_hd_code_8029A7E4("popTuneImmediate();\n");
+                rmonPrintf("popTuneImmediate();\n");
                 func_hd_code_80261040();
             } else {
-                func_hd_code_8029A7E4("WILL THIS FIX IT!!?\n");
+                rmonPrintf("WILL THIS FIX IT!!?\n");
             }
             if (D_hd_code_803153F0 == 2) {
                 sndPlaySfx(D_hd_code_80367738, 0x68U, NULL);
@@ -1957,7 +1953,7 @@ u8 func_hd_code_8024AFA8(s32 arg0) {
     func_hd_code_8025BBE8(D_hd_code_80364AF0[playerNumber].unkF0 & (1 << arg0) ? 0x80 : 0x40, 0, 0);
   }
   if (sp27 != 0) {
-    func_hd_code_8029A7E4("changing to digger %d\n", arg0);
+    rmonPrintf("changing to digger %d\n", arg0);
   }
   return sp27;
 }
@@ -2138,7 +2134,7 @@ void func_hd_code_8024B618(void) {
                         func_hd_code_802B2FA0();
                         break;
                     default:
-                        func_hd_code_8029A7E4("MOVEABLE GEOMETRY MOVE ROUTINE NOT WRITTEN YET\n");
+                        rmonPrintf("MOVEABLE GEOMETRY MOVE ROUTINE NOT WRITTEN YET\n");
                         break;
                     }
                 }
@@ -2301,11 +2297,11 @@ void func_hd_code_8024BDA4(u16* arg0) {
             case 0x1A7:
             case 0x1A8:
                 if ((((*arg0 - 0x1A7) << D_hd_code_80364456) ^ ((1 << D_hd_code_80364456) & 0x10205)) != 0) {
-                    func_hd_code_8029A7E4("selected controller mode yes\n");
+                    rmonPrintf("selected controller mode yes\n");
                     D_hd_code_80364AF0[playerNumber].unkF0 = D_hd_code_80364AF0[playerNumber].unkF0 | (1 << D_hd_code_80364456);
                     func_hd_code_8025BBE8(0x80, 0, 0);
                 } else {
-                    func_hd_code_8029A7E4("selected controller mode no\n");
+                    rmonPrintf("selected controller mode no\n");
                     D_hd_code_80364AF0[playerNumber].unkF0 = (s32) (D_hd_code_80364AF0[playerNumber].unkF0 & ~(1 << D_hd_code_80364456));
                     func_hd_code_8025BBE8(0x40, 0, 0);
                 }
@@ -2317,7 +2313,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 switch (D_hd_code_8036BB18) {                   /* switch 1; irregular */
                 case 0x1:                               /* switch 1 */
                 case 0x6:                               /* switch 1 */
-                    func_hd_code_8029A7E4("TESTING PAUSE2 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
+                    rmonPrintf("TESTING PAUSE2 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                     func_hd_code_8026AF6C(0x8000);
                     if ((D_hd_code_803643DB != 0) || (D_hd_code_80364AC1 != 0)) {
                         D_hd_code_80364A98 = 0x100;
@@ -2326,7 +2322,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
                     break;
                 case 0xD:                               /* switch 1 */
                 case 0x58:                              /* switch 1 */
-                    func_hd_code_8029A7E4("TESTING PAUSE3 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
+                    rmonPrintf("TESTING PAUSE3 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                     func_hd_code_8026AF6C(0x8001);
                     break;
                 }
@@ -2360,13 +2356,13 @@ void func_hd_code_8024BDA4(u16* arg0) {
             break;
         case 0x2000000000000000:
             if (*arg0 == 0xFFFF) {
-                func_hd_code_8029A7E4("TESTING PAUSE %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
+                rmonPrintf("TESTING PAUSE %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                 func_hd_code_8026AF6C(0x8001);
             }
             D_hd_code_80364A98 = 4;
             break;
         default:
-            func_hd_code_8029A7E4("Yoshi selection in illegal game mode\n");
+            rmonPrintf("Yoshi selection in illegal game mode\n");
             break;
     }
 
@@ -4138,7 +4134,7 @@ void func_hd_code_802559F8(Gfx* gfx, s32* length) {
 
   *length = (s32) (((s32)entry - (s32)&D_hd_code_803156F8[D_hd_code_8035805C]) - 0x48B0) >> 3;
   if (*length >= TOPLEVEL_DL_SIZE) {
-    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "*length<TOPLEVEL_DL_SIZE", "hd.c", 0xE51);
+    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "*length<TOPLEVEL_DL_SIZE", "hd.c", 0xE51);
   }
 }
 
@@ -4155,10 +4151,10 @@ void func_hd_code_80255AD0(void) {
     osCreateMesgQueue(&D_hd_code_80315180, D_hd_code_80315198, 0x90);
     osCreateScheduler(&sc, g_SchedulerStack + 0x800, 0xD, osTvType != OS_TV_NTSC ? OS_VI_PAL_LAN1 : OS_VI_NTSC_LAN1, 1);
     osCreateMesgQueue(&D_hd_code_803153D8, D_hd_code_803153F8, 0x10);
-    func_hd_code_80270E50(&sc, &D_hd_code_803156D8, &D_hd_code_803153D8, 1, 1);
+    osScAddClient(&sc, &D_hd_code_803156D8, &D_hd_code_803153D8, 1, 1);
     sp2F = func_hd_code_8028A370();
     func_hd_code_80261588();
-    func_hd_code_8029A7E4("audio inited\n");
+    rmonPrintf("audio inited\n");
     osViSetSpecialFeatures(2);
     osViSetSpecialFeatures(0x40);
     D_hd_code_80358050[0] = VIRTUAL_TO_PHYSICAL(&D_80000400);
@@ -4189,7 +4185,7 @@ void func_hd_code_80255D34(void) {
   for(sp18 = 0x1FF; sp18 >= 0 && sp1F == 0; sp18--) {
     if (g_Thread3Stack[sp18] != 0x1122334455667788) {
       sp1F = 1;
-      func_hd_code_8029A7E4("stack end =%d\n", sp18);
+      rmonPrintf("stack end =%d\n", sp18);
     }
   }
 }
@@ -4218,7 +4214,7 @@ void func_hd_code_80255DC8(void) {
     D_hd_code_8035806C = &D_hd_code_803FF600;
     InitiateDma(&D_787F40, &D_hd_code_803FF600, &sp24, 0xA, 0, 2);
     sp2C = ((s32)&D_788000 - (s32)&D_787F40) + (s32)&D_hd_code_803FF600;
-    func_hd_code_8029A7E4("Static end = 0x%x, space=0x%x (%d) bytes\n", sp2C, 0x80400000 - (s32)sp2C, 0x80400000 - (s32)sp2C);
+    rmonPrintf("Static end = 0x%x, space=0x%x (%d) bytes\n", sp2C, 0x80400000 - (s32)sp2C, 0x80400000 - (s32)sp2C);
     D_hd_code_80358078 = 0;
     func_hd_code_802558C8(D_hd_code_803156F8[D_hd_code_8035805C].dp, &D_hd_code_80358078);
     func_hd_code_802559F8(D_hd_code_803156F8[D_hd_code_8035805C].dp, &D_hd_code_80358078);
@@ -4227,7 +4223,7 @@ void func_hd_code_80255DC8(void) {
     D_hd_code_8036E694 = D_hd_code_80358070;
     D_hd_code_80358070 += 0x1400 * 8;
     if ((D_hd_code_802E8F94[levelno].unk0 == 2) && !(D_hd_code_80364A98 & 0x0000100000000002)) {
-        func_hd_code_8029A7E4("Allocating ghost buffer memory\n");
+        rmonPrintf("Allocating ghost buffer memory\n");
         D_hd_code_80358070 += 0x4000 * 8;
     }
     D_hd_code_803B9888 = 0;
@@ -4254,7 +4250,7 @@ void func_hd_code_80255DC8(void) {
     }
     sp20 = D_hd_code_80358070;
     func_hd_code_8026B118(0);
-    func_hd_code_8029A7E4("Yoshi windows allocated %d bytes, %x\n", (u32)D_hd_code_80358070 - (u32)sp20, D_hd_code_80358070);
+    rmonPrintf("Yoshi windows allocated %d bytes, %x\n", (u32)D_hd_code_80358070 - (u32)sp20, D_hd_code_80358070);
     D_hd_code_803649D0 = D_hd_code_80364460;
     func_hd_code_8028A42C();
     func_hd_code_802592F0();
@@ -4607,12 +4603,12 @@ void func_hd_code_80256A34(s32* arg0) {
     D_hd_code_80364456 = 0;
     if (D_hd_code_80370C50 != 0) {
         if (D_hd_code_8039C4B0 != 0) {
-            func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!pakBusy", "hd.c", 0x1042);
+            rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!pakBusy", "hd.c", 0x1042);
         }
         if (D_80219F58 != 0) {
-            func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "MQ_IS_EMPTY(&pakToGameMessageQ)", "hd.c", 0x1043);
+            rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "MQ_IS_EMPTY(&pakToGameMessageQ)", "hd.c", 0x1043);
         }
-        func_hd_code_80270ECC(&sc, &D_80218EE0);
+        osScRemoveClient(&sc, &D_80218EE0);
         osDestroyThread(&D_80218D30);
     }
     D_hd_code_8039CA62 = 0;
@@ -4635,10 +4631,10 @@ void func_hd_code_80256A34(s32* arg0) {
     func_hd_code_80262150(levelno);
     D_hd_code_80367BFF = 0;
     func_hd_code_802CE840();
-    func_hd_code_8029A7E4("enter initlevel game_mode=%d loop_done=%d\n", func_hd_code_8026F92C(D_hd_code_80364A90), func_hd_code_8026F92C(D_hd_code_80364A98));
+    rmonPrintf("enter initlevel game_mode=%d loop_done=%d\n", func_hd_code_8026F92C(D_hd_code_80364A90), func_hd_code_8026F92C(D_hd_code_80364A98));
     sp3C = D_hd_code_80358070;
     func_hd_code_802A1674(D_hd_code_80358074, arg0);
-    func_hd_code_8029A7E4("exit initlevel allocated %d bytes, %x\n", (u32)D_hd_code_80358070 - (u32)sp3C, D_hd_code_80358070);
+    rmonPrintf("exit initlevel allocated %d bytes, %x\n", (u32)D_hd_code_80358070 - (u32)sp3C, D_hd_code_80358070);
     func_hd_code_80257234();
     if (D_hd_code_80364A98 != 2) {
         if((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) {
@@ -4722,7 +4718,7 @@ void func_hd_code_80256A34(s32* arg0) {
     if (D_hd_code_803669B4 != 0) {
         func_hd_code_8025BD98();
     }
-    func_hd_code_8029A7E4("Level %d: mem_pool=0x%x, code seg=0x%x, space=%d bytes\n", (s32* ) levelno, D_hd_code_80358070, 0x802447C0, 0x8021ED00 - (s32)D_hd_code_80358070);
+    rmonPrintf("Level %d: mem_pool=0x%x, code seg=0x%x, space=%d bytes\n", (s32* ) levelno, D_hd_code_80358070, 0x802447C0, 0x8021ED00 - (s32)D_hd_code_80358070);
     if (D_hd_code_8039CAB7 != 0) {
         func_hd_code_802979E0(levelno);
     }

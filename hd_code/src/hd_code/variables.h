@@ -324,7 +324,7 @@ extern s32 no_palette_dmas;
 
 extern s32* D_hd_code_803F7820;
 extern s32* D_hd_code_803F7824;
-extern s64 D_hd_code_8036BF38;
+extern u64 D_hd_code_8036BF38;
 extern s8 D_hd_code_803649EE;
 extern s8 D_hd_code_80364A50;
 extern s8 D_hd_code_80364A71;

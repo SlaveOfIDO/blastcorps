@@ -169,7 +169,7 @@ void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
         if (snd == NULL)
         {
             sndCountAllocList(&sp4A, &sp48);
-            func_hd_code_8029A7E4("Bad soundState: voices =%d, states free =%d, states busy =%d, type %d data %x\n", g_sndAllocatedVoicesCount, sp4A, sp48, (s32) event->common.type, event->playSfx.soundIndex);
+            rmonPrintf("Bad soundState: voices =%d, states free =%d, states busy =%d, type %d data %x\n", g_sndAllocatedVoicesCount, sp4A, sp48, (s32) event->common.type, event->playSfx.soundIndex);
             return;
         }
 
@@ -183,7 +183,7 @@ void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
                 if ((state->playingState == AL_UNKOWN_5) || (state->playingState == AL_UNKOWN_4))
                 {
                     if (state->playingState == 1) {
-                        func_hd_code_8029A7E4("playing a playing sound\n");
+                        rmonPrintf("playing a playing sound\n");
                     }
 
                     // comment copied from sndplayer: effect buss 0
@@ -467,7 +467,7 @@ void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
             break;
 
             default:
-                func_hd_code_8029A7E4("Nonsense sndp event\n");
+                rmonPrintf("Nonsense sndp event\n");
             break;
         }
 
@@ -779,7 +779,7 @@ ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 sndId, ALSoundState 
 
             nextState = newState;
         } else {
-            func_hd_code_8029A7E4("Sound state allocate failed - sndId %d\n", sndId);
+            rmonPrintf("Sound state allocate failed - sndId %d\n", sndId);
         }
 
         deltaTotal += deltaLoop;
@@ -830,7 +830,7 @@ void sndDeactivate(ALSoundState *state)
     alEvtqPostEvent(&g_sndPlayerPtr->evtq, (ALEvent *)&evt, 0);
   } else
   {
-    func_hd_code_8029A7E4("WARNING: Attempt to stop NULL sound aborted\n");
+    rmonPrintf("WARNING: Attempt to stop NULL sound aborted\n");
   }
 }
 
@@ -903,7 +903,7 @@ void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2) {
     alEvtqPostEvent(&g_sndPlayerPtr->evtq, (ALEvent *)&evt, 0);
     return;
   }
-  func_hd_code_8029A7E4("WARNING: Attempt to modify NULL sound aborted\n");
+  rmonPrintf("WARNING: Attempt to modify NULL sound aborted\n");
 }
 
 u16 sndGetSfxSlotVolume(u8 sfxIndex)

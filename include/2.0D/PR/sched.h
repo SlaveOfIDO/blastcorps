@@ -86,16 +86,20 @@ typedef struct OSScTask_s {
 typedef struct SCClient_s {
     struct SCClient_s   *next;  /* next client in the list      */
     OSMesgQueue         *msgQ;  /* where to send the frame msg  */
+    s32 unk8;
+    s32 unkC;
 } OSScClient;
 
 // TODO: This struct is in some way off. This should be fixed when we get to sched.c
 typedef struct {
-    OSScMsg     retraceMsg;
-    OSScMsg     prenmiMsg;
     OSMesgQueue interruptQ;
     OSMesg      intBuf[OS_SC_MAX_MESGS];
+    OSScMsg     retraceMsg;
+
     OSMesgQueue cmdQ;
     OSMesg      cmdMsgBuf[OS_SC_MAX_MESGS];
+    OSScMsg     prenmiMsg;
+
     OSThread    thread;
     OSScClient  *clientList;
     OSScTask    *audioListHead;
@@ -107,11 +111,13 @@ typedef struct {
     u32         frameCount;
     s32         unk803156C0;
     u32         unk803156C4; // safe type: u32
+    OSTime      unk803156C8;
+    OSTime      unk803156D0;
 } OSSched;
 
 void            osCreateScheduler(OSSched *s, void *stack, OSPri priority,
                                   u8 mode, u8 numFields);
-void            osScAddClient(OSSched *s, OSScClient *c, OSMesgQueue *msgQ);
+void            osScAddClient(OSSched *s, OSScClient *c, OSMesgQueue *msgQ, s32 arg3, s32 arg4);
 void            osScRemoveClient(OSSched *s, OSScClient *c);
 OSMesgQueue     *osScGetCmdQ(OSSched *s);
 

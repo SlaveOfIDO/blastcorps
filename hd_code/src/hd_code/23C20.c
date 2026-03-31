@@ -3,42 +3,50 @@
 #include "functions.h"
 #include "structs.h"
 
-extern u8 D_hd_code_8036B8C0;
-extern s32 D_hd_code_8036B908;
-extern u8 D_hd_code_8036B90C;
-extern s32 D_hd_code_8036B96C;
-extern s32 D_hd_code_8036B968;
-extern s32 D_hd_code_8036B974;
-extern s32 D_hd_code_8036B96C;
-extern f32 D_hd_code_8036B8C8[4][4];
+extern s32 D_hd_code_80303AF4;
+extern s32 D_hd_code_80303B00;
+extern s32 D_hd_code_80303B10;
+extern s32 D_hd_code_80303B24;
 
-extern s32 D_80364A94;
-extern s32 D_hd_code_8036B950;
-extern u8 D_hd_code_8036B954;
-extern u8 D_hd_code_8036B955;
-extern u8 D_hd_code_8036B958[];
-extern u8 D_hd_code_8036B95C;
-extern u8 D_hd_code_8036B960[4];
-extern s8 D_hd_code_8036B964;
-extern u8 D_hd_code_8036B966;
+// BSS
+u8 D_hd_code_8036AFB0[0x900]; // TODO: what is this? only referenced in later code
+u8 D_hd_code_8036B8B0;
+s32 D_hd_code_8036B8B4;
+s32 D_hd_code_8036B8B8;
+s32 D_hd_code_8036B8BC;
+u8 D_hd_code_8036B8C0;
+f32 D_hd_code_8036B8C8[4][4];
+s32 D_hd_code_8036B908;
+u8 D_hd_code_8036B90C;
+f32 D_hd_code_8036B910[4][4];
+s32 D_hd_code_8036B950;
+u8 D_hd_code_8036B954;
+u8 D_hd_code_8036B955;
+u8 D_hd_code_8036B958[4];
+u8 D_hd_code_8036B95C;
+u8 D_hd_code_8036B960[4];
+s8 D_hd_code_8036B964;
+u8 D_hd_code_8036B965;
+u8 D_hd_code_8036B966;
+s32 D_hd_code_8036B968;
+s32 D_hd_code_8036B96C;
+s32 D_hd_code_8036B96C;
+u8 D_hd_code_8036B970;
+u8 D_hd_code_8036B971;
+s32 D_hd_code_8036B974;
+u8 D_hd_code_8036B978;
+u8 D_hd_code_8036B979;
+
+extern u8 D_hd_code_8036C7CC;
+
+extern u8 D_hd_code_803ED826;
+extern u8 D_hd_code_803EFECB;
+extern s32 D_hd_code_803FCD60;
 extern s16 D_hd_code_803FCD6A;
 extern s16 D_hd_code_803FCD6C;
 extern s16 D_hd_code_803FCD6E;
 extern u8 D_hd_code_803FCD70;
 extern u8 D_hd_code_803FCD75;
-extern s32 D_hd_code_80303AF4;
-extern s32 D_hd_code_80303B00;
-extern s32 D_hd_code_80303B10;
-extern s32 D_hd_code_80303B24;
-extern u8 D_hd_code_8036B970;
-extern u8 D_hd_code_8036B971;
-extern u8 D_hd_code_8036B978;
-extern u8 D_hd_code_8036B979;
-extern u8 D_hd_code_8036C7CC;
-extern u8 D_hd_code_803EFECB;
-extern f32 D_hd_code_8036B910[4][4];
-extern s32 D_hd_code_803FCD60;
-extern u8 D_hd_code_803ED826;
 
 // Data
 struct S_802F3C10 D_hd_code_802F3C10[1] = {
@@ -450,7 +458,7 @@ void func_hd_code_802688C4(s32 arg0) {
                 }
             }
             if (sp2B == 0) {
-                func_hd_code_8029A7E4("\n --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "utils2.c", 0xB5);
+                rmonPrintf("\n --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "utils2.c", 0xB5);
             }
             sp4C[sp54] = sp50;
         }
@@ -587,7 +595,7 @@ void func_hd_code_80269258(void) {
             }
         }
         if (sp3B == 0) {
-            func_hd_code_8029A7E4("\n --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "utils2.c", 0x183);
+            rmonPrintf("\n --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "utils2.c", 0x183);
         }
         sp64[sp6C] = sp68;
     }

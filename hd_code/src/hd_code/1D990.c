@@ -925,12 +925,12 @@ void func_hd_code_802633E0(void) {
 
         }
         if (D_hd_code_80370C28 & 0x2000) {
-            func_hd_code_8029A7E4("box number=%d\n", D_hd_code_80367BFA);
+            rmonPrintf("box number=%d\n", D_hd_code_80367BFA);
         }
         if (D_hd_code_80367BF8 == 4) {
             if (func_hd_code_8026394C((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, D_hd_code_80367C04->unkA, D_hd_code_80367C04->unkC, (s32) D_hd_code_80367C04->unkE, (s32) D_hd_code_80367C04->unk10) != 0) {
                 if ((s32) D_hd_code_80367B58[D_hd_code_80367B54 - 1] < (s32) D_hd_code_80367BFC) {
-                    func_hd_code_8029A7E4("new best lap %d %d\n", D_hd_code_80367BFC, D_hd_code_80367B58[D_hd_code_80367B54 - 1]);
+                    rmonPrintf("new best lap %d %d\n", D_hd_code_80367BFC, D_hd_code_80367B58[D_hd_code_80367B54 - 1]);
                     D_hd_code_80367BFB = D_hd_code_80367B54;
                     D_hd_code_80367BFC = D_hd_code_80367B58[D_hd_code_80367B54 - 1];
                 }
@@ -954,7 +954,7 @@ void func_hd_code_802633E0(void) {
                 D_hd_code_80367BF8 = 0U;
             }
         } else if (D_hd_code_80367C04->unk12[D_hd_code_80367BF8] == D_hd_code_80367BF9 && D_hd_code_80367C04->unk12[(D_hd_code_80367BF8 + 1) % 4] == D_hd_code_80367BFA) {
-            func_hd_code_8029A7E4("box cross: %d to %d\n", D_hd_code_80367BF9, D_hd_code_80367BFA);
+            rmonPrintf("box cross: %d to %d\n", D_hd_code_80367BF9, D_hd_code_80367BFA);
             D_hd_code_80367BF8 = (u8) (D_hd_code_80367BF8 + 1);
         }
         D_hd_code_80367BF9 = (u8) D_hd_code_80367BFA;
@@ -1057,7 +1057,7 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
 
 void func_hd_code_8026420C(void) {
   if ((D_hd_code_80367BFE != 0) && (D_hd_code_80358064 == D_hd_code_80367B50)) {
-    func_hd_code_8029A7E4("Replay turbo ....\n");
+    rmonPrintf("Replay turbo ....\n");
     D_hd_code_80367BFF = 1;
   }
 }
@@ -1113,7 +1113,7 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
         D_hd_code_80367D50 = 0xA - ((u32) ((((sc.unk803156C0 - D_hd_code_80364A58) << 1) * 0x3C ) - 0x960) / 60U);
         if (D_hd_code_80367D50 < -0x3F) {
             D_hd_code_80367BC8 = 0,
-            func_hd_code_8029A7E4("turbo %d\n", D_hd_code_80367BFE);
+            rmonPrintf("turbo %d\n", D_hd_code_80367BFE);
         }
         break;
     }

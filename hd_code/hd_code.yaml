@@ -16,7 +16,7 @@ segments:
   type: code
   start: 0x00000
   vram:  0x802447C0
-  bss_size: 0x5B950 # bss_size is 0xF09A0
+  bss_size: 0x5C890 # bss_size is 0xF09A0
   subsegments:
     - [0x00000, c, hd_code/00000] # done
     - [0x12D80, c, hd_code/12D80] # done
@@ -33,8 +33,9 @@ segments:
     - [0x22EE0, c, hd_code/22EE0] # done: audi.c
     - [0x23C20, c, hd_code/23C20] # done
     - [0x26570, c, hd_code/26570] # done: yoshi.c
-    - [0x2B3F0, c, hd_code/2B3F0]
+    - [0x2B3F0, c, hd_code/2B3F0] # done
     - [0x2C560, asm, hd_code/2C560] # sched.c
+    - [0x2D810, asm, hd_code/2D810]
     - [0x2E490, asm, hd_code/2E490]
     - [0x30430, asm, hd_code/30430]
     - [0x30C70, asm, hd_code/30C70]
@@ -230,8 +231,10 @@ segments:
     - [0xC5070, .rodata, hd_code/23C20] # done
     - [0xC5210, bin, hd_code/prose] # ??? this is some prose or poem ;) and seems to be unused
     - [0xC7390, .rodata, hd_code/26570] # done: yoshi.c
-    - [0xC7800, .rodata, hd_code/2B3F0]
-    - [0xC7860, bin, hd_code/hd_code_rodata_rest]
+    - [0xC7800, .rodata, hd_code/2B3F0] # done
+    #- [0xC7860, .rodata, hd_code/2C560] # sched.c
+    #- [0xC7D10, bin, hd_code/hd_code_rodata_rest]
+    - [ 0xC7860, bin, hd_code/hd_code_rodata_rest ]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]
@@ -247,6 +250,10 @@ segments:
     - [0xCAEA0, .bss, hd_code/1C460] # done
     - [0xCAEA0, .bss, hd_code/1D990] # done
     - [0xCAEA0, .bss, hd_code/20460] # done
+    - [0xCAEA0, .bss, hd_code/22EE0] # done
+    - [0xCAEA0, .bss, hd_code/23C20] # done
+    - [0xCAEA0, .bss, hd_code/26570] # done
+    - [0xCAEA0, .bss, hd_code/2B3F0] # done
     #- { start: 0xCAEA0, type: bss, subalign: 1, name: hd_code/hd_code_bss_rest, vram: 0x8036AFB0 }
   #- { start: 0xCAEA0, type: bss, vram: 0x8030F660 }
 - [0xCAEA0]

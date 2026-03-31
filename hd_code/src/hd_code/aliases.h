@@ -48,7 +48,6 @@
 #define D_hd_code_8036EB99 D_8036EB99
 #define D_hd_code_8036BB18 D_8036BB18
 #define D_hd_code_80370C38 D_80370C38
-#define D_hd_code_8036BB1C D_8036BB1C
 #define D_hd_code_803EF6E4 D_803EF6E4
 #define D_hd_code_803EF6F8 D_803EF6F8
 #define D_hd_code_803EF6F0 D_803EF6F0
@@ -79,7 +78,6 @@
 #define D_hd_code_803EF6FF D_803EF6FF
 #define D_hd_code_803ED40D D_803ED40D
 #define D_hd_code_803EF326 D_803EF326
-#define D_hd_code_8036B965 D_8036B965
 #define D_hd_code_803EF328 D_803EF328
 #define D_hd_code_803EF32A D_803EF32A
 #define D_hd_code_80370C1C D_80370C1C
@@ -91,12 +89,6 @@
 #define D_hd_code_80370C2D D_80370C2D
 #define D_hd_code_8036BED8 D_8036BED8
 #define D_hd_code_8036BBB0 D_8036BBB0
-#define D_hd_code_8036B8B0 D_8036B8B0
-#define D_hd_code_8036B8B4 D_8036B8B4
-#define D_hd_code_8036B8B8 D_8036B8B8
-#define D_hd_code_8036B8BC D_8036B8BC
-#define D_hd_code_803F767C D_803F767C
-#define D_hd_code_803F767E D_803F767E
 #define D_hd_code_803F7680 D_803F7680
 #define D_hd_code_803F7670 D_803F7670
 #define D_hd_code_803F7674 D_803F7674
@@ -161,9 +153,7 @@
 #define D_hd_code_803FCD60 D_803FCD60
 #define D_hd_code_8036B950 D_8036B950
 #define D_hd_code_8036B954 D_8036B954
-#define D_hd_code_8036B958 D_8036B958
 #define D_hd_code_8036B95C D_8036B95C
-#define D_hd_code_8036B964 D_8036B964
 #define D_hd_code_8036B960 D_8036B960
 #define D_hd_code_803FCD6A D_803FCD6A
 #define D_hd_code_803FCD6C D_803FCD6C
@@ -171,11 +161,9 @@
 #define D_hd_code_803FCD70 D_803FCD70
 #define D_hd_code_8036B96C D_8036B96C
 #define D_hd_code_8036B970 D_8036B970
-#define D_hd_code_8036B971 D_8036B971
-#define D_hd_code_8036B974 D_8036B974
-#define D_hd_code_8036B978 D_8036B978
-#define D_hd_code_8036B979 D_8036B979
 #define D_hd_code_803EFECB D_803EFECB
 #define D_hd_code_8036C7CC D_8036C7CC
+#define D_hd_code_803F767C D_803F767C
+#define D_hd_code_803F767E D_803F767E
 
 #endif

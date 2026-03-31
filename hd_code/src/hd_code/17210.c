@@ -156,7 +156,7 @@ void func_hd_code_8025BEF8(void) {
                     func_hd_code_80275270(2, 0x3E800000);
                     break;
                 case 0x100000000000:
-                    func_hd_code_8029A7E4("sequence playback over\n");
+                    rmonPrintf("sequence playback over\n");
                     func_hd_code_80275390(0x0000200000000000);
                     break;
                 case 0x40:
@@ -169,7 +169,7 @@ void func_hd_code_8025BEF8(void) {
                     func_hd_code_80275270(0x40, 0x3F000000);
                     break;
                 default:
-                    func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "recording.c", 0x184);
+                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "recording.c", 0x184);
                     break;
             }
             return;

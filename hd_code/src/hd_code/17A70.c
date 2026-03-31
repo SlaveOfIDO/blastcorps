@@ -44,7 +44,7 @@ s32 func_hd_code_8025C30C(void) {
   D_hd_code_802E8CC0 = D_hd_code_803669C0[D_hd_code_803669EC++];
 
   if (D_hd_code_802E8CC0 != 8) { // Compression mode != DEFLATE?
-    func_hd_code_8029A7E4("kiunzip: unknown method %d -- get newer version of gzip\n", D_hd_code_802E8CC0);
+    rmonPrintf("kiunzip: unknown method %d -- get newer version of gzip\n", D_hd_code_802E8CC0);
     D_hd_code_802E8CC4 = 1;
     return -1;
   }

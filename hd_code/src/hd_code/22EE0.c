@@ -243,7 +243,7 @@ u64 D_80368058;
 OSTime g_StartTime;
 OSTime g_EndTime;
 struct AudioManager_s g_AudioManager;
-OSScClient g_AudioClient[2]; // TODO: could be wrong size. Is only 0x10?
+OSScClient g_AudioClient;
 u8 D_80368308[0x2000]; // stack for amMain / also called sp_audi
 DMAState g_DmaState;
 DMABuffer g_DmaBuffers[NUMBER_DMA_BUFFERS];
@@ -340,7 +340,7 @@ void amMain(void* arg) {
     sp3C = 0;
     sp34 = NULL;
     sp30 = 1;
-    func_hd_code_80270E50(&sc, &g_AudioClient[0], &g_AudioManager.frameMessageQueue, 2, 2);
+    osScAddClient(&sc, &g_AudioClient, &g_AudioManager.frameMessageQueue, 2, 2);
 
     osSendMesg(&g_AudioManager.frameMessageQueue, (void* )5, 0);
 
@@ -383,7 +383,7 @@ void amMain(void* arg) {
             sp3C = 1;
             break;
         case 6:
-            func_hd_code_8029A7E4("No samples left\n");
+            rmonPrintf("No samples left\n");
             break;
         }
     }
@@ -409,14 +409,14 @@ void amHandleFrameMessage(AudioInfo* info, AudioInfo* lastInfo) {
     }
     cmdlp = alAudioFrame(g_AudioManager.cmdList[g_CurrentAcmdList], &g_CommandLength, outBuffer, info->frameSamples);
     if (g_CommandLength > MAX_ACMD_SIZE) {
-        func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "cmdLen <= MAX_RSP_CMDS", "audio.c", 0x150);
+        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "cmdLen <= MAX_RSP_CMDS", "audio.c", 0x150);
     }
     task = &info->task;
     info->task.next = NULL;
     task->msg = &g_AudioManager.replyMessageQueue;
     task->pad1 = (s32) info;
     task->flags = 1;
-    task->msgQ = (OSMesgQueue* ) g_AudioClient;
+    task->msgQ = (OSMesgQueue* ) &g_AudioClient;
     task->list.t.data_ptr = (u64* ) g_AudioManager.cmdList[g_CurrentAcmdList];
     task->list.t.data_size = ((s32) ((s32)cmdlp - (s32)g_AudioManager.cmdList[g_CurrentAcmdList]) >> 3) * 8;
     task->list.t.type = 2;
@@ -431,7 +431,7 @@ void amHandleFrameMessage(AudioInfo* info, AudioInfo* lastInfo) {
     osWritebackDCache(task, 0x60);
     osWritebackDCache(task->list.t.data_ptr, (s32) task->list.t.data_size);
     if (osSendMesg(osScGetCmdQ(&sc), (OSMesg)task, OS_MESG_NOBLOCK) == -1) {
-        func_hd_code_8029A7E4("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "osSendMesg(osScGetCmdQ(&sc), (OSMesg) t, OS_MESG_NOBLOCK)!=-1", "audio.c", 0x169);
+        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "osSendMesg(osScGetCmdQ(&sc), (OSMesg) t, OS_MESG_NOBLOCK)!=-1", "audio.c", 0x169);
     }
     g_CurrentAcmdList ^= 1;
 }
@@ -441,7 +441,7 @@ void amHandleDoneMessage(AudioInfo* info) {
 
   samplesLeft = osAiGetLength() >> 2;
   if ((samplesLeft == 0) && (g_FirstTime == 0)) {
-    func_hd_code_8029A7E4("audio: ai out of samples\n");
+    rmonPrintf("audio: ai out of samples\n");
     g_FirstTime = 0;
   }
 }
@@ -484,7 +484,7 @@ s32 amDmaCallback(s32 addr, s32 len, void* state) {
     }
     dmaPtr = g_DmaState.firstFree;
     if (g_DmaState.firstFree == NULL) {
-        func_hd_code_8029A7E4("OH DEAR - No audio DMA buffers left\n");
+        rmonPrintf("OH DEAR - No audio DMA buffers left\n");
     }
     if (dmaPtr == NULL) {
         return osVirtualToPhysical(g_DmaState.firstUsed);
@@ -537,7 +537,7 @@ void amClearDmaBuffers(void) {
 
   for(i = 0; i < g_NextDMa; i++) {
     if (osRecvMesg(&g_DmaMessageQueue, &mesg, 0) == -1) {
-      func_hd_code_8029A7E4("Dma not done\n");
+      rmonPrintf("Dma not done\n");
     }
   }
   dmaPtr = g_DmaState.firstUsed;
