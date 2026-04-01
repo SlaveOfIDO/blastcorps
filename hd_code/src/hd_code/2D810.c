@@ -1,0 +1,150 @@
+#include "common.h"
+#include "variables.h"
+#include "functions.h"
+#include "structs.h"
+
+extern u32 D_803BE718;
+extern u32 D_803BE71C;
+extern u16 D_803BE720;
+extern u16 D_803BE722;
+extern f32 D_8036BFC0;
+extern u8 D_8036BFC4;
+extern u8 D_8036BFC5;
+extern f32 D_8036BFC8;
+extern f32 D_8036BFCC;
+extern f32 D_8036BFD0;
+
+extern struct S_802FA280 D_hd_code_802FA280[][2];
+extern Vtx D_hd_code_802FA820[2][4];
+extern u16 D_hd_code_802FA8A0[2];
+
+Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s16 arg4, s32* arg5) {
+    Gfx* entry = arg0;
+    u16 sp78[2] = D_hd_code_802FA8A0;
+    s32 sp74;
+    struct S_802FA280* sp70;
+    f32 sp6C;
+    f32 sp68;
+    f32 sp64;
+    f32 sp60;
+    f32 sp5C;
+
+    if (D_8036BFC4 == 0) {
+        *arg5 = 0;
+        return entry;
+    }
+    sp6C = (120.0 - ((f32)arg4 * 0.22)) + D_8036BFC0;
+
+    D_8036BFCC = MAX(0.0, sp6C);
+    D_8036BFD0 = MAX(0.0, -sp6C);
+
+    *arg5 = D_8036BFCC;
+    if (*arg5 <= 0) {
+        return entry;
+    }
+    D_8036BFC8 = ((arg3 - 2048.0) * 0.5);
+
+    D_hd_code_802FA820[D_8036BFC5][2].v.ob[1] = (D_8036BFCC * 4.0) - 1.0;
+    D_hd_code_802FA820[D_8036BFC5][3].v.ob[1] = (D_8036BFCC * 4.0) - 1.0;
+
+    gSPClearGeometryMode(entry++, -1);
+    gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
+    gSPTexture(entry++, qu016(0.5), qu016(0.5), 0, G_TX_RENDERTILE, G_ON);
+    gDPPipeSync(entry++);
+    gDPSetCombineLERP(entry++, TEXEL1, TEXEL0, TEXEL1_ALPHA, TEXEL0, TEXEL1, TEXEL0, TEXEL0, TEXEL0, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED);
+    gDPSetCycleType(entry++, G_CYC_2CYCLE);
+    gDPSetRenderMode(entry++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+    gDPSetTextureFilter(entry++, G_TF_BILERP);
+
+    for(sp74 = 0; sp74 < 2; sp74++) {
+        sp70 = &D_hd_code_802FA280[arg2][sp74];
+
+        gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sp70->unk4);
+        gDPTileSync(entry++);
+        gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, sp74 << 8, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
+        gDPLoadSync(entry++);
+        gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 1023, 256);
+    }
+
+    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->mtx2), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->modelview), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPTileSync(entry++);
+    gDPSetTextureLOD(entry++, G_TL_TILE);
+
+    for(sp74 = 0; sp74 < 2; sp74++) {
+        sp70 = &D_hd_code_802FA280[arg2][sp74];
+
+        gDPSetTile(entry++, sp78[sp74], G_IM_SIZ_16b, 8, sp74 << 8, sp74, 0, (sp70->unkB & 0x3), 5, sp74, (sp70->unkA & 0x3), 5, sp74);
+        gDPSetTileSize(entry++, sp74, 0, 0, qu102(31), qu102(31));
+    }
+
+    sp68 = (D_8036BFC8 + 16.0f) / (f32) (1 << sp70->unk8);
+    sp60 = (f32) (319.0 / (f64) (f32) (1 << sp70->unk8));
+    D_hd_code_802FA820[D_8036BFC5][0].v.tc[0] = sp68 * 32.0;
+    D_hd_code_802FA820[D_8036BFC5][1].v.tc[0] = (sp68 + sp60) * 32.0;
+    D_hd_code_802FA820[D_8036BFC5][2].v.tc[0] = sp68 * 32.0;
+    D_hd_code_802FA820[D_8036BFC5][3].v.tc[0] = (sp68 + sp60) * 32.0;
+
+    sp64 = ((D_8036BFCC - D_8036BFC0) - D_8036BFD0) / (f32) (1 << sp70->unk9);
+    sp5C = (f32) (((f64) D_8036BFCC - 1.0) / (f64) (f32) (1 << sp70->unk9));
+    D_hd_code_802FA820[D_8036BFC5][0].v.tc[1] = sp64 * 32.0;
+    D_hd_code_802FA820[D_8036BFC5][1].v.tc[1] = sp64 * 32.0;
+    D_hd_code_802FA820[D_8036BFC5][2].v.tc[1] = (sp64 - sp5C) * 32.0;
+    D_hd_code_802FA820[D_8036BFC5][3].v.tc[1] = (sp64 - sp5C) * 32.0;
+
+    gSPVertex(entry++, D_hd_code_802FA820[D_8036BFC5], 4, 0);
+    gDPPipeSync(entry++);
+    gSP1Triangle(entry++, 0, 1, 2, 0);
+    gSP1Triangle(entry++, 1, 2, 3, 0);
+
+    D_8036BFC5 ^= 1;
+    return entry;
+}
+
+void func_hd_code_802729F0(u16 arg0, u16 arg1) {
+  s32 sp2C;
+  f32 sp28;
+  u16 sp26;
+
+  sp28 = (f32) (D_803BE720 * D_803BE718);
+  sp28 = ((f32) (D_803BE722 * D_803BE71C) + sp28) / 32.0f;
+  D_8036BFC4 = 1;
+
+  switch(arg0) {
+    case 0x0:
+    case 0x1:
+    case 0x2:
+    case 0x40:
+    case 0x800:
+    case 0x1000:
+      D_8036BFC0 = (f32) (1200000.0 / (f64) sp28);
+      break;
+    case 0x4:
+    case 0x100:
+    case 0x2000:
+      D_8036BFC0 = (f32) (600000.0 / (f64) sp28);
+      break;
+    default:
+      D_8036BFC0 = 0.0f;
+      break;
+  }
+
+  if (arg1 == 0x34 || arg1 == 0x3B || arg1 == 0x26 || arg1 == 0x11) {
+    D_8036BFC0 += 32.0f;
+  }
+
+  for(sp2C = 0; sp2C < 2; sp2C++) {
+    D_hd_code_802FA280[arg1][sp2C].unk4 = D_hd_code_80358070;
+    sp26 = D_hd_code_802FA280[arg1][sp2C].unk0;
+    if (sp26) {
+      func_hd_code_802A0B00(sp26, 0);
+    } else {
+      D_8036BFC4 = 0;
+    }
+  }
+}
+
+void func_hd_code_80272C40(s32 arg0) {
+
+}
+

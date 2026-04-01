@@ -35,7 +35,7 @@ segments:
     - [0x26570, c, hd_code/26570] # done: yoshi.c
     - [0x2B3F0, c, hd_code/2B3F0] # done
     - [0x2C560, c, hd_code/2C560] # done: sched.c
-    - [0x2D810, asm, hd_code/2D810]
+    - [0x2D810, c, hd_code/2D810] # done
     - [0x2E490, asm, hd_code/2E490]
     - [0x30430, asm, hd_code/30430]
     - [0x30C70, asm, hd_code/30C70]
@@ -233,7 +233,8 @@ segments:
     - [0xC7390, .rodata, hd_code/26570] # done: yoshi.c
     - [0xC7800, .rodata, hd_code/2B3F0] # done
     - [0xC7860, .rodata, hd_code/2C560] # done: sched.c
-    - [0xC7D10, bin, hd_code/hd_code_rodata_rest]
+    - [0xC7D10, .rodata, hd_code/2D810] # done
+    - [0xC7D30, rodata, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]

@@ -466,5 +466,13 @@ struct S_8020C070 {
   /* 0x1B */ u8 unk1B;
 }; // Size: 0x1C -> This is safe
 
+struct S_802FA280 {
+  s16 unk0;
+  u8* unk4; // texture data pointer
+  u8 unk8;
+  u8 unk9;
+  u8 unkA;
+  u8 unkB;
+}; // Size: 0xC
 
 #endif
