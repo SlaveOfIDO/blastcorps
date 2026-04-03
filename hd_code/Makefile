@@ -66,7 +66,7 @@ O_FILES := $(UNMATCHED_S_O_FILES) \
 ###################
 
 decompile:
-	$(PYTHON) $(TOOLS_DIR)/splat/split.py hd_code.yaml
+	splat split hd_code.yaml
 
 
 #################
