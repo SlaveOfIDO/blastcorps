@@ -23,7 +23,7 @@ OBJCOPYFLAGS = -O binary
 ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
 LDFLAGS = -T $(LD_SCRIPT) -Map hd_code.map -T undefined_syms_auto.txt -T undefined_funcs_auto.txt -T undefined_syms.txt --no-check-sections
 INCLUDE_CFLAGS := -I . -I ../include -I ../include/2.0D
-CFLAGS := -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DTARGET_N64 -DF3D_OLD -woff 649,838 $(INCLUDE_CFLAGS)
+CFLAGS := -c -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DTARGET_N64 -DF3D_OLD -woff 649,838 $(INCLUDE_CFLAGS)
 GCC_ASFLAGS    := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -O2 -fno-align-labels -fno-align-functions -fno-align-loops -fno-align-jumps -fno-common -fno-zero-initialized-in-bss -mfp32 -c -x assembler-with-cpp -mabi=32 -ffreestanding -mtune=vr4300 -march=vr4300 -mfix4300 -G 0 -O -mno-shared -fno-PIC -mno-abicalls
 
 
@@ -81,15 +81,12 @@ build/src/hd_code/gu/%.c.o: OPT_FLAGS = -O3
 # *.c -> *.c.o (with GLOBAL_ASM macro)
 $(GLOBAL_ASM_HD_CODE_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $(@D)
-	$(PYTHON) $(TOOLS_DIR)/asm-processor/asm_processor.py $(OPT_FLAGS) $< > $(BUILD_DIR)/$<
-	$(CC) -c -32 $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $(BUILD_DIR)/$<
-	$(PYTHON) $(TOOLS_DIR)/asm-processor/asm_processor.py $(OPT_FLAGS) $< --post-process $@ \
-		--assembler "$(AS) $(ASFLAGS)" --asm-prelude $(TOOLS_DIR)/asm-processor/prelude.s
+	$(PYTHON) $(TOOLS_DIR)/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) -- $(CFLAGS) $(OPT_FLAGS) -o $@ $<
 
 # *.c -> *.c.o (without GLOBAL_ASM macro)
 $(MIPS3_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $(@D)
-	$(CC) -c -32 $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
+	$(CC) -32 $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
 	$(TOOLS_DIR)/set_o32abi_bit.py $@
 	$(OBJCOPY) $@
 	$(OBJCOPY) --strip-unneeded $@
@@ -98,7 +95,7 @@ $(MIPS3_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c
 # *.c -> *.c.o (without GLOBAL_ASM macro)
 $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $(@D)
-	$(CC) -c $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
+	$(CC) $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
 
 # *.s -> *.s.o
 $(BUILD_DIR)/%.s.o: %.s
@@ -107,7 +104,7 @@ $(BUILD_DIR)/%.s.o: %.s
 
 #  *.bin -> *.bin.o
 $(BUILD_DIR)/%.bin.o: %.bin
-	mkdir -p $(@D)
+	@mkdir -p $(@D)
 	$(LD) -r -b binary -o $@ $<
 
 

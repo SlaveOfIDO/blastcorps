@@ -452,7 +452,7 @@ void func_hd_code_802C9F54();                          /* extern */
 s32 func_hd_code_8025B300(u8*);                     /* extern */
 void InitiateDma(void*, void*, s32*, u8, s32, s32);           /* extern */
 void func_hd_code_80257490(u8** arg0, s32 arg1);
-s8 func_hd_code_80272C5C(char*, s32, s32, s32, s32, f32);    /* extern */
+u8 func_hd_code_80272C5C(u16* arg0, u16* arg1, u8 arg2, u8 arg3, u8 arg4, f32 arg5);    /* extern */
 s32 func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2);
 void func_hd_code_8025E1E0(Gfx**);                      /* extern */
 void sndDeactivateAllSfxByFlag_11();                          /* extern */
@@ -495,6 +495,6 @@ void func_hd_code_8026A2E8(f32, f32*);                 /* extern */
 s32 func_hd_code_8026A6F0(s32, s32, s32, s32, s32, s32); /* extern */
 s32 func_hd_code_802AB3C0(s32);                     /* extern */
 Gfx* func_hd_code_8026BCE0(Gfx* arg0, struct Model1* arg1, s32* arg2);
-void func_hd_code_802A0B00(s32, s32);                    /* extern */
+void func_hd_code_802A0B00(u16, u8*);                    /* extern */
 
 #endif

@@ -36,7 +36,7 @@ segments:
     - [0x2B3F0, c, hd_code/2B3F0] # done
     - [0x2C560, c, hd_code/2C560] # done: sched.c
     - [0x2D810, c, hd_code/2D810] # done
-    - [0x2E490, asm, hd_code/2E490]
+    - [0x2E490, c, hd_code/2E490]
     - [0x30430, asm, hd_code/30430]
     - [0x30C70, asm, hd_code/30C70]
     - [0x34430, asm, hd_code/34430]
@@ -66,33 +66,33 @@ segments:
     - [0x56040, asm, hd_code/56040]
     - [0x5BF40, asm, hd_code/5BF40]
     - [0x5CB60, asm, hd_code/5CB60]
-    - [0x5FD50, asm, hd_code/5FD50]
+    - [0x5FD50, bin, hd_code/5FD50] # TODO: misuses $gp
     - [0x60D50, asm, hd_code/60D50]
     - [0x60F60, asm, hd_code/60F60]
     - [0x62740, asm, hd_code/62740]
     - [0x679E0, asm, hd_code/679E0]
     - [0x68810, bin, hd_code/68810]
-    - [0x69BB0, asm, hd_code/69BB0]
-    - [0x6B4A0, asm, hd_code/6B4A0]
-    - [0x6C5E0, asm, hd_code/6C5E0]
-    - [0x6E200, asm, hd_code/6E200]
-    - [0x71140, asm, hd_code/71140]
-    - [0x72B80, asm, hd_code/72B80]
-    - [0x75490, asm, hd_code/75490]
-    - [0x772A0, asm, hd_code/772A0]
-    - [0x77E20, asm, hd_code/77E20]
+    - [0x69BB0, bin, hd_code/69BB0] # TODO: misuses $gp
+    - [0x6B4A0, bin, hd_code/6B4A0] # TODO: misuses $gp
+    - [0x6C5E0, bin, hd_code/6C5E0] # TODO: misuses $gp
+    - [0x6E200, bin, hd_code/6E200] # TODO: misuses $gp
+    - [0x71140, bin, hd_code/71140] # TODO: misuses $gp
+    - [0x72B80, bin, hd_code/72B80] # TODO: misuses $gp
+    - [0x75490, bin, hd_code/75490] # TODO: misuses $gp
+    - [0x772A0, bin, hd_code/772A0] # TODO: misuses $gp
+    - [0x77E20, bin, hd_code/77E20] # TODO: misuses $gp
     - [0x7D9D0, bin, hd_code/7D9D0_data] # ?? handwritten or a mix of .text+.data?
-    - [0x80280, asm, hd_code/7FB50]
-    - [0x83910, asm, hd_code/83910]
-    - [0x853D0, asm, hd_code/853D0]
+    - [0x80280, bin, hd_code/7FB50] # TODO: misuses $gp
+    - [0x83910, bin, hd_code/83910] # TODO: misuses $gp
+    - [0x853D0, bin, hd_code/853D0] # TODO: misuses $gp
     - [0x86ED0, asm, hd_code/86ED0]
-    - [0x86F60, asm, hd_code/86F60]
-    - [0x88160, asm, hd_code/88160]
-    - [0x89250, asm, hd_code/89250]
+    - [0x86F60, bin, hd_code/86F60] # TODO: misuses $gp
+    - [0x88160, bin, hd_code/88160] # TODO: misuses $gp
+    - [0x89250, bin, hd_code/89250] # TODO: misuses $gp
     - [0x8A080, asm, hd_code/8A080]
     - [0x8A2E0, asm, hd_code/8A2E0]
-    - [0x8AEE0, asm, hd_code/8AEE0]
-    - [0x8DDB0, asm, hd_code/8DDB0]
+    - [0x8AEE0, bin, hd_code/8AEE0] # TODO: misuses $gp
+    - [0x8DDB0, bin, hd_code/8DDB0] # TODO: misuses $gp
     - [0x8E910, bin, hd_code/8E910] # more data?
     - [0x8F860, c, hd_code/os/initialize]
     - [0x8FA90, asm, hd_code/8FA90]
@@ -234,7 +234,7 @@ segments:
     - [0xC7800, .rodata, hd_code/2B3F0] # done
     - [0xC7860, .rodata, hd_code/2C560] # done: sched.c
     - [0xC7D10, .rodata, hd_code/2D810] # done
-    - [0xC7D30, rodata, hd_code/hd_code_rodata_rest]
+    - [0xC7D30, bin, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]

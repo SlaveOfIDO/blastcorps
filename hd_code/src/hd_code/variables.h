@@ -339,7 +339,7 @@ extern s8 D_hd_code_80370C33;
 extern s8 D_hd_code_8039CA61;
 extern s8 D_hd_code_803A7426;
 extern s8 D_hd_code_803A7430;
-extern s8 D_hd_code_803B9888;
+extern u8 D_hd_code_803B9888;
 extern s8 D_hd_code_803ED40C;
 extern u8 D_hd_code_803F7806;
 extern s8 D_hd_code_802FDB14;

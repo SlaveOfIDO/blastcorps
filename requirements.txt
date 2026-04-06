@@ -1,2 +1,2 @@
-splat64[mips]==0.24.4
-spimdisasm==1.32.0
+splat64[mips]==0.39.1
+spimdisasm==1.40.2
