@@ -60,12 +60,16 @@ O_FILES := $(UNMATCHED_S_O_FILES) \
 		   $(GLOBAL_ASM_HD_CODE_C_O_FILES) \
 		   $(BIN_O_FILES)
 
+default: all
 
-###################
-## DECOMPILATION ##
-###################
+all: build/hd_code.bin verify
 
-decompile:
+
+################
+## EXTRACTION ##
+################
+
+extract:
 	splat split hd_code.yaml
 
 
@@ -122,8 +126,6 @@ build/hd_code.bin: build/hd_code.elf
 .baserom.$(VERSION).ok: baserom.$(VERSION).z64
 	echo "$$(cat $(BASENAME).$(VERSION).sha1)  $<" | sha1sum --check
 	touch $@
-
-compile: build/hd_code.bin verify
 
 verify: build/hd_code.bin
 	@echo "$$(cat hd_code.sha1) $<" | sha1sum --check

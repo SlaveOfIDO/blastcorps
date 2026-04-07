@@ -11,7 +11,7 @@ struct huft {
   } v;
 };
 
-#define NEXTBYTE() (u8)(D_802229F0[D_80222A1C++])
+#define NEXTBYTE() (u8)(D_init_802229F0[D_init_80222A1C++])
 #define NEEDBITS(n) {while(k<(n)){b|=((u32)NEXTBYTE())<<k;k+=8;}}
 #define DUMPBITS(n) {b>>=(n);k-=(n);}
 

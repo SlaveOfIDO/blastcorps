@@ -1,12 +1,12 @@
 # Blast Corps
 
-- This repo is about to contain a full decompilation of Blast Corps `(Japan)`, `(USA)`, `(USA) (Rev 1)` and `(Europe) (En,De)`.
-- Naming and documentation of the source code and data structures are in progress.
+A work-in-progress matching decompilation of Blast Corps `(Japan)`, `(USA)`, `(USA) (Rev 1)` and `(Europe) (En,De)`.
+Currently only `(USA) (Rev 1)` is supported. Any help appreciated.
 
-It uses the following ROMs:
+The following ROMs will be supported in the future:
 
-| no-intro                       | Location             | sha1                                       |
-| ---                            | ---                  | ---                                        |
+| Name                           | Location             | sha1                                       |
+|--------------------------------| ---                  | ---                                        |
 | `Blast Corps (USA)`            | `baserom.us.v10.z64` | `185a6ef7ba1adb243278062c81a7d4e119bda58c` |
 | `Blast Corps (USA) (Rev 1)`    | `baserom.us.v11.z64` | `483f7161aea39de8b45c9fbc70a2c3883c4dea8c` |
 | `Blastdozer (Japan)`           | `baserom.jp.z64`     | `b147fdbeb661c89107c440b00dc4810508f58636` |
@@ -17,7 +17,7 @@ A prior copy of the game is required to extract the assets.
 
 # Clone the repo
 
-Clone recursively to initialize the splat submodule.
+Clone recursively to initialize necessary submodules.
 
 ```
 git clone https://github.com/retroplastic/blastcorps.git --recursive
@@ -32,50 +32,28 @@ git submodule update
 
 # Build
 
-This is a two-stage build; first stage is to extract the compressed section from the ROM, second stage is to extract/compile them.
+Place the US Rev 1.1 ROM at the base of this repo `baserom.us.v11.z64`.
 
-Place a US Rev 1.0 ROM at the base of this repo.
-
-## Set up Python for splat
+## Set up Python and splat
 
 ```
 virtualenv .env
 . .env/bin/activate
-pip install -r tools/splat/requirements.txt
+pip install -r requirements.txt
 ```
 
-## Stage 1
+## Extract necessary files from ROM
 
-**Extract init, hd_code and hd_front_end code from ROM**
 ```
-make VERSION=us.v11 extract
-```
-**Decompress hd_code and hd_front_end .text and .data sections**
-```
-make VERSION=us.v11 decompress
-```
-**Build ROM**
-```
-make VERSION=us.v11
+make extract
+make -C hd_code extract
 ```
 
-## Stage 2 (Optional)
+## Build ROM
 
-**Extract `init` + `hd_code` (TODO: `hd_front_end`):**
 ```
-make VERSION=us.v11 -C blastcorps extract
-```
-**Compile ASM/C**
-```
-make VERSION=us.v11 -C blastcorps
-```
-**Compress compiled code and replace**
-```
-make VERSION=us.v11 -C blastcorps compress
-```
-**(re)Build ROM**
-```
-make VERSION=us.v11
+make -C hd_code
+make
 ```
 
 ## C tools

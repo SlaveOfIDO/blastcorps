@@ -23,6 +23,7 @@ segments:
     type: code
     start: 0x001000
     vram:  0x8021ED00
+    bss_size: 0x23A0
     subsegments: 
     - [0x1000, hasm, init/entry]
     - [0x1050, c, init/inflate]
@@ -810,11 +811,12 @@ segments:
     - [0x78776F, bin, endsid5.raw.853757148]
     - [0x787D6F, bin, endsid5_dl.raw.853757069]
   #
-  - [0x787FD0, bin, hd_code_text.us.v11]
-  - [0x7D73B4, bin, hd_code_data.us.v11]       # data for main asm   855919891
+  - [0x787FD0, bin] # hd_code_text.us.v11 will be extracted and decompressed by Makefile
+  - [0x7D73B4, bin] # hd_code_data.us.v11 will be extracted and decompressed by Makefile ts:855919891
   - [0x7E3AC7, bin]                            # zero padding
   - [0x7E3AD0, bin, hd_front_end_text.us.v11]  # UI asm code         855919891
   - [0x7F63A1, bin, hd_front_end_data.us.v11]  # data for UI asm     855919891
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end
-  - [0x800000, bin]
+  - [0x800000, bin, hd_code.us.v11]
+  - [0x8CAEA0]

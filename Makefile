@@ -1,15 +1,12 @@
-BASENAME  = blastcorps
 VERSION  := us.v11
 
 ASM_DIR   = asm
 ASM_DIRS  = $(shell find $(ASM_DIR)/init -type d) $(shell find $(ASM_DIR)/hd_code -type d) $(shell find $(ASM_DIR)/data -type d) # only include init and data here
 
-TOOLS_DIR := ./tools
+TOOLS_DIR := tools
 ASM_PROCESSOR_DIR := $(TOOLS_DIR)/asm-processor
 
 BLASTCORP_EXTRACTED := blastcorps/init.$(VERSION).bin blastcorps/hd_code.$(VERSION).bin blastcorps/hd_front_end.$(VERSION).bin
-
-TOOLS_DIR := tools
 
 CROSS = mips-linux-gnu-
 AS = $(CROSS)as
@@ -25,11 +22,11 @@ GREP    = grep -rl
 
 OPT_FLAGS := -O1
 MIPSISET := -mips2 -o32
-LD_SCRIPT = $(BASENAME).$(VERSION).decompressed.ld
+LD_SCRIPT = blastcorps.$(VERSION).decompressed.ld
 OBJCOPYFLAGS = -O binary
 ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
 LDFLAGS = -T $(LD_SCRIPT) -Map $(TARGET).map -T undefined_syms_auto.init.$(VERSION).txt -T undefined_funcs_auto.init.$(VERSION).txt -T undefined_syms.init.$(VERSION).txt --no-check-sections
-INCLUDE_CFLAGS := -I . -I include -I include/2.0I -I include/2.0I/PR
+INCLUDE_CFLAGS := -I . -I include -I include/2.0D -I include/2.0D/PR
 CFLAGS := -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -woff 649,838 $(INCLUDE_CFLAGS)
 GCC_ASFLAGS    := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -O2 -fno-align-labels -fno-align-functions -fno-align-loops -fno-align-jumps -fno-common -fno-zero-initialized-in-bss -mfp32 -c -x assembler-with-cpp -mabi=32 -ffreestanding -mtune=vr4300 -march=vr4300 -mfix4300 -G 0 -O -mno-shared -fno-PIC -mno-abicalls
 
@@ -37,7 +34,7 @@ GCC_ASFLAGS    := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -O2 -fno-align-labels
 
 SRC_DIR = src
 BUILD_DIR = build
-TARGET = $(BUILD_DIR)/$(BASENAME).$(VERSION)
+TARGET = $(BUILD_DIR)/blastcorps.$(VERSION)
 
 ### ROM
 ROM_SRC_DIR = $(SRC_DIR)
@@ -127,10 +124,11 @@ dirs:
 check: .baserom.$(VERSION).ok
 
 verify: $(TARGET).z64
-	echo "$$(cat $(BASENAME).$(VERSION).sha1)  $(TARGET).z64" | sha1sum --check
+	echo "$$(cat blastcorps.$(VERSION).sha1)  $(TARGET).z64" | sha1sum --check
 
 extract: check decompressed.$(VERSION).z64
-	$(PYTHON) $(TOOLS_DIR)/splat/split.py $(BASENAME).$(VERSION).yaml
+	splat split blastcorps.$(VERSION).yaml
+	cp assets/hd_code.$(VERSION).bin hd_code/hd_code.bin
 
 decompressed.$(VERSION).z64: baserom.$(VERSION).z64
 	$(PYTHON) $(TOOLS_DIR)/decompress_rom.py baserom.$(VERSION).z64
@@ -180,7 +178,7 @@ $(TARGET).z64: $(TARGET).bin
 
 # SHA1 check
 .baserom.$(VERSION).ok: baserom.$(VERSION).z64
-	echo "$$(cat $(BASENAME).$(VERSION).sha1)  $<" | sha1sum --check
+	echo "$$(cat blastcorps.$(VERSION).sha1)  $<" | sha1sum --check
 	touch $@
 
 

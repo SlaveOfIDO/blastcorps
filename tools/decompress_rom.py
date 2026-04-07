@@ -35,11 +35,6 @@ def readAndDecompressOverlays(fr : BinaryIO):
         x["dataCompressedData"] = fr.read(x['dataCompressedSize'])
         x["dataDecompressedData"] = gzip.decompress(x["dataCompressedData"])
 
-        with open("expected/" + x["codeName"] + ".expected", "wb") as f:
-            f.write(x["codeDecompressedData"])
-        with open("expected/" + x["dataName"] + ".expected", "wb") as f:
-            f.write(x["dataDecompressedData"])
-        
 
 def alignHex10(fr: BinaryIO):
     # Get the current position

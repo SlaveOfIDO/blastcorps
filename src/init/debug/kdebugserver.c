@@ -1,6 +1,8 @@
 #include "common.h"
-#include <ultra64.h>
+
 #include <PR/rdb.h>
+#include <ultra64.h>
+#include <PR/os_internal.h>
 
 // TODO: This file is perhaps this https://github.com/ExcellentGamer/sm64ds-remastered/blob/bf7e2acf57b36518b5927a3e9a11b8d30a59e49e/lib/ultra/debug/kdebugserver.c#L36
 

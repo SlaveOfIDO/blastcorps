@@ -98,7 +98,7 @@ extern void		__osGIORawInterrupt(s32);
 extern OSThread *	__osGetActiveQueue(void);
 
 /* Debug port */
-extern void		__osSyncPutChars(int, int, const char *);
+extern void		__osSyncPutChars(int, int, const unsigned char *);
 extern int		__osSyncGetChars(char *);
 extern void		__osAsyncPutChars(int, int, const char *);
 extern int		__osAsyncGetChars(char *);

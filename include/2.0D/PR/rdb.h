@@ -80,9 +80,10 @@
 
 /* Structure for debug port */
 typedef struct {
-	unsigned type : 6;	/* 0: invalid, 1: print, 2: debug */
+	unsigned type : 2;	/* 0: invalid, 1: print, 2: debug */
+        unsigned :4;		/* padding */
 	unsigned length : 2;	/* 1, 2, or 3 */
-	char buf[3];		/* character buffer */
+	u8 buf[3];		/* character buffer */
 } rdbPacket;
 
 extern unsigned int	__osRdbWriteOK;

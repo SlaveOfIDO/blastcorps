@@ -25,14 +25,14 @@ s32 D_80222834 = 9;
 // dbits
 s32 D_80222838 = 6;
 
-extern struct huft* D_802229E0; // bss?
-extern u32 D_802229EC; // bss?
-extern u32 D_802229E4; // bss?
-extern u32 D_802229E8; // bss?
-extern u8 *D_802229F0; // bss?
-extern u8 *D_802229F4; // bss? 
-extern s32 D_80222A1C; // bss?
-extern u32 D_80222A20; // bss?
+extern struct huft* D_init_802229E0; // bss?
+extern u32 D_init_802229EC; // bss?
+extern u32 D_init_802229E4; // bss?
+extern u32 D_init_802229E8; // bss?
+extern u8 *D_init_802229F0; // bss?
+extern u8 *D_init_802229F4; // bss?
+extern s32 D_init_80222A1C; // bss?
+extern u32 D_init_80222A20; // bss?
 
 int huft_build(b, n, s, d, e, t, m)
 unsigned *b;            /* code lengths in bits (all assumed <= BMAX) */
@@ -164,10 +164,10 @@ int *m;                 /* maximum lookup bits, returns actual */
 
          /* allocate and link in new table */
         //q = D_80007290 + hufts;
-        q = D_802229E0 + D_802229EC;
+        q = D_init_802229E0 + D_init_802229EC;
         
         // hufts += z + 1;         /* track memory usage */
-        D_802229EC += z + 1;         /* track memory usage */
+        D_init_802229EC += z + 1;         /* track memory usage */
         *t = q + 1;             /* link to list for huft_free() */
         *(t = &(q->v.t)) = (struct huft *)NULL;
         u[h] = ++q;             /* table starts after link */
@@ -235,9 +235,9 @@ int *m;                 /* maximum lookup bits, returns actual */
   register u32 b;       /* bit buffer */
 
   /* make local copies of globals */
-  b = D_802229E4; // b = bb; /* initialize bit buffer */
-  k = D_802229E8; // k = bk;
-  w = D_80222A20; // w = wp; /* initialize window position */
+  b = D_init_802229E4; // b = bb; /* initialize bit buffer */
+  k = D_init_802229E8; // k = bk;
+  w = D_init_80222A20; // w = wp; /* initialize window position */
 
   /* inflate the coded data */
   ml = D_80222810[bl];           /* precompute masks for speed */
@@ -256,7 +256,7 @@ int *m;                 /* maximum lookup bits, returns actual */
     if (e == 16)                /* then it's a literal */
     {
 
-      D_802229F4[w++] =  t->v.n;
+      D_init_802229F4[w++] =  t->v.n;
     }
     else                        /* it's an EOB or a length */
     {//L80000EAC
@@ -287,16 +287,16 @@ int *m;                 /* maximum lookup bits, returns actual */
       do{
         n -= (e = n);
         do{
-          D_802229F4[w++] =  D_802229F4[d++];
+          D_init_802229F4[w++] =  D_init_802229F4[d++];
         }while(--e);
       }while(n != 0);
     }
   }
 
   /* restore the globals from the locals */
-  D_80222A20 = w; // wp = w; /* restore global window pointer */
-  D_802229E4 = b; // bb = b; /* restore global bit buffer */
-  D_802229E8 = k; // bk = k;
+  D_init_80222A20 = w; // wp = w; /* restore global window pointer */
+  D_init_802229E4 = b; // bb = b; /* restore global bit buffer */
+  D_init_802229E8 = k; // bk = k;
 
   /* done */
   return 0;
@@ -312,9 +312,9 @@ int inflate_stored(void)
   register u32 b;       /* bit buffer */
 
   /* make local copies of globals */
-  b = D_802229E4;                       /* initialize bit buffer */
-  k = D_802229E8;
-  w = D_80222A20;                       /* initialize window position */
+  b = D_init_802229E4;                       /* initialize bit buffer */
+  k = D_init_802229E8;
+  w = D_init_80222A20;                       /* initialize window position */
 
 
   /* go to byte boundary */
@@ -334,14 +334,14 @@ int inflate_stored(void)
    while (n--)
    {
      NEEDBITS(8)
-     D_802229F4[w++] = (u8) b;
+     D_init_802229F4[w++] = (u8) b;
      DUMPBITS(8)
    }
 
   /* restore the globals from the locals */
-  D_80222A20 = w;                       /* restore global window pointer */
-  D_802229E4 = b;                       /* restore global bit buffer */
-  D_802229E8 = k;
+  D_init_80222A20 = w;                       /* restore global window pointer */
+  D_init_802229E4 = b;                       /* restore global bit buffer */
+  D_init_802229E8 = k;
   return 0;
 }
 
@@ -403,8 +403,8 @@ int inflate_dynamic(void)/* decompress an inflated type 2 (dynamic Huffman codes
   unsigned ll[286+30];  /* literal/length and distance code lengths */
 
   /* make local bit buffer */
-  b = D_802229E4;
-  k = D_802229E8;
+  b = D_init_802229E4;
+  k = D_init_802229E8;
 
 
    /* read in table lengths */
@@ -475,8 +475,8 @@ int inflate_dynamic(void)/* decompress an inflated type 2 (dynamic Huffman codes
     }
 
    /* restore the global bit buffer */
-   D_802229E4 = b;
-   D_802229E8 = k;
+   D_init_802229E4 = b;
+   D_init_802229E8 = k;
 
    /* build the decoding tables for literal/length and distance codes */
    bl = D_80222834;
@@ -499,8 +499,8 @@ int inflate_block(int *e)
 
 
   /* make local bit buffer */
-  b = D_802229E4; // b = bb; /* initialize bit buffer */
-  k = D_802229E8; // k = bk;
+  b = D_init_802229E4; // b = bb; /* initialize bit buffer */
+  k = D_init_802229E8; // k = bk;
 
 
   /* read in last block bit */
@@ -516,8 +516,8 @@ int inflate_block(int *e)
 
 
   /* restore the global bit buffer */
-   D_802229E4 = b; // bb = b;
-   D_802229E8 = k; // bk = k;
+   D_init_802229E4 = b; // bb = b;
+   D_init_802229E8 = k; // bk = k;
 
 
   /* inflate that block type */
@@ -538,22 +538,22 @@ int inflate() {
     int r;
     unsigned h;
 
-    D_80222A20 = 0;
-    D_802229E8 = 0;
-    D_802229E4 = 0;
+    D_init_80222A20 = 0;
+    D_init_802229E8 = 0;
+    D_init_802229E4 = 0;
     h = 0;
     do {
-      D_802229EC = 0;
+      D_init_802229EC = 0;
       if (r = inflate_block(&e))
         return r;
-      if (D_802229EC > h)
-        h = D_802229EC;
+      if (D_init_802229EC > h)
+        h = D_init_802229EC;
     } while (!e);
 
-    while (D_802229E8 >= 8) {
-      D_802229E8 -= 8;
-      D_80222A1C -= 1;
+    while (D_init_802229E8 >= 8) {
+      D_init_802229E8 -= 8;
+      D_init_80222A1C -= 1;
     }
-    D_80222A1C += 8;
+    D_init_80222A1C += 8;
     return 0;
 }
