@@ -20,7 +20,7 @@ A prior copy of the game is required to extract the assets.
 Clone recursively to initialize necessary submodules.
 
 ```
-git clone https://github.com/retroplastic/blastcorps.git --recursive
+git clone https://github.com/SlaveOfIDO/blastcorps.git --recursive
 ```
 
 If you cloned it without `--recursive`, you can initialize the submodule later.
