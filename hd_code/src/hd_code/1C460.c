@@ -410,7 +410,7 @@ void func_hd_code_80260C20(u8 arg0, f32 arg1) {
 
 void func_hd_code_80260D7C(f32 arg0) {
   D_hd_code_802E8D88 = arg0;
-  func_hd_code_802D8220((struct ALSeqPlayer* ) D_hd_code_80367734, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
+  func_hd_code_802D8220(D_hd_code_80367734, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
 }
 
 f32 func_hd_code_80260DF0(void) {
@@ -524,21 +524,21 @@ void func_hd_code_80261284(void) {
 
   switch (D_hd_code_80367729) {                           /* irregular */
     case 1:
-      if (func_hd_code_802D4E10((struct ALSeqPlayer* ) D_hd_code_80367734) == 1) {
+      if (func_hd_code_802D4E10(D_hd_code_80367734) == 1) {
         func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         D_hd_code_80367400->unk1EC = func_hd_code_802D8260(D_hd_code_80367734);
         for(sp24 = 0; sp24 < 0x40U; sp24++) {
           D_hd_code_80367400->unk0[sp24] = *(((u32*)D_hd_code_80367734->chanState)+sp24);
 
         }
-        func_hd_code_802D76C0((struct ALSeqPlayer* ) D_hd_code_80367734);
+        func_hd_code_802D76C0(D_hd_code_80367734);
         D_hd_code_80367400++;
         D_hd_code_80367729 = 2;
         return;
       }
       return;
     case 2:
-      if (func_hd_code_802D4E10((struct ALSeqPlayer* ) D_hd_code_80367734) == 0) {
+      if (func_hd_code_802D4E10(D_hd_code_80367734) == 0) {
         func_hd_code_80260C20(D_hd_code_80367708, 1.0f);
         D_hd_code_80367729 = 0;
       }
@@ -558,7 +558,7 @@ void func_hd_code_802613C8(void) {
     sp26 = sp28 * D_hd_code_8036770C;
     D_hd_code_8036772A = 0;
   }
-  func_hd_code_802D8220((struct ALSeqPlayer* ) D_hd_code_80367734, (s32) sp26);
+  func_hd_code_802D8220(D_hd_code_80367734, (s32) sp26);
 }
 
 void func_hd_code_80261528(void) {
@@ -635,7 +635,7 @@ void func_hd_code_80261588(void) {
             D_hd_code_80367408[sp30]++;
         }
     }
-    // TODO: find matching struct
+    // TODO: find matching struct. probably ALSynConfig
     sp44 = 0;
     sp48 = 0x18;
     sp4C = 0x80;

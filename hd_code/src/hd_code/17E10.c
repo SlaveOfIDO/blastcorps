@@ -112,7 +112,7 @@ void func_hd_code_8025C5D0(void) {
     }
 }
 
-s32 func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
+Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
     s32 sp6C;
     u32 sp68;
     Gfx* entry;
@@ -275,7 +275,7 @@ void func_hd_code_8025D184(void) {
   D_hd_code_80366A00 = 0x10;
 }
 
-s32 func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
+Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
     Gfx* entry;
     s32 spC0;
     s32 spBC;

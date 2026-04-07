@@ -201,7 +201,7 @@ typedef union ALSndpEvent_u {
     u16 type;
     ALSoundState *state;
     s32 soundIndex;
-    struct ALBankAlt_s *soundBank;
+    ALBank *soundBank;
   } playSfx;
 
   struct {

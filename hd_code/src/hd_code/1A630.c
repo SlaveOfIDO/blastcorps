@@ -13,9 +13,9 @@ void alSynStartVoice(ALSynth *s, ALVoice *voice, ALWaveTable *w);           /* e
 void alSynSetPan(ALSynth *s, ALVoice *voice, ALPan pan);            /* extern */
 void alSynSetPitch(ALSynth *s, ALVoice *voice, f32 ratio);           /* extern */
 void alSynSetFXMix(ALSynth *s, ALVoice *voice, u8 fxmix);           /* extern */
-ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 soundIndex, ALSoundState *pendingState);
+ALSoundState *sndPlaySfx(ALBank *soundBank, s16 soundIndex, ALSoundState *pendingState);
 void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event);
-ALSoundState *sndSetupSound(struct ALBankAlt_s *, ALSound *);            /* extern */
+ALSoundState *sndSetupSound(ALBank*, ALSound *);            /* extern */
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
 void sndUnlinkClearSound(ALSoundState *state);
 
@@ -456,7 +456,7 @@ void sndHandleEvent(ALSndPlayer *sndp, ALSndpEvent *event)
             {
                 if ((state->unk3e & 0x10) != 0)
                 {
-                    sp30 = sndPlaySfx((struct ALBankAlt_s *)event->playSfx.soundBank, event->playSfx.soundIndex, state->state);
+                    sp30 = sndPlaySfx(event->playSfx.soundBank, event->playSfx.soundIndex, state->state);
                     sndCreatePostEvent(sp30, 8, state->vol);
                     sndCreatePostEvent(sp30, 4, state->pan);
                     sndCreatePostEvent(sp30, 0x100, state->fxMix);
@@ -598,7 +598,7 @@ s32 sndCountAllocList(s16 *allocListCount, s16 *freeListCount)
   return k;
 }
 
-ALSoundState *sndSetupSound(struct ALBankAlt_s *soundBank, ALSound* sound)
+ALSoundState *sndSetupSound(ALBank *soundBank, ALSound* sound)
 {
   ALSoundState *state;
   ALKeyMap *keymap;
@@ -730,7 +730,7 @@ u8 sndGetPlayingState(ALSoundState *state)
   return AL_STOPPED;
 }
 
-ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 sndId, ALSoundState *pendingState) {
+ALSoundState *sndPlaySfx(ALBank *soundBank, s16 sndId, ALSoundState *pendingState) {
     ALSoundState *newState;  // sp 0x54
     ALSoundState *nextState; // sp 0x50
     ALKeyMap *keyMap;        // sp 0x4C
@@ -752,7 +752,7 @@ ALSoundState *sndPlaySfx(struct ALBankAlt_s *soundBank, s16 sndId, ALSoundState 
     {
 
 
-        sound = (soundBank->instArray[0]->soundArray[sndId]);
+        sound = (soundBank->instArray[0]->soundArray[sndId - 1]);
 
         newState = sndSetupSound(soundBank, sound);
 

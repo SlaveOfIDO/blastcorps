@@ -1,16 +1,24 @@
 options:
-  platform: n64
-  base_path: .
   basename: hd_code
-  compiler: IDO
-  #create_detected_syms: yes
-  find_file_boundaries: yes
   target_path: hd_code.bin
+  elf_path: build/hd_code.elf
+  base_path: .
+  platform: n64
+  compiler: IDO
+  ld_script_path: hd_code.ld
+  find_file_boundaries: True
+  header_encoding: ASCII
   symbol_addrs_path: symbol_addrs.txt
   undefined_funcs_auto_path: undefined_funcs_auto.txt
   undefined_syms_auto_path: undefined_syms_auto.txt
   ld_legacy_generation: True # change this when ready to False
   symbol_name_format: hd_code_$VRAM
+  migrate_rodata_to_functions: True
+  gfx_ucode: f3db
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
 segments:
 - name:  hd_code
   type: code
