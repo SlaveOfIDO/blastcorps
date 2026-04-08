@@ -85,7 +85,7 @@ build/src/hd_code/gu/%.c.o: OPT_FLAGS = -O3
 # *.c -> *.c.o (with GLOBAL_ASM macro)
 $(GLOBAL_ASM_HD_CODE_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $(@D)
-	$(PYTHON) $(TOOLS_DIR)/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) -- $(CFLAGS) $(OPT_FLAGS) -o $@ $<
+	$(PYTHON) $(TOOLS_DIR)/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) -- $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
 
 # *.c -> *.c.o (without GLOBAL_ASM macro)
 $(MIPS3_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c

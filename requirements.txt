@@ -1,2 +1,10 @@
+# splat
 splat64[mips]==0.39.1
 spimdisasm==1.40.2
+
+# asm-differ
+colorama
+watchdog
+levenshtein
+cxxfilt
+ansiwrap

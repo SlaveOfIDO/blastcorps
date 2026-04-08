@@ -98,7 +98,7 @@ void func_hd_code_80266248(Gfx**, struct Model1*);                        /* ext
 void func_hd_code_8026A378(s32, s8*);                          /* extern */
 void func_hd_code_802701A8(Gfx**, s32*);                        /* extern */
 Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s16 arg4, s32* arg5); /* extern */
-void func_hd_code_80274B40(Gfx**, struct Model1*, u8, s32, s32);            /* extern */
+void func_hd_code_80274B40(Gfx** arg0, struct Model1* arg1, u8 arg2, s16 arg3, s32 arg4);
 s32 areWeFading();                                /* extern */
 s32 func_hd_code_80275478(struct Model1*, Gfx**, s32);                   /* extern */
 s32 func_hd_code_80276E50(void**, s32*, u8, s32, s32, s32);     /* extern */

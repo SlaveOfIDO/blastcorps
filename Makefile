@@ -6,8 +6,6 @@ ASM_DIRS  = $(shell find $(ASM_DIR)/init -type d) $(shell find $(ASM_DIR)/hd_cod
 TOOLS_DIR := tools
 ASM_PROCESSOR_DIR := $(TOOLS_DIR)/asm-processor
 
-BLASTCORP_EXTRACTED := blastcorps/init.$(VERSION).bin blastcorps/hd_code.$(VERSION).bin blastcorps/hd_front_end.$(VERSION).bin
-
 CROSS = mips-linux-gnu-
 AS = $(CROSS)as
 CPP = cpp
@@ -68,23 +66,6 @@ MIPS3_INIT_C_O_FILES = $(BUILD_DIR)/src/init/libc/ll.c.o
 GLOBAL_ASM_INIT_C_FILES := $(shell $(GREP) GLOBAL_ASM $(INIT_SRC_DIR) </dev/null 2>/dev/null)
 GLOBAL_ASM_INIT_C_O_FILES := $(foreach file,$(GLOBAL_ASM_INIT_C_FILES),$(BUILD_DIR)/$(file).o)
 
-### HD Code
-
-
-HD_CODE_SRC_DIR   = $(SRC_DIR)/hd_code
-HD_CODE_SRC_DIRS  = $(shell find $(HD_CODE_SRC_DIR) -type d)
-
-HD_CODE_C_FILES   = $(shell find $(HD_CODE_SRC_DIR) -name '*.c')
-HD_CODE_C_O_FILES := $(foreach file,$(HD_CODE_C_FILES),$(BUILD_DIR)/$(file).o)
-
-HD_CODE_S_FILES   = $(shell find $(HD_CODE_SRC_DIR) -name '*.s')
-HD_CODE_S_O_FILES := $(foreach file,$(HD_CODE_S_FILES),$(BUILD_DIR)/$(file).o)
-
-# Files requiring pre/post-processing
-GLOBAL_ASM_HD_CODE_C_FILES := $(shell $(GREP) GLOBAL_ASM $(HD_CODE_SRC_DIR) </dev/null 2>/dev/null)
-GLOBAL_ASM_HD_CODE_C_O_FILES := $(foreach file,$(GLOBAL_ASM_HD_CODE_C_FILES),$(BUILD_DIR)/$(file).o)
-
-
 ### Combined
 GLOBAL_ASM_C_O_FILES := $(GLOBAL_ASM_INIT_C_O_FILES) \
                         $(GLOBAL_ASM_HD_CODE_C_O_FILES)
@@ -101,9 +82,6 @@ O_FILES := $(UNMATCHED_S_O_FILES) \
 		   $(INIT_C_O_FILES) \
 		   $(INIT_S_O_FILES) \
 		   $(GLOBAL_ASM_INIT_C_O_FILES) \
-		   $(HD_CODE_C_O_FILES) \
-		   $(HD_CODE_S_O_FILES) \
-		   $(GLOBAL_ASM_HD_CODE_C_O_FILES) \
 		   $(BIN_O_FILES)
 
 
@@ -119,7 +97,7 @@ default: all
 all: dirs $(TARGET).z64 verify
 
 dirs:
-	$(foreach dir,$(INIT_SRC_DIRS) $(HD_CODE_SRC_DIRS) $(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))
+	$(foreach dir,$(INIT_SRC_DIRS) $(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))
 
 check: .baserom.$(VERSION).ok
 
@@ -191,7 +169,7 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
-	rm -rf $(BLASTCORP_EXTRACTED)
+	rm hd_code/hd_code.bin
 
 ### Settings
 .SECONDARY:
