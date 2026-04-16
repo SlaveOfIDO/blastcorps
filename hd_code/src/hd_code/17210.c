@@ -153,7 +153,7 @@ void func_hd_code_8025BEF8(void) {
         } else if (areWeFading() == 0) {
             switch(D_hd_code_80364A90) {
                 case 0x2:
-                    func_hd_code_80275270(2, 0x3E800000);
+                    func_hd_code_80275270(2, 0.25f);
                     break;
                 case 0x100000000000:
                     rmonPrintf("sequence playback over\n");
@@ -163,10 +163,10 @@ void func_hd_code_8025BEF8(void) {
                 case 0x400:
                     D_hd_code_802E8BD8 = 1;
                     if(D_hd_code_80364A90 == 0x400) {
-                        func_hd_code_80275270(0x40, 0x3FA00000);
+                        func_hd_code_80275270(0x40, 1.25f);
                         break;
                     }
-                    func_hd_code_80275270(0x40, 0x3F000000);
+                    func_hd_code_80275270(0x40, 0.5f);
                     break;
                 default:
                     rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "recording.c", 0x184);

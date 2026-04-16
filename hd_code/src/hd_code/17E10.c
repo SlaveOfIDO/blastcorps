@@ -487,7 +487,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
             }
         } else {
 block_32:
-            func_hd_code_80275270(0x08000000, 0x3F400000);
+            func_hd_code_80275270(0x08000000, 0.75f);
             D_hd_code_80366BB8 = 0;
             D_hd_code_80366BC0.unk0 = 0;
         }

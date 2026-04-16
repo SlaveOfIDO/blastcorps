@@ -659,7 +659,7 @@ void func_hd_code_80269258(void) {
             switch (D_hd_code_8036B95C) {                   /* switch 2; irregular */
             case 0:                                 /* switch 2 */
                 if (D_hd_code_803FCD75 == 1) {
-                    func_hd_code_80275270(0x200000000000, 0x3F000000);
+                    func_hd_code_80275270(0x200000000000, 0.5f);
                 } else {
                     D_hd_code_803643DA = 1;
                     D_hd_code_802E8BD8 = 1;

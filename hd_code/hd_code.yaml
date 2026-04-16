@@ -44,9 +44,10 @@ segments:
     - [0x2B3F0, c, hd_code/2B3F0] # done
     - [0x2C560, c, hd_code/2C560] # done: sched.c
     - [0x2D810, c, hd_code/2D810] # done
-    - [0x2E490, c, hd_code/2E490]
-    - [0x30430, asm, hd_code/30430]
-    - [0x30C70, asm, hd_code/30C70]
+    - [0x2E490, c, hd_code/2E490] # done
+    - [0x30430, c, hd_code/30430] # done: fade.c
+    - [0x30C70, c, hd_code/30C70] # done
+    - [0x32E60, c, hd_code/32E60] # done
     - [0x34430, asm, hd_code/34430]
     - [0x37530, asm, hd_code/37530]
     - [0x39050, asm, hd_code/39050]
@@ -242,7 +243,10 @@ segments:
     - [0xC7800, .rodata, hd_code/2B3F0] # done
     - [0xC7860, .rodata, hd_code/2C560] # done: sched.c
     - [0xC7D10, .rodata, hd_code/2D810] # done
-    - [0xC7D30, bin, hd_code/hd_code_rodata_rest]
+    - [0xC7D30, .rodata, hd_code/30430] # done: fade.c
+    - [0xC7D80, .rodata, hd_code/30C70] # done
+    - [0xC7DB0, .rodata, hd_code/32E60] # done
+    - [0xC7E50, bin, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]

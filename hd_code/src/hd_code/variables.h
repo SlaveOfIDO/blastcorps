@@ -189,7 +189,7 @@ extern s16 D_hd_code_80364452;
 extern s16 D_hd_code_80364454;
 extern s16 D_hd_code_80364A72;
 extern s16 D_hd_code_80364A74;
-extern s16* D_hd_code_8036C794;
+extern struct vec3s* D_hd_code_8036C794;
 extern s32 D_6A9F10; // attract.raw
 extern s32 D_6A9F10; // attract.raw
 extern s32 D_6AD3F0; // 6AD3F0.bin
@@ -638,5 +638,55 @@ extern s16 D_hd_code_8036BB18;
 extern struct S_80367BD0 D_hd_code_80367BD0;
 extern u16 D_8036BB14;
 
+extern u8 D_8036CB38;
+extern Vtx* D_8036CB40;
+extern u8 D_8036CB44;
+extern u8 D_8036CB51;
+extern u8 D_hd_code_802FAD50[];
+extern u8 D_8036CB35;
+extern u8 D_8036CB36;
+extern u8 D_8036CB37;
+extern u8 D_8036CB38;
+extern u8 D_8036CB39;
+extern u8 D_8036CB3A;
+extern u8 D_8036CB3B;
+extern u8 D_8036CB3C;
+extern Vtx* D_8036CB40;
+extern u8 D_8036CB44;
+extern u8 D_8036CB50;
+extern Vtx D_hd_code_802FBD50[];
+extern Vtx D_hd_code_802FBDD0[]; // wild guess
+extern Vtx D_hd_code_802FBDEC[]; // wild guess
+extern Vtx D_hd_code_802FBE18[]; // wild guess
+extern Vtx D_hd_code_802FBE44[]; // wild guess
+extern Vtx D_hd_code_802FBE80[]; // wild guess
+extern s16 D_8036CB2A;
+extern u16 D_hd_code_8035807C;
+extern struct vec3s* D_8036C7A0[10];
+extern u8 D_hd_code_8036C7CC;
+extern struct vec3s* D_8036C790;
+extern s32 D_8036C798;
+extern s32 D_8036C7C8;
+extern u8 D_803F7808;
+extern u8 D_803F7809;
+extern s32 D_hd_code_802FAD40;
+extern s32 D_hd_code_802FAD44;
+extern u8 D_hd_code_802FAD48;
+extern Vtx D_8036C7D0[2][4];
+extern Mtx D_8036C850[];
+extern u8 D_8036CB28;
+extern u8 D_8036CB29;
+extern u8 D_8036CB34;
+extern u8* D_8036CB48[];
+extern struct S_8036C8D0 D_8036C8D0[];
+extern u8 D_8036CB2E;
+extern u8 D_8036CB2F;
+extern struct S_803BE6FC* D_803BE6FC;
+extern struct S_803BE6FC* D_803BE700;
+extern u8 D_8036CB30;
+extern u8 D_8036CB31;
+extern u8 D_8036CB32;
+extern u8 D_8036CB33;
+extern s16 D_8036CB2C;
 
 #endif

@@ -767,10 +767,10 @@ void func_hd_code_80262BF4(void) {
         case 0x04000000:
             if ((D_hd_code_803643D6 != 0) && (areWeFading() == 0) && (D_hd_code_8036BB1C == 1)) {
                 if (((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
-                    func_hd_code_80275270(0x08000000, 0x3E800000);
+                    func_hd_code_80275270(0x08000000, 0.25f);
                     break;
                 }
-                func_hd_code_80275270(0x40, 0x3E800000);
+                func_hd_code_80275270(0x40, 0.25f);
             }
             break;
         default:

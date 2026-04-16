@@ -61,7 +61,9 @@ struct Model1 {
   /* 0x01900 */ Vtx unk1900[(0x1D80 - 0x1900)/0x10];
   /* 0x01D80 */ Vtx unk1D80[8];
   /* 0x01E00 */ Vtx unk1E00[8];
-  /* 0x01E80 */ u8 pad1E80[0x38C0 - 0x1E80];
+  /* 0x01E80 */ u8 pad1E80[0x1F00 - 0x1E80];
+  /* 0x01F00 */ Vtx unk1F00[16];
+  /* 0x02000 */ u8 pad2000[0x38C0 - 0x2000];
   /* 0x038C0 */ Vtx unk38C0[0x40 / 0x10];
   /* 0x03900 */ Vtx unk3900[(0x03C00 - 0x03900)/0x10];
   /* 0x03C00 */ LookAt lookAt;
@@ -474,5 +476,21 @@ struct S_802FA280 {
   u8 unkA;
   u8 unkB;
 }; // Size: 0xC
+
+struct S_803BE6FC {
+  s16 unk0;
+  u8 unk2;
+  u8 unk3;
+  u8 unk4;
+  u8 unk5;
+  u8 unk6;
+};
+
+struct S_8036C8D0 {
+  s16 unk0;
+  s16 unk2;
+  u8 unk4;
+  s32 unk8;
+};
 
 #endif
