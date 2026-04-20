@@ -43,7 +43,7 @@ Gfx* D_hd_code_80358038[2];
 Gfx* D_hd_code_80358040[2];
 Gfx* D_hd_code_80358048[2];
 u32 *D_hd_code_80358050[2]; // Texture image data addresses?
-s32 D_hd_code_80358058;
+u32 D_hd_code_80358058;
 u8 D_hd_code_8035805C; // Texture index?
 u32 D_hd_code_80358060;
 s32 D_hd_code_80358064;

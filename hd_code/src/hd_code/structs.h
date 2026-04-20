@@ -493,4 +493,13 @@ struct S_8036C8D0 {
   s32 unk8;
 };
 
+struct S_8036CB60 {
+  f32 unk0;
+  f32 unk4;
+  f32 unk8;
+  f32 unkC;
+  f32 unk10;
+  f32 unk14;
+}; // Size: 0x18
+
 #endif

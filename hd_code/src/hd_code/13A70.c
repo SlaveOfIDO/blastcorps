@@ -120,18 +120,6 @@ s32 func_hd_code_80258500(u8 arg0) {
   }
   return 0;
 }
-# define gSPPerspNormalize_old(pkt, s)					\
-{									\
-Gfx *_g = (Gfx *)(pkt);						\
-\
-_g->words.w0 = _SHIFTL(G_RDPHALF_1, 24, 8);			\
-_g->words.w1 = (s);						\
-}
-# define gsSPPerspNormalize_old(s)						\
-{{									\
-_SHIFTL(G_RDPHALF_1, 24, 8),					\
-(s)								\
-}}
 
 void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, s32 *arg5, s32 *arg6, s32 *arg7) {
     Gfx *entry;
@@ -161,7 +149,7 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
 
     guPerspective(&D_hd_code_803651F0, &sp9A, 45.0f, 1.0f, 1.0f, 1000.0f, 1.0f);
     gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803651F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPPerspNormalize_old(entry++, sp9A);
+    gSPPerspNormalize(entry++, sp9A);
 
     func_hd_code_802D4F68(&D_hd_code_803652F0, 0.0f, 0.0f, -arg4);
     gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803652F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

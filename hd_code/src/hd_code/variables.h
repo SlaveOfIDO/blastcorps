@@ -198,8 +198,7 @@ extern OSThread D_80218D30;
 extern s32 D_80218EE0;
 extern s32 D_80219F58;
 
-extern s32 D_hd_code_80358058;
-extern s32 D_hd_code_80358058;
+extern u32 D_hd_code_80358058;
 extern s32 D_hd_code_80358064;
 extern s32 D_hd_code_80358068;
 extern s32 D_hd_code_80358078;

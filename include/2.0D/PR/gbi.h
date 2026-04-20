@@ -2594,12 +2594,27 @@ ERROR!! gSPInsertMatrix is no longer supported.
         (_SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16))			\
 }
 
+#ifdef F3D_OLD
+# define gSPPerspNormalize(pkt, s)					\
+{									\
+    Gfx *_g = (Gfx *)(pkt);					 	\
+									\
+    _g->words.w0 = _SHIFTL(G_RDPHALF_1, 24, 8);				\
+    _g->words.w1 = (s);							\
+}
 
+# define gsSPPerspNormalize(s)						\
+{{									\
+    _SHIFTL(G_RDPHALF_1, 24, 8),					\
+    (s)									\
+}}
+
+#else
 #define gSPPerspNormalize(pkt, s)					\
 	gMoveWd(pkt, G_MW_PERSPNORM, 0, (s))
 #define gsSPPerspNormalize(s)						\
 	gsMoveWd(    G_MW_PERSPNORM, 0, (s))
-
+#endif
 #ifdef	F3DEX_GBI_2x
 # define gSPPopMatrixN(pkt, n, num)	gDma2p((pkt),G_POPMTX,(num)*64,64,2,0)
 # define gsSPPopMatrixN(n, num)		gsDma2p(     G_POPMTX,(num)*64,64,2,0)
