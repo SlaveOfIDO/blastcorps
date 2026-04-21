@@ -24,8 +24,11 @@ CMakeLists.txt
 CMakeCache.txt
 cmake_install.cmake
 
+# permuter working directory
+permuter-bench
+
 # other code for inspiration
 other/
 
-# custom ignores
-web-tools
+# build artifacts
+hd_code/hd_code.map
