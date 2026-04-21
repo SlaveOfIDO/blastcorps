@@ -49,7 +49,7 @@ segments:
     - [0x30C70, c, hd_code/30C70] # done
     - [0x32E60, c, hd_code/32E60] # done
     - [0x34430, c, hd_code/34430] # done: mb.c
-    - [0x37530, asm, hd_code/37530]
+    - [0x37530, c, hd_code/37530] # done
     - [0x39050, asm, hd_code/39050]
     - [0x3E4C0, asm, hd_code/3E4C0]
     - [0x405F0, asm, hd_code/405F0] # uses data from 00000
@@ -247,7 +247,8 @@ segments:
     - [0xC7D80, .rodata, hd_code/30C70] # done
     - [0xC7DB0, .rodata, hd_code/32E60] # done
     - [0xC7E50, .rodata, hd_code/34430] # done: mb.c
-    - [0xC7F10, bin, hd_code/hd_code_rodata_rest]
+    - [0xC7F10, .rodata, hd_code/37530] # done
+    - [0xC7F20, bin, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, bin, hd_code_rodata_rest2 ]
