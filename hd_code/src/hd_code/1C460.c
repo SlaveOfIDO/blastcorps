@@ -481,7 +481,7 @@ void func_hd_code_80261068(void) {
 
   switch(D_hd_code_80367728) {
     case 2:
-      if (func_hd_code_802D4E10(D_hd_code_80367734) == 0) {
+      if (alSeqpGetState(D_hd_code_80367734) == 0) {
         func_hd_code_80260C20(D_hd_code_80367708, D_hd_code_80367714);
         D_hd_code_80367728 = 1;
       }
@@ -489,7 +489,7 @@ void func_hd_code_80261068(void) {
 
     case 1:
       func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &sp28);
-      if ((func_hd_code_802D4E10(D_hd_code_80367734) == 1) && (sp2C != 0)) {
+      if ((alSeqpGetState(D_hd_code_80367734) == 1) && (sp2C != 0)) {
         func_hd_code_802D7790(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         func_hd_code_802D82A0(D_hd_code_80367734, D_hd_code_80367400->unk1EC);
         // Reads 4 channels 4 * 0x10
@@ -513,7 +513,7 @@ void func_hd_code_802611F0(void) {
   u32 sp1C;
 
   func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &sp1C);
-  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (func_hd_code_802D4E10(D_hd_code_80367734) == 0) && (sp20 != 0)) {
+  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alSeqpGetState(D_hd_code_80367734) == 0) && (sp20 != 0)) {
     rmonPrintf("auto popping\n");
     func_hd_code_8026101C();
   }
@@ -524,7 +524,7 @@ void func_hd_code_80261284(void) {
 
   switch (D_hd_code_80367729) {                           /* irregular */
     case 1:
-      if (func_hd_code_802D4E10(D_hd_code_80367734) == 1) {
+      if (alSeqpGetState(D_hd_code_80367734) == 1) {
         func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         D_hd_code_80367400->unk1EC = func_hd_code_802D8260(D_hd_code_80367734);
         for(sp24 = 0; sp24 < 0x40U; sp24++) {
@@ -538,7 +538,7 @@ void func_hd_code_80261284(void) {
       }
       return;
     case 2:
-      if (func_hd_code_802D4E10(D_hd_code_80367734) == 0) {
+      if (alSeqpGetState(D_hd_code_80367734) == 0) {
         func_hd_code_80260C20(D_hd_code_80367708, 1.0f);
         D_hd_code_80367729 = 0;
       }

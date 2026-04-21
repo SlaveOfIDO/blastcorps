@@ -115,7 +115,7 @@ segments:
     - [0x90290, c, hd_code/io/viblack]
     - [0x90300, c, hd_code/os/gettime]
     - [0x90390, c, hd_code/libc/ll]
-    - [0x90650, c, hd_code/90650] # TODO: find library function
+    - [0x90650, c, hd_code/90650]
     - [0x90660, c, hd_code/os/virtualtophysical]
     - [0x906E0, asm, hd_code/os/writebackdcache]
     - [0x90760, asm, hd_code/90760] # TODO: guMtxIdent? and other function

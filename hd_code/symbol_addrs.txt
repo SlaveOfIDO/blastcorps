@@ -342,3 +342,4 @@ osViModeTable = 0x80306E70;
 rmonPrintf = 0x8029A7E4;
 guLookAtF = 0x802D5FF0;
 
+alSeqpGetState = 0x802D4E10;
