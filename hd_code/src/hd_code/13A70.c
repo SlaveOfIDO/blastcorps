@@ -151,7 +151,7 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
     gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803651F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPPerspNormalize(entry++, sp9A);
 
-    func_hd_code_802D4F68(&D_hd_code_803652F0, 0.0f, 0.0f, -arg4);
+    guTranslate(&D_hd_code_803652F0, 0.0f, 0.0f, -arg4);
     gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803652F0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     guAlign(&D_hd_code_80365270, -90.0f, 1.0f, 0.0f, 0.0f);
@@ -160,7 +160,7 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
     guAlign(&D_hd_code_803652B0, 180.0f, 0.0f, 1.0f, 0.0f);
     gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_803652B0), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    func_hd_code_802D4F68(&D_hd_code_80365230, -(arg1 / 32.0f), -(arg2 / 32.0f), -(arg3 / 32.0f));
+    guTranslate(&D_hd_code_80365230, -(arg1 / 32.0f), -(arg2 / 32.0f), -(arg3 / 32.0f));
     gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_80365230), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPDisplayList(entry++, VIRTUAL_TO_PHYSICAL(arg5));
     gSPEndDisplayList(entry++);

@@ -23,7 +23,7 @@ extern s32 D_hd_code_803EF2F0;
 
 
 
-u8 func_hd_code_8026FA38(Gfx**, s32*);                /* extern */
+u8 func_hd_code_8026FA38(char**, s32*);                /* extern */
 extern s32 D_6A32B0;
 extern s32 D_6A8DA0;
 extern s32 D_hd_code_80367C0C;

@@ -285,9 +285,9 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
             sp94 = (f32) (0.0 - (f64) sp94);
         }
         if ((sp98 > 0.5) || (sp94 > 0.5)) {
-            func_hd_code_802D62A8((s32) &D_8036D388, spC4, spC0, spBC, spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
+            guLookAt((s32) &D_8036D388, spC4, spC0, spBC, spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
         } else {
-            func_hd_code_802D62A8((s32) &D_8036D388, (f32) ((f64) spC4 + 2.0), spC0, (f32) ((f64) spBC + 2.0), spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
+            guLookAt((s32) &D_8036D388, (f32) ((f64) spC4 + 2.0), spC0, (f32) ((f64) spBC + 2.0), spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
         }
         gSPMatrix(entry++, (s32) &D_8036D388 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(entry++, 0, 0, 0, arg9);

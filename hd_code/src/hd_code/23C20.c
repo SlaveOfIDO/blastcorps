@@ -817,12 +817,12 @@ void func_hd_code_8026A454(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, Mtx
   f32 sp60[4][4];
   f32 sp20[4][4];
 
-  func_hd_code_802D4F20(sp60, -arg0, -arg1, -arg2);
+  guTranslateF(sp60, -arg0, -arg1, -arg2);
   guAlignF(sp20, (f32) arg3 / 11.375, 0.0f, 0.0f, 1.0f);
   guMtxCatF(sp60, sp20, sp60);
   guAlignF(sp20, (f32) arg4 / 11.375, 0.0f, 1.0f, 0.0f);
   guMtxCatF(sp60, sp20, sp60);
-  func_hd_code_802D4F20(sp20, arg0, arg1, arg2);
+  guTranslateF(sp20, arg0, arg1, arg2);
   guMtxCatF(sp60, sp20, sp60);
   guMtxF2L(sp60, arg5);
 }

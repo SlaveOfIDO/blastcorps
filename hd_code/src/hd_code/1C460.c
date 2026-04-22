@@ -10,7 +10,7 @@ struct S_80367400* D_hd_code_80367400;
 s32 D_hd_code_80367408[0x42];
 void* D_hd_code_80367510;
 ALSeqFile *D_hd_code_80367514;
-struct S_80367518 D_hd_code_80367518[2];
+ALCSeq D_hd_code_80367518[2];
 u8 D_hd_code_80367708;
 f32 D_hd_code_8036770C;
 f32 D_hd_code_80367710;
@@ -393,7 +393,7 @@ void func_hd_code_80260C20(u8 arg0, f32 arg1) {
   void* sp24;
 
   D_hd_code_802E8D84 ^= 1;
-  func_hd_code_802D76C0(D_hd_code_80367734);
+  alCSPStop(D_hd_code_80367734);
 
   D_hd_code_8036772A = 0;
   D_hd_code_8036770C = arg1;
@@ -460,7 +460,7 @@ void func_hd_code_80260F60(f32 arg0) {
   }
   rmonPrintf("2 pop tune %d\n", D_hd_code_80367400->unk1F0);
   D_hd_code_80367708 = D_hd_code_80367400->unk1F0;
-  func_hd_code_802D76C0(D_hd_code_80367734);
+  alCSPStop(D_hd_code_80367734);
   D_hd_code_80367728 = 2;
   D_hd_code_80367714 = arg0;
 }
@@ -475,9 +475,7 @@ void func_hd_code_80261040(void) {
 
 void func_hd_code_80261068(void) {
   u32 sp114;
-  u8 pad30[0x114-0x30];
-  u32 sp2C;
-  u32 sp28;
+  ALCSeqMarker sp28;
 
   switch(D_hd_code_80367728) {
     case 2:
@@ -488,8 +486,8 @@ void func_hd_code_80261068(void) {
       break;
 
     case 1:
-      func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &sp28);
-      if ((alSeqpGetState(D_hd_code_80367734) == 1) && (sp2C != 0)) {
+      alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp28);
+      if ((alSeqpGetState(D_hd_code_80367734) == 1) && (sp28.lastTicks != 0)) {
         func_hd_code_802D7790(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         func_hd_code_802D82A0(D_hd_code_80367734, D_hd_code_80367400->unk1EC);
         // Reads 4 channels 4 * 0x10
@@ -508,12 +506,10 @@ void func_hd_code_80261068(void) {
 }
 
 void func_hd_code_802611F0(void) {
-  u8 pad[0x3B * 4 - 0x8];
-  u32 sp20;
-  u32 sp1C;
+  ALCSeqMarker sp1C;
 
-  func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &sp1C);
-  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alSeqpGetState(D_hd_code_80367734) == 0) && (sp20 != 0)) {
+  alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp1C);
+  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alSeqpGetState(D_hd_code_80367734) == 0) && (sp1C.lastTicks != 0)) {
     rmonPrintf("auto popping\n");
     func_hd_code_8026101C();
   }
@@ -525,13 +521,13 @@ void func_hd_code_80261284(void) {
   switch (D_hd_code_80367729) {                           /* irregular */
     case 1:
       if (alSeqpGetState(D_hd_code_80367734) == 1) {
-        func_hd_code_802D76F0(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
+        alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         D_hd_code_80367400->unk1EC = func_hd_code_802D8260(D_hd_code_80367734);
         for(sp24 = 0; sp24 < 0x40U; sp24++) {
           D_hd_code_80367400->unk0[sp24] = *(((u32*)D_hd_code_80367734->chanState)+sp24);
 
         }
-        func_hd_code_802D76C0(D_hd_code_80367734);
+        alCSPStop(D_hd_code_80367734);
         D_hd_code_80367400++;
         D_hd_code_80367729 = 2;
         return;

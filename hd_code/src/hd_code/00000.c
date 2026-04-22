@@ -6,6 +6,7 @@
 #include "variables.h"
 #include "macros.h"
 #include "functions.h"
+#include "yoshi.h"
 
 // BSS begin
 u8 D_hd_code_8030F660;
@@ -2394,7 +2395,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     gDPSetFillColor(entry++, 0xFFFCFFFC);
     gDPFillRectangle(entry++, 0, 0, 319, 239);
 
-    func_hd_code_802D4F68(&arg0->modelview, 0.f, 0.f, 0.f);
+    guTranslate(&arg0->modelview, 0.f, 0.f, 0.f);
     guOrtho(&arg0->mtx1, 0, 319.f, 239.f, 0.0f, -20000.0f, 20000.0f, 1.0f);
     guOrtho(&arg0->mtx2, 0, 1279.f, 959.f, 0.0f, -20000.0f, 20000.0f, 1.0f);
     func_hd_code_802507C8(&arg0->projection2, &arg0->lookAt, &arg0->unk180);
@@ -2727,7 +2728,7 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2) {
                 guMtxCatF(spB0, spF0, spF0);
                 guAlignF(spB0, (f32) (((f64) (f32) D_hd_code_803643C8.textures[sp140].unk101E * 360.0) / 4096.0), 0, 1.0f, 0.0f);
                 guMtxCatF(spF0, spB0, spF0);
-                func_hd_code_802D4F20(spB0, (f32) sp13C, (f32) sp13A, (f32) sp138);
+                guTranslateF(spB0, (f32) sp13C, (f32) sp13A, (f32) sp138);
                 guMtxCatF(spF0, spB0, spF0);
                 guMtxF2L(spF0, &arg1->unk2C0[sp140]);
 
@@ -2855,7 +2856,7 @@ void func_hd_code_8024F520(Gfx** arg0, struct Model1* arg1) {
     arg1->unk18C0[3].v.cn[2] = 0xA;
     arg1->unk18C0[3].v.cn[3] = 0x8C;
 
-    func_hd_code_802D4F68(&arg1->unk240, (f32) sp84, (f32) sp82, (f32) sp80);
+    guTranslate(&arg1->unk240, (f32) sp84, (f32) sp82, (f32) sp80);
     guAlign(&arg1->unk280, ((f32) D_hd_code_803EF326 * 360.0) / 4096.0, 0.0f, 1.0f, 0.0f);
     gSPMatrix(entry++, &D_2000000.unk240, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPMatrix(entry++, &D_2000000.unk280, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
@@ -2938,12 +2939,12 @@ void func_hd_code_802502EC(void) {
     s16 sp26;
 
     if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81)) {
-        func_hd_code_802D4F20(sp70, (f64) -(f32) D_hd_code_803643E0 / 32.0f, (f64) -(f32) D_hd_code_803643E4 / 32.0, (f64) -(f32) D_hd_code_803643E8 / 32.0);
-        guRotateRPYF(sp30, D_hd_code_80364ABC, D_hd_code_80364ABC, D_hd_code_80364ABC);
+        guTranslateF(sp70, (f64) -(f32) D_hd_code_803643E0 / 32.0f, (f64) -(f32) D_hd_code_803643E4 / 32.0, (f64) -(f32) D_hd_code_803643E8 / 32.0);
+        guScaleF(sp30, D_hd_code_80364ABC, D_hd_code_80364ABC, D_hd_code_80364ABC);
         guMtxCatF(sp70, sp30, sp70);
         guAlignF(sp30, D_hd_code_80364AB4, 0, 1.0f, 0.0f);
         guMtxCatF(sp70, sp30, sp70);
-        func_hd_code_802D4F20(sp30, (f64) (f32) D_hd_code_803643E0 / 32.0,(f64) (f32) D_hd_code_803643E4 / 32.0, (f64) (f32) D_hd_code_803643E8 / 32.0);
+        guTranslateF(sp30, (f64) (f32) D_hd_code_803643E0 / 32.0,(f64) (f32) D_hd_code_803643E4 / 32.0, (f64) (f32) D_hd_code_803643E8 / 32.0);
         guMtxCatF(sp70, sp30, sp70);
         guMtxF2L(sp70, &D_hd_code_803156F8[D_hd_code_8035805C].unk1500);
         sp2C = 0;
@@ -2953,12 +2954,12 @@ void func_hd_code_802502EC(void) {
         sp2A = D_hd_code_803643C8.textures[sp2C].unk1004 >> 5;
         sp28 = D_hd_code_803643C8.textures[sp2C].unk1008 >> 5;
         sp26 = D_hd_code_803643C8.textures[sp2C].unk100C >> 5;
-        func_hd_code_802D4F20(sp70, (f32) -sp2A, (f32) -sp28, (f32) -sp26);
-        guRotateRPYF(sp30, D_hd_code_80364ABC, D_hd_code_80364ABC, D_hd_code_80364ABC);
+        guTranslateF(sp70, (f32) -sp2A, (f32) -sp28, (f32) -sp26);
+        guScaleF(sp30, D_hd_code_80364ABC, D_hd_code_80364ABC, D_hd_code_80364ABC);
         guMtxCatF(sp70, sp30, sp70);
         guAlignF(sp30, D_hd_code_80364AB4, 0, 1.0f, 0.0f);
         guMtxCatF(sp70, sp30, sp70);
-        func_hd_code_802D4F20(sp30, sp2A, sp28, sp26);
+        guTranslateF(sp30, sp2A, sp28, sp26);
         guMtxCatF(sp70, sp30, sp70);
         guMtxF2L(sp70, &D_hd_code_803156F8[D_hd_code_8035805C].unk1540);
         if (D_hd_code_80364AC0 == 0) {
@@ -3849,9 +3850,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         sp80 = 0.0-sp80;
     }
     if (((f64) sp84 > 0.5) || ((f64) sp80 > 0.5)) {
-        func_hd_code_802D5F60(arg0, arg1, spB4, spB0, spAC, ((D_hd_code_80365084 * 32.0f) + (f32) spC0) / 32.0f, ((D_hd_code_80365088 * 32.0f) + (f32) spBC) / 32.0f, ((D_hd_code_8036508C * 32.0f) + (f32) spB8) / 32.0f, 0.0f, 1.0f, 0.0f);
+        guLookAtReflect(arg0, arg1, spB4, spB0, spAC, ((D_hd_code_80365084 * 32.0f) + (f32) spC0) / 32.0f, ((D_hd_code_80365088 * 32.0f) + (f32) spBC) / 32.0f, ((D_hd_code_8036508C * 32.0f) + (f32) spB8) / 32.0f, 0.0f, 1.0f, 0.0f);
     } else {
-        func_hd_code_802D5F60(arg0, arg1, (f32) ((f64) spB4 + 2.0), spB0, (f32) ((f64) spAC + 2.0), ((D_hd_code_80365084 * 32.0f) + (f32) spC0) / 32.0f, ((D_hd_code_80365088 * 32.0f) + (f32) spBC) / 32.0f, ((D_hd_code_8036508C * 32.0f) + (f32) spB8) / 32.0f, 0.0f, 1.0f, 0.0f);
+        guLookAtReflect(arg0, arg1, (f32) ((f64) spB4 + 2.0), spB0, (f32) ((f64) spAC + 2.0), ((D_hd_code_80365084 * 32.0f) + (f32) spC0) / 32.0f, ((D_hd_code_80365088 * 32.0f) + (f32) spBC) / 32.0f, ((D_hd_code_8036508C * 32.0f) + (f32) spB8) / 32.0f, 0.0f, 1.0f, 0.0f);
     }
     sp98 = sqrtf(((spB4 - D_hd_code_80365084) * (spB4 - D_hd_code_80365084)) + ((spAC - D_hd_code_8036508C) * (spAC - D_hd_code_8036508C)));
     if (sp98 < 1.0) {
@@ -3890,9 +3891,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     spA4 = ((spB0 - D_hd_code_80365088) * sp9C) + D_hd_code_80365088;
     spA0 = ((spAC - D_hd_code_8036508C) * sp9C) + D_hd_code_8036508C;
     if (((f64) sp84 > 0.5) || ((f64) sp80 > 0.5)) {
-        func_hd_code_802D62A8(arg2, spA8, spA4, spA0, D_hd_code_80365084, D_hd_code_80365088, D_hd_code_8036508C, 0.0f, 1.0f, 0.0f);
+        guLookAt(arg2, spA8, spA4, spA0, D_hd_code_80365084, D_hd_code_80365088, D_hd_code_8036508C, 0.0f, 1.0f, 0.0f);
     } else {
-        func_hd_code_802D62A8(arg2, (f32) ((f64) spA8 + 2.0), spA4, (f32) ((f64) spA0 + 2.0), D_hd_code_80365084, D_hd_code_80365088, D_hd_code_8036508C, 0.0f, 1.0f, 0.0f);
+        guLookAt(arg2, (f32) ((f64) spA8 + 2.0), spA4, (f32) ((f64) spA0 + 2.0), D_hd_code_80365084, D_hd_code_80365088, D_hd_code_8036508C, 0.0f, 1.0f, 0.0f);
     }
     D_hd_code_80364412 = 0;
 }

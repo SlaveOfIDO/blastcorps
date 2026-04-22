@@ -455,7 +455,7 @@ void func_hd_code_8027690C(struct Model1* arg0, f32 arg1, f32 arg2, f32 arg3, s1
 void func_hd_code_80276D1C(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32* arg5, f32* arg6, f32* arg7, f32* arg8) {
   f32 sp18[4][4];
 
-  func_hd_code_802D59C8(sp18, arg0);
+  guMtxL2F(sp18, arg0);
 
   *arg5 = sp18[0][0] * arg1 + sp18[1][0] * arg2 + sp18[2][0] * arg3 + sp18[3][0];
   *arg6 = sp18[0][1] * arg1 + sp18[1][1] * arg2 + sp18[2][1] * arg3 + sp18[3][1];
@@ -509,7 +509,7 @@ void func_hd_code_80276E50(Gfx** arg0, struct Model1* arg1, u8 arg2, s32 arg3, s
         D_8036C7D0[arg2][3].v.tc[0] = 0;
         D_8036C7D0[arg2][3].v.tc[1] = 0x3E0;
 
-        func_hd_code_802D4F20(spC8, (f32) sp10E, (f32) sp10C, 0.0f);
+        guTranslateF(spC8, (f32) sp10E, (f32) sp10C, 0.0f);
         guAlignF(sp88, (f32) (135.0 - (((f64) D_hd_code_8036443E / 4095.0) * 360.0)), 0.0f, 0.0f, 1.0f);
         guMtxCatF(sp88, spC8, spC8);
         guMtxF2L(spC8, &D_8036C850[arg2]);

@@ -3,8 +3,6 @@
 #include "structs.h"
 #include "variables.h"
 
-void func_hd_code_8026AF6C(u16);                       /* extern */
-u16 func_hd_code_8026B10C();                        /* extern */
 extern u16 D_8036C770;
 extern f32 D_8036C774;
 u64 D_8036C778;

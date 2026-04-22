@@ -719,7 +719,7 @@ void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
                     arg1->unk1900[sp168 + sp15C].v.ob[1] = spEC[sp15C];
                     arg1->unk1900[sp168 + sp15C].v.ob[2] = spDC[sp15C];
                 }
-                func_hd_code_802D4F68(&arg1->unk200, D_hd_code_803EF310 / 32.0f, D_hd_code_803EF314 / 32.0f, D_hd_code_803EF318 / 32.0f);
+                guTranslate(&arg1->unk200, D_hd_code_803EF310 / 32.0f, D_hd_code_803EF314 / 32.0f, D_hd_code_803EF318 / 32.0f);
                 gSPMatrix(entry++, &D_2000000.unk200, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
                 gSPVertex(entry++, &D_2000000.unk1900[sp168], 4, 0);
                 sp168 += 4;

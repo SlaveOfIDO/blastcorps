@@ -3,6 +3,7 @@
 #include "gu/guint.h"
 #include "structs.h"
 #include "variables.h"
+#include "yoshi.h"
 
 struct S_802F9934 {
   u8 unk0;
@@ -38,7 +39,7 @@ Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
 s32 func_hd_code_8025B558(u16*);                    /* extern */
 void func_hd_code_8026BA7C(struct S_802F8BDC*);        /* extern */
 s32 func_hd_code_80297EF8(s32);                     /* extern */
-u8 func_hd_code_8026FA38(char** arg0, s32* arg1);
+Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2);
 
 extern u16 D_hd_code_802E8C98[];
 extern u16 D_hd_code_802E8C9C[];
@@ -154,21 +155,22 @@ s32 func_hd_code_8026AD30(s16 arg0) {
   return (s32) sp2B;
 }
 
-// part of yoshi.c
-void func_hd_code_8026AF6C(u16 arg0) {
+void func_hd_code_8026AF6C(u16 yd) {
   u16 sp1E;
   u16 sp1C;
 
   sp1E = D_8036BB14 & 0xFF;
-  sp1C = arg0 & 0xFF;
+  sp1C = yd & 0xFF;
   if (D_8036BB14) {
-    if (D_8036BB14 != 0) {
+    if (D_8036BB14) {
       rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x520);
     }
-    rmonPrintf("NEW: %x OLD:%x\n", arg0, D_8036BB14);
+    rmonPrintf("NEW: %x OLD:%x\n", yd, D_8036BB14);
   }
-  if ((arg0 & 0x4000) && (arg0 != 0x4000)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
+  if ((yd & 0x4000)) {
+    if (!(yd == 0x4000)) {
+      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
+    }
   }
   if ((sp1C == 0x1E) || (sp1C == 0x23) || (sp1C == 5) || (sp1C == 0xE)) {
     D_8036BB1A = -1;
@@ -182,9 +184,9 @@ void func_hd_code_8026AF6C(u16 arg0) {
     if (D_8036BB14 != 0) {
       rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x533);
     }
-    rmonPrintf("GOING FOR NEW: %x OLD:%x\n", arg0, D_8036BB14);
+    rmonPrintf("GOING FOR NEW: %x OLD:%x\n", yd, D_8036BB14);
   }
-  D_8036BB14 = arg0;
+  D_8036BB14 = yd;
 }
 
 u16 func_hd_code_8026B10C() {
@@ -346,6 +348,7 @@ void func_hd_code_8026B8F8(void) {
   }
 }
 
+// @internal
 void func_hd_code_8026BA7C(struct S_802F8BDC* arg0) {
   struct S_80367BCC* sp2C;
   s32 sp28;
@@ -372,7 +375,6 @@ void func_hd_code_8026BA7C(struct S_802F8BDC* arg0) {
   }
 }
 
-// part of yoshi.c
 Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
   Gfx* entry;                                       /* compiler-managed */
 
@@ -389,7 +391,7 @@ Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
   // This does not return any value... UB... needed for match
 }
 
-// part of yoshi.c
+// @internal
 Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     struct S_802F8BDC* sp14C;
     struct S_8020C070* sp148;
@@ -659,16 +661,16 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             guAlign(&arg1->unk12C0, 180.0 - 180.0 * ((D_8036BB38 * D_8036BB34) / sp128), 2.0f, 0.0f, 1.0f);
             gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->unk12C0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         } else {
-            func_hd_code_802D4F68(&arg1->unk12C0, 0.0f, 0.0f, 0.0f);
+            guTranslate(&arg1->unk12C0, 0.0f, 0.0f, 0.0f);
             gSPMatrix(entry++,  OS_PHYSICAL_TO_K0(&arg1->unk12C0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         }
         gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->unk1300), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPPopMatrix(entry++, G_MTX_MODELVIEW);
         if (sp14C->unk8 & 8) {
-            guRotateRPY(&arg1->unk1300, (sp136 * D_8036BB38 * D_8036BB34) / 1000.0f, (sp134 * D_8036BB38 * D_8036BB34) / 1000.0f, 1.0f);
+            guScale(&arg1->unk1300, (sp136 * D_8036BB38 * D_8036BB34) / 1000.0f, (sp134 * D_8036BB38 * D_8036BB34) / 1000.0f, 1.0f);
             gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->unk1300), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         } else {
-            guRotateRPY(&arg1->unk1300, sp136 / 1000.0f, sp134 / 1000.0f, 1.0f);
+            guScale(&arg1->unk1300, sp136 / 1000.0f, sp134 / 1000.0f, 1.0f);
             gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->unk1300), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         }
         gDPPipeSync(entry++);
@@ -684,7 +686,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
         gSPPopMatrix(entry++, G_MTX_MODELVIEW);
 
         if (sp14C->unk8 & 8) {
-            guRotateRPY(&arg1->unk1280, D_8036BB38, D_8036BB38, 1.0f);
+            guScale(&arg1->unk1280, D_8036BB38, D_8036BB38, 1.0f);
             gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->unk1280), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         }
         if ((sp14C->unk8 & 0x20) && (D_hd_code_8036BB1C == 2)) {
@@ -904,6 +906,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     return (Gfx* ) entry;
 }
 
+// @internal
 void func_hd_code_8026EF70(struct S_802F8BDC* arg0) {
   if (arg0->unk8 & 0x80) {
     D_8036BB04 = func_hd_code_8026F8A8(arg0->unkE, arg0->unk10, arg0->unkE - 1, 0x100);
@@ -918,6 +921,7 @@ void func_hd_code_8026EF70(struct S_802F8BDC* arg0) {
   D_8036BB1E = 0;
 }
 
+// @internal
 u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
     struct S_8020C070* sp3C;
     u8 sp3B;
@@ -1033,6 +1037,7 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
 
 }
 
+// @internal
 u8 func_hd_code_8026F644(struct S_802F8BDC* arg0, struct S_8020C070* arg1, s16 arg2) {
   if (arg1->unk0 & 0x1000) {
     return MAX(0x00, MIN(0xFF, 0x200 - (((ABS(arg2)) << 9) / (arg0->unk2 / 3))));
@@ -1040,6 +1045,7 @@ u8 func_hd_code_8026F644(struct S_802F8BDC* arg0, struct S_8020C070* arg1, s16 a
   return 0xFF;
 }
 
+// @internal
 u16 func_hd_code_8026F82C(u16 arg0, u16 arg1, u16 arg2) {
   s32 sp4;
 
@@ -1051,6 +1057,7 @@ u16 func_hd_code_8026F82C(u16 arg0, u16 arg1, u16 arg2) {
   return arg1;
 }
 
+// @internal
 u16 func_hd_code_8026F8A8(u16 arg0, u16 arg1, u16 arg2, u16 arg3) {
   s32 sp4;
 
@@ -1062,7 +1069,6 @@ u16 func_hd_code_8026F8A8(u16 arg0, u16 arg1, u16 arg2, u16 arg3) {
   return arg2;
 }
 
-// part of yoshi.c
 s32 func_hd_code_8026F92C(u64 arg) {
   s64 sp1C;
 
@@ -1110,6 +1116,7 @@ u8 func_hd_code_8026FA38(char** arg0, s32* arg1) {
   return sp18;
 }
 
+// @internal
 void func_hd_code_8026FB50(struct S_802F8BDC* arg0) {
   if (arg0->unk8 & 0x8000) {
     D_8036BB10 = D_hd_code_8036BB24;

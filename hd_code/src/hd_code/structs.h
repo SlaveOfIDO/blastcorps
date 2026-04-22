@@ -142,7 +142,7 @@ struct UnknownStruct_803644BC {
   /* 0x68 */ s32 unk68;
   /* 0x6C */ s32 unk6C;
   /* 0x70 */ s32 unk70;
-};
+}; // Size: 0x74
 
 // size: 0x4
 struct UnknownStruct8030F668 {
