@@ -81,6 +81,7 @@ extract:
 
 build/src/hd_code/libc/ll.c.o: MIPSISET := -mips3 -o32
 build/src/hd_code/gu/%.c.o: OPT_FLAGS = -O3
+build/src/hd_code/audio/%.c.o: OPT_FLAGS = -O3
 
 # *.c -> *.c.o (with GLOBAL_ASM macro)
 $(GLOBAL_ASM_HD_CODE_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c

@@ -229,7 +229,7 @@ extern s32 D_hd_code_803669DC;
 extern s32 D_hd_code_803669E8;
 extern s32 D_hd_code_803669EC;
 extern s32 D_hd_code_803669F0;
-extern ALSeqPlayer* D_hd_code_80367734;
+extern ALCSPlayer* D_hd_code_80367734;
 extern s32 D_hd_code_80367740;
 extern s32 D_hd_code_8036B8B4;
 extern s32 D_hd_code_8036B8B8;

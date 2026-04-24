@@ -136,11 +136,11 @@ segments:
     - [0x92030, asm, hd_code/os/destroythread] # TODO
     - [0x92130, asm, hd_code/92130] # probably cosf, needs .data migration
     - [0x922A0, asm, hd_code/libc/sprintf] # TODO
-    - [0x92350, asm, hd_code/audio/heapalloc] # TODO
-    - [0x923B0, asm, hd_code/audio/event] # TODO
+    - [0x92350, c, hd_code/audio/heapalloc]
+    - [0x923B0, c, hd_code/audio/event]
     - [0x926F0, asm, hd_code/audio/sl] # TODO
-    - [0x927B0, asm, hd_code/audio/synaddplayer] # TODO
-    - [0x92800, asm, hd_code/audio/synallocvoice] # TODO
+    - [0x927B0, c, hd_code/audio/synaddplayer]
+    - [0x92800, c, hd_code/audio/synallocvoice]
     - [0x92A30, asm, hd_code/audio/synsetvol] # TODO
     - [0x92AD0, asm, hd_code/audio/synstartvoice] # TODO
     - [0x92B60, asm, hd_code/audio/synsetpan] # TODO
@@ -151,9 +151,10 @@ segments:
     - [0x92E50, asm, hd_code/audio/cents2ratio] # TODO
     - [0x92EA0, asm, hd_code/os/setintmask] # TODO handwritten asm
     - [0x92F00, asm, hd_code/audio/cspstop] # TODO
-    - [0x92F30, asm, hd_code/92F30]  # TODO: this contains alCSeqGetLoc. Not alSeqGetLoc
-    - [0x939F0, asm, hd_code/939F0]
-    - [0x93A30, asm, hd_code/93A30]
+    - [0x92F30, asm, hd_code/audio/cseq]  # TODO
+    - [0x939F0, asm, hd_code/audio/cspsetseq] # TODO
+    - [0x93A30, asm, hd_code/audio/cspplay] # TODO
+    - [0x93A60, asm, hd_code/93A60] # TODO
     - [0x93AA0, asm, hd_code/93AA0]
     - [0x93B50, asm, hd_code/93B50]
     - [0x93B60, asm, hd_code/93B60]

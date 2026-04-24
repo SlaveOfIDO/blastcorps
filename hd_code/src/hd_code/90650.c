@@ -4,8 +4,8 @@
 #include "variables.h"
 
 // TODO: This is 99% a library function
-// Maybe it is alSeqpGetState and this file is seqpgetstate.c
-s32 alSeqpGetState(ALSeqPlayer* arg0) {
+// Maybe it is alCSPGetState
+s32 alCSPGetState(ALCSPlayer* arg0) {
   return arg0->state;
 }
 

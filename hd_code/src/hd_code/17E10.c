@@ -479,7 +479,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 func_hd_code_80278318();
                 func_hd_code_80277EDC(2, 1, 2, func_hd_code_8026205C(3));
             }
-        } else if ((alSeqpGetState(D_hd_code_80367734) != 0) && ((D_hd_code_80366BC4.unk0 == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) < 0x1E1U))) {
+        } else if ((alCSPGetState(D_hd_code_80367734) != 0) && ((D_hd_code_80366BC4.unk0 == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) < 0x1E1U))) {
             if (D_hd_code_80366BC4.unk0 == 0) {
                 if (sc.unk803156C4 - D_hd_code_80366BB8 > D_hd_code_802E8CD0[(D_hd_code_80364AA8 & 0x81)?1:0]) {
                     goto block_32;

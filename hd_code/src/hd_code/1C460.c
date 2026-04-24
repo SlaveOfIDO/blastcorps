@@ -21,7 +21,7 @@ u8 D_hd_code_80367729;
 u8 D_hd_code_8036772A;
 s32 D_hd_code_8036772C;
 s8 D_hd_code_80367730;
-ALSeqPlayer* D_hd_code_80367734;
+ALCSPlayer* D_hd_code_80367734;
 ALBank* D_hd_code_80367738;
 ALBank* D_hd_code_8036773C;
 s32 D_hd_code_80367740;
@@ -402,9 +402,9 @@ void func_hd_code_80260C20(u8 arg0, f32 arg1) {
 
 
   InitiateDma(sp24, D_hd_code_80367510, &D_hd_code_80367408[arg0], 0U, 0, 0);
-  func_hd_code_802D7C4C(&D_hd_code_80367518[D_hd_code_802E8D84], D_hd_code_80367510);
-  func_hd_code_802D81B0(D_hd_code_80367734, &D_hd_code_80367518[D_hd_code_802E8D84]);
-  func_hd_code_802D81F0(D_hd_code_80367734);
+  alCSeqNew(&D_hd_code_80367518[D_hd_code_802E8D84], D_hd_code_80367510);
+  alCSPSetSeq(D_hd_code_80367734, &D_hd_code_80367518[D_hd_code_802E8D84]);
+  alCSPPlay(D_hd_code_80367734);
   func_hd_code_802D8220(D_hd_code_80367734, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
 }
 
@@ -479,7 +479,7 @@ void func_hd_code_80261068(void) {
 
   switch(D_hd_code_80367728) {
     case 2:
-      if (alSeqpGetState(D_hd_code_80367734) == 0) {
+      if (alCSPGetState(D_hd_code_80367734) == 0) {
         func_hd_code_80260C20(D_hd_code_80367708, D_hd_code_80367714);
         D_hd_code_80367728 = 1;
       }
@@ -487,8 +487,8 @@ void func_hd_code_80261068(void) {
 
     case 1:
       alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp28);
-      if ((alSeqpGetState(D_hd_code_80367734) == 1) && (sp28.lastTicks != 0)) {
-        func_hd_code_802D7790(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
+      if ((alCSPGetState(D_hd_code_80367734) == 1) && (sp28.lastTicks != 0)) {
+        alCSeqSetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         func_hd_code_802D82A0(D_hd_code_80367734, D_hd_code_80367400->unk1EC);
         // Reads 4 channels 4 * 0x10
         for(sp114 = 0; sp114 < 0x40U; sp114++) {
@@ -509,7 +509,7 @@ void func_hd_code_802611F0(void) {
   ALCSeqMarker sp1C;
 
   alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp1C);
-  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alSeqpGetState(D_hd_code_80367734) == 0) && (sp1C.lastTicks != 0)) {
+  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alCSPGetState(D_hd_code_80367734) == 0) && (sp1C.lastTicks != 0)) {
     rmonPrintf("auto popping\n");
     func_hd_code_8026101C();
   }
@@ -520,7 +520,7 @@ void func_hd_code_80261284(void) {
 
   switch (D_hd_code_80367729) {                           /* irregular */
     case 1:
-      if (alSeqpGetState(D_hd_code_80367734) == 1) {
+      if (alCSPGetState(D_hd_code_80367734) == 1) {
         alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
         D_hd_code_80367400->unk1EC = func_hd_code_802D8260(D_hd_code_80367734);
         for(sp24 = 0; sp24 < 0x40U; sp24++) {
@@ -534,7 +534,7 @@ void func_hd_code_80261284(void) {
       }
       return;
     case 2:
-      if (alSeqpGetState(D_hd_code_80367734) == 0) {
+      if (alCSPGetState(D_hd_code_80367734) == 0) {
         func_hd_code_80260C20(D_hd_code_80367708, 1.0f);
         D_hd_code_80367729 = 0;
       }

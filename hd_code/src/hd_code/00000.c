@@ -1529,7 +1529,7 @@ block_275:
             }
         }
     }
-    if (D_hd_code_80364A90 == 8 && (areWeFading() == 0) && ((alSeqpGetState(D_hd_code_80367734) == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) >= 0x12DU))) {
+    if (D_hd_code_80364A90 == 8 && (areWeFading() == 0) && ((alCSPGetState(D_hd_code_80367734) == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) >= 0x12DU))) {
         func_hd_code_80275390(0x08000000);
     }
     if ((levelno == 0x31) && (D_hd_code_8036BB1C == 1)) {
