@@ -850,7 +850,7 @@ s32 func_hd_code_8026A610(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
   sp30 = sp30 * sp30;
   sp28 = sp28 * sp28;
-  return (s32) sqrtf(func_hd_code_802DA58C(sp30 + sp28));
+  return (s32) sqrtf(sp30 + sp28);
 }
 
 s32 func_hd_code_8026A6F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
@@ -865,7 +865,7 @@ s32 func_hd_code_8026A6F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
   sp38 = sp38 * sp38;
   sp30 = sp30 * sp30;
   sp28 = sp28 * sp28;
-  return sqrtf(func_hd_code_802DA58C(sp38 + sp30 + sp28));
+  return sqrtf(sp38 + sp30 + sp28);
 }
 
 s32 func_hd_code_8026A828(s32 arg0, s32 arg1) {

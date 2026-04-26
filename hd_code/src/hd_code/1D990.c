@@ -948,7 +948,7 @@ void func_hd_code_802633E0(void) {
                     }
                     D_hd_code_802F5804[0x23].unkC  = D_hd_code_80367D10;
                     D_hd_code_802F5804[0x23].unk10 = D_hd_code_80367D28;
-                    func_hd_code_802D82A0(D_hd_code_80367734, (s32) ((f64) func_hd_code_802D8260(D_hd_code_80367734) * 0.95));
+                    alCSPSetTempo(D_hd_code_80367734, (s32) ((f64) alCSPGetTempo(D_hd_code_80367734) * 0.95));
                 }
                 D_hd_code_80367B54 += 1;
                 D_hd_code_80367BF8 = 0U;

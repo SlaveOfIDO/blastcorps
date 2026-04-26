@@ -405,12 +405,12 @@ void func_hd_code_80260C20(u8 arg0, f32 arg1) {
   alCSeqNew(&D_hd_code_80367518[D_hd_code_802E8D84], D_hd_code_80367510);
   alCSPSetSeq(D_hd_code_80367734, &D_hd_code_80367518[D_hd_code_802E8D84]);
   alCSPPlay(D_hd_code_80367734);
-  func_hd_code_802D8220(D_hd_code_80367734, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
+  alCSPSetVol(D_hd_code_80367734, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
 }
 
 void func_hd_code_80260D7C(f32 arg0) {
   D_hd_code_802E8D88 = arg0;
-  func_hd_code_802D8220(D_hd_code_80367734, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
+  alCSPSetVol(D_hd_code_80367734, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
 }
 
 f32 func_hd_code_80260DF0(void) {
@@ -423,7 +423,7 @@ void func_hd_code_80260DFC(void) {
 
 void func_hd_code_80260E2C(void) {
   D_hd_code_80367740 = (s32) sc.unk803156C4;
-  D_hd_code_8036772C = func_hd_code_802D8260(D_hd_code_80367734);
+  D_hd_code_8036772C = alCSPGetTempo(D_hd_code_80367734);
   func_hd_code_80261FB0(D_hd_code_802E8E04[levelno]);
 }
 
@@ -489,7 +489,7 @@ void func_hd_code_80261068(void) {
       alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp28);
       if ((alCSPGetState(D_hd_code_80367734) == 1) && (sp28.lastTicks != 0)) {
         alCSeqSetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
-        func_hd_code_802D82A0(D_hd_code_80367734, D_hd_code_80367400->unk1EC);
+        alCSPSetTempo(D_hd_code_80367734, D_hd_code_80367400->unk1EC);
         // Reads 4 channels 4 * 0x10
         for(sp114 = 0; sp114 < 0x40U; sp114++) {
           // Raw data transfer
@@ -522,7 +522,7 @@ void func_hd_code_80261284(void) {
     case 1:
       if (alCSPGetState(D_hd_code_80367734) == 1) {
         alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
-        D_hd_code_80367400->unk1EC = func_hd_code_802D8260(D_hd_code_80367734);
+        D_hd_code_80367400->unk1EC = alCSPGetTempo(D_hd_code_80367734);
         for(sp24 = 0; sp24 < 0x40U; sp24++) {
           D_hd_code_80367400->unk0[sp24] = *(((u32*)D_hd_code_80367734->chanState)+sp24);
 
@@ -547,19 +547,19 @@ void func_hd_code_802613C8(void) {
   f32 sp28;
   s16 sp26;
 
-  sp2C = func_hd_code_802D8310(D_hd_code_80367734);
+  sp2C = alCSPGetVol(D_hd_code_80367734);
   sp28 = D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_802E8D88;
   sp26 = sp2C + (sp28 * D_hd_code_8036770C - sp2C) * 0.075;
   if ((ABS(sp26 - sp28 * D_hd_code_8036770C)) < 10.0f) {
     sp26 = sp28 * D_hd_code_8036770C;
     D_hd_code_8036772A = 0;
   }
-  func_hd_code_802D8220(D_hd_code_80367734, (s32) sp26);
+  alCSPSetVol(D_hd_code_80367734, (s32) sp26);
 }
 
 void func_hd_code_80261528(void) {
   if (D_hd_code_80367734->state == 1) {
-    func_hd_code_802D82A0(D_hd_code_80367734, D_hd_code_8036772C);
+    alCSPSetTempo(D_hd_code_80367734, D_hd_code_8036772C);
     D_hd_code_8036772C = 0;
   }
 }
@@ -603,7 +603,7 @@ void func_hd_code_80261588(void) {
     s32 sp24;
     s32 sp20;
 
-    func_hd_code_802D8320(&D_hd_code_80367718, &D_hd_code_80370C80, 0x2A280);
+    alHeapInit(&D_hd_code_80367718, &D_hd_code_80370C80, 0x2A280);
     sp38 = sp34 = (s32)&D_3539A0 - (s32)&D_350950;
     InitiateDma(&D_350950, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
     sp3C = alHeapAlloc(&D_hd_code_80367718, 1, sp38);
@@ -651,7 +651,7 @@ void func_hd_code_80261588(void) {
     sp80 = 0;
     D_hd_code_80367734 = alHeapAlloc(&D_hd_code_80367718, 1, 0x7C);
     func_hd_code_802D9670(D_hd_code_80367734, &sp68);
-    func_hd_code_802D97E0(D_hd_code_80367734, D_hd_code_8036773C);
+    alCSPSetBank(D_hd_code_80367734, D_hd_code_8036773C);
     sp84.maxEvents = 0x40;
     sp84.maybeSndStateCount = 0x20;
     sp84.maybeMaxSounds = 8;

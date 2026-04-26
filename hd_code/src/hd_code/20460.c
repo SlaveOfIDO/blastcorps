@@ -32,8 +32,6 @@ s32 func_hd_code_80267614(struct S_80367D60*);                   /* extern */
 void func_hd_code_8026A5CC(u64*, u64*, u32);              /* extern */
 s32 func_hd_code_8026A8E0(s32, s32);                /* extern */
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
-s16 func_hd_code_802D9830(s32);                     /* extern */
-s16 func_hd_code_802D98A0(s32);                     /* extern */
 void func_hd_code_8026513C();                          /* extern */
 void func_hd_code_80265428();                          /* extern */
 void func_hd_code_80265E48();                          /* extern */
@@ -341,8 +339,8 @@ void func_hd_code_80265B7C(s32 arg0) {
   }
   D_hd_code_80367D60[arg0].unk18 = sp26;
   sp24 = (s16) (sp26 % 1024);
-  sp22 = func_hd_code_802D9830((s32) ((s16) sp24 * 0xFFFF) / 4095);
-  sp20 = func_hd_code_802D98A0((s32) (sp24 * 0xFFFF) / 4095);
+  sp22 = sins((s32) ((s16) sp24 * 0xFFFF) / 4095);
+  sp20 = coss((s32) (sp24 * 0xFFFF) / 4095);
   if ((s32) D_hd_code_80367D60[arg0].unk1C < sp18) {
     D_hd_code_80367D60[arg0].unk1C++;
   }

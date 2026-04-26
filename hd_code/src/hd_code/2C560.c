@@ -18,11 +18,7 @@ void func_hd_code_80271358(OSSched*);              /* extern */
 void func_hd_code_802715DC(OSSched*);              /* extern */
 void func_hd_code_80271904(OSSched*);              /* extern */
 s32 func_hd_code_802A1320();                        /* extern */
-s32 func_hd_code_802DAAC0();                        /* extern */
-s32 func_hd_code_802DAAD0();                        /* extern */
-s32 func_hd_code_802DAB10();                        /* extern */
 void __scMain(void*);                               /* extern */
-void osSetEventMsg(OSEvent e, OSMesgQueue *mq, OSMesg m);
 void func_hd_code_80271C24(OSSched*, OSScTask*);           /* extern */
 void func_hd_code_80271CE4(OSSched*, s32);               /* extern */
 s32 func_hd_code_80271F48(OSMesgQueue* arg0, OSMesg arg1, s32 arg2);               /* extern */
@@ -73,7 +69,7 @@ void osCreateScheduler(OSSched* s, void* stack, s32 priority, u8 mode, u8 numFie
   osSetEventMesg(OS_EVENT_DP, &s->interruptQ, (void* )0x29C);
   osSetEventMesg(OS_EVENT_PRENMI, &s->interruptQ, (void* )0x29D);
   osSetEventMesg(OS_EVENT_FAULT, &s->interruptQ, (void* )0x2A0);
-  osViSetEventMesg(s, 0x29A, numFields);
+  osViSetEvent(s, 0x29A, numFields);
   osCreateThread(&s->thread, 5, __scMain, s, stack, priority);
   osStartThread(&s->thread);
 }
@@ -133,10 +129,10 @@ void __scMain(void* arg0) {
             }
             D_8036BF10 = 1;
             osViBlack(1U);
-            rmonPrintf("GO %x\n", func_hd_code_802DAAC0());
+            rmonPrintf("GO %x\n", osDpGetStatus());
             osDpSetStatus(4U);
             RCP_STAT_PRINT;
-            rmonPrintf("GO %x\n", func_hd_code_802DAAC0());
+            rmonPrintf("GO %x\n", osDpGetStatus());
             while(1);
         }
         switch ((s32)sp34 - 0x29A) {
@@ -166,14 +162,14 @@ void __scMain(void* arg0) {
             }
             D_8036BF10 = 1;
             osViBlack(TRUE);
-            rmonPrintf("%x\n", func_hd_code_802DAAC0());
+            rmonPrintf("%x\n", osDpGetStatus());
             osDpSetStatus(4U);
             RCP_STAT_PRINT;
-            rmonPrintf("%x\n", func_hd_code_802DAAC0());
+            rmonPrintf("%x\n", osDpGetStatus());
             while(1);
         case 6:
             rmonPrintf(" *** CPU FAULT *** - UNFREEZING RDP?\n");
-            while (func_hd_code_802DAAD0() != func_hd_code_802DAB10()) {
+            while (osViGetCurrentFramebuffer() != osViGetNextFramebuffer()) {
 
             }
             osDpSetStatus(4U);
@@ -222,7 +218,7 @@ void func_hd_code_80271358(OSSched* arg0) {
     }
     D_8036BF1C = NULL;
   } else {
-    if ((func_hd_code_802DAAD0() == func_hd_code_802DAB10()) && (func_hd_code_802DAAC0() & 2)) {
+    if ((osViGetCurrentFramebuffer() == osViGetNextFramebuffer()) && (osDpGetStatus() & 2)) {
       arg0->unk803156C8 = osGetTime();
       osDpSetStatus(4U);
     }

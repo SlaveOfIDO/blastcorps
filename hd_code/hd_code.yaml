@@ -141,40 +141,48 @@ segments:
     - [0x926F0, asm, hd_code/audio/sl] # TODO
     - [0x927B0, c, hd_code/audio/synaddplayer]
     - [0x92800, c, hd_code/audio/synallocvoice]
-    - [0x92A30, asm, hd_code/audio/synsetvol] # TODO
-    - [0x92AD0, asm, hd_code/audio/synstartvoice] # TODO
-    - [0x92B60, asm, hd_code/audio/synsetpan] # TODO
-    - [0x92BF0, asm, hd_code/audio/synsetpitch] # TODO
-    - [0x92C80, asm, hd_code/audio/synsetfxmix] # TODO
-    - [0x92D20, asm, hd_code/audio/synstopvoice] # TODO
-    - [0x92DA0, asm, hd_code/audio/synfreevoice] # TODO
-    - [0x92E50, asm, hd_code/audio/cents2ratio] # TODO
+    - [0x92A30, c, hd_code/audio/synsetvol]
+    - [0x92AD0, c, hd_code/audio/synstartvoice]
+    - [0x92B60, c, hd_code/audio/synsetpan]
+    - [0x92BF0, c, hd_code/audio/synsetpitch]
+    - [0x92C80, c, hd_code/audio/synsetfxmix]
+    - [0x92D20, c, hd_code/audio/synstopvoice]
+    - [0x92DA0, c, hd_code/audio/synfreevoice]
+    - [0x92E50, c, hd_code/audio/cents2ratio]
     - [0x92EA0, asm, hd_code/os/setintmask] # TODO handwritten asm
-    - [0x92F00, asm, hd_code/audio/cspstop] # TODO
+    - [0x92F00, c, hd_code/audio/cspstop]
     - [0x92F30, asm, hd_code/audio/cseq]  # TODO
     - [0x939F0, asm, hd_code/audio/cspsetseq] # TODO
     - [0x93A30, asm, hd_code/audio/cspplay] # TODO
-    - [0x93A60, asm, hd_code/93A60] # TODO
-    - [0x93AA0, asm, hd_code/93AA0]
-    - [0x93B50, asm, hd_code/93B50]
-    - [0x93B60, asm, hd_code/93B60]
-    - [0x93BA0, asm, hd_code/93BA0]
-    - [0x93DF0, asm, hd_code/93DF0]
-    - [0x95020, asm, hd_code/95020]
-    - [0x95060, asm, hd_code/95060]
-    - [0x95070, asm, hd_code/95070]
-    - [0x95240, asm, hd_code/95240]
-    - [0x95450, asm, hd_code/95450]
-    - [0x95460, asm, hd_code/95460]
-    - [0x95C40, asm, hd_code/95C40]
-    - [0x95E50, asm, hd_code/95E50]
-    - [0x961B0, asm, hd_code/961B0]
-    - [0x96220, asm, hd_code/96220]
-    - [0x96290, asm, hd_code/96290]
-    - [0x96300, asm, hd_code/96300]
-    - [0x96310, asm, hd_code/96310]
-    - [0x964C0, asm, hd_code/964C0]
-    - [0x96800, asm, hd_code/96800]
+    - [0x93A60, c, hd_code/audio/cspsetvol]
+    - [0x93AA0, c, hd_code/audio/cspgettempo]
+    - [0x93AE0, c, hd_code/audio/cspsettempo]
+    - [0x93B50, c, hd_code/audio/cspgetvol]
+    - [0x93B60, c, hd_code/audio/heapinit]
+    - [0x93BA0, c, hd_code/audio/bnkf]
+    - [0x93DF0, asm, hd_code/audio/csplayer] # TODO: not sure. probably
+    - [0x95020, c, hd_code/audio/cspsetbank]
+    - [0x95060, asm, hd_code/os/getcount] # TODO: handwritten asm
+    - [0x95070, asm, hd_code/gu/sins] # TODO: needs data
+    - [0x950E0, c, hd_code/gu/coss]
+    - [0x95110, asm, hd_code/os/vi] # TODO
+    - [0x95240, c, hd_code/os/aisetfreq]
+    - [0x953A0, c, hd_code/os/aisetnextbuf]
+    - [0x95450, c, hd_code/os/aigetlen]
+    - [0x95460, asm, hd_code/audio/synthesizer]
+    - [0x95C40, asm, hd_code/libc/llcvt] # TODO needs rodata
+    - [0x95E50, asm, hd_code/io/vimgr] # TODO needs data and bss
+    - [0x961B0, c, hd_code/io/visetmode]
+    - [0x96220, asm, hd_code/os/seteventmesg] # TODO: needs bss
+    - [0x96290, c, hd_code/os/visetevent]
+    - [0x96300, c, hd_code/io/dpgetstat]
+    - [0x96310, c, hd_code/io/vigetcurrframebuf]
+    - [0x96350, c, hd_code/io/vigetnextframebuf]
+    - [0x96390, c, hd_code/io/viswapbuf]
+    - [0x963E0, c, hd_code/os/settimer]
+    - [0x964C0, asm, hd_code/io/sptask] # TODO
+    - [0x96800, c, hd_code/io/sptaskyield]
+    - [0x96820, c, hd_code/gu/mtxcatl]
     - [0x968E0, asm, hd_code/968E0]
     - [0x96D10, asm, hd_code/96D10]
     - [0x96F70, asm, hd_code/96F70]
@@ -264,6 +272,8 @@ segments:
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, .rodata, hd_code/gu/lookatref ]
     - [0xC9260, bin, hd_code_rodata_rest2 ]
+    - [0xC9300, .rodata, hd_code/audio/cents2ratio ]
+    - [0xC9310, bin, hd_code_rodata_rest3 ]
     - { start: 0xCAEA0, type: .bss, name: hd_code/00000, vram: 0x8030F660 } # done
     - [0xCAEA0, .bss, hd_code/12D80] # done
     - [0xCAEA0, .bss, hd_code/13A70] # done

@@ -440,22 +440,17 @@ s32 func_hd_code_8026205C(s32 arg0);                       /* extern */
 u8 func_hd_code_802C1B1C();                        /* extern */
 s32 func_hd_code_8026394C(s16 x, s16 y, s16 x1, s16 y1, s16 x2, s16 y2);
 void func_hd_code_80264A34(char*, u16, u16);           /* extern */
-s32 func_hd_code_802D8260(ALCSPlayer*);            /* extern */
-void func_hd_code_802D82A0(ALCSPlayer*, s32);         /* extern */
-void func_hd_code_802D8220(ALCSPlayer*, s32);   /* extern */
+s32 alCSPGetTempo(ALCSPlayer*);            /* extern */
+void alCSPSetTempo(ALCSPlayer*, s32);         /* extern */
 void amCreateAudioManager(ALSynConfig*, s32);                   /* extern */
 void amStartAudioThread();                          /* extern */
-void func_hd_code_802D8320(ALHeap*, void*, u32);            /* extern */
 void func_hd_code_802D9670(ALCSPlayer*, s32*);  /* extern */
-void func_hd_code_802D97E0(ALCSPlayer*, ALBank*); /* extern */
 void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig);
 void func_hd_code_80260A30(s32);                         /* extern */
 u8 func_hd_code_80264BA4(u8);
 void sndDeactivateAllSfxByFlag_11();                   /* extern */
 void sndDeactivateAllSfxByFlag_3();                    /* extern */
 void func_hd_code_80260C20(u8, f32);                   /* extern */
-s32 func_hd_code_802D8310(ALCSPlayer*);            /* extern */
-f32 func_hd_code_802DA58C(s64);                /* extern */
 f32 func_hd_code_80268D84(f32, f32, f32, f32, f32, f32, f32); /* extern */
 f32 func_hd_code_8026A184(f32, f32, f32, f32, f32, f32, f32); /* extern */
 void func_hd_code_8026A2E8(f32, f32*);                 /* extern */
