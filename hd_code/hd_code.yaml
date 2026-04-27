@@ -102,7 +102,7 @@ segments:
     - [0x8A2E0, asm, hd_code/8A2E0]
     - [0x8AEE0, bin, hd_code/8AEE0] # TODO: misuses $gp
     - [0x8DDB0, bin, hd_code/8DDB0] # TODO: misuses $gp
-    - [0x8E910, bin, hd_code/8E910] # more data?
+    - [0x8E910, asm, hd_code/8E910] # TODO: levelno based data
     - [0x8F860, c, hd_code/os/initialize]
     - [0x8FA90, c, hd_code/io/pirawread]
     - [0x8FAF0, c, hd_code/os/createthread]
@@ -183,47 +183,60 @@ segments:
     - [0x964C0, asm, hd_code/io/sptask] # TODO
     - [0x96800, c, hd_code/io/sptaskyield]
     - [0x96820, c, hd_code/gu/mtxcatl]
-    - [0x968E0, asm, hd_code/968E0]
-    - [0x96D10, asm, hd_code/96D10]
-    - [0x96F70, asm, hd_code/96F70]
-    - [0x96FF0, asm, hd_code/96FF0]
-    - [0x97090, asm, hd_code/97090]
-    - [0x97140, asm, hd_code/97140]
-    - [0x971D0, asm, hd_code/971D0]
-    - [0x971F0, asm, hd_code/971F0]
-    - [0x972A0, asm, hd_code/972A0]
-    - [0x97B70, asm, hd_code/97B70]
-    - [0x97BB0, asm, hd_code/97BB0]
-    - [0x97CD0, asm, hd_code/97CD0]
-    - [0x97F30, asm, hd_code/97F30]
-    - [0x983F0, asm, hd_code/983F0]
-    - [0x99580, asm, hd_code/99580]
-    - [0x99620, asm, hd_code/99620]
-    - [0x996A0, asm, hd_code/996A0]
-    - [0x996B0, asm, hd_code/996B0]
-    - [0x9AFF0, asm, hd_code/9AFF0]
-    - [0x9B0E0, asm, hd_code/9B0E0]
-    - [0x9B440, asm, hd_code/9B440]
-    - [0x9BBF0, asm, hd_code/9BBF0]
-    - [0x9BC90, asm, hd_code/9BC90]
-    - [0x9C930, asm, hd_code/9C930]
+    - [0x968E0, asm, hd_code/io/controller] # TODO needs rodata
+    - [0x96CA0, c, hd_code/io/contsetch]
+    - [0x96D10, c, hd_code/io/contreaddata]
+    - [0x96F70, asm, hd_code/os/invalicache] # TODO handwritten asm
+    - [0x96FF0, asm, hd_code/libc/bzero] # TODO handwritten asm
+    - [0x97090, c, hd_code/io/contquery]
+    - [0x97140, c, hd_code/gu/normalize]
+    - [0x971D0, asm, hd_code/os/setsr] # TODO handwritten asm
+    - [0x971E0, asm, hd_code/os/getsr] # TODO handwritten asm
+    - [0x971F0, asm, hd_code/os/setfpccsr] # TODO handwritten asm
+    - [0x97200, c, hd_code/io/sirawread]
+    - [0x97250, c, hd_code/io/sirawwrite]
+    - [0x972A0, asm, hd_code/os/exceptasm] # TODO handwritten asm
+    - [0x97B10, asm, hd_code/os/maptlbrdb] # TODO handwritten asm
+    - [0x97B70, asm, hd_code/os/interrupt] # TODO handwritten asm
+    - [0x97BB0, asm, hd_code/os/thread] # TODO requires bss
+    - [0x97BF0, asm, hd_code/io/piacs] # TODO requires data
+    - [0x97CB0, c, hd_code/os/getthreadpri]
+    - [0x97CD0, c, hd_code/io/pirawdma]
+    - [0x97DB0, c, hd_code/io/devmgr]
+    - [0x97F30, asm, hd_code/os/timerintr] # TODO requires bss
+    - [0x98330, asm, hd_code/os/probetlb] # TODO handwritten asm
+    - [0x983F0, asm, hd_code/libc/xprintf] # TODO needs data
+    - [0x99580, asm, hd_code/libc/string] # TODO
+    - [0x99620, c, hd_code/audio/copy]
+    - [0x996A0, c, hd_code/audio/syndelete]
+    - [0x996B0, asm, hd_code/audio/seqplayer] # TODO needs rodata and matching
+    - [0x9AFF0, c, hd_code/audio/synstartvoiceparam]
+    - [0x9B0E0, c, hd_code/io/viswapcontext]
+    - [0x9B440, c, hd_code/io/ai]
+    - [0x9B470, asm, hd_code/audio/drvrNew] # TODO needs rodata and matching
+    - [0x9BBF0, c, hd_code/audio/synallocfx]
+    - [0x9BC90, c, hd_code/audio/mainbus]
+    - [0x9BDE0, asm, hd_code/audio/load] # TODO needs matching
+    - [0x9C930, asm, hd_code/audio/resample] # TODO needs rodata and matching
     - [0x9CC30, asm, hd_code/9CC30]
     - [0x9D810, asm, hd_code/9D810]
     - [0x9D920, asm, hd_code/9D920]
-    - [0x9DB60, asm, hd_code/9DB60]
-    - [0x9DB70, asm, hd_code/9DB70]
-    - [0x9DB80, asm, hd_code/9DB80]
-    - [0x9DE90, asm, hd_code/9DE90]
-    - [0x9DEA0, asm, hd_code/9DEA0]
-    - [0x9DEE0, asm, hd_code/9DEE0]
-    - [0x9DF70, asm, hd_code/9DF70]
-    - [0x9DFA0, asm, hd_code/9DFA0]
-    - [0x9E050, asm, hd_code/9E050]
+    - [0x9DB60, c, hd_code/io/vigetcurrcontext]
+    - [0x9DB70, c, hd_code/io/spgetstat]
+    - [0x9DB80, asm, hd_code/libc/bcopy] # TODO handwritten asm
+    - [0x9DE90, c, hd_code/io/spsetstat]
+    - [0x9DEA0, c, hd_code/io/spsetpc]
+    - [0x9DEE0, c, hd_code/io/sprawdma]
+    - [0x9DF70, c, hd_code/io/sp]
+    - [0x9DFA0, c, hd_code/io/sirawdma]
+    - [0x9E050, asm, hd_code/io/siacs] # TODO needs bss
+    - [0x9E110, c, hd_code/io/si]
     - [0x9E140, asm, hd_code/9E140]
-    - [0x9E5C0, asm, hd_code/9E5C0]
-    - [0x9E6F0, asm, hd_code/9E6F0]
+    - [0x9E5C0, asm, hd_code/os/syncputchars] # TODO needs matching
+    - [0x9E6F0, asm, hd_code/os/setcompare] # TODO handwritten asm
     - [0x9E700, asm, hd_code/9E700]
-    - [0x9FE20, asm, hd_code/9FE20]
+    - [0x9FE00, c, hd_code/audio/filter]
+    - [0x9FE20, asm, hd_code/audio/reverb] # TODO needs matching
     - [0xA0A30, asm, hd_code/A0A30]
     - [0xA0A40, asm, hd_code/A0A40]
     - [0xA0AA0, asm, hd_code/A0AA0]
