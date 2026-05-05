@@ -107,6 +107,7 @@ verify: $(TARGET).z64
 extract: check decompressed.$(VERSION).z64
 	splat split blastcorps.$(VERSION).yaml
 	cp assets/hd_code.$(VERSION).bin hd_code/hd_code.bin
+	cp assets/hd_front_end.$(VERSION).bin hd_front_end/hd_front_end.bin
 
 decompressed.$(VERSION).z64: baserom.$(VERSION).z64
 	$(PYTHON) $(TOOLS_DIR)/decompress_rom.py baserom.$(VERSION).z64
@@ -136,11 +137,25 @@ $(BUILD_DIR)/%.c.o: %.c
 
 # *.s -> *.s.o
 $(BUILD_DIR)/%.s.o: %.s
+	@mkdir -p $(@D)
 	$(GCC) $(GCC_ASFLAGS) $(INCLUDE_CFLAGS) -o $@ $<
 
 #  *.bin -> *.bin.o
 $(BUILD_DIR)/%.bin.o: %.bin
 	$(LD) -r -b binary -o $@ $<
+
+#  assets/hd_code.us.v11.bin -> assets/hd_code.us.v11.bin.o
+$(BUILD_DIR)/assets/hd_code.$(VERSION).bin.o: assets/hd_code.$(VERSION).bin
+	echo "Copying hd_code binary"
+	cp hd_code/hd_code.bin assets/hd_code.$(VERSION).bin
+	$(LD) -r -b binary -o $@ $<
+
+#  assets/hd_front_end.us.v11.bin -> assets/hd_front_end.us.v11.bin.o
+$(BUILD_DIR)/assets/hd_front_end.$(VERSION).bin.o: assets/hd_front_end.$(VERSION).bin
+	echo "Copying hd_front_end binary"
+	cp hd_front_end/hd_front_end.bin assets/hd_front_end.$(VERSION).bin
+	$(LD) -r -b binary -o $@ $<
+
 
 # *.o -> *.elf
 $(TARGET).elf: $(O_FILES)
@@ -159,6 +174,13 @@ $(TARGET).z64: $(TARGET).bin
 	echo "$$(cat blastcorps.$(VERSION).sha1)  $<" | sha1sum --check
 	touch $@
 
+############
+## REPORT ##
+############
+
+report:
+	$(PYTHON) $(TOOLS_DIR)/generate_objdiff.py
+	objdiff-cli report generate -o report.json --format json-pretty
 
 ###########
 ## CLEAN ##
@@ -170,6 +192,7 @@ clean:
 	rm -rf build
 	rm -f *auto.txt
 	rm hd_code/hd_code.bin
+	rm hd_front_end/hd_front_end.bin
 
 ### Settings
 .SECONDARY:

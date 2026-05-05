@@ -26,6 +26,23 @@ overlays = [
         # Note: These byte arrays should not contain the gzip footer
         # codeCompressedData: [], // Will be written to ROM
         # dataCompressedData: [], // Will be written to ROM directly after .code, regardless of the original .data address
+    },
+    {
+        "name": "hd_front_end",
+        "codeName": "hd_front_end_text.raw",
+        "codeTimestamp": "134D0433",
+        "codeROMAddress": 0x7E3AD0,
+        "decompressedCodeROMAddress": 0x8CAEA0,
+
+        "dataName": "hd_front_end_data.raw",
+        "dataTimestamp": "134D0433",
+        "dataROMAddress": 0x7F63A1,
+        "dataCompressedSize": 0x383C, # - 8 for length without gzip footer
+        "decompressedDataROMAddress": 0x8EBEE0,
+        "dataDecompressedSize": 0x8E50, # - 8 for length without gzip footer
+        # Note: These byte arrays should not contain the gzip footer
+        # codeCompressedData: [], // Will be written to ROM
+        # dataCompressedData: [], // Will be written to ROM directly after .code, regardless of the original .data address
     }
 ]
 

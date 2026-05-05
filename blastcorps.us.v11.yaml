@@ -12,6 +12,7 @@ options:
   ld_legacy_generation: True # change this when ready to False
   extensions_path: tools/splat_ext
   symbol_name_format: $SEG_$VRAM
+  make_full_disasm_for_code: yes
 segments:
   - name:  header
     type:  header
@@ -814,9 +815,10 @@ segments:
   - [0x787FD0, bin] # hd_code_text.us.v11 will be extracted and decompressed by Makefile
   - [0x7D73B4, bin] # hd_code_data.us.v11 will be extracted and decompressed by Makefile ts:855919891
   - [0x7E3AC7, bin]                            # zero padding
-  - [0x7E3AD0, bin, hd_front_end_text.us.v11]  # UI asm code         855919891
-  - [0x7F63A1, bin, hd_front_end_data.us.v11]  # data for UI asm     855919891
+  - [0x7E3AD0, bin] # hd_front_end_text.us.v11 will be extracted and decompressed by Makefile
+  - [0x7F63A1, bin] # hd_front_end_data.us.v11 will be extracted and decompressed by Makefile ts:855919891
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end
   - [0x800000, bin, hd_code.us.v11]
-  - [0x8CAEA0]
+  - [0x8CAEA0, bin, hd_front_end.us.v11]
+  - [0x8F4D30]

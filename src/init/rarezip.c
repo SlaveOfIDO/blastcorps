@@ -1,8 +1,8 @@
 #include "common.h"
 #include "inflate.h"
 
-s32 func_8022043C();
-void func_802206D0(void);
+s32 func_init_8022043C();
+void func_init_802206D0(void);
 
 s32 D_80222840 = 8;
 s32 D_80222844 = 0;
@@ -21,11 +21,11 @@ void func_init_80220360(u8** arg0, u8** arg1, struct huft* arg2) {
     D_init_802229F0 = *arg0;
     D_init_802229F4 = *arg1;
     D_init_802229E0 = arg2;
-    func_802206D0();
+    func_init_802206D0();
     if (D_init_802229F0[D_init_80222A1C] != 0x1F) {
         D_init_80222A1C += 1;
     }
-    D_80222840 = func_8022043C();
+    D_80222840 = func_init_8022043C();
     if (D_80222840 >= 0) {
         inflate();
         *arg0 += D_init_80222A1C;
@@ -34,7 +34,7 @@ void func_init_80220360(u8** arg0, u8** arg1, struct huft* arg2) {
 }
 
 // get_method
-s32 func_8022043C(void) {
+s32 func_init_8022043C(void) {
     u8 flags;
     s32 sp28;
 
@@ -77,7 +77,7 @@ s32 func_8022043C(void) {
 }
 
 
-u32 func_8022069C(u32 arg0, s32 arg1) {
+u32 func_init_8022069C(u32 arg0, s32 arg1) {
     register u32 v1 = 0;
     do {
         v1 |= (arg0 & 1);
@@ -85,7 +85,7 @@ u32 func_8022069C(u32 arg0, s32 arg1) {
     return v1 >> 1;
 }
 
-void func_802206D0(void) {
+void func_init_802206D0(void) {
     D_init_80222A20 = 0;
     D_init_80222A1C = 0;
     D_init_80222A18 = 0;

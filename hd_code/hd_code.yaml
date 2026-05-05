@@ -19,6 +19,7 @@ options:
   data_string_encoding: ASCII
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
+  make_full_disasm_for_code: yes
 segments:
 - name:  hd_code
   type: code
@@ -166,9 +167,9 @@ segments:
     - [0x95070, asm, hd_code/gu/sins] # TODO: needs data
     - [0x950E0, c, hd_code/gu/coss]
     - [0x95110, asm, hd_code/os/vi] # TODO
-    - [0x95240, c, hd_code/os/aisetfreq]
-    - [0x953A0, c, hd_code/os/aisetnextbuf]
-    - [0x95450, c, hd_code/os/aigetlen]
+    - [0x95240, asm, hd_code/io/aisetfreq] # TODO
+    - [0x953A0, asm, hd_code/io/aisetnextbuf] # TODO
+    - [0x95450, c, hd_code/io/aigetlen]
     - [0x95460, asm, hd_code/audio/synthesizer]
     - [0x95C40, asm, hd_code/libc/llcvt] # TODO needs rodata
     - [0x95E50, asm, hd_code/io/vimgr] # TODO needs data and bss
@@ -251,7 +252,7 @@ segments:
     - [0xA57F0, .data, hd_code/20460] # done
     - [0xAF330, .data, hd_code/22EE0] # done
     - [0xAF450, .data, hd_code/23C20] # done
-    - [0xAFF00, bin, hd_code/hd_code_data_rest2 ]
+    - [0xAFF00, data, hd_code/hd_code_data_rest2 ]
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, bin, hd_code/hd_code_data_rest3 ]
