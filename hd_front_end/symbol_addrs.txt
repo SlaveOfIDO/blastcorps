@@ -1,0 +1,1 @@
+../hd_code/symbol_addrs.txt
