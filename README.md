@@ -1,16 +1,18 @@
 # Blast Corps
 
+<img src="./badges/total.svg">
+
 A work-in-progress matching decompilation of Blast Corps `(Japan)`, `(USA)`, `(USA) (Rev 1)` and `(Europe) (En,De)`.
 Currently only `(USA) (Rev 1)` is supported. Any help appreciated.
 
 The following ROMs will be supported in the future:
 
-| Name                           | Location             | sha1                                       |
-|--------------------------------| ---                  | ---                                        |
-| `Blast Corps (USA)`            | `baserom.us.v10.z64` | `185a6ef7ba1adb243278062c81a7d4e119bda58c` |
-| `Blast Corps (USA) (Rev 1)`    | `baserom.us.v11.z64` | `483f7161aea39de8b45c9fbc70a2c3883c4dea8c` |
-| `Blastdozer (Japan)`           | `baserom.jp.z64`     | `b147fdbeb661c89107c440b00dc4810508f58636` |
-| `Blast Corps (Europe) (En,De)` | `baserom.eu.z64`     | `460212600f8b9f0da95219c4c7330f2e626d9a7e` |
+| Name                           | Location             | sha1                                       | Progress                                                                                             |
+|--------------------------------| ---                  | ---                                        |------------------------------------------------------------------------------------------------------|
+| `Blast Corps (USA)`            | `baserom.us.v10.z64` | `185a6ef7ba1adb243278062c81a7d4e119bda58c` | 0%                                                                                                   |
+| `Blast Corps (USA) (Rev 1)`    | `baserom.us.v11.z64` | `483f7161aea39de8b45c9fbc70a2c3883c4dea8c` | <img src="./badges/init.svg"> <img src="./badges/hd_code.svg"> <img src="./badges/hd_front_end.svg"> |
+| `Blastdozer (Japan)`           | `baserom.jp.z64`     | `b147fdbeb661c89107c440b00dc4810508f58636` | 0%                                                                                                   |
+| `Blast Corps (Europe) (En,De)` | `baserom.eu.z64`     | `460212600f8b9f0da95219c4c7330f2e626d9a7e` | 0%                                                                                                   |
 
 This repo does not include all assets necessary for compiling the ROMs.
 A prior copy of the game is required to extract the assets.

@@ -182,6 +182,9 @@ report:
 	$(PYTHON) $(TOOLS_DIR)/generate_objdiff.py
 	objdiff-cli report generate -o report.json --format json-pretty
 
+progress: report
+	$(PYTHON) $(TOOLS_DIR)/progress.py
+
 ###########
 ## CLEAN ##
 ###########

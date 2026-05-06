@@ -8,3 +8,6 @@ watchdog
 levenshtein
 cxxfilt
 ansiwrap
+
+# progress
+anybadge
