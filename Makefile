@@ -26,7 +26,7 @@ ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
 LDFLAGS = -T $(LD_SCRIPT) -Map $(TARGET).map -T undefined_syms_auto.init.$(VERSION).txt -T undefined_funcs_auto.init.$(VERSION).txt -T undefined_syms.init.$(VERSION).txt --no-check-sections
 INCLUDE_CFLAGS := -I . -I include -I include/2.0D -I include/2.0D/PR
 CFLAGS := -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -woff 649,838 $(INCLUDE_CFLAGS)
-GCC_ASFLAGS    := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -O2 -fno-align-labels -fno-align-functions -fno-align-loops -fno-align-jumps -fno-common -fno-zero-initialized-in-bss -mfp32 -c -x assembler-with-cpp -mabi=32 -ffreestanding -mtune=vr4300 -march=vr4300 -mfix4300 -G 0 -O -mno-shared -fno-PIC -mno-abicalls
+GCC_ASFLAGS    := -EB -x assembler-with-cpp -march=vr4300 -mabi=32 -O2 -G 0 -w -nostdinc -c   -mfix4300 -mno-abicalls -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_MIPS_SIM=1 -D_MIPS_SZLONG=32
 
 ### Main
 
@@ -194,8 +194,8 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
-	rm hd_code/hd_code.bin
-	rm hd_front_end/hd_front_end.bin
+	rm -f hd_code/hd_code.bin
+	rm -f hd_front_end/hd_front_end.bin
 
 ### Settings
 .SECONDARY:

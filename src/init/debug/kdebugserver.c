@@ -82,7 +82,7 @@ void func_8022207C(void) {
     func_80221F58((u8*)(&__osThreadSave.context), 0x190);
 }
 
-void func_init_802220A8(u32 packet) {
+void kdebugserver(u32 packet) {
     u32 i;
     rdbPacket sp28;
     

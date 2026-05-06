@@ -19,11 +19,13 @@ for category, directory in directories:
             if file.endswith(".s") and "nonmatchings" not in asm_path:
 
                 source_path = asm_path.replace('asm', 'src').replace('.s', '.c') # hd_code/src/hd_code/00000.c
+                if not os.path.exists(source_path):
+                    source_path = asm_path.replace('asm', 'src') # hd_code/src/hd_code/00000.s
                 name = os.path.splitext(source_path)[0] # hd_code/src/hd_code/00000
 
-                # hd_code/src/hd_code/00000.c -> hd_code/build/src/hd_code/00000.c.o
-                # src/init/rarezip.c -> build/src/init/rarezip.c.o
-                base_path = asm_path.replace(src_path, os.path.join(directory, "build/src"), 1).replace(".s", ".c.o")
+                # hd_code/src/hd_code/00000.s|c -> hd_code/build/src/hd_code/00000.s|c.o
+                # src/init/rarezip.s|c -> build/src/init/rarezip.s|c.o
+                base_path = source_path.replace(src_path.replace('asm', 'src'), os.path.join(directory, "build/src"), 1) + '.o'
                 if not os.path.exists(base_path):
                     base_path = None
                 # hd_code/src/hd_code/00000.c -> hd_code/build/asm/hd_code/00000.s.o

@@ -13,6 +13,7 @@ options:
   extensions_path: tools/splat_ext
   symbol_name_format: $SEG_$VRAM
   make_full_disasm_for_code: yes
+  hasm_in_src_path: yes
 segments:
   - name:  header
     type:  header
@@ -30,8 +31,8 @@ segments:
     - [0x1050, c, init/inflate]
     - [0x2660, c, init/rarezip] 
     - [0x2A00, c, init/libc/syncprintf]
-    - [0x2A30, hasm, init/1A30]
-    - [0x2EA0, hasm, init/libc/bzero]
+    - [0x2A30, hasm, init/1A30] # TODO
+    - [0x2EA0, hasm, init/libc/bzero] # TODO: does not match libultra 2.0I bzero
     - [0x2F40, c, init/os/initialize]
     - [0x3170, c, init/io/pirawdma]
     - [0x3250, c, init/io/pigetstat]
@@ -40,9 +41,9 @@ segments:
     - [0x3280, hasm, init/os/setfpccsr]
     - [0x3290, c, init/io/sirawread]
     - [0x32E0, c, init/io/sirawwrite]
-    - [0x3330, hasm, init/os/exceptasm]
+    - [0x3330, hasm, init/os/exceptasm] # TODO: does not match libultra 2.0D exceptasm
     - [0x3BA0, hasm, init/os/writebackdcache]
-    - [0x3C20, hasm, init/os/invalicache]
+    - [0x3C20, hasm, init/os/invalicache] # TODO: does not match libultra 2.0D invalicache
     - [0x3CA0, hasm, init/os/maptlbrdb]
     - [0x3D00, c, init/io/pirawread]
     - [0x3D60, c, init/libc/ll]
@@ -61,14 +62,15 @@ segments:
     - [0x4A00, hasm, init/os/interrupt]
     - [0x4A40, .data, init/inflate]
     - [0x4B40, .data, init/rarezip]
-    - [0x4B50, data, init/1A30_data] # .data of 1A30
+    - [0x4B50, .data, init/1A30]
     - [0x4B60, .data, init/os/initialize]
-    - [0x4B70, bin, init/exceptasm_data]
+    - [0x4B70, .data, init/os/exceptasm]
     - [0x4B90, .data, init/debug/kdebugserver]
     - [0x4BA0, .data, init/os/thread]
     - [0x4BC0, .data, init/os/syncputchars]
     - [0x4BD0, .rodata, init/rarezip]
-    - [0x4C10, rodata, init/exceptasm_rodata]
+    - [0x4C10, .rodata, init/os/exceptasm]
+    - [0x4C60, .rodata, init/os/setintmask]
     - { start: 0x4CE0, type: bss, vram: 0x802229E0 }
   - name: assets
     type: bin
