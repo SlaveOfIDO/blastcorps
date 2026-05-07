@@ -3,7 +3,6 @@
 #include "functions.h"
 #include "structs.h"
 
-void func_hd_code_8026A5CC(void*, void*, u32);              /* extern */
 void func_hd_code_802AC544(s16, s16, s16);             /* extern */
 s32 func_hd_code_80270A54(struct Struct8036BED8*);  /* extern */
 

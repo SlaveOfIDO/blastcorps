@@ -29,7 +29,6 @@ struct S_80367D60 {
 s32 func_hd_code_80265A0C(s32);                     /* extern */
 void func_hd_code_80265B7C(s32);                       /* extern */
 s32 func_hd_code_80267614(struct S_80367D60*);                   /* extern */
-void func_hd_code_8026A5CC(u64*, u64*, u32);              /* extern */
 s32 func_hd_code_8026A8E0(s32, s32);                /* extern */
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
 void func_hd_code_8026513C();                          /* extern */
