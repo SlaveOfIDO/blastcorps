@@ -398,8 +398,7 @@ extern u16 D_hd_code_80370C30;
 extern u16 D_hd_code_80370C30;
 extern u16 D_hd_code_802E8C94[2];
 extern u16 D_hd_code_8036442C;
-extern u32 *D_hd_code_80358050[]; // Texture image data addresses?
-extern u32 *D_hd_code_80358050[]; // Texture image data addresses?
+extern u16 *D_hd_code_80358050[]; // Framebuffers
 extern u32 D_hd_code_80364AA8;
 extern u32 D_hd_code_80364AC8;
 extern u32 D_hd_code_80364ACC;
@@ -492,7 +491,7 @@ extern u8 D_hd_code_80370C21;
 extern u8 D_hd_code_80370C22;
 extern u8 D_hd_code_80370C24;
 extern u8 D_hd_code_80370C27;
-extern u8 D_hd_code_80370C50;
+extern u8 frontEndPresent;
 extern u8 D_hd_code_8039C4B0;
 extern u8 D_hd_code_8039C4F8[];
 extern u8 D_hd_code_8039C541;
@@ -561,7 +560,7 @@ extern u8* D_hd_code_803669B0;
 extern u8* D_hd_code_803669C0;
 extern void* D_787F40;
 extern void* D_788000;
-extern void* D_80000400;
+extern u16 D_80000400[][320 * 240]; // framebuffers
 extern void* D_hd_code_8035806C;
 extern void* D_hd_code_803FF600;
 extern void* func_init_8021ED00;
@@ -686,5 +685,6 @@ extern u8 D_8036CB31;
 extern u8 D_8036CB32;
 extern u8 D_8036CB33;
 extern s16 D_8036CB2C;
+extern u32 D_hd_code_803156C4;
 
 #endif

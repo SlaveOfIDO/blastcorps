@@ -43,7 +43,7 @@ Gfx* D_hd_code_80358030[2];
 Gfx* D_hd_code_80358038[2];
 Gfx* D_hd_code_80358040[2];
 Gfx* D_hd_code_80358048[2];
-u32 *D_hd_code_80358050[2]; // Texture image data addresses?
+u16 *D_hd_code_80358050[2]; // Framebuffers
 u32 D_hd_code_80358058;
 u8 D_hd_code_8035805C; // Texture index?
 u32 D_hd_code_80358060;
@@ -2226,7 +2226,7 @@ void func_hd_code_8024B8F4(void* arg0, void* arg1) {
   gSPSegment(entry++, 1, osVirtualToPhysical(D_hd_code_8035806C));
   gSPDisplayList(entry++, D_1000010);
   gSPMatrix(entry++, (s32)arg0 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-  gImmp1(entry++, G_RDPHALF_1, D_hd_code_8035807C);
+  gSPPerspNormalize(entry++, D_hd_code_8035807C);
   gSPMatrix(entry++, (s32)arg1 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
   gSPVertex(entry++, (s32)vertices & 0x1FFFFFFF, 8, 0);
   gSP1Triangle(entry++, 0, 1, 4, 0);
@@ -2429,7 +2429,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     gSPMatrix(entry++, &D_2000000.projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(entry++, &D_2000000.projection2, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gImmp1(entry++, G_RDPHALF_1, D_hd_code_8035807C);
+    gSPPerspNormalize(entry++, D_hd_code_8035807C);
 
     switch(D_hd_code_80364A90) {
         case 0x40:
@@ -2639,7 +2639,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
         func_hd_code_80282C80(&entry, arg0, D_hd_code_803643E0, D_hd_code_803643E4, D_hd_code_803643E8, D_hd_code_803EF6DC, D_hd_code_803EF6E0, D_hd_code_803EF6E4);
     }
     if ((D_hd_code_802E8F94[levelno].unk0 & 0x81) && (D_hd_code_80364A90 == 4) ) {
-        if (levelno != 0x32 || ((D_hd_code_80364AF0[playerNumber].unk4A > 0 && D_hd_code_80364AF0[playerNumber].unk4A < 6) ? 1 : 0)) {
+        if (levelno != 0x32 || ((D_hd_code_80364AF0[playerNumber].unk18[0x32] > 0 && D_hd_code_80364AF0[playerNumber].unk18[0x32] < 6) ? 1 : 0)) {
             func_hd_code_8028376C(&entry, arg0, D_hd_code_8035805C, D_hd_code_803643E0, D_hd_code_803643E8, D_hd_code_803EF6DC, D_hd_code_803EF6E4);
         }
     }
@@ -4158,8 +4158,8 @@ void func_hd_code_80255AD0(void) {
     rmonPrintf("audio inited\n");
     osViSetSpecialFeatures(2);
     osViSetSpecialFeatures(0x40);
-    D_hd_code_80358050[0] = VIRTUAL_TO_PHYSICAL(&D_80000400);
-    D_hd_code_80358050[1] = VIRTUAL_TO_PHYSICAL(&D_80000400 + 0x9600);
+    D_hd_code_80358050[0] = VIRTUAL_TO_PHYSICAL(D_80000400[0]);
+    D_hd_code_80358050[1] = VIRTUAL_TO_PHYSICAL(D_80000400[1]);
     D_hd_code_80358058 = VIRTUAL_TO_PHYSICAL(&func_init_8021ED00);
     func_hd_code_80284DB0();
     osWritebackDCacheAll();
@@ -4602,7 +4602,7 @@ void func_hd_code_80256A34(s32* arg0) {
     D_hd_code_803649EE = 0;
     D_hd_code_80364A84 = 0;
     D_hd_code_80364456 = 0;
-    if (D_hd_code_80370C50 != 0) {
+    if (frontEndPresent) {
         if (D_hd_code_8039C4B0 != 0) {
             rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!pakBusy", "hd.c", 0x1042);
         }

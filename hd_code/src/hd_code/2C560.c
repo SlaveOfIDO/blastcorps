@@ -214,7 +214,7 @@ void func_hd_code_80271358(OSSched* arg0) {
     D_8036BF14 = arg0->unk803156C4 + 1;
     osDpSetStatus(8U);
     if (D_8036BF1C->msg != NULL) {
-      func_hd_code_80271F48(D_8036BF1C->msg, D_8036BF1C->pad1, 0);
+      func_hd_code_80271F48(D_8036BF1C->msg, D_8036BF1C->unk58, 0);
     }
     D_8036BF1C = NULL;
   } else {
@@ -346,9 +346,9 @@ s32 func_hd_code_80271A84(OSSched* arg0, OSScTask* arg1) {
     }
     if ((arg1->msg != NULL) && ((D_8036BF1C == NULL) || (sp18 != 1))) {
       if (arg1->flags & 0x40) {
-        sp24 = func_hd_code_80271F48((s32) arg1->msg, arg1->pad1, 0);
+        sp24 = func_hd_code_80271F48((s32) arg1->msg, arg1->unk58, 0);
       } else {
-        sp24 = osSendMesg((OSMesgQueue* ) arg1->msg, (void* ) arg1->pad1, 0);
+        sp24 = osSendMesg((OSMesgQueue* ) arg1->msg, (void* ) arg1->unk58, 0);
       }
       if (sp24 == -1) {
         rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "rv!=-1", "sched.c", 0x289);

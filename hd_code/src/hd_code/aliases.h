@@ -106,7 +106,6 @@
 #define D_hd_code_8036E694 D_8036E694
 #define D_hd_code_803B9888 D_803B9888
 #define D_hd_code_803A7430 D_803A7430
-#define D_hd_code_80370C50 D_80370C50
 #define D_hd_code_8039C4B0 D_8039C4B0
 #define D_hd_code_8039CA61 D_8039CA61
 #define D_hd_code_803ED808 D_803ED808

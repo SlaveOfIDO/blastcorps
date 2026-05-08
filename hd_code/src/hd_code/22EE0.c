@@ -414,7 +414,7 @@ void amHandleFrameMessage(AudioInfo* info, AudioInfo* lastInfo) {
     task = &info->task;
     info->task.next = NULL;
     task->msg = &g_AudioManager.replyMessageQueue;
-    task->pad1 = (s32) info;
+    task->unk58 = (s32) info;
     task->flags = 1;
     task->msgQ = (OSMesgQueue* ) &g_AudioClient;
     task->list.t.data_ptr = (u64* ) g_AudioManager.cmdList[g_CurrentAcmdList];

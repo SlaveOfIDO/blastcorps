@@ -15,14 +15,11 @@ typedef struct UnknownData8024C414_s {
   /* 0x0C */ u32 pad2;
   /* 0x10 */ s32 unk10;
   /* 0x14 */ s32 unk14;
-  /* 0x18 */ u8 unk18[0x4A - 0x18]; // flags? often check >0 and <6
-  /* 0x4A */ u8 unk4A;
-  /* 0x4B */ u8 pad4B[0x88 - 0x4B]; // -1 byte alignment
+  /* 0x18 */ u8 unk18[0x54 - 0x18]; // flags? often check >0 and <6
+  /* 0x54 */ u8 unk54[0x88 - 0x54];
   /* 0x88 */ u8 unk88[0x91 - 0x88];
   /* 0x91 */ u8 unk91;
-  /* 0x92 */ u8 pad92[0x98 - 0x92];
-  /* 0x98 */ s16 unk98;
-  /* 0x9A */ u8 pad9A[0xF0 - 0x9A];
+  /* 0x92 */ u8 unk92[0xF0 - 0x92]; // indexed by level
   /* 0xF0 */ s32 unkF0;
   /* 0xF4 */ u8 padF4[0xFF - 0xF4];
 } UnknownData8024C414;

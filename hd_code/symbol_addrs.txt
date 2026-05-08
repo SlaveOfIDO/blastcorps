@@ -434,3 +434,7 @@ alSynAllocFX = 0x802E03B0;
 alFxNew = 0x802DFF90;
 alFxParam = 0x802E4E90;
 __osViGetCurrentContext = 0x802E2320;
+
+D_hd_code_80364AF0 = 0x80364AF0; // size:0x400
+create_status = 0x802C4E58;
+frontEndPresent = 0x80370C50;

@@ -52,9 +52,9 @@ segments:
     - [0x34430, c, hd_code/34430] # done: mb.c
     - [0x37530, c, hd_code/37530] # done
     - [0x39050, c, hd_code/39050] # done
-    - [0x3E4C0, asm, hd_code/3E4C0]
-    - [0x405F0, asm, hd_code/405F0] # uses data from 00000
-    - [0x409D0, asm, hd_code/409D0]
+    - [0x3E4C0, c, hd_code/3E4C0] # done
+    - [0x405F0, c, hd_code/405F0] # done, uses data from 00000
+    - [0x409D0, c, hd_code/409D0] # done: stats_perm.c
     - [0x41930, asm, hd_code/41930]
     - [0x42240, asm, hd_code/42240]
     - [0x43A60, asm, hd_code/43A60]
@@ -281,7 +281,10 @@ segments:
     - [0xC7E50, .rodata, hd_code/34430] # done: mb.c
     - [0xC7F10, .rodata, hd_code/37530] # done
     - [0xC7F20, .rodata, hd_code/39050] # done
-    - [0xC8030, bin, hd_code/hd_code_rodata_rest]
+    - [0xC8030, .rodata, hd_code/3E4C0] # done
+    - [0xC80D0, .rodata, hd_code/405F0] # done
+    - [0xC80F0, .rodata, hd_code/409D0] # done
+    - [0xC8210, rodata, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, .rodata, hd_code/gu/lookatref ]

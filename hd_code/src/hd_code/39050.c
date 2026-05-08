@@ -96,7 +96,7 @@ extern Mtx D_8036E4D8[][2];
 extern f32 D_8036E5D8[];
 extern u32 D_hd_code_802FFF38[];
 extern Gfx D_hd_code_80300A68[];
-extern u32 D_hd_code_803156C4;
+
 extern s32 D_803F9320;
 extern s32 D_803F9324;
 extern s16 D_8036DCE0[][6];
