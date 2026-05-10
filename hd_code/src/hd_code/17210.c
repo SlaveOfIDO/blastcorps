@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "macros.h"
 
 // Data Begin
 char D_hd_code_802E8CB0[16] = "\t \0\0\0\0\0\0\0\0\0\0\0\0\0\0";
@@ -169,7 +170,7 @@ void func_hd_code_8025BEF8(void) {
                     func_hd_code_80275270(0x40, 0.5f);
                     break;
                 default:
-                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "recording.c", 0x184);
+                    rmonPrintf(ASSERT_MESSAGE, "1==0", "recording.c", 0x184);
                     break;
             }
             return;

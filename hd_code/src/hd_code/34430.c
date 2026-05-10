@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "macros.h"
 
 extern Gfx D_hd_code_802FC060[];
 extern s32 D_8036CC68;
@@ -389,7 +390,7 @@ void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
             }
             sp14B = invertTransformMatrix(spC0, sp100);
             if (sp14B == 0) {
-                rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "flag", "mb.c", 0x223);
+                rmonPrintf(ASSERT_MESSAGE, "flag", "mb.c", 0x223);
             }
             guMtxF2L(spC0, &D_8036CC70[arg2][spBC]);
             gSPMatrix(entry++, (s32) &D_8036CC70[arg2][spBC] & 0x1FFFFFFF, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);

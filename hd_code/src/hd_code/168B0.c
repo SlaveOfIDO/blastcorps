@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "macros.h"
 
 // BSS Begin
 u8 D_hd_code_80365360[0x50];
@@ -56,7 +57,7 @@ void* func_hd_code_8025B0B8(u16 arg0) {
     }
   }
   if (!found) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "found", "font.c", 0x51);
+    rmonPrintf(ASSERT_MESSAGE, "found", "font.c", 0x51);
   }
   if (found) {
     D_hd_code_80365360[sp1C] = 3;

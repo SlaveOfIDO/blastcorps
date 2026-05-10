@@ -3,6 +3,7 @@
 #include "common.h"
 #include "functions.h"
 #include "variables.h"
+#include "macros.h"
 
 
 void func_hd_code_80261068();                          /* extern */
@@ -409,7 +410,7 @@ void amHandleFrameMessage(AudioInfo* info, AudioInfo* lastInfo) {
     }
     cmdlp = alAudioFrame(g_AudioManager.cmdList[g_CurrentAcmdList], &g_CommandLength, outBuffer, info->frameSamples);
     if (g_CommandLength > MAX_ACMD_SIZE) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "cmdLen <= MAX_RSP_CMDS", "audio.c", 0x150);
+        rmonPrintf(ASSERT_MESSAGE, "cmdLen <= MAX_RSP_CMDS", "audio.c", 0x150);
     }
     task = &info->task;
     info->task.next = NULL;
@@ -431,7 +432,7 @@ void amHandleFrameMessage(AudioInfo* info, AudioInfo* lastInfo) {
     osWritebackDCache(task, 0x60);
     osWritebackDCache(task->list.t.data_ptr, (s32) task->list.t.data_size);
     if (osSendMesg(osScGetCmdQ(&sc), (OSMesg)task, OS_MESG_NOBLOCK) == -1) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "osSendMesg(osScGetCmdQ(&sc), (OSMesg) t, OS_MESG_NOBLOCK)!=-1", "audio.c", 0x169);
+        rmonPrintf(ASSERT_MESSAGE, "osSendMesg(osScGetCmdQ(&sc), (OSMesg) t, OS_MESG_NOBLOCK)!=-1", "audio.c", 0x169);
     }
     g_CurrentAcmdList ^= 1;
 }

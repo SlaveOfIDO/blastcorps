@@ -435,7 +435,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
         if (D_hd_code_80366BC0.unk0 == 0) {
             func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
             D_hd_code_80366BB8 = 0;
-            if ((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0 != 0) {
+            if ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0 != 0) {
                 sndDeactivateAllSfxByFlag_11();
                 sndDeactivateAllSfxByFlag_3();
                 D_hd_code_80366BC0.unk2 = 5;
@@ -543,7 +543,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 break;
             case 50:                                /* switch 2 */
                 if ((D_hd_code_8036BB1C == 1) && (areWeFading() == 0)) {
-                    if ((((s32)  D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0) && ((s32) D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
+                    if ((((s32)  players[playerNumber].unk18[levelno] > 0) && ((s32) players[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
                         func_hd_code_80275390(0x08000000);
                     } else {
                         func_hd_code_80275390(0x40);
@@ -580,7 +580,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                         if ((D_hd_code_80364A90 == 0x100000000000)) {
                             D_hd_code_80364A98 = 0x200000000000;
                         } else {
-                            if ((((s32) D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0) && ((s32)  D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6))?1:0 != 0) {
+                            if ((((s32) players[playerNumber].unk18[levelno] > 0) && ((s32)  players[playerNumber].unk18[levelno] < 6))?1:0 != 0) {
                                 func_hd_code_80275390(0x08000000);
                             } else {
                                 func_hd_code_80275390(0x40);

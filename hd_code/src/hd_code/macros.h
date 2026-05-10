@@ -37,5 +37,5 @@
 (VERT).v.cn[3] = (a)
 
 #define ASPECT_RATIO 1.33333333f
-
+#define ASSERT_MESSAGE "\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n"
 #endif

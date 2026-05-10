@@ -3,6 +3,7 @@
 #include "gu/guint.h"
 #include "structs.h"
 #include "variables.h"
+#include "macros.h"
 #include "yoshi.h"
 
 struct S_802F9934 {
@@ -129,7 +130,7 @@ s32 func_hd_code_8026AD30(s16 arg0) {
   if (!(D_hd_code_80364A90 & 0x2104)) {
     return 0;
   }
-  if (D_hd_code_80364AF0[playerNumber].unk91 >= 0xB) {
+  if (players[playerNumber].unk91 >= 0xB) {
     return 0;
   }
   for(sp24 = 0; sp24 < 8 && sp2B == 0; sp24++) {
@@ -137,11 +138,11 @@ s32 func_hd_code_8026AD30(s16 arg0) {
     if (sp2C->unk0 == levelno) {
       for(sp20 = 0; sp20 < 16 && (sp2B == 0) && (sp2C->unk2[sp20] != -1); sp20++) {
         if (sp2C->unk2[sp20] == arg0) {
-          sp1C = D_hd_code_80364AF0[playerNumber].unk88[arg0] < (s32) D_hd_code_802F499A[arg0];
+          sp1C = players[playerNumber].unk88[arg0] < (s32) D_hd_code_802F499A[arg0];
           sp18 = levelno == 0;
           if (!D_8036BAA0[arg0+2] && ((sp18 != 0) || (sp1C != 0))) {
             if ((sp1C != 0) && (sp18 == 0)) {
-              D_hd_code_80364AF0[playerNumber].unk88[arg0] += 1;
+              players[playerNumber].unk88[arg0] += 1;
             }
             D_8036BAA0[arg0+2] = 1;
             func_hd_code_8026AF6C((s16) arg0 | 0x8000 | 0x2000);
@@ -163,26 +164,26 @@ void func_hd_code_8026AF6C(u16 yd) {
   sp1C = yd & 0xFF;
   if (D_8036BB14) {
     if (D_8036BB14) {
-      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x520);
+      rmonPrintf(ASSERT_MESSAGE, "!yoshiDemandV", "yoshi.c", 0x520);
     }
     rmonPrintf("NEW: %x OLD:%x\n", yd, D_8036BB14);
   }
   if ((yd & 0x4000)) {
     if (!(yd == 0x4000)) {
-      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
+      rmonPrintf(ASSERT_MESSAGE, "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
     }
   }
   if ((sp1C == 0x1E) || (sp1C == 0x23) || (sp1C == 5) || (sp1C == 0xE)) {
     D_8036BB1A = -1;
   }
   if ((sp1E == 0x1E) || (sp1E == 0x23) || (sp1E == 5) || (sp1E == 0xE)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "yoshi.c", 0x52C);
+    rmonPrintf(ASSERT_MESSAGE, "1==0", "yoshi.c", 0x52C);
     rmonPrintf("OH MY GOD!\n");
     return;
   }
   if (D_8036BB14) {
     if (D_8036BB14 != 0) {
-      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!yoshiDemandV", "yoshi.c", 0x533);
+      rmonPrintf(ASSERT_MESSAGE, "!yoshiDemandV", "yoshi.c", 0x533);
     }
     rmonPrintf("GOING FOR NEW: %x OLD:%x\n", yd, D_8036BB14);
   }
@@ -281,7 +282,7 @@ void func_hd_code_8026B118(s32 arg0) {
             break;
 
         case 0x2000:
-            if ((((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) != 0) && (D_hd_code_802E8F94[levelno].unk0 == 1)) {
+            if ((((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) != 0) && (D_hd_code_802E8F94[levelno].unk0 == 1)) {
                 sp44 = &D_hd_code_802F8BDC[6];
             } else {
                 sp44 = NULL;
@@ -380,11 +381,11 @@ Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
 
   entry = arg0;
   if ((D_hd_code_8036BB1C == 1) && (D_8036BB18 != -1)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x61F);
+    rmonPrintf(ASSERT_MESSAGE, "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x61F);
   }
   entry = func_hd_code_8026BCE0(entry, arg1, arg2);
   if ((D_hd_code_8036BB1C == 1) && (D_8036BB18 != -1)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x623);
+    rmonPrintf(ASSERT_MESSAGE, "!(yoshiState==YOSHI_OFF && currentYoshiWindow!=NO_YOSHI_WINDOW)", "yoshi.c", 0x623);
   }
   gDPPipeSync(entry++);
   *arg2 += entry - arg0;
@@ -453,7 +454,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
         func_hd_code_8026AF6C(0x4000U);
     }
     if ((D_8036BB18 == -1) && (D_8036BB14 & 0x4000)) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "1==0", "yoshi.c", 0x65B);
+        rmonPrintf(ASSERT_MESSAGE, "1==0", "yoshi.c", 0x65B);
         D_8036BB14 = 0;
         return gfx;
     }
@@ -978,11 +979,11 @@ u8* func_hd_code_8026F004(struct S_802F8BDC* arg0, u16 arg1, s32 arg2) {
             }
             if ((u8) arg2 != 0) {
                 if (sp30 == 0) {
-                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "jtext", "./vidiPrint.h", 0x46);
+                    rmonPrintf(ASSERT_MESSAGE, "jtext", "./vidiPrint.h", 0x46);
                 }
             } else {
                 if (sp34 == 0) {
-                    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "text", "./vidiPrint.h", 0x46);
+                    rmonPrintf(ASSERT_MESSAGE, "text", "./vidiPrint.h", 0x46);
                 }
             }
             sp28 = 0;
@@ -1073,7 +1074,7 @@ s32 func_hd_code_8026F92C(u64 arg) {
   s64 sp1C;
 
   if ((arg == 0)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "in", "yoshi.c", 0x8DE);
+    rmonPrintf(ASSERT_MESSAGE, "in", "yoshi.c", 0x8DE);
   }
   if ((arg == 0)) {
     return -1;

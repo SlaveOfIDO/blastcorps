@@ -55,7 +55,7 @@ segments:
     - [0x3E4C0, c, hd_code/3E4C0] # done
     - [0x405F0, c, hd_code/405F0] # done, uses data from 00000
     - [0x409D0, c, hd_code/409D0] # done: stats_perm.c
-    - [0x41930, asm, hd_code/41930]
+    - [0x41930, c, hd_code/41930] # done: academy.c
     - [0x42240, asm, hd_code/42240]
     - [0x43A60, asm, hd_code/43A60]
     - [0x45BB0, asm, hd_code/45BB0]
@@ -284,7 +284,8 @@ segments:
     - [0xC8030, .rodata, hd_code/3E4C0] # done
     - [0xC80D0, .rodata, hd_code/405F0] # done
     - [0xC80F0, .rodata, hd_code/409D0] # done
-    - [0xC8210, rodata, hd_code/hd_code_rodata_rest]
+    - [0xC8210, .rodata, hd_code/41930] # done: academy.c
+    - [0xC83E0, rodata, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]
     - [0xC9240, rodata, hd_code/gu/align ]
     - [0xC9250, .rodata, hd_code/gu/lookatref ]

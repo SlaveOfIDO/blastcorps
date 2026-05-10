@@ -2,6 +2,7 @@
 #include "variables.h"
 #include "functions.h"
 #include "structs.h"
+#include "macros.h"
 
 #define VIDEO_MSG       0
 #define RSP_DONE_MSG    1
@@ -225,7 +226,7 @@ void func_hd_code_80271358(OSSched* arg0) {
   }
   for(sp38 = arg0->cmdQ.validCount, sp3C = 0; sp3C < sp38; sp3C++) {
     if (osRecvMesg(&arg0->cmdQ, (OSMesg*)&sp44, 0) == -1) {
-      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "osRecvMesg(&sc->cmdQ, (OSMesg *)&rspTask, OS_MESG_NOBLOCK) != -1", "sched.c", 0x1BD);
+      rmonPrintf(ASSERT_MESSAGE, "osRecvMesg(&sc->cmdQ, (OSMesg *)&rspTask, OS_MESG_NOBLOCK) != -1", "sched.c", 0x1BD);
     }
     if (((u32) arg0->unk803156C4 % (u32) sp44->msgQ->validCount) == 0) {
       func_hd_code_80271C24(arg0, sp44);
@@ -248,7 +249,7 @@ void func_hd_code_802715DC(OSSched* arg0) {
     OSTime sp20;
 
     if (arg0->curRSPTask == NULL) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->curRSPTask", "sched.c", 0x1F2);
+        rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask", "sched.c", 0x1F2);
     }
     sp2C = arg0->curRSPTask;
     arg0->curRSPTask = NULL;
@@ -266,7 +267,7 @@ void func_hd_code_802715DC(OSSched* arg0) {
             func_hd_code_80271A84(arg0, sp2C);
         }
         if (arg0->audioListHead == NULL) {
-            rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->audioListHead", "sched.c", 0x21A);
+            rmonPrintf(ASSERT_MESSAGE, "sc->audioListHead", "sched.c", 0x21A);
         }
         if (arg0->audioListHead == NULL) {
             rmonPrintf("Yield took %llu, max %llu\n", D_8036BF00, D_8036BEF8);
@@ -285,7 +286,7 @@ void func_hd_code_802715DC(OSSched* arg0) {
     sp2C->state = 2;
     sp2C->flags |= 4;
     if (arg0->curRSPTask != NULL) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->curRSPTask==0", "sched.c", 0x230);
+        rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask==0", "sched.c", 0x230);
     }
     if (func_hd_code_80271A84(arg0, sp2C) != 0) {
         if ((arg0->gfxListHead != NULL) && (arg0->gfxListHead->flags != 0x47)) {
@@ -299,7 +300,7 @@ void func_hd_code_80271904(OSSched* arg0) {
   OSTime sp18;
 
   if (arg0->curRDPTask == NULL) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->curRDPTask", "sched.c", 0x24A);
+    rmonPrintf(ASSERT_MESSAGE, "sc->curRDPTask", "sched.c", 0x24A);
   }
   sp24 = arg0->curRDPTask;
   arg0->curRDPTask = NULL;
@@ -337,7 +338,7 @@ s32 func_hd_code_80271A84(OSSched* arg0, OSScTask* arg1) {
   if (sp20 == sp1C) {
     if (sp18 == 1) {
       if (arg0->gfxListHead == NULL) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->gfxListHead", "sched.c", 0x27C);
+        rmonPrintf(ASSERT_MESSAGE, "sc->gfxListHead", "sched.c", 0x27C);
       }
       arg0->gfxListHead = arg0->gfxListHead->next;
       if (arg0->gfxListHead == NULL) {
@@ -351,7 +352,7 @@ s32 func_hd_code_80271A84(OSSched* arg0, OSScTask* arg1) {
         sp24 = osSendMesg((OSMesgQueue* ) arg1->msg, (void* ) arg1->unk58, 0);
       }
       if (sp24 == -1) {
-        rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "rv!=-1", "sched.c", 0x289);
+        rmonPrintf(ASSERT_MESSAGE, "rv!=-1", "sched.c", 0x289);
       }
     }
     D_8036BFBC = 1;
@@ -367,7 +368,7 @@ void func_hd_code_80271C24(OSSched* arg0, OSScTask* arg1) {
 
   sp1C = arg1->list.t.type;
   if (!(sp1C == M_AUDTASK || sp1C == M_GFXTASK)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "(type == M_AUDTASK) || (type == M_GFXTASK)", "sched.c", 0x29C);
+    rmonPrintf(ASSERT_MESSAGE, "(type == M_AUDTASK) || (type == M_GFXTASK)", "sched.c", 0x29C);
   }
   if (sp1C == M_AUDTASK) {
     arg0->audioListTail->next = arg1;
@@ -386,12 +387,12 @@ void func_hd_code_80271CE4(OSSched* arg0, s32 arg1) {
   OSTime sp18;
 
   if (arg0->curRSPTask != NULL) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!sc->curRSPTask", "sched.c", 0x2B8);
+    rmonPrintf(ASSERT_MESSAGE, "!sc->curRSPTask", "sched.c", 0x2B8);
   }
   if (arg1 == NULL) {
     sp24 = arg0->audioListHead;
     if (!sp24) {
-      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "t", "sched.c", 0x2BD);
+      rmonPrintf(ASSERT_MESSAGE, "t", "sched.c", 0x2BD);
     }
     if (sp24) {
       arg0->audioListHead = arg0->audioListHead->next;
@@ -425,12 +426,12 @@ void func_hd_code_80271CE4(OSSched* arg0, s32 arg1) {
 // __scYield
 void func_hd_code_80271E88(OSSched* sc) {
   if (!(sc->curRSPTask->list.t.type != M_AUDTASK)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->curRSPTask->list.t.type != M_AUDTASK", "sched.c", 0x2DF);
+    rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask->list.t.type != M_AUDTASK", "sched.c", 0x2DF);
   }
 
   if (sc->curRSPTask->list.t.type == M_GFXTASK) {
     if (!(sc->curRSPTask->state != RSP_STATE_SUSPENDED)) {
-      rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "sc->curRSPTask->state != RSP_STATE_SUSPENDED", "sched.c", 0x2E3);
+      rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask->state != RSP_STATE_SUSPENDED", "sched.c", 0x2E3);
     }
     sc->curRSPTask->state = 3;
     D_8036BEF0 = osGetTime();

@@ -9,15 +9,18 @@
 typedef struct UnknownData8024C414_s {
   /* 0x00 */ struct UnknownData8024C414_s* unk0; // parent?
   /* 0x04 */ u32 pad1;
-  /* 0x08 */ u8 unk8;
+  /* 0x08 */ u8 levelno;
   /* 0x09 */ u8 unk9;
   /* 0x0A */ u16 unkA;
-  /* 0x0C */ u32 pad2;
+  /* 0x0C */ u8 unkC;
+  /* 0x0D */ u8 padD;
+  /* 0x0E */ s16 padE;
   /* 0x10 */ s32 unk10;
   /* 0x14 */ s32 unk14;
   /* 0x18 */ u8 unk18[0x54 - 0x18]; // flags? often check >0 and <6
   /* 0x54 */ u8 unk54[0x88 - 0x54];
-  /* 0x88 */ u8 unk88[0x91 - 0x88];
+  /* 0x88 */ u8 unk88[0x90 - 0x88];
+  /* 0x90 */ u8 unk90;
   /* 0x91 */ u8 unk91;
   /* 0x92 */ u8 unk92[0xF0 - 0x92]; // indexed by level
   /* 0xF0 */ s32 unkF0;
@@ -259,7 +262,7 @@ struct S_80366BC0 {
 struct S_80367C04
 {
   u8 unk0;
-  u8 pad1;
+  u8 unk1;
   u16 unk2;
   u16 unk4;
   u16 unk6;

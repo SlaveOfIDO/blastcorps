@@ -44,7 +44,7 @@ extern struct Model1 D_hd_code_803156F8[];
 extern OSMesg D_hd_code_8039C4B4;
 extern OSMesgQueue D_80219EF8;
 extern OSMesgQueue D_80219F50;
-extern UnknownData8024C414 D_hd_code_80364AF0[];
+extern UnknownData8024C414 players[];
 extern UnknownData8024C414* D_hd_code_8036EA70;
 extern UnknownStruct_80364A00 D_hd_code_80364A00[]; // Is an array of structs of size 0xC
 extern f32 D_hd_code_80364418; // safe f32

@@ -949,7 +949,7 @@ void func_hd_code_8026A9B4(void) {
         func_hd_code_8026AD30(0x53U);
     }
     if (D_hd_code_8036B971 != 0) {
-        if (((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) == 0 && (D_hd_code_8036EB98 == 0)) {
+        if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) == 0 && (D_hd_code_8036EB98 == 0)) {
             if (func_hd_code_8026AD30(0x4EU) == 0) {
                 func_hd_code_8026AD30(0x4FU);
             }

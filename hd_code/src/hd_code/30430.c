@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "macros.h"
 
 extern u16 D_8036C770;
 extern f32 D_8036C774;
@@ -61,7 +62,7 @@ Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
 
 void func_hd_code_80275270(u64 arg0, f32 arg2) {
   if ((D_8036C778 != 0)) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "!postFadeLoop_done", "fade.c", 0x64);
+    rmonPrintf(ASSERT_MESSAGE, "!postFadeLoop_done", "fade.c", 0x64);
   }
   if ((D_8036C778 == 0)) {
     D_8036C778 = arg0;

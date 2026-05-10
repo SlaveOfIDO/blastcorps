@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "macros.h"
 #include "yoshi.h"
 
 #define LEVEL_SAVE_SIZE 0x40
@@ -25,15 +26,15 @@ extern u8 D_8036EB9C[4];
 void func_hd_code_80285190(void) {
   s32 sp4;
 
-  D_8036EA7B = D_hd_code_80364AF0[playerNumber].unk92[levelno];
+  D_8036EA7B = players[playerNumber].unk92[levelno];
   D_8036EA74 = (s32) D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_802E8F94[levelno].unk0 == 1 ? 1 : D_8036EA7B]];
-  D_8036EA7A = (u8) ((s32) D_hd_code_80364AF0[playerNumber].unk18[levelno] % 8);
+  D_8036EA7A = (u8) ((s32) players[playerNumber].unk18[levelno] % 8);
 
   for(sp4 = 0; sp4 < 4; sp4++) {
     D_8036EB94[sp4] = 0;
   }
 
-  if (D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6) {
+  if (players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6) {
     D_8036EB98 = 1;
     return;
   }
@@ -128,24 +129,24 @@ u8 func_hd_code_80285814(void) {
 
   sp27 = 0;
   if (!frontEndPresent) {
-    rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "frontEndPresent", "stats_perm.c", 0x8C);
+    rmonPrintf(ASSERT_MESSAGE, "frontEndPresent", "stats_perm.c", 0x8C);
   }
   frontEndPresent = 1;
   func_hd_code_80255DC8();
   if ((D_hd_code_80364A90 == 0x4000)) {
     osRecvMesg(&D_80219F50, NULL, 1);
   }
-  if ((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) {
+  if ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) {
     if (D_hd_code_802E8F94[levelno].unk0 == 1) {
       if (*(u64*)pakBuffer == 0x1234567887654321) {
         func_hd_code_80256A34(NULL);
         rmonPrintf("Creating status ...\n");
-        coin = D_hd_code_80364AF0[playerNumber].unk18[levelno];
+        coin = players[playerNumber].unk18[levelno];
         if (coin == 5) {
           coin = 4;
         }
         if (!(create_status(pakBuffer, coin) <= LEVEL_SAVE_SIZE-4)) {
-          rmonPrintf("\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n", "create_status(pakBuffer,coin)<=LEVEL_SAVE_SIZE-4", "stats_perm.c", 0xA1);
+          rmonPrintf(ASSERT_MESSAGE, "create_status(pakBuffer,coin)<=LEVEL_SAVE_SIZE-4", "stats_perm.c", 0xA1);
         }
         func_hd_code_802C4BF0(pakBuffer);
         func_hd_code_802C1DD0(0);
@@ -176,16 +177,16 @@ void func_hd_code_80285A78(u8* arg0, u8* arg1) {
 
 void func_hd_code_80285AB0(u8 arg0) {
   D_hd_code_80364A87 |= 2;
-  D_hd_code_80364AF0[playerNumber].unk54[levelno] |= (1 << (arg0 + 0x1F));
+  players[playerNumber].unk54[levelno] |= (1 << (arg0 + 0x1F));
 }
 
 s32 func_hd_code_80285B10(u8 arg0) {
-  return (D_hd_code_80364AF0[playerNumber].unk54[levelno] & (1 << (arg0 + 0x1F))) ? 1 : 0;
+  return (players[playerNumber].unk54[levelno] & (1 << (arg0 + 0x1F))) ? 1 : 0;
 }
 
 void func_hd_code_80285B68(s32 arg0) {
   if (D_hd_code_80364A90 & 0x104) {
-    if (((D_hd_code_80364AF0[playerNumber].unk18[levelno] > 0 && D_hd_code_80364AF0[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_802E8F94[levelno].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
+    if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_802E8F94[levelno].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
       func_hd_code_802CF5B0();
       D_hd_code_802E8BD8 = 1;
       func_hd_code_80275270(0x4000, 1.25f);
@@ -279,5 +280,5 @@ u16 func_hd_code_8028604C(s32 arg0) {
 }
 
 u8 func_hd_code_80286090(s32 lvl) {
-  return (D_hd_code_80364AF0[playerNumber].unk18[lvl] > 0 && D_hd_code_80364AF0[playerNumber].unk18[lvl] < 6)?1:0;
+  return (players[playerNumber].unk18[lvl] > 0 && players[playerNumber].unk18[lvl] < 6)?1:0;
 }
