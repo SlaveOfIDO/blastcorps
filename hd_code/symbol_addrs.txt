@@ -438,3 +438,4 @@ __osViGetCurrentContext = 0x802E2320;
 create_status = 0x802C4E58;
 frontEndPresent = 0x80370C50;
 players = 0x80364AF0; // size:0x400
+D_8036EC38 = 0x8036EC38; // size:0x640

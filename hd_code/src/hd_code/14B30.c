@@ -169,7 +169,7 @@ void func_hd_code_80259CCC(struct Model1* arg0, const char* arg1, u16* arg2, u8 
   func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13);
 }
 
-void func_hd_code_80259DC8(s32 arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17) {
+void func_hd_code_80259DC8(struct Model1* arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17) {
   func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) arg9, (s32) arg10, (s32) arg11, (s32) arg12, (s32) arg13, (s32) arg10, (s32) arg11, (s32) arg12, (s32) arg13, (s32) arg14, (s32) arg15, (s32) arg16, (s32) arg17, (s32) arg14, (s32) arg15, (s32) arg16, (s32) arg17);
 }
 

@@ -26,7 +26,6 @@ struct S_802F4A22 {
 Gfx* func_hd_code_80274AA4(s32);                     /* extern */
 s32 func_hd_code_80272ED8(s32, s32, u8, s32, u32, s32, f32); /* extern */
 void func_hd_code_80259BD4(Gfx**, struct Model1*);     /* extern */
-void func_hd_code_80259DC8(struct Model1*, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32); /* extern */
 void func_hd_code_8026EF70(struct S_802F8BDC*);        /* extern */
 u8* func_hd_code_8026F004(struct S_802F8BDC*, u16, s32); /* extern */
 u8 func_hd_code_8026F644(struct S_802F8BDC*, struct S_8020C070*, s16); /* extern */
