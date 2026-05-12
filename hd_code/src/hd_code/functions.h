@@ -118,7 +118,7 @@ void func_hd_code_80285CC0();                                  /* extern */
 void func_hd_code_80286C60(Gfx**, s32*, u8, u8);                /* extern */
 void func_hd_code_80287530(Gfx**, struct Model1*, u8, u8);                /* extern */
 void func_hd_code_80287C68(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3);
-s32 func_hd_code_80288DF0(void**, u8);                        /* extern */
+void func_hd_code_80288DF0(Gfx**, u8);                        /* extern */
 s32 func_hd_code_8028CB30(void**, s32*);                        /* extern */
 s32 func_hd_code_8028E9E4(void**, s32*);                        /* extern */
 s32 func_hd_code_802917B0(void**, s32*);                        /* extern */
