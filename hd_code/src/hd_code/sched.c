@@ -26,10 +26,14 @@ s32 func_hd_code_80271F48(OSMesgQueue* arg0, OSMesg arg1, s32 arg2);            
 s32 func_hd_code_80271A84(OSSched*, OSScTask*);     /* extern */
 s32 func_hd_code_802DAC80(OSTask*);                 /* extern */
 
-extern s8 D_hd_code_802FA270;
 extern OSViMode D_hd_code_80306E70[];
 extern s8 D_hd_code_8030C0C0;
 
+// Data begin
+s8 D_hd_code_802FA270 = 1;
+// Data end
+
+// BSS begin
 OSTime D_8036BEF0;
 OSTime D_8036BEF8;
 OSTime D_8036BF00;
@@ -54,7 +58,7 @@ OSTimer D_8036BF78;
 u8 bss_pad_8036BF98[0x8036BFB8 - 0x8036BF98];
 u32 D_8036BFB8;
 s32 D_8036BFBC;
-
+// BSS end
 
 void osCreateScheduler(OSSched* s, void* stack, s32 priority, u8 mode, u8 numFields) {
   s->audioListTail = (OSScTask* ) &s->audioListHead;

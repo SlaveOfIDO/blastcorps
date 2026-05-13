@@ -357,15 +357,13 @@ extern struct S_8020C070 D_8020C070[];
 extern struct S_80367C04 D_hd_code_802E8F94[];
 extern struct S_802E8FCA D_hd_code_802E8FCA[60];
 extern struct S_8020C070 D_hd_code_802F5804[0x1DA];
-extern struct S_802F8BDC D_hd_code_802F8BDC[0x7A]; // 8 bytes 122 = 0x7A
-extern struct S_802F8BE4 D_hd_code_802F8BE4[10]; // Struct of size 0x1C, length of array is wrong
+extern struct S_802F8BDC D_hd_code_802F8BDC[]; // 8 bytes 122 = 0x7A
 extern struct S_802FA8B0 D_hd_code_802FA8B0[];
 extern struct S_803669AC D_hd_code_80365588[];
 extern struct S_803669AC* D_hd_code_803669AC;
 extern struct S_80366BC4 D_hd_code_80366BC4;
 extern struct S_803F4030 D_hd_code_803F4030[];
 extern struct S_803F4030* D_hd_code_803F7654;
-extern struct Struct802F8BF4 D_hd_code_802F8BF4[];
 extern struct Struct8036BED8 *D_hd_code_8036BED8;
 extern struct Textures D_hd_code_803643C8;
 extern struct UnknownData8024C414* D_hd_code_803649F0;

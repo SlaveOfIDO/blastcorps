@@ -316,9 +316,9 @@ struct S_80367BCC {
   s16 unk2;
   u8 unk4;
   u8 pad5;
-  char unk6[0x1A - 0x6];
+  char unk6[20];
   u8 unk1A;
-  u8 unk1B[0x26 - 0x1B];
+  u8 unk1B[11];
   u8 unk26;
   u8 pad27;
   float unk28;
@@ -463,14 +463,15 @@ struct S_8020C070 {
   /* 0x14 */ u8 unk14;
   /* 0x15 */ u8 pad15;
   /* 0x16 */ u16 unk16;
-  /* 0x18 */ u8 unk18;
-  /* 0x19 */ u8 unk19;
+  /* 0x18 */ u8 unk18; // color index 0, looks up D_hd_code_802F47B0
+  /* 0x19 */ u8 unk19; // color index 1, looks up D_hd_code_802F47B0
   /* 0x1A */ u8 unk1A;
   /* 0x1B */ u8 unk1B;
 }; // Size: 0x1C -> This is safe
 
 struct S_802FA280 {
   s16 unk0;
+  s16 pad2;
   u8* unk4; // texture data pointer
   u8 unk8;
   u8 unk9;

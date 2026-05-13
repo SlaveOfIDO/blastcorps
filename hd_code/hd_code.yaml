@@ -25,7 +25,7 @@ segments:
   type: code
   start: 0x00000
   vram:  0x802447C0
-  bss_size: 0x5C960 # bss_size is 0xF09A0
+  bss_size: 0x5D110 # bss_size is 0xF09A0
   subsegments:
     - [0x00000, c, hd_code/00000] # done
     - [0x12D80, c, hd_code/12D80] # done
@@ -43,7 +43,7 @@ segments:
     - [0x23C20, c, hd_code/23C20] # done
     - [0x26570, c, hd_code/yoshi] # done
     - [0x2B3F0, c, hd_code/2B3F0] # done
-    - [0x2C560, c, hd_code/2C560] # done: sched.c
+    - [0x2C560, c, hd_code/sched] # done
     - [0x2D810, c, hd_code/2D810] # done
     - [0x2E490, c, hd_code/2E490] # done
     - [0x30430, c, hd_code/30430] # done: fade.c
@@ -252,7 +252,11 @@ segments:
     - [0xA57F0, .data, hd_code/20460] # done
     - [0xAF330, .data, hd_code/22EE0] # done
     - [0xAF450, .data, hd_code/23C20] # done
-    - [0xAFF00, data, hd_code/hd_code_data_rest2 ]
+    - [0xAFF00, .data, hd_code/yoshi] # done
+    - [0xB5200, .data, hd_code/2B3F0] # done
+    - [0xB5AB0, .data, hd_code/sched] # done
+    - [0xB5AC0, .data, hd_code/2D810] # done
+    - [0xB60F0, data, hd_code/hd_code_data_rest2 ]
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, bin, hd_code/hd_code_data_rest3 ]
@@ -270,10 +274,9 @@ segments:
     - [0xC4E80, .rodata, hd_code/20460] # done
     - [0xC4F40, .rodata, hd_code/22EE0] # done: audi.c
     - [0xC5070, .rodata, hd_code/23C20] # done
-    - [0xC5210, bin, hd_code/prose] # ??? this is some prose or poem ;) and seems to be unused
-    - [0xC7390, .rodata, hd_code/yoshi] # done
+    - [0xC5210, .rodata, hd_code/yoshi] # done
     - [0xC7800, .rodata, hd_code/2B3F0] # done
-    - [0xC7860, .rodata, hd_code/2C560] # done: sched.c
+    - [0xC7860, .rodata, hd_code/sched] # done: sched.c
     - [0xC7D10, .rodata, hd_code/2D810] # done
     - [0xC7D30, .rodata, hd_code/30430] # done: fade.c
     - [0xC7D80, .rodata, hd_code/30C70] # done
@@ -310,7 +313,9 @@ segments:
     - [0xCAEA0, .bss, hd_code/23C20] # done
     - [0xCAEA0, .bss, hd_code/yoshi] # done
     - [0xCAEA0, .bss, hd_code/2B3F0] # done
-    - [0xCAEA0, .bss, hd_code/2C560] # done
-    #- { start: 0xCAEA0, type: bss, subalign: 1, name: hd_code/hd_code_bss_rest, vram: 0x8036AFB0 }
+    - [0xCAEA0, .bss, hd_code/sched] # done
+    - [0xCAEA0, .bss, hd_code/2D810] # done
+    - [0xCAEA0, .bss, hd_code/2E490] # done
+    #- { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest, vram: 0x8036C770 }
   #- { start: 0xCAEA0, type: bss, vram: 0x8030F660 }
 - [0xCAEA0]

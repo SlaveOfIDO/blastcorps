@@ -1618,7 +1618,7 @@ block_275:
     if ((D_hd_code_8036BB16 != 0) && (D_hd_code_803643D9 == 0) && (D_hd_code_803643DA == 0)) {
         func_hd_code_8024BDA4(&D_hd_code_8036BB16);
     }
-    if (D_hd_code_80364A90 & 0x444 && D_hd_code_8036BB1A == -1 && D_hd_code_80367BC8 == 0 && (((D_hd_code_8036BB18 != -1)?(D_hd_code_802F8BE4[D_hd_code_8036BB18].unk0 & 0x01000000):0) == 0)) {
+    if (D_hd_code_80364A90 & 0x444 && D_hd_code_8036BB1A == -1 && D_hd_code_80367BC8 == 0 && (((D_hd_code_8036BB18 != -1)?(D_hd_code_802F8BDC[D_hd_code_8036BB18].unk8 & 0x01000000):0) == 0)) {
 
             if (D_hd_code_80364A90 & 0x440) {
                 sp4A = 0xB4;
@@ -3035,7 +3035,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     }
 
     sp95 = D_hd_code_80364AC1 && ((D_hd_code_80364A90 & 0x940) || D_hd_code_8036B965);
-    if (((D_hd_code_80364A90 == 8)) || ((D_hd_code_8036BB18 == 0x4B) && (D_hd_code_8036BB1C == 2) && D_hd_code_802F8BF4[D_hd_code_8036BB18].id == 0x14D)) {
+    if (((D_hd_code_80364A90 == 8)) || ((D_hd_code_8036BB18 == 0x4B) && (D_hd_code_8036BB1C == 2) && D_hd_code_802F8BDC[D_hd_code_8036BB18].unk18 == 0x14D)) {
         if (D_hd_code_8030F668.flag1 == 0) {
             sp8B = 1;
         }
@@ -3046,7 +3046,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         }
         D_hd_code_8030F668.flag1 = 0;
     }
-    if ((D_hd_code_8036BB18 == 0x49) && (D_hd_code_8036BB1C == 2) && (D_hd_code_802F8BF4[D_hd_code_8036BB18].id == 0x130)) {
+    if ((D_hd_code_8036BB18 == 0x49) && (D_hd_code_8036BB1C == 2) && (D_hd_code_802F8BDC[D_hd_code_8036BB18].unk18 == 0x130)) {
         if (D_hd_code_8030F668.flag3 == 0) {
             sp8B = 1;
         }
@@ -3057,7 +3057,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         }
         D_hd_code_8030F668.flag3 = 0;
     }
-    if ((D_hd_code_8036BB18 == 0x4D) && (D_hd_code_8036BB1C == 2) && (D_hd_code_802F8BF4[D_hd_code_8036BB18].id != 0x164)) {
+    if ((D_hd_code_8036BB18 == 0x4D) && (D_hd_code_8036BB1C == 2) && (D_hd_code_802F8BDC[D_hd_code_8036BB18].unk18 != 0x164)) {
         if (D_hd_code_8030F668.flag2 == 0) {
             sp8B = 1;
         }
