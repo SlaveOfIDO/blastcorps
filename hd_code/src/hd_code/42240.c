@@ -17,12 +17,10 @@ extern u8* D_8036EC14;
 extern Vtx* D_8036EC18;
 extern s16 D_8036EC1C;
 extern u8 D_hd_code_80364A6A;
-extern s16 D_803F8B72;
 extern u8* D_8036EC20;
 extern Vtx* D_8036EC24;
 extern s16 D_8036EC28;
 extern u8 D_hd_code_80364A6C;
-extern s16 D_803EDC00;
 
 void func_hd_code_80286A00(void) {
   D_hd_code_80364A68 = 1;

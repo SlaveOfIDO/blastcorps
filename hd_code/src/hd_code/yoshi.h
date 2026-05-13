@@ -13,4 +13,4 @@ Gfx* func_hd_code_8026BBD0(Gfx*, struct Model1*, s32*);
 s32 func_hd_code_8026F92C(u64);
 u8 func_hd_code_8026FA38(char** arg0, s32* arg1);
 
-#endif _YOSHI_H
+#endif

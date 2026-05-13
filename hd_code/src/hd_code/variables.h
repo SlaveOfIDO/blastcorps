@@ -374,6 +374,8 @@ extern struct UnknownStruct_803644BC *D_hd_code_803649D0;
 extern struct vec3 D_hd_code_80365090; // some 3d vec
 extern u16 D_hd_code_8035807C;
 extern u16 D_hd_code_8036509C;
+extern s16 D_803F8B72;
+extern s16 D_803EDC00;
 extern u16 D_hd_code_803653B0[];
 extern u16 D_hd_code_80365558[];
 extern u16 D_hd_code_80365558[];
@@ -684,5 +686,9 @@ extern u8 D_8036CB32;
 extern u8 D_8036CB33;
 extern s16 D_8036CB2C;
 extern u32 D_hd_code_803156C4;
+extern s8 D_80370C11;
+extern s8 D_80370C12;
+extern s8 D_80370C13;
+extern s8 D_80370C14;
 
 #endif
