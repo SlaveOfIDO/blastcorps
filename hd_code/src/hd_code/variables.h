@@ -690,5 +690,8 @@ extern s8 D_80370C11;
 extern s8 D_80370C12;
 extern s8 D_80370C13;
 extern s8 D_80370C14;
+extern s32 D_803F9320;
+extern s32 D_803F9324;
+extern OSMesgQueue D_80370BF8;
 
 #endif

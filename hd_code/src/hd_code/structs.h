@@ -44,7 +44,8 @@ struct Model1 {
   /* 0x00200 */ Mtx unk200;
   /* 0x00240 */ Mtx unk240;
   /* 0x00280 */ Mtx unk280;
-  /* 0x002C0 */ Mtx unk2C0[(0xE00 - 0x2C0) / 0x40]; // length could be smaller
+  /* 0x002C0 */ Mtx unk2C0[(0x600 - 0x2C0) / 0x40]; // length could be smaller
+  /* 0x00600 */ Mtx unk600[(0xE00 - 0x600) / 0x40]; // length could be smaller
   /* 0x00E00 */ s32 unkE00;
   /* 0x00E04 */ u8 pad[0x11C0 - 0xE04];
   /* 0x011C0 */ s32 unk11C0;

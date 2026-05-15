@@ -87,7 +87,6 @@ s32 func_hd_code_8027E164(s32, s32, struct S_802AC4C4*, struct S_802AC4C4*);    
 f32 func_hd_code_8027E228(u8 arg0);
 void func_hd_code_802802D4(Vtx*, s32, s32, s32);       /* extern */
 void func_hd_code_8028072C(Vtx*, s16, s16, s16, s16, s16, s16); /* extern */
-void func_hd_code_802CE65C(s32, s32, s16, s16);        /* extern */
 s32 func_hd_code_8029DBF0(u8);                      /* extern */
 void func_hd_code_802AC1A0(s32);                       /* extern */
 
@@ -96,8 +95,6 @@ extern f32 D_8036E5D8[];
 extern u32 D_hd_code_802FFF38[];
 extern Gfx D_hd_code_80300A68[];
 
-extern s32 D_803F9320;
-extern s32 D_803F9324;
 extern s16 D_8036DCE0[][6];
 extern Vtx D_8036DD70[2][12][4];
 extern u8 D_8036E370;

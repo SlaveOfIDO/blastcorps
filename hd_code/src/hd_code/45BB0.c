@@ -33,7 +33,6 @@ extern s16 D_803F7C34;
 extern u8 D_803F7C3F;
 extern OSContStatus D_80370BC8;
 extern void* D_80370BF0;
-extern OSMesgQueue D_80370BF8;
 extern u8 D_80370C10;
 extern u8 D_80370C35;
 extern s32 D_80370BC0;

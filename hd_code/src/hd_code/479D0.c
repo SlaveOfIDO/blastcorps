@@ -112,9 +112,6 @@ void func_hd_code_8028C41C(Vtx* arg0, u8 arg1, s16 x, s16 y, s16 z) {
   arg0[7].v.tc[0] = 0;
 }
 
-void func_hd_code_802CE880(s32, s32, s32, s32, s32);   /* extern */
-void func_hd_code_802CE90C(s32);                       /* extern */
-
 void func_hd_code_8028C874(u8 arg0) {
   s32 i;
   s32 distance;
