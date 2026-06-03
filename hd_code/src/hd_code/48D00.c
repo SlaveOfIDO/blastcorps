@@ -51,29 +51,17 @@ struct S_802FDB98 {
 }; // Size: 0x18
 
 void func_hd_code_8028DA5C(Vtx*, u8);                   /* extern */
-s32 func_hd_code_802CE6F8(s32, s32, s32);           /* extern */
 struct S_8039B070* func_hd_code_8028DE94();
 void func_hd_code_802CDA10(s32, s32, s32);
 void sndDeactivate(s32);
 void func_hd_code_8028DD64(u8);                       /* extern */
-s32 func_hd_code_8029B930();                        /* extern */
-s16 func_hd_code_802A6F6C();                        /* extern */
 void func_hd_code_802CDAE8(s16, s16);                  /* extern */
-s32 func_hd_code_802CDB70(s16, s16);                /* extern */
-u8 func_hd_code_802CDF94(s16);                      /* extern */
-s16 func_hd_code_802CE3B8(s16);                     /* extern */
-s32 func_hd_code_802CE958(s32);                     /* extern */
 void func_hd_code_802AACD4(u8, s32, s32, s16*, s16*);
-void func_hd_code_802AAE1C(u8, s16, s16, struct S_8039B070*, s32*); /* extern */
 u8 func_hd_code_8028FCD4(OSMesgQueue*, u8*);       /* extern */
 
 extern s32 D_803A73F0;
 extern s32 D_803A73F4;
 extern s32 D_803A73F8;
-extern s16 D_803A7410;
-extern s16 D_803A7412;
-extern u8 D_803F932D;
-extern u8 D_803F932E;
 extern s16 D_hd_code_802FDB70[];
 extern u8 D_hd_code_803643D9;
 extern struct S_8039B070 D_8039B070[];
@@ -82,7 +70,6 @@ extern s32 D_8039B614;
 extern s32 D_8039B618;
 extern s32 D_8039B61C;
 extern s8 D_8039B620;
-extern u8 D_803F932C;
 extern struct S_802FDB98 D_hd_code_802FDB98[];
 
 struct S_Tnt {

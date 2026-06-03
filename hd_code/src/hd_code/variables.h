@@ -693,5 +693,12 @@ extern s8 D_80370C14;
 extern s32 D_803F9320;
 extern s32 D_803F9324;
 extern OSMesgQueue D_80370BF8;
+extern s16 D_803A7412;
+extern s16 D_803A7410;
+extern u8 D_803F932D;
+extern u8 D_803F932E;
+extern u8 D_803F932C;
+extern s32 D_8039C710;
+extern struct S_8039C550 D_8039C550[];
 
 #endif

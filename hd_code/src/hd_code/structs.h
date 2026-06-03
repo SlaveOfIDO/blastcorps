@@ -45,7 +45,8 @@ struct Model1 {
   /* 0x00240 */ Mtx unk240;
   /* 0x00280 */ Mtx unk280;
   /* 0x002C0 */ Mtx unk2C0[(0x600 - 0x2C0) / 0x40]; // length could be smaller
-  /* 0x00600 */ Mtx unk600[(0xE00 - 0x600) / 0x40]; // length could be smaller
+  /* 0x00600 */ Mtx unk600[(0xB00 - 0x600) / 0x40]; // length could be smaller
+  /* 0x00B00 */ Mtx unkB00[(0xE00 - 0xB00) / 0x40]; // length could be smaller
   /* 0x00E00 */ s32 unkE00;
   /* 0x00E04 */ u8 pad[0x11C0 - 0xE04];
   /* 0x011C0 */ s32 unk11C0;
@@ -504,5 +505,30 @@ struct S_8036CB60 {
   f32 unk10;
   f32 unk14;
 }; // Size: 0x18
+
+struct S_8039C550 {
+  /* 0x00 */ s32 unk0;
+  /* 0x04 */ s32 unk4;
+  /* 0x08 */ s32 unk8;
+  /* 0x0C */ s16 unkC;
+  /* 0x0E */ s16 unkE;
+  /* 0x10 */ u8 unk10;
+  /* 0x11 */ u8 unk11;
+  /* 0x12 */ u8 unk12;
+  /* 0x13 */ u8 unk13;                            /* inferred */
+  /* 0x14 */ s32 unk14;
+  /* 0x18 */ s32 unk18;
+  /* 0x1C */ s32 unk1C;
+  /* 0x20 */ u8 unk20;
+  /* 0x21 */ char pad21[3];                       /* maybe part of unk20[4]? */
+  /* 0x24 */ s32 unk24;
+  /* 0x28 */ u8 unk28;
+  /* 0x29 */ u8 unk29;
+  /* 0x2A */ s16 unk2A;
+  /* 0x2C */ s16 unk2C;
+  /* 0x2E */ s16 pad2E;
+  /* 0x30 */ s32 unk30;
+  /* 0x34 */ s32 unk34;
+};
 
 #endif
