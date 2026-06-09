@@ -700,5 +700,8 @@ extern u8 D_803F932E;
 extern u8 D_803F932C;
 extern s32 D_8039C710;
 extern struct S_8039C550 D_8039C550[];
+extern s32 D_803BE70C;
+extern s32 D_803BE710;
+extern s16 D_803BE714;
 
 #endif

@@ -78,9 +78,6 @@ s32 D_hd_code_802FA26C = 0;
 
 // Data End
 
-extern s32 D_803BE70C;
-extern s32 D_803BE710;
-extern s16 D_803BE714;
 extern u16 D_803C30A8[];
 
 void LoadLevelRdus(struct vec3s* arg0, struct vec3s* arg1) {

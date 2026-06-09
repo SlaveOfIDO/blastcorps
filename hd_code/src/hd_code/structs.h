@@ -30,6 +30,7 @@ typedef struct UnknownData8024C414_s {
 #define TOPLEVEL_DL_SIZE (0xB5E)
 
 
+
 struct Model1 {
   // size: 0x21498
   /* 0x00000 */ u32 unk00000;
@@ -46,7 +47,8 @@ struct Model1 {
   /* 0x00280 */ Mtx unk280;
   /* 0x002C0 */ Mtx unk2C0[(0x600 - 0x2C0) / 0x40]; // length could be smaller
   /* 0x00600 */ Mtx unk600[(0xB00 - 0x600) / 0x40]; // length could be smaller
-  /* 0x00B00 */ Mtx unkB00[(0xE00 - 0xB00) / 0x40]; // length could be smaller
+  /* 0x00B00 */ Mtx unkB00[(0xD00 - 0xB00) / 0x40]; // length could be smaller
+  /* 0x00B00 */ Mtx unkD00[(0xE00 - 0xD00) / 0x40]; // length could be smaller
   /* 0x00E00 */ s32 unkE00;
   /* 0x00E04 */ u8 pad[0x11C0 - 0xE04];
   /* 0x011C0 */ s32 unk11C0;
