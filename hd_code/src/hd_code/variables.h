@@ -4,6 +4,7 @@
 #include "aliases.h"
 #include <PR/libaudio.h>
 #include "structs.h"
+#include "snd.h"
 #include <PR/os.h>
 #include <PR/sched.h>
 
@@ -703,5 +704,8 @@ extern struct S_8039C550 D_8039C550[];
 extern s32 D_803BE70C;
 extern s32 D_803BE710;
 extern s16 D_803BE714;
+extern s16 D_8036E4C8;
+extern ALSoundState D_8036DCD8;
+extern u8 D_8036E4CA;
 
 #endif
