@@ -24,6 +24,38 @@
 		((height)-1) << G_TEXTURE_IMAGE_FRAC)			\
 }
 
+/*
+adapted gSPScisTextureRectangle version for this match.
+- Removes the s16 casting
+- Removes the `xl < 0 ? ... : 0` ternary
+- Removes the `yl < 0 ? ... : 0` ternary
+- Subtracts 1 from the gImmp1 RDPHALF_X commands
+*/
+#define rare_gSPScisTextureRectangle(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
+{                                                                            \
+    Gfx *_g = (Gfx *)(pkt);                                                  \
+                                                                             \
+    _g->words.w0 = (_SHIFTL(G_TEXRECT, 24, 8) |                              \
+                    _SHIFTL(MAX((xh),0), 12, 12) |                      \
+                    _SHIFTL(MAX((yh),0), 0, 12));                       \
+    _g->words.w1 = (_SHIFTL((tile), 24, 3) |                                 \
+                    _SHIFTL(MAX((xl),0), 12, 12) |                      \
+                    _SHIFTL(MAX((yl),0), 0, 12));                       \
+    gImmp1(pkt, (G_RDPHALF_2),                                                 \
+                (_SHIFTL(((s) -                                              \
+                          (((dsdx) < 0) ?                              \
+                            (MAX((((xl)*(dsdx))>>7),0)) :          \
+			    (MIN((((xl)*(dsdx))>>7),0)))),    \
+			 16, 16) |                                           \
+                 _SHIFTL(((t) -                                              \
+                          (((dtdy) < 0) ?                              \
+                            (MAX((((yl)*(dtdy))>>7),0)) :          \
+                            (MIN((((yl)*(dtdy))>>7),0)))),    \
+			 0, 16)));                                           \
+    gImmp1(pkt, (G_RDPHALF_CONT), (_SHIFTL((dsdx), 16, 16) |                      \
+                              _SHIFTL((dtdy), 0, 16)));                      \
+}
+
 
 #define SET_COLOR_VERTEX(VERT, x,y,z, tx, ty, r, g, b, a) (VERT).v.ob[0] = (x);\
 (VERT).v.ob[1] = (y);\

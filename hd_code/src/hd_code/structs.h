@@ -57,7 +57,8 @@ struct Model1 {
   /* 0x01240 */ Mtx unk1280; // modelview matrix
   /* 0x01240 */ Mtx unk12C0; // modelview matrix
   /* 0x01240 */ Mtx unk1300; // modelview matrix
-  /* 0x01280 */ u8 pad1340[0x1500 - 0x1340];
+  /* 0x01280 */ u8 pad1340[0x14C0 - 0x1340];
+  /* 0x014C0 */ Mtx unk14C0; // another modelview
   /* 0x01500 */ Mtx unk1500; // another modelview
   /* 0x01540 */ Mtx unk1540; // another modelview
   /* 0x01580 */ Vtx unk1580[(0x18C0 - 0x1580)/0x10]; // length could be smaller, possibly only 0x4?

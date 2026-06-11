@@ -336,7 +336,7 @@ extern s8 D_hd_code_80370C32;
 extern s8 D_hd_code_80370C32;
 extern s8 D_hd_code_80370C33;
 extern s8 D_hd_code_80370C33;
-extern s8 D_hd_code_8039CA61;
+extern u8 D_hd_code_8039CA61;
 extern s8 D_hd_code_803A7426;
 extern s8 D_hd_code_803A7430;
 extern u8 D_hd_code_803B9888;
@@ -707,5 +707,6 @@ extern s16 D_803BE714;
 extern s16 D_8036E4C8;
 extern ALSoundState D_8036DCD8;
 extern u8 D_8036E4CA;
+extern s32 D_hd_code_803156C0;
 
 #endif

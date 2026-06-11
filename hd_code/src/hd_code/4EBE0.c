@@ -581,7 +581,7 @@ void func_hd_code_80294D24(f32 (*arg0)[4], s16* arg1, s16* arg2, s16* arg3, stru
   if (D_hd_code_802E8BD0 == 0) {
     arg4->unk0 += arg5;
   }
-  guAlignF(sp38, arg4->unk0, 0.2f, 0.7f, D_hd_code_8030CD50);
+  guAlignF(sp38, arg4->unk0, 0.2f, 0.7f, 0.1f);
   guMtxXFMF(sp38, 90.0f, 0.0f, 0.0f, &sp34, &sp30, &sp2C);
   *arg1 = sp34;
   *arg2 = sp30;

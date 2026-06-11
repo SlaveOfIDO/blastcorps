@@ -123,7 +123,7 @@ void func_hd_code_8028CB30(Gfx**, s32*);                        /* extern */
 void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1);
 void func_hd_code_802917B0(Gfx**, struct Model1*);                        /* extern */
 void func_hd_code_80292EB8(Gfx**, struct Model1*);                        /* extern */
-s32 func_hd_code_80295120(Gfx**, struct Model1*);                        /* extern */
+void func_hd_code_80295120(Gfx**, struct Model1*);                        /* extern */
 s32 func_hd_code_802976E8(void**);                            /* extern */
 s32 func_hd_code_802A45D4(s32);                                 /* extern */
 void* func_hd_code_802CEEFC(void*, u8, void*, void*);       /* extern */
@@ -184,9 +184,9 @@ void func_hd_code_802873AC();                          /* extern */
 void func_hd_code_80287AE4();                          /* extern */
 void func_hd_code_80288220();                          /* extern */
 void func_hd_code_80292240();                          /* extern */
-s32 func_hd_code_80294E30();                          /* extern */
-s32 func_hd_code_80294E88();                          /* extern */
-s32 func_hd_code_80294EB8();                          /* extern */
+void func_hd_code_80294E30();                          /* extern */
+void func_hd_code_80294E88();                          /* extern */
+void func_hd_code_80294EB8();                          /* extern */
 s32 func_hd_code_802979E0(s32);                       /* extern */
 s32 func_hd_code_802A1674(u8*, s32);                   /* extern */
 s32 func_hd_code_802A56C4();                          /* extern */
@@ -330,8 +330,8 @@ void func_hd_code_802906C0(u8);                        /* extern */
 void func_hd_code_80291FAC(u8);                        /* extern */
 void func_hd_code_80292830();                          /* extern */
 void func_hd_code_80294F00();                          /* extern */
-void func_hd_code_80295C70(s32, s32, s32);             /* extern */
-s32 func_hd_code_80295EFC(void*, s32, s32, s32, s32); /* extern */
+void func_hd_code_80295C70(u8, s32, s32);             /* extern */
+Gfx* func_hd_code_80295EFC(s32 arg0, Gfx* gfx, s16 arg2, s16 arg3, u8 arg4);
 void func_hd_code_80297804(s32, s32, s32);             /* extern */
 s32 func_hd_code_8029A1A8(s32*, s32);                 /* extern */
 s32 func_hd_code_8029A518(void*, s32);              /* extern */

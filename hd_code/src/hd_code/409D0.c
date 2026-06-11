@@ -12,7 +12,6 @@ u32 create_status(u8*, u8);
 s32 func_hd_code_8026AD30(s16);
 u32 func_hd_code_802852EC();                          /* extern */
 
-extern s32 D_hd_code_803156C0;
 extern u8 D_hd_code_802E8C44[];
 extern u16 D_hd_code_80364EF0[][0x10];
 extern s32 D_hd_code_80364A9C;
