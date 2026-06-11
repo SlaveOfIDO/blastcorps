@@ -4,30 +4,40 @@
 #include "snd.h"
 #include "structs.h"
 #include "variables.h"
+// Proposed file name: music.c
+//
+// This file is the music/sequence player module: it manages MIDI sequence
+// playback via the compressed sequence player (ALCSPlayer), a "tune stack"
+// for interrupting music with jingles and resuming where it left off
+// (including seq position, tempo and channel state), volume fades,
+// per-level track selection, and SFX dispatch.
+
 // BSS Begin
-struct S_80367400 D_hd_code_80366C30[4];
-struct S_80367400* D_hd_code_80367400;
-s32 D_hd_code_80367408[0x42];
-void* D_hd_code_80367510;
-ALSeqFile *D_hd_code_80367514;
-ALCSeq D_hd_code_80367518[2];
-u8 D_hd_code_80367708;
-f32 D_hd_code_8036770C;
-f32 D_hd_code_80367710;
-f32 D_hd_code_80367714;
-ALHeap D_hd_code_80367718;
-u8 D_hd_code_80367728;
-u8 D_hd_code_80367729;
-u8 D_hd_code_8036772A;
-s32 D_hd_code_8036772C;
-s8 D_hd_code_80367730;
-ALCSPlayer* D_hd_code_80367734;
-ALBank* D_hd_code_80367738;
-ALBank* D_hd_code_8036773C;
-s32 D_hd_code_80367740;
+struct S_80367400 D_hd_code_80366C30[4]; // tune stack: saved seq location/tempo/channel state + tune id per frame; proposed name: tuneStack
+struct S_80367400* D_hd_code_80367400; // tune stack pointer (current frame); proposed name: tuneStackPtr
+s32 D_hd_code_80367408[0x42]; // per-sequence data length (rounded up to even), one per tune in seq file; proposed name: tuneDataLengths
+void* D_hd_code_80367510; // sequence data buffer the current tune is DMA'd into; proposed name: seqDataBuffer
+ALSeqFile *D_hd_code_80367514; // sequence file header (66 tunes); proposed name: seqFile
+ALCSeq D_hd_code_80367518[2]; // double-buffered compressed sequences (index = D_hd_code_802E8D84); proposed name: seqDoubleBuffer
+u8 D_hd_code_80367708; // currently playing tune id; proposed name: currentTune
+f32 D_hd_code_8036770C; // current/target music volume scale (fade target); proposed name: musicVolTarget
+f32 D_hd_code_80367710; // per-level volume scale applied when (re)starting a tune; proposed name: levelMusicVol
+f32 D_hd_code_80367714; // volume scale to resume at after a pop; proposed name: popResumeVol
+ALHeap D_hd_code_80367718; // audio heap; proposed name: audioHeap
+u8 D_hd_code_80367728; // pop state machine: 2 = waiting for stop, 1 = waiting for play to restore state, 0 = idle; proposed name: tunePopState
+u8 D_hd_code_80367729; // push state machine: 1 = waiting to snapshot state, 2 = waiting for stop, 0 = idle; proposed name: tunePushState
+u8 D_hd_code_8036772A; // volume fade in progress flag; proposed name: musicFadeActive
+s32 D_hd_code_8036772C; // saved tempo to restore once player is playing; proposed name: savedTempo
+s8 D_hd_code_80367730; // set when tune stack is at the bottom (nothing pushed); proposed name: tuneStackEmpty
+ALCSPlayer* D_hd_code_80367734; // the compressed MIDI sequence player; proposed name: seqPlayer
+ALBank* D_hd_code_80367738; // SFX instrument bank; proposed name: sfxBank
+ALBank* D_hd_code_8036773C; // music instrument bank; proposed name: musicBank
+s32 D_hd_code_80367740; // saved timer/frame counter (set alongside results music); proposed name: resultsMusicStartFrame
 // BSS End
 
 // Data
+// Per-tune base volume, one entry per sequence in the seq file
+// Proposed name: tuneVolumes
 s16 D_hd_code_802E8D00[66] = {
   0x6590,
   0x6FB8,
@@ -96,8 +106,10 @@ s16 D_hd_code_802E8D00[66] = {
   0x7FFF,
   0x6FB8
 };
-u8 D_hd_code_802E8D84 = 0; // Can be either 0 or 1
-f32 D_hd_code_802E8D88 = 1.0f;
+u8 D_hd_code_802E8D84 = 0; // Can be either 0 or 1; double-buffer index into D_hd_code_80367518, toggled each tune start; proposed name: seqBufIdx
+f32 D_hd_code_802E8D88 = 1.0f; // master music volume multiplier; proposed name: musicMasterVol
+// Per-level default tune id, indexed by levelno
+// Proposed name: levelTunes
 u8 D_hd_code_802E8D8C[60] = {
   0x08,
   0x01,
@@ -161,6 +173,8 @@ u8 D_hd_code_802E8D8C[60] = {
   0x22
 };
 
+// Per-level push/jingle tune id, indexed by levelno (0 = none)
+// Proposed name: levelJingles
 u8 D_hd_code_802E8DC8[60] = {
   0x14,
   0x20,
@@ -224,6 +238,8 @@ u8 D_hd_code_802E8DC8[60] = {
   0x00
 };
 
+// Per-level tune id set (used by func_hd_code_80260E2C, likely results/end-of-level music), indexed by levelno
+// Proposed name: levelResultsTunes
 u8 D_hd_code_802E8E04[60] = {
   0x2B,
   0x35,
@@ -287,6 +303,8 @@ u8 D_hd_code_802E8E04[60] = {
   0x2E
 };
 
+// Per-level alternate tune id set (used by func_hd_code_80260E80, overlaps with D_hd_code_802E8E04), indexed by levelno
+// Proposed name: levelResultsTunesAlt
 u8 D_hd_code_802E8E40[60] = {
   0x41,
   0x39,
@@ -350,6 +368,8 @@ u8 D_hd_code_802E8E40[60] = {
   0x2E
 };
 
+// Effect id -> bank sound number map for func_hd_code_802619D0 (0 = no sound)
+// Proposed name: effectSfxMap
 u16 D_hd_code_802E8E7C[28] = {
   0x0012,
   0x0011,
@@ -381,6 +401,8 @@ u16 D_hd_code_802E8E7C[28] = {
   0x0043
 };
 
+// Randomized sound id pools: 5 groups of up to 5 sound ids, -1 terminated (see func_hd_code_8026205C)
+// Proposed name: randomSfxPools
 struct S_802E8EB4 D_hd_code_802E8EB4[5] = {
   {0x00000067, 0x000000D9, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000},
   {0x00000059, 0x000000E1, 0x000000E2, 0x000000E3, 0x00000065, 0xFFFFFFFF},
@@ -389,6 +411,10 @@ struct S_802E8EB4 D_hd_code_802E8EB4[5] = {
   {0x00000056, 0x000000DB, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000}
 };
 
+// Start playing a tune: toggles the sequence double-buffer, stops the player,
+// DMAs the sequence data into RAM, attaches it to the player and plays it.
+// Volume = per-tune base volume * arg1 * master volume.
+// Proposed name: PlayTune
 void func_hd_code_80260C20(u8 arg0, f32 arg1) {
   void* sp24;
 
@@ -408,34 +434,51 @@ void func_hd_code_80260C20(u8 arg0, f32 arg1) {
   alCSPSetVol(D_hd_code_80367734, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
 }
 
+// Set the master music volume multiplier and apply it immediately
+// Proposed name: SetMusicMasterVolume
 void func_hd_code_80260D7C(f32 arg0) {
   D_hd_code_802E8D88 = arg0;
   alCSPSetVol(D_hd_code_80367734, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
 }
 
+// Get the master music volume multiplier
+// Proposed name: GetMusicMasterVolume
 f32 func_hd_code_80260DF0(void) {
   return D_hd_code_802E8D88;
 }
 
+// Push the current level's jingle tune (from D_hd_code_802E8DC8) onto the tune stack
+// Proposed name: PushLevelJingle
 void func_hd_code_80260DFC(void) {
   func_hd_code_80260EE0(D_hd_code_802E8DC8[levelno]);
 }
 
+// Save the current timer and tempo, then hard-play the current level's tune
+// from D_hd_code_802E8E04 (likely results/end-of-level music)
+// Proposed name: PlayLevelResultsTune
 void func_hd_code_80260E2C(void) {
   D_hd_code_80367740 = (s32) sc.unk803156C4;
   D_hd_code_8036772C = alCSPGetTempo(D_hd_code_80367734);
   func_hd_code_80261FB0(D_hd_code_802E8E04[levelno]);
 }
 
+// Save the current timer, then hard-play the current level's tune from the
+// alternate set D_hd_code_802E8E40
+// Proposed name: PlayLevelResultsTuneAlt
 void func_hd_code_80260E80(void) {
   D_hd_code_80367740 = (s32) sc.unk803156C4;
   func_hd_code_80261FB0(D_hd_code_802E8E40[levelno]);
 }
 
+// Wrapper for func_hd_code_80260DFC (push current level's jingle tune)
+// Proposed name: PushLevelJingleWrapper
 void func_hd_code_80260EC0(void) {
   func_hd_code_80260DFC();
 }
 
+// Push tune: save the current tune id into the stack frame, set the new tune
+// and arm the push state machine (func_hd_code_80261284 does the actual work)
+// Proposed name: PushTune
 void func_hd_code_80260EE0(u8 arg0) {
   if (D_hd_code_80367728 != 0) {
     rmonPrintf("OH DEAR - pushing tune but we're still popping!\n");
@@ -448,6 +491,10 @@ void func_hd_code_80260EE0(u8 arg0) {
   D_hd_code_80367729 = 1;
 }
 
+// Pop tune: restore the previous tune id from the stack, stop the player and
+// arm the pop state machine (func_hd_code_80261068 resumes playback).
+// arg0 is the volume scale to resume at. No-op if the stack is empty.
+// Proposed name: PopTune
 void func_hd_code_80260F60(f32 arg0) {
   rmonPrintf("1 pop tune");
   if (&D_hd_code_80366C30[0] == D_hd_code_80367400) {
@@ -465,14 +512,23 @@ void func_hd_code_80260F60(f32 arg0) {
   D_hd_code_80367714 = arg0;
 }
 
+// Pop tune, resuming silent (volume 0)
+// Proposed name: PopTuneSilent
 void func_hd_code_8026101C(void) {
   func_hd_code_80260F60(0);
 }
 
+// Pop tune, resuming at full volume
+// Proposed name: PopTuneFullVolume
 void func_hd_code_80261040(void) {
   func_hd_code_80260F60(1.0f);
 }
 
+// Pop state machine update (called per frame): once the player has stopped,
+// restart the saved tune; once it's playing again, restore the saved sequence
+// position, tempo and channel state from the stack frame, then fade volume
+// back to 1.0 if it was popped quiet.
+// Proposed name: UpdateTunePop
 void func_hd_code_80261068(void) {
   u32 sp114;
   ALCSeqMarker sp28;
@@ -505,6 +561,9 @@ void func_hd_code_80261068(void) {
   }
 }
 
+// Auto-pop: if no push/pop is in progress and the current tune has finished
+// playing on its own, automatically pop back to the previous tune
+// Proposed name: AutoPopTune
 void func_hd_code_802611F0(void) {
   ALCSeqMarker sp1C;
 
@@ -515,6 +574,11 @@ void func_hd_code_802611F0(void) {
   }
 }
 
+// Push state machine update (called per frame): once the player is playing,
+// snapshot the sequence location, tempo and channel state into the current
+// stack frame, stop the player and advance the stack pointer; once stopped,
+// start the pushed tune.
+// Proposed name: UpdateTunePush
 void func_hd_code_80261284(void) {
   u32 sp24;
 
@@ -542,6 +606,10 @@ void func_hd_code_80261284(void) {
   }
 }
 
+// Volume fade update (called per frame): exponentially interpolate the player
+// volume toward the target at 7.5% per step, snapping and clearing the fade
+// flag once within 10 units
+// Proposed name: UpdateMusicFade
 void func_hd_code_802613C8(void) {
   f32 sp2C;
   f32 sp28;
@@ -557,6 +625,9 @@ void func_hd_code_802613C8(void) {
   alCSPSetVol(D_hd_code_80367734, (s32) sp26);
 }
 
+// Deferred tempo restore: once the player reaches the playing state, apply the
+// tempo saved in D_hd_code_8036772C
+// Proposed name: RestoreSavedTempo
 void func_hd_code_80261528(void) {
   if (D_hd_code_80367734->state == 1) {
     alCSPSetTempo(D_hd_code_80367734, D_hd_code_8036772C);
@@ -564,11 +635,19 @@ void func_hd_code_80261528(void) {
   }
 }
 
+// Set a fade target volume scale and flag a fade as active
+// (func_hd_code_802613C8 performs the fade)
+// Proposed name: FadeMusicTo
 void func_hd_code_80261570(f32 arg0) {
   D_hd_code_8036770C = arg0;
   D_hd_code_8036772A = 1;
 }
 
+// Audio system init: set up the audio heap, DMA the music and SFX instrument
+// bank files from ROM, load the sequence file header and record each
+// sequence's length, create the audio manager and compressed sequence player,
+// init the SFX player and start the audio thread.
+// Proposed name: InitAudio
 void func_hd_code_80261588(void) {
     ALSeqpSfxConfig sp84;
     s32 sp80;
@@ -667,6 +746,9 @@ void func_hd_code_80261588(void) {
     amStartAudioThread();
 }
 
+// Play a one-shot sound effect: maps the logical effect id through
+// D_hd_code_802E8E7C to a bank sound number (0 = no sound)
+// Proposed name: PlaySoundEffect
 void func_hd_code_802619D0(u32 effectId) {
   if (effectId >= 0x1CU) {
     rmonPrintf("effect id %d out of range!\n", effectId);
@@ -678,6 +760,13 @@ void func_hd_code_802619D0(u32 effectId) {
   }
 }
 
+// Main music chooser. arg0 is a one-hot level bitmask (1 << levelno; u64 since
+// there are 60 levels), which is why the cases are powers of two. Deactivates
+// certain SFX, applies per-level SFX ducking, then selects the tune for that
+// level: special-case levels get fixed tunes, some just fade the music out,
+// ordinary levels use D_hd_code_802E8D8C[levelno]. Returns the new tune id
+// (after starting a fade-out) if it differs from the current one, else 0.
+// Proposed name: ChooseLevelMusic
 u8 func_hd_code_80261A44(u64 arg0) {
     u8 sp27;
     u8 sp26;
@@ -775,6 +864,9 @@ u8 func_hd_code_80261A44(u64 arg0) {
     return 0U;
 }
 
+// Per-level SFX ducking: set SFX slot 0/5 volumes based on the level bitmask
+// (full volume 0x7FFF for levels not listed)
+// Proposed name: SetLevelSfxVolumes
 void func_hd_code_80261E9C(u64 arg0) {
   switch(arg0) {
     case 0x2:
@@ -800,6 +892,9 @@ void func_hd_code_80261E9C(u64 arg0) {
   }
 }
 
+// Hard reset and play: clear push/pop state, reset the tune stack to the
+// bottom and start the tune at the stored per-level volume
+// Proposed name: ResetAndPlayTune
 void func_hd_code_80261FB0(u8 arg0) {
   D_hd_code_80367728 = 0;
   D_hd_code_80367729 = 0;
@@ -808,17 +903,26 @@ void func_hd_code_80261FB0(u8 arg0) {
   func_hd_code_80260C20(arg0, D_hd_code_80367710);
 }
 
+// Reset the tune stack and play a tune at an explicit volume (does not clear
+// the push/pop state flags, unlike func_hd_code_80261FB0)
+// Proposed name: ResetAndPlayTuneVol
 void func_hd_code_80262008(u8 arg0, f32 arg1) {
   D_hd_code_80367400 = &D_hd_code_80366C30[0];
   D_hd_code_80367730 = 1;
   func_hd_code_80260C20(arg0, arg1);
 }
 
+// Get the currently playing tune id
+// Proposed name: GetCurrentTune
 u8 func_hd_code_80262050()
 {
   return D_hd_code_80367708;
 }
 
+// Random sound variation picker: count the valid (-1 terminated) entries in
+// group arg0 of D_hd_code_802E8EB4 and return one chosen pseudo-randomly via
+// the CPU cycle counter
+// Proposed name: PickRandomSfx
 s32 func_hd_code_8026205C(s32 arg0) {
   u32 sp2C;
   s32 sp28;
