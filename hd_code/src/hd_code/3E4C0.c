@@ -3,20 +3,40 @@
 #include "structs.h"
 #include "variables.h"
 
+// Proposed file name: radar.c
+//
+// This file draws the HUD navigation aids that track the runaway missile
+// carrier: a 3D arrow in the corner of the screen pointing toward the
+// carrier (color-coded by distance, blinking when close), and the circular
+// radar/minimap with blips for the objective and the carrier, a rotating
+// direction needle and a radar sweep line. D_803F7670/D_803F7678 hold the
+// carrier's world x/z; D_803F7660 == 0x98967F (9999999) is the sentinel for
+// "no carrier on this level". D_hd_code_80367BD6 is the overall HUD alpha.
+
 f32 func_hd_code_80284ADC(s16, s16, s16, s16);      /* extern */
 
-extern Mtx D_8036E5E0[];
-extern u16 D_hd_code_802FC5B0[]; // Texture
-extern u16 D_hd_code_802FC6B0[]; // Texture
-extern u8 D_hd_code_802FD6B0[8 * 32];  // Texture
-extern Vtx D_hd_code_802FD7B0[4];
-extern Vtx D_hd_code_802FD7F0[4];
-extern Vtx D_hd_code_802FD830[2][12];
-extern f32 D_hd_code_802FD9B0;
-extern s32 D_803F7660;
-extern u16 D_hd_code_802FCEB0[32 * 32]; // Texture data
-extern Vtx D_hd_code_802FD9B8[10];
+extern Mtx D_8036E5E0[]; // per-frame matrices for the rotated radar needle; proposed name: radarNeedleMtx
+extern u16 D_hd_code_802FC5B0[]; // Texture, IA16, radar background layer 1; proposed name: radarTex1
+extern u16 D_hd_code_802FC6B0[]; // Texture, IA16, radar background layer 2 (zoomable detail); proposed name: radarTex2
+extern u8 D_hd_code_802FD6B0[8 * 32];  // Texture, IA8 8x32, radar sweep line; proposed name: radarSweepTex
+extern Vtx D_hd_code_802FD7B0[4]; // radar disc quad; proposed name: radarDiscVtx
+extern Vtx D_hd_code_802FD7F0[4]; // radar sweep line quad; proposed name: radarSweepVtx
+extern Vtx D_hd_code_802FD830[2][12]; // double-buffered radar markers: [0..3] objective blip, [4..7] carrier blip, [8..11] needle; proposed name: radarMarkerVtx
+extern f32 D_hd_code_802FD9B0; // radar sweep rotation angle in degrees, +4 per frame; proposed name: radarSweepAngle
+extern s32 D_803F7660; // carrier-related value; 0x98967F (9999999) = no carrier on this level
+extern u16 D_hd_code_802FCEB0[32 * 32]; // Texture data, RGBA16, carrier arrow surface; proposed name: carrierArrowTex
+extern Vtx D_hd_code_802FD9B8[10]; // 3D carrier arrow model (9 triangles); proposed name: carrierArrowVtx
 
+// Draw the 3D arrow pointing at the missile carrier. (arg2, arg3, arg4) and
+// (arg5, arg6, arg7) are two world positions (>> 5 fixed point): the first is
+// used for the arrow's direction to the carrier, the second for the distance
+// that picks its color - green when more than 1500 units away, fading to red
+// within 500. Within 250 units the arrow blinks. The arrow is a 10-vertex
+// lit, env-mapped (G_TEXTURE_GEN) model drawn in perspective at the bottom
+// left of the screen, rotated by the carrier bearing (atan via
+// func_hd_code_802AD7D4 quadrant lookup) relative to the camera yaw
+// (D_hd_code_80364452). Not drawn when there is no carrier.
+// Proposed name: DrawCarrierArrow
 void func_hd_code_80282C80(Gfx** gfx, struct Model1* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     Gfx* entry = *gfx;
     f32 sp130;
@@ -121,6 +141,17 @@ void func_hd_code_80282C80(Gfx** gfx, struct Model1* arg1, s32 arg2, s32 arg3, s
     *gfx = entry;
 }
 
+// Draw the radar/minimap centered at screen (58, 195). arg2 = frame double-
+// buffer index, (arg3, arg4) = player world x/z, (arg5, arg6) = objective
+// world x/z. The distance between them picks one of three zoom levels (range
+// scale 1200/2400/4800 units, with matching texture shift); D_hd_code_803643DB
+// == 0 forces the closest zoom and hides blips and sweep. Draws the radar
+// disc from two blended IA16 texture layers (2-cycle combine), then two
+// 3x3-pixel blips rotated into radar space by the camera yaw and clipped to
+// the radar's screen box - the objective blip (blinking at the closest zoom)
+// and the carrier blip - then a needle quad rotated toward
+// (D_803F767C, D_803F7680), and finally the rotating sweep line.
+// Proposed name: DrawRadar
 void func_hd_code_8028376C(Gfx** gfx, struct Model1* arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     Gfx* entry;
     s32 sp218;
@@ -274,6 +305,10 @@ void func_hd_code_8028376C(Gfx** gfx, struct Model1* arg1, u8 arg2, s32 arg3, s3
     *gfx = entry;
 }
 
+// Return the bearing in degrees (0..360) from point (arg0, arg1) to point
+// (arg2, arg3), using the quadrant-corrected atan lookup
+// func_hd_code_802AD7D4 (which works in 1/65536 revolutions)
+// Proposed name: GetAngleToPoint
 f32 func_hd_code_80284ADC(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
   f32 sp1C = sqrtf((((arg2 - arg0) * (arg2 - arg0)) + ((arg3 - arg1) * (arg3 - arg1))));
 
