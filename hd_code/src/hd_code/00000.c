@@ -8,6 +8,23 @@
 #include "functions.h"
 #include "yoshi.h"
 
+// Proposed file name: hd.c (the original name - the assert strings in this
+// file reference "hd.c" and "./master_switch.c")
+//
+// This file is the game core: the boot entry point and threads, the "master
+// switch" game state machine, the per-frame in-level game update, the camera
+// system, vehicle enter/exit dispatch, the frame display list builder and
+// level loading. Game states are u64 one-hot bits held in a pipeline:
+// D_hd_code_80364A88 = previous, ...A90 = current, ...A98 = requested next,
+// ...AA0 = queued follow-up. Thread3 loops: while a transition is pending it
+// runs the master switch case for the new state (level/menu setup, music
+// selection etc.), then runs per-frame updates until the next transition is
+// requested. The mission result flags flow: D_hd_code_803643D9 (fail
+// request, "cmo_hit_request" in the asserts - CMO is the missile carrier) /
+// ...DA (success request) are latched at the end of each frame into ...D6
+// (mission failed) / ...D7 (mission complete). Vehicles ("diggers" in the
+// debug prints) are identified by id; 0 = on foot.
+
 // BSS begin
 u8 D_hd_code_8030F660;
 s32 D_hd_code_8030F664;
@@ -36,104 +53,104 @@ s32 D_hd_code_803156EC;
 s32 D_hd_code_803156F0;
 u8 D_hd_code_803156F4;
 u8 D_hd_code_803156F5;
-struct Model1 D_hd_code_803156F8[2];
+struct Model1 D_hd_code_803156F8[2]; // double-buffered per-frame graphics contexts (matrices, display lists, vertex space); proposed name: gfxContexts
 s32 pad_80358028;
 s32 pad_8035802C;
-Gfx* D_hd_code_80358030[2];
-Gfx* D_hd_code_80358038[2];
-Gfx* D_hd_code_80358040[2];
-Gfx* D_hd_code_80358048[2];
-u16 *D_hd_code_80358050[2]; // Framebuffers
-u32 D_hd_code_80358058;
-u8 D_hd_code_8035805C; // Texture index?
-u32 D_hd_code_80358060;
-s32 D_hd_code_80358064;
-s32 D_hd_code_80358068;
-void* D_hd_code_8035806C;
-u8* D_hd_code_80358070;
-Gfx* D_hd_code_80358074;
-s32 D_hd_code_80358078;
-u16 D_hd_code_8035807C;
+Gfx* D_hd_code_80358030[2]; // categorized world display list buffers per frame (see func_hd_code_80257234); proposed name: worldDlBufs0
+Gfx* D_hd_code_80358038[2]; // proposed name: worldDlBufs1
+Gfx* D_hd_code_80358040[2]; // proposed name: worldDlBufs2
+Gfx* D_hd_code_80358048[2]; // proposed name: worldDlBufs3
+u16 *D_hd_code_80358050[2]; // Framebuffers; proposed name: framebuffers
+u32 D_hd_code_80358058; // z-buffer physical address; proposed name: zbufferPhys
+u8 D_hd_code_8035805C; // frame double-buffer index (0/1); proposed name: frameBufIdx
+u32 D_hd_code_80358060; // frames since the level/state started; proposed name: frameCount
+s32 D_hd_code_80358064; // replay-relevant frame counter (reset on unpause sync); proposed name: replayFrameCount
+s32 D_hd_code_80358068; // unpaused frame counter; proposed name: unpausedFrameCount
+void* D_hd_code_8035806C; // static data segment pointer (segment 1); proposed name: staticSegment
+u8* D_hd_code_80358070; // level memory bump allocator pointer (reset to 0x8004B400 each level); proposed name: levelAllocPtr
+Gfx* D_hd_code_80358074; // loaded level data base; proposed name: levelData
+s32 D_hd_code_80358078; // current top-level display list length; proposed name: topLevelDlLen
+u16 D_hd_code_8035807C; // perspective normalization scale from guPerspective; proposed name: perspNorm
 s32 nextdma; // 0x80358080
 s32 no_palette_dmas; // 0x80358084
-u8 D_hd_code_80358088[0xC340]; // Texdata space?
-struct Textures D_hd_code_803643C8; // size: 0x08
+u8 D_hd_code_80358088[0xC340]; // object shadow texture space; proposed name: shadowTexSpace
+struct Textures D_hd_code_803643C8; // object blob-shadow texture list (unk1022 = owner vehicle id); proposed name: shadowTextures
 s32 bss_pad_5;
 u8 D_hd_code_803643D4;
-u8 D_hd_code_803643D5;
-u8 D_hd_code_803643D6;
-u8 D_hd_code_803643D7;
-u8 D_hd_code_803643D8;
-u8 D_hd_code_803643D9;
-u8 D_hd_code_803643DA;
-u8 D_hd_code_803643DB;
-u8 D_hd_code_803643DC;
-s32 D_hd_code_803643E0;
-s32 D_hd_code_803643E4;
-s32 D_hd_code_803643E8;
+u8 D_hd_code_803643D5; // set when the player has NOT yet earned a medal on this level; proposed name: notYetCompleted
+u8 D_hd_code_803643D6; // mission failed (latched); proposed name: missionFailed
+u8 D_hd_code_803643D7; // mission complete (latched); proposed name: missionComplete
+u8 D_hd_code_803643D8; // missionFailed as of last frame; proposed name: prevMissionFailed
+u8 D_hd_code_803643D9; // failure request, latched into missionFailed at end of frame ("cmo_hit_request"); proposed name: failRequest
+u8 D_hd_code_803643DA; // success request, latched into missionComplete at end of frame; proposed name: successRequest
+u8 D_hd_code_803643DB; // level has a missile carrier; proposed name: carrierPresent
+u8 D_hd_code_803643DC; // level has a train (object id 0xFE, see func_hd_code_8024F520); proposed name: trainPresent
+s32 D_hd_code_803643E0; // player world x (<< 5 fixed point); proposed name: playerX
+s32 D_hd_code_803643E4; // player world y; proposed name: playerY
+s32 D_hd_code_803643E8; // player world z; proposed name: playerZ
 s32 D_hd_code_803643EC;
 s32 D_hd_code_803643F0;
 s32 D_hd_code_803643F4;
-s32 D_hd_code_803643F8;
-s32 D_hd_code_803643FC;
-s32 D_hd_code_80364400;
+s32 D_hd_code_803643F8; // secondary position x/y/z passed with the player position to the world renderer (likely camera focus); proposed name: focusX
+s32 D_hd_code_803643FC; // proposed name: focusY
+s32 D_hd_code_80364400; // proposed name: focusZ
 s32 D_hd_code_80364404;
 s32 D_hd_code_80364408;
 s32 D_hd_code_8036440C;
-u8 D_hd_code_80364410;
+u8 D_hd_code_80364410; // special-position marker active for this level (see 1D990.c func_hd_code_80262320); proposed name: specialMarkerActive
 u8 D_hd_code_80364411;
-u8 D_hd_code_80364412;
-f32 D_hd_code_80364414;
-f32 D_hd_code_80364418;
-u8 D_hd_code_8036441C;
-u8 D_hd_code_8036441D;
+u8 D_hd_code_80364412; // camera snap/force-update flag; proposed name: cameraSnap
+f32 D_hd_code_80364414; // camera yaw in degrees (default 135); proposed name: cameraYawDeg
+f32 D_hd_code_80364418; // camera yaw rotation target in degrees; proposed name: cameraYawTargetDeg
+u8 D_hd_code_8036441C; // camera rotating counterclockwise (R pressed); proposed name: cameraRotatingCCW
+u8 D_hd_code_8036441D; // camera rotating clockwise (Z/L pressed); proposed name: cameraRotatingCW
 u32 D_hd_code_80364420;
 u8 D_hd_code_80364424;
 u32 D_hd_code_80364428;
 u16 D_hd_code_8036442C;
 s32 D_hd_code_80364430;
 u8 D_hd_code_80364434;
-f32 D_hd_code_80364438;
-s16 D_hd_code_8036443C;
-s16 D_hd_code_8036443E;
-s16 D_hd_code_80364440;
-f32 D_hd_code_80364444;
-f32 D_hd_code_80364448;
+f32 D_hd_code_80364438; // camera field of view in degrees (45 default, 80 on special levels); proposed name: cameraFov
+s16 D_hd_code_8036443C; // camera pitch input (vehicle-dependent, clamped per camera type); proposed name: cameraPitchInput
+s16 D_hd_code_8036443E; // camera target heading (0..4095); proposed name: cameraHeading
+s16 D_hd_code_80364440; // current vehicle visual heading (0..4095, used for shadow rotation); proposed name: vehicleHeading
+f32 D_hd_code_80364444; // smoothed camera pitch; proposed name: cameraPitchSmoothed
+f32 D_hd_code_80364448; // smoothed camera heading; proposed name: cameraHeadingSmoothed
 s16 D_hd_code_8036444C;
 s16 D_hd_code_8036444E;
 s16 D_hd_code_80364450;
-s16 D_hd_code_80364452;
-s16 D_hd_code_80364454;
-u8 D_hd_code_80364456;
+s16 D_hd_code_80364452; // camera yaw, 0..4095 (passed to sky/HUD); proposed name: cameraYaw
+s16 D_hd_code_80364454; // camera pitch, 0..4095; proposed name: cameraPitch
+u8 D_hd_code_80364456; // current vehicle id (0 = on foot); proposed name: currentVehicle
 s32 D_hd_code_80364458;
 s32 pad_8036445C;
-struct UnknownStruct_803644BC D_hd_code_80364460[12];
-struct UnknownStruct_803644BC *D_hd_code_803649D0;
-u64 D_hd_code_803649D8;
+struct UnknownStruct_803644BC D_hd_code_80364460[12]; // loaded vehicle/object model slots (unk5C = vehicle id, display lists, skins); proposed name: modelSlots
+struct UnknownStruct_803644BC *D_hd_code_803649D0; // end pointer of the used model slots; proposed name: modelSlotsEnd
+u64 D_hd_code_803649D8; // os time captured at frame start (used for a wobble effect seed); proposed name: frameStartTime
 s16 D_hd_code_803649E0;
 s16 D_hd_code_803649E2;
 s16 D_hd_code_803649E4;
-s32 D_hd_code_803649E8;
+s32 D_hd_code_803649E8; // player is inside a vehicle flag; proposed name: inVehicle
 u8 D_hd_code_803649EC;
-u8 D_hd_code_803649ED;
+u8 D_hd_code_803649ED; // vehicle id requested to enter (0xFF = none); proposed name: requestedVehicle
 s8 D_hd_code_803649EE;
-struct UnknownData8024C414* D_hd_code_803649F0;
-struct UnknownData8024C414* D_hd_code_803649F4;
+struct UnknownData8024C414* D_hd_code_803649F0; // money counter target value; proposed name: moneyTarget
+struct UnknownData8024C414* D_hd_code_803649F4; // money counter displayed value (animates toward target); proposed name: moneyDisplayed
 f32 D_hd_code_803649F8;
-UnknownStruct_80364A00 D_hd_code_80364A00[5]; // Is an array of structs of size 0xC
-u8 D_hd_code_80364A3C;
-u8 D_hd_code_80364A3D;
-s32 D_hd_code_80364A40;
-s32 D_hd_code_80364A44;
-u8 D_hd_code_80364A48;
-s16 D_hd_code_80364A4A;
-s16 D_hd_code_80364A4C;
-u8 D_hd_code_80364A4E;
+UnknownStruct_80364A00 D_hd_code_80364A00[5]; // Is an array of structs of size 0xC; ring buffer of floating value popups (value, x, y, align, timer); proposed name: popupQueue
+u8 D_hd_code_80364A3C; // popup queue read index; proposed name: popupTail
+u8 D_hd_code_80364A3D; // popup queue write index; proposed name: popupHead
+s32 D_hd_code_80364A40; // pending popup value to enqueue; proposed name: popupPending
+s32 D_hd_code_80364A44; // currently displayed popup value; proposed name: popupValue
+u8 D_hd_code_80364A48; // popup alpha (fades in/out over the 30-frame timer); proposed name: popupAlpha
+s16 D_hd_code_80364A4A; // popup screen x; proposed name: popupX
+s16 D_hd_code_80364A4C; // popup screen y; proposed name: popupY
+u8 D_hd_code_80364A4E; // popup alignment flag; proposed name: popupAlign
 u8 pad_80364A4F;
 s8 D_hd_code_80364A50;
 s32 D_hd_code_80364A54;
-s32 D_hd_code_80364A58;
-s32 D_hd_code_80364A5C;
+s32 D_hd_code_80364A58; // scheduler frame when the mission started; proposed name: levelStartFrame
+s32 D_hd_code_80364A5C; // time spent in the level (frames, latched at mission end); proposed name: timeInLevel
 u8 D_hd_code_80364A60;
 s32 D_hd_code_80364A64;
 u8 D_hd_code_80364A68;
@@ -143,7 +160,7 @@ u8 D_hd_code_80364A6B;
 u8 D_hd_code_80364A6C;
 u8 D_hd_code_80364A6D;
 u8 pad_80364A6E;
-u8 D_hd_code_80364A6F;
+u8 D_hd_code_80364A6F; // carrier proximity zone: 0 = far, 1 = medium, 2 = near (see func_hd_code_8024A92C); proposed name: carrierZone
 u8 D_hd_code_80364A70;
 s8 D_hd_code_80364A71;
 s16 D_hd_code_80364A72;
@@ -155,29 +172,29 @@ u8 D_hd_code_80364A84;
 u8 D_hd_code_80364A85;
 u8 D_hd_code_80364A86;
 u8 D_hd_code_80364A87;
-u64 D_hd_code_80364A88;
-u64 D_hd_code_80364A90;
-u64 D_hd_code_80364A98;
-u64 D_hd_code_80364AA0;
-u32 D_hd_code_80364AA8;
+u64 D_hd_code_80364A88; // previous game state; proposed name: prevGameState
+u64 D_hd_code_80364A90; // current game state (one-hot u64); proposed name: gameState
+u64 D_hd_code_80364A98; // requested next game state (0 = no transition pending); proposed name: nextGameState
+u64 D_hd_code_80364AA0; // queued follow-up game state set inside the master switch; proposed name: queuedGameState
+u32 D_hd_code_80364AA8; // current game mode from the mission config table (1 = demolition, 2 = race, ...); proposed name: gameMode
 u32 pad_80364AAC;
 u32 pad_80364AB0;
-f32 D_hd_code_80364AB4;
-f32 D_hd_code_80364AB8;
-f32 D_hd_code_80364ABC;
-u8 D_hd_code_80364AC0;
-u8 D_hd_code_80364AC1;
+f32 D_hd_code_80364AB4; // failure spin effect: current rotation angle; proposed name: failSpinAngle
+f32 D_hd_code_80364AB8; // failure spin effect: rotation speed (accelerates 3 deg/frame^2); proposed name: failSpinSpeed
+f32 D_hd_code_80364ABC; // failure spin effect: vehicle scale (shrinks to 0, then explosion); proposed name: failSpinScale
+u8 D_hd_code_80364AC0; // failure spin effect finished flag; proposed name: failSpinDone
+u8 D_hd_code_80364AC1; // shuttle present/shuttle view available flag; proposed name: shuttlePresent
 s32 D_hd_code_80364AC4;
-u32 D_hd_code_80364AC8;
-u32 D_hd_code_80364ACC;
-u64 D_hd_code_80364AD0;
+u32 D_hd_code_80364AC8; // frame update time in ~ms (profiling); proposed name: frameUpdateMs
+u32 D_hd_code_80364ACC; // full frame time in ~ms (profiling); proposed name: frameTotalMs
+u64 D_hd_code_80364AD0; // os time at frame start (profiling); proposed name: frameProfileStart
 s32 pad_80364AD8;
 s32 pad_80364ADC;
 s32 pad_80364AE0;
 s32 pad_80364AE4;
 u8 playerNumber; // 0x80364AE8
 u8 D_hd_code_80364AE9; // nextPlayerNumber?
-u8 D_hd_code_80364AEA;
+u8 D_hd_code_80364AEA; // player selected on the world map / primary player; proposed name: selectedPlayer
 UnknownData8024C414 players[5]; // size 0xFF
 u8 bss_pad[0x70];
 u8 D_hd_code_80365060[5];
@@ -187,18 +204,21 @@ s32 pad_80365068;
 s32 D_hd_code_8036506C; // This is a vertex index
 s32 pad_80365070;
 s32 pad_80365074;
-f32 D_hd_code_80365078;
-f32 D_hd_code_8036507C;
-f32 D_hd_code_80365080;
-f32 D_hd_code_80365084;
-f32 D_hd_code_80365088;
-f32 D_hd_code_8036508C;
+f32 D_hd_code_80365078; // smoothed camera eye position x/y/z; proposed name: cameraEyeX
+f32 D_hd_code_8036507C; // proposed name: cameraEyeY
+f32 D_hd_code_80365080; // proposed name: cameraEyeZ
+f32 D_hd_code_80365084; // smoothed camera look-at point x/y/z; proposed name: cameraLookX
+f32 D_hd_code_80365088; // proposed name: cameraLookY
+f32 D_hd_code_8036508C; // proposed name: cameraLookZ
 struct vec3 D_hd_code_80365090; // some 3d vec
 u16 D_hd_code_8036509C;
-s16 D_hd_code_8036509E;
+s16 D_hd_code_8036509E; // camera target type: vehicle id, or 0xFF/0xFE/0xFD for train/carrier/shuttle views; proposed name: cameraTargetType
 s16 D_hd_code_803650A0;
 // BSS End
 
+// Boot entry point: osInitialize, read 16 words of boot arguments from the
+// cart via raw PI reads, parse the debug command-line flags
+// (func_hd_code_80270AE0 in 2B3F0.c), then create and start Thread1
 void MainJump() {
   u32 sp74;
   s32 pad[2];
@@ -215,6 +235,8 @@ void MainJump() {
   osStartThread(&g_Thread1);
 }
 
+// Init thread: unfreeze the RDP, create the PI manager, start the main game
+// thread (Thread3), then idle forever at priority 0
 void Thread1(void* arg0) {
   u8 pad[2];
   osDpSetStatus(DPC_CLR_FREEZE);
@@ -228,6 +250,14 @@ void Thread1(void* arg0) {
   while(1);
 }
 
+// The main game thread. After init it loops forever: the "master switch"
+// processes pending game state transitions (each case does the setup work
+// for the new state - level loading, menu setup, music selection via
+// func_hd_code_80261A44, save handling...), shifting the state pipeline
+// prev <- current <- next <- queued until no transition is pending. Then the
+// per-frame loop dispatches the frame update for the current state class
+// (world map, front-end menus, intro, or the in-level frame
+// func_hd_code_802475D8) and waits for the frame via func_hd_code_80285110.
 void Thread3(void* arg0) {
     s32 sp64;
     s32 sp60;
@@ -1041,6 +1071,16 @@ void Thread3(void* arg0) {
     }
 }
 
+// The per-frame in-level game update - the heart of gameplay. Handles the
+// debug instant-win cheat, per-frame texture/shadow refresh, pause and
+// unpause logic (D_hd_code_802E8BD0/BD4/BD8), camera zoom in/out via C
+// buttons, map scrolling in missile view, vehicle enter/exit, all subsystem
+// updates (carrier, train, buildings, RDU pickups, explosions, objectives
+// via func_hd_code_80262BF4...), builds the frame display list
+// (func_hd_code_8024C414 plus HUD overlays), start-button and menu
+// transitions, waits for outstanding texture DMAs, and finally latches the
+// success/failure request flags into the mission result.
+// Proposed name: GameFrame
 void func_hd_code_802475D8(void) {
     s32 sp6C;
     s32 sp68; // sp70
@@ -1666,6 +1706,11 @@ block_275:
     }
 }
 
+// Floating value popup queue update: enqueue a pending popup value
+// (positioned by camera quadrant and game mode), then animate the current
+// one - 30-frame lifetime with alpha fade in/out - advancing the ring
+// buffer when it expires.
+// Proposed name: UpdatePopupQueue
 void func_hd_code_8024A348(void) {
     if (D_hd_code_80364A40 != 0) {
         if (((D_hd_code_80364A3D + 1) != D_hd_code_80364A3C) && ((D_hd_code_80364A3D != 4) || (D_hd_code_80364A3C != 0))) {
@@ -1724,6 +1769,13 @@ void func_hd_code_8024A348(void) {
     }
 }
 
+// Carrier proximity warning: arg0 = distance to the missile carrier. Maps it
+// to 3 zones using per-level thresholds (a few levels have custom, even
+// progress-dependent ones). On zone change: pushes the danger jingle when
+// entering range, starts/stops the looping alarm SFX 0x26 when very close,
+// pops the music back when leaving range, and shows/hides the warning
+// message windows (0x8002/0x8003).
+// Proposed name: UpdateCarrierProximity
 void func_hd_code_8024A92C(u32 arg0) {
     u32 sp2C;
     u32 sp28;
@@ -1854,6 +1906,9 @@ void func_hd_code_8024A92C(u32 arg0) {
     }
 }
 
+// Animate the displayed money counter toward the real value (10% of the
+// difference + 10 per frame, clamped)
+// Proposed name: UpdateMoneyCounter
 void func_hd_code_8024ADD8(void) {
   u32 sp4;
 
@@ -1865,6 +1920,12 @@ void func_hd_code_8024ADD8(void) {
   }
 }
 
+// Vehicle entry: if a vehicle entry was requested (D_hd_code_803649ED) and
+// the vehicle is free, swap the on-foot model out, run the per-vehicle init
+// (func_hd_code_8024AFA8), record it as driven in the player's save bits,
+// and play the "first time in this vehicle" hint; otherwise play the locked
+// sound (0x2B).
+// Proposed name: TryEnterVehicle
 void func_hd_code_8024AE2C(void) {
     UnknownData8024C414* temp_t4;
 
@@ -1894,6 +1955,9 @@ void func_hd_code_8024AE2C(void) {
     }
 }
 
+// Per-vehicle entry init dispatch ("changing to digger %d"). Returns 1 for a
+// valid vehicle id. Also flashes the controller-config indicator.
+// Proposed name: InitVehicleById
 u8 func_hd_code_8024AFA8(s32 arg0) {
   u8 sp27;
 
@@ -1959,6 +2023,11 @@ u8 func_hd_code_8024AFA8(s32 arg0) {
   return sp27;
 }
 
+// Vehicle exit: check the per-vehicle "can exit here" handler
+// (func_hd_code_8024B4B8) and a clear spot for the human
+// (func_hd_code_802AE888); if ok, run the per-vehicle exit handler and
+// switch to on-foot (vehicle 0), else play the blocked sound.
+// Proposed name: TryExitVehicle
 void func_hd_code_8024B188(void) {
     u8 sp27;
     u8 sp26;
@@ -2041,6 +2110,8 @@ void func_hd_code_8024B188(void) {
     }
 }
 
+// Return 1 if a model slot is loaded for vehicle id arg0
+// Proposed name: IsVehicleModelLoaded
 s32 func_hd_code_8024B418(u8 arg0) {
   u32 sp4;
   sp4 = 0;
@@ -2053,6 +2124,8 @@ s32 func_hd_code_8024B418(u8 arg0) {
   return 0;
 }
 
+// Per-vehicle "may the player exit right now?" dispatch
+// Proposed name: CanExitVehicle
 u8 func_hd_code_8024B4B8(void) {
   switch (D_hd_code_80364456) {
     case 4:
@@ -2090,11 +2163,18 @@ u8 func_hd_code_8024B4B8(void) {
   }
 }
 
+// Pre-update for the current vehicle (sets D_hd_code_803ED3F5 around the
+// frame; cleared again in func_hd_code_8024B7AC)
+// Proposed name: PreUpdateCurrentVehicle
 void func_hd_code_8024B5E8() {
   D_hd_code_803ED3F5 = 1;
   func_hd_code_802AB670(D_hd_code_80364456);
 }
 
+// Update parked/idle vehicle models that were displaced ("MOVEABLE GEOMETRY
+// MOVE ROUTINE NOT WRITTEN YET" for the rest) - lets vehicles the player
+// isn't driving settle physically
+// Proposed name: UpdateIdleVehicles
 void func_hd_code_8024B618(void) {
 
     s32 sp1C;
@@ -2145,6 +2225,9 @@ void func_hd_code_8024B618(void) {
     }
 }
 
+// Per-vehicle control/physics update dispatch for the vehicle being driven
+// (case 0 = on foot)
+// Proposed name: UpdateVehicleControls
 void func_hd_code_8024B7AC(void) {
     D_hd_code_803ED3F5 = 0;
     switch (D_hd_code_80364456) {
@@ -2204,6 +2287,10 @@ void func_hd_code_8024B7AC(void) {
     }
 }
 
+// Build and submit a small dummy display list (degenerate all-zero vertices,
+// given projection/modelview) to the RSP via func_hd_code_802A467C - likely
+// a microcode warm-up/priming task run early in a level
+// Proposed name: SubmitDummyDisplayList
 void func_hd_code_8024B8F4(void* arg0, void* arg1) {
   Gfx gfx[50];
   Gfx* entry;
@@ -2250,6 +2337,11 @@ void func_hd_code_8024B8F4(void* arg0, void* arg1) {
   func_hd_code_802A467C(D_hd_code_80358074, gfx, vertices, (((s32) entry - (s32)gfx) >> 3) * 8);
 }
 
+// Handle a selection made in the pause/yoshi menu (*arg0 = menu item id,
+// cleared on exit): toggles submenus, restart/continue/quit transitions,
+// camera-mode and controller-mode selections, music volume toggle
+// (items 0x27/0x28 -> 0.7/1.0), and unpause (0xFFFF).
+// Proposed name: HandleMenuSelection
 void func_hd_code_8024BDA4(u16* arg0) {
     switch(D_hd_code_80364A90) {
         case 0x4:
@@ -2370,11 +2462,22 @@ void func_hd_code_8024BDA4(u16* arg0) {
     *arg0 = 0;
 }
 
+// Stub: just zero the length counter
+// Proposed name: ResetDlLengthStub
 Gfx* func_hd_code_8024C404(Gfx* arg0, struct Model1* arg1, s32* arg2) {
   *arg2 = 0;
   return arg0;
 }
 
+// Build the master frame display list: set up segments, clear the z-buffer,
+// draw the sky (func_hd_code_80271FD0) and the ground-color fill below the
+// horizon (per-level fill colors), set up the perspective projection (FOV
+// D_hd_code_80364438), then chain all the world geometry display list
+// buffers, object shadows, vehicle models, RDUs, particle/effect systems,
+// the mission failure spin effect, the floating money popups, the carrier
+// arrow and radar, "PRESS START" / "MISSILE VIEW" / "SHUTTLE VIEW" labels
+// and the rest of the HUD.
+// Proposed name: BuildFrameDisplayList
 Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     Gfx* entry;
     u8 sp194[16];
@@ -2672,6 +2775,12 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
 
 
 // arg2 can only be 0,1 and 2
+// Draw the blob shadows under vehicles/objects for render pass arg2: each
+// entry in the shadow texture list is a 64x64 IA8 texture (32x32
+// D_hd_code_802FA940 for the on-foot human) drawn as a dark quad rotated by
+// the object's yaw/pitch/roll at its ground position. The driven vehicle's
+// shadow also follows the failure spin matrix.
+// Proposed name: DrawObjectShadows
 void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2) {
     Gfx *entry; // sp144
     s32 sp140;
@@ -2769,6 +2878,9 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2) {
     *arg0 = entry;
 }
 
+// Draw the train's shadow (the shadow list entry with owner id 0xFE):
+// a single 64x64 IA quad rotated by the train heading D_hd_code_803EF326
+// Proposed name: DrawTrainShadow
 void func_hd_code_8024F520(Gfx** arg0, struct Model1* arg1) {
     Gfx* entry;
 
@@ -2868,6 +2980,12 @@ void func_hd_code_8024F520(Gfx** arg0, struct Model1* arg1) {
     *arg0 = entry;
 }
 
+// Draw the loaded vehicle/object models for render pass arg1 (0..2): for
+// each model slot set segment 6 to its data and segment 7 to one of two
+// per-frame vertex/skin buffers, set the env alpha, and run the pass's
+// display list. The driven vehicle gets the failure spin matrix when the
+// mission has failed.
+// Proposed name: DrawVehicleModels
 void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
     Gfx* entry;
     s32 sp60;
@@ -2930,6 +3048,11 @@ void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
     *arg0 = entry;
 }
 
+// Mission-failure spin effect: while the mission is failed, build matrices
+// that spin the player's vehicle around its position with accelerating
+// speed while shrinking it to nothing, then trigger the final explosion
+// (func_hd_code_802AC61C) once fully shrunk.
+// Proposed name: UpdateFailureSpinEffect
 void func_hd_code_802502EC(void) {
     f32 sp70[4][4];
     f32 sp30[4][4];
@@ -2977,6 +3100,14 @@ void func_hd_code_802502EC(void) {
     }
 }
 
+// The camera system. Selects per-target parameters (orbit distance, height,
+// pitch limits, smoothing rates) from the camera target type - each vehicle
+// has its own, plus 0xFF/0xFE/0xFD for train/carrier/shuttle views - applies
+// the L/R 45-degree rotation (func_hd_code_80255190), accelerate/brake pitch
+// tilt, position smoothing toward the target, terrain collision, cutscene
+// camera positions from the menu system, and finally builds the projection
+// matrix and guLookAt.
+// Proposed name: UpdateCamera
 void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     f32 spFC;
     f32 spF8;
@@ -3898,6 +4029,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     D_hd_code_80364412 = 0;
 }
 
+// Per-vehicle camera distance scale between two 3D points, reduced so that
+// distance * scale never exceeds 10000
+// Proposed name: GetCameraDistScale
 f32 func_hd_code_80254E54(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
   f32 sp2C;
   f32 sp28;
@@ -3974,6 +4108,9 @@ f32 func_hd_code_80254E54(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
   return sp2C;
 }
 
+// Convert an orbit radius and angle in degrees to x/z offsets (camera orbit
+// position), snapping near-zero z to 0
+// Proposed name: PolarToXZ
 void func_hd_code_80255034(s32 arg0, f32 arg1, s32* arg2, s32* arg3) {
   f32 sp2C;
   f32 sp28;
@@ -3998,6 +4135,10 @@ void func_hd_code_80255034(s32 arg0, f32 arg1, s32* arg2, s32* arg3) {
   *arg3 = sp20;
 }
 
+// Camera 45-degree rotation on the L/Z and R triggers: sets a new target
+// yaw, rotates toward it at 3 degrees per frame with a whoosh sound, unless
+// rotation is locked for this area (func_hd_code_80255628)
+// Proposed name: UpdateCameraRotation
 void func_hd_code_80255190(void) {
     u8 sp1F;
 
@@ -4068,6 +4209,10 @@ void func_hd_code_80255190(void) {
     }
 }
 
+// Return 1 if camera rotation is locked here (race mode, the world map,
+// level 0x3B always, and specific regions of levels 4, 13 and 16), forcing
+// the camera back to the default 135-degree yaw via the shorter direction
+// Proposed name: IsCameraRotationLocked
 u8 func_hd_code_80255628(void) {
   u8 sp37;
 
@@ -4114,6 +4259,8 @@ u8 func_hd_code_80255628(void) {
   return sp37;
 }
 
+// Append a display list that clears the current framebuffer to black
+// Proposed name: ClearFramebufferDL
 void func_hd_code_802558C8(Gfx* gfx, s32* arg1) {
   Gfx *entry = gfx;
 
@@ -4127,6 +4274,9 @@ void func_hd_code_802558C8(Gfx* gfx, s32* arg1) {
   *arg1 += entry - gfx;
 }
 
+// Terminate the frame display list (full sync + end) and compute its final
+// length, asserting it fits in the buffer
+// Proposed name: EndFrameDisplayList
 void func_hd_code_802559F8(Gfx* gfx, s32* length) {
   Gfx *entry = gfx;
 
@@ -4139,6 +4289,12 @@ void func_hd_code_802559F8(Gfx* gfx, s32* length) {
   }
 }
 
+// Game init (called once from Thread3): create the message queues and the
+// OS scheduler (NTSC/PAL VI mode), register as a scheduler client, init
+// audio (func_hd_code_80261588), set up framebuffer/z-buffer pointers, pick
+// the initial game state (controller pak menus or the intro), and fill the
+// thread stack with a sentinel pattern for usage measurement.
+// Proposed name: InitGame
 void func_hd_code_80255AD0(void) {
     s32 sp44;
     f32 sp40;
@@ -4178,6 +4334,9 @@ void func_hd_code_80255AD0(void) {
     }
 }
 
+// Report the main thread's stack high-water mark by scanning for the
+// sentinel pattern
+// Proposed name: CheckThreadStackUsage
 void func_hd_code_80255D34(void) {
   u8 sp1F;
   s32 sp18;
@@ -4191,6 +4350,12 @@ void func_hd_code_80255D34(void) {
   }
 }
 
+// Common state-transition teardown: blank the screen, choose the new music,
+// flush caches, reset frame counters and HUD alpha, DMA the static data
+// block to its home, reset the level bump allocator (to 0x8004B400) and
+// reserve the controller-input/ghost buffers, reset the shadow texture list,
+// clear all mission flags, reset HUD sprites and menu windows.
+// Proposed name: PrepareStateTransition
 void func_hd_code_80255DC8(void) {
     s32 sp2C;
     s32 pad;
@@ -4322,6 +4487,8 @@ extern u8 D_665F80;
 extern u8 D_66C900;
 //endregion
 
+// DMA the level data blob for level arg0 into arg1, returning its size in
+// *arg2 (the per-level ROM address ranges come from the extern table above)
 void LoadLevel(u32 arg0, void* arg1, s32* arg2) {
     u8* sp24;
 
@@ -4569,6 +4736,16 @@ void LoadLevel(u32 arg0, void* arg1, s32* arg2) {
     InitiateDma(sp24, arg1, arg2, 0xCU, 0xA, 1);
 }
 
+// Level init ("enter initlevel"). arg0 = optional saved level state buffer
+// (restores destroyed buildings on completed levels). Resets all per-level
+// state, sets the game mode from the mission config table, defaults the
+// camera (135 degrees), kills the front-end thread, sets up race ghost
+// recording, loads and parses the level data (LoadLevel +
+// func_hd_code_802A1674), allocates the frame display list buffers, runs
+// mission init (func_hd_code_80262320 in 1D990.c), builds all object
+// shadows, initializes the sky (func_hd_code_802729F0 - note its first
+// argument is the pending game state), and resets camera/popup/money state.
+// Proposed name: InitLevel
 void func_hd_code_80256A34(s32* arg0) {
     s32 sp4C;
     s32 sp48;
@@ -4727,6 +4904,9 @@ void func_hd_code_80256A34(s32* arg0) {
     func_hd_code_802A5FA8();
 }
 
+// Allocate the four categorized world display list buffers, double-buffered,
+// from the level allocator; a few levels get custom sizes
+// Proposed name: AllocFrameDlBuffers
 void func_hd_code_80257234(void) {
   s32 sp14;
   s32 sp10;
@@ -4794,6 +4974,8 @@ void func_hd_code_80257234(void) {
   D_hd_code_80358070 += sp8 * 8;
 }
 
+// Align a bump-allocator pointer up to an arg1-byte boundary
+// Proposed name: AlignPointer
 void func_hd_code_80257490(u8** arg0, s32 arg1) {
   s32 sp4;
 
@@ -4804,10 +4986,12 @@ void func_hd_code_80257490(u8** arg0, s32 arg1) {
   *arg0 += sp4;
 }
 
+// sinf wrapper; proposed name: Sinf
 f32 func_hd_code_802574F0(f32 arg0) {
   return sinf(arg0);
 }
 
+// cosf wrapper; proposed name: Cosf
 f32 func_hd_code_80257514(f32 arg0) {
   return cosf(arg0);
 }
