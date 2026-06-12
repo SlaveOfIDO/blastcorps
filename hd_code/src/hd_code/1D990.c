@@ -3,6 +3,18 @@
 #include "functions.h"
 #include "structs.h"
 
+// Proposed file name: missions.c
+//
+// This file is the mission/objective system: per-level mission configuration,
+// the mission-start countdown and objective banner, win/lose condition
+// checking per game mode, the race lap tracker, the mission timer HUD and the
+// turbo-start traffic light. D_hd_code_80364AA8 holds the current game mode as
+// a bitmask (0x1 = normal demolition, 0x2 = race, 0x4 = destroy N buildings,
+// 0x8 = cause $N damage, 0x10/0x40 = find N RDUs, 0x20 = destroy named
+// targets, 0x80 = clear the carrier/shuttle path); the same values appear as
+// the first field of the mission config table D_hd_code_802E8F94. World
+// positions in the tables are stored >> 5 and shifted back << 5 on load.
+
 void func_hd_code_80262840();                          /* extern */
 void func_hd_code_80262FD0();                          /* extern */
 void func_hd_code_8026303C();                          /* extern */
@@ -43,48 +55,53 @@ extern u8 D_hd_code_80367C10;
 
 // BSS
 u8 D_hd_code_80367750[0x400];
-s32 D_hd_code_80367B50;
-u8 D_hd_code_80367B54;
-u16 D_hd_code_80367B58[4];
+s32 D_hd_code_80367B50; // replay frame at which the turbo start was recorded (see func_hd_code_8026420C); proposed name: replayTurboFrame
+u8 D_hd_code_80367B54; // race lap counter (0 = start line not yet crossed, else current lap number); proposed name: currentLap
+u16 D_hd_code_80367B58[4]; // per-lap times in tenths of seconds; proposed name: lapTimes
 
-u8 D_hd_code_80367B60[4][0x14];
-u8 D_hd_code_80367BB0[0xC];
-s32 D_hd_code_80367BBC;
-u32 D_hd_code_80367BC0;
-u32 D_hd_code_80367BC4;
-u16 D_hd_code_80367BC8;
-struct S_80367BCC* D_hd_code_80367BCC;
-struct S_80367BD0 D_hd_code_80367BD0;
-u16 D_hd_code_80367BF4;
-u16 D_hd_code_80367BF6;
-u8 D_hd_code_80367BF8;
-u8 D_hd_code_80367BF9;
-u8 D_hd_code_80367BFA;
-u8 D_hd_code_80367BFB;
-u16 D_hd_code_80367BFC;
-u8 D_hd_code_80367BFE;
-s8 D_hd_code_80367BFF;
+u8 D_hd_code_80367B60[4][0x14]; // HUD strings: lap times in race mode, objective progress in [0] otherwise; proposed name: hudProgressStrings
+u8 D_hd_code_80367BB0[0xC]; // remaining-time string, "MM:SS.T" format; proposed name: timerString
+s32 D_hd_code_80367BBC; // frame when the start/finish line was first crossed; proposed name: raceStartFrame
+u32 D_hd_code_80367BC0; // mission start frame counter; proposed name: missionStartFrame
+u32 D_hd_code_80367BC4; // last countdown second processed (so each second triggers once); proposed name: lastCountdownSecond
+u16 D_hd_code_80367BC8; // traffic light state machine (0 = off, 1..5 = drop in/count down/wait/grade turbo/slide out); proposed name: trafficLightState
+struct S_80367BCC* D_hd_code_80367BCC; // HUD objective icon info (NULL = no icon); proposed name: objectiveIconInfo
+struct S_80367BD0 D_hd_code_80367BD0; // HUD state: unk6 = text alpha, unk8 = y offset, unkC = traffic light texture pointers; proposed name: hudState
+u16 D_hd_code_80367BF4; // remaining time in whole seconds; proposed name: timeLeftSeconds
+u16 D_hd_code_80367BF6; // remaining time in tenths of seconds; proposed name: timeLeftTenths
+u8 D_hd_code_80367BF8; // index into the checkpoint-box crossing order (lap valid once it reaches 4); proposed name: checkpointIdx
+u8 D_hd_code_80367BF9; // quadrant box the player was in last frame; proposed name: prevQuadrant
+u8 D_hd_code_80367BFA; // quadrant box the player is in now; proposed name: currentQuadrant
+u8 D_hd_code_80367BFB; // best lap number (1-based); proposed name: bestLapNum
+u16 D_hd_code_80367BFC; // best lap time in tenths of seconds; proposed name: bestLapTime
+u8 D_hd_code_80367BFE; // turbo start earned flag; proposed name: turboStartEarned
+s8 D_hd_code_80367BFF; // turbo start active flag; proposed name: turboStartActive
 u8 D_hd_code_80367C00;
-u8 D_hd_code_80367C01;
-struct S_80367C04 *D_hd_code_80367C04;
-char* D_hd_code_80367C08;
-s32 D_hd_code_80367C0C;
-u8 D_hd_code_80367C10;
+u8 D_hd_code_80367C01; // accelerator pressed too early during the light sequence (disqualifies turbo); proposed name: turboDisqualified
+struct S_80367C04 *D_hd_code_80367C04; // current level's mission config (points into D_hd_code_802E8F94); proposed name: missionConfig
+char* D_hd_code_80367C08; // objective target name string (e.g. "BUILDINGS"); proposed name: targetName
+s32 D_hd_code_80367C0C; // objective target icon data pointer; proposed name: targetIconData
+u8 D_hd_code_80367C10; // set if the current level is one of the specials in D_hd_code_802E8F30; proposed name: isSpecialLevel
 s32 pad_80367C14;
-char D_hd_code_80367C18[0x28];
-char D_hd_code_80367C40[0x28];
-s16 D_hd_code_80367C68[0x28];
-s16 D_hd_code_80367CB8[0x28];
-u16 D_hd_code_80367D08;
+char D_hd_code_80367C18[0x28]; // objective banner line 1 (e.g. "FINISH %d LAPS IN"); proposed name: bannerLine1
+char D_hd_code_80367C40[0x28]; // objective banner line 2 ("%d MINUTES %d SECONDS"); proposed name: bannerLine2
+s16 D_hd_code_80367C68[0x28]; // banner line 1 text effect buffer; proposed name: bannerLine1Fx
+s16 D_hd_code_80367CB8[0x28]; // banner line 2 text effect buffer; proposed name: bannerLine2Fx
+u16 D_hd_code_80367D08; // last second beeped during the final-10-seconds countdown; proposed name: lastBeepSecond
 s32 pad_80367D0C;
-char D_hd_code_80367D10[0x18];
-char D_hd_code_80367D28[0x28];
-s16 D_hd_code_80367D50;
-struct S_80367D52 D_hd_code_80367D52;
+char D_hd_code_80367D10[0x18]; // "%d LAPS LEFT!" text; proposed name: lapsLeftText
+char D_hd_code_80367D28[0x28]; // "%d LAPS LEFT!" text effect buffer; proposed name: lapsLeftFx
+s16 D_hd_code_80367D50; // traffic light vertical slide offset; proposed name: trafficLightSlide
+struct S_80367D52 D_hd_code_80367D52; // traffic light lamp image index (unk0 = current, unk1 = previous); proposed name: trafficLightLamp
 // BSS End
 
 // Data
+// Special level numbers (40, 43, 44, 45, 46): these get an extended draw
+// distance (80 vs 45) and map through func_hd_code_80264BA4
+// Proposed name: specialLevels
 u8 D_hd_code_802E8F30[5] = { 0x28, 0x2B, 0x2C, 0x2D, 0x2E };
+// 6 records of {level, pad, x, y, z}: positions for levels 10, 17, 33, 14, 13, 4 (not referenced in this file)
+// Proposed name: levelPoints
 u8 D_hd_code_802E8F38[] = {
   0x0A, 0x00, 0x0F, 0x84, 0x00, 0x2C, 0x09, 0xAE,
   0x11, 0x00, 0x0F, 0xDF, 0x00, 0x64, 0x05, 0x7A,
@@ -94,10 +111,14 @@ u8 D_hd_code_802E8F38[] = {
   0x04, 0x00, 0x0C, 0x8D, 0x01, 0x9F, 0x11, 0x70
 };
 
+// {level, rect x1, y1, x2, y2}: special region bounds, only level 13 (see func_hd_code_80262238)
+// Proposed name: levelRegions
 struct S_802E8F68 D_hd_code_802E8F68[1] = {
   {0x0D, 0x00, 0x18D3, 0x054F, 0x11B5, 0x1FCD }
 };
 
+// {level, pad, x, y, z}: special positions for levels 39, 24, 51, 41, loaded << 16 (see func_hd_code_80262320)
+// Proposed name: levelSpecialPositions
 struct S_802E8F74 D_hd_code_802E8F74[4] = {
   {0x27, 0x00, 0x080D, 0x00B4, 0x1016},
   {0x18, 0x00, 0x0697, 0x00C8, 0x027F},
@@ -106,6 +127,13 @@ struct S_802E8F74 D_hd_code_802E8F74[4] = {
 };
 
 
+// Per-level mission config table, indexed by levelno. Known fields:
+// unk0 = game mode bitmask (see file header), unk2..unk10 = start/finish-line
+// and track rectangles (race mode), unk12[4] = checkpoint-box crossing order,
+// unk18 = goal count (laps / $ damage / RDU count), unk1C..unk2A = positions,
+// unk36 = time limit in tenths of seconds, the 10-byte array is likely medal
+// time thresholds. 1C460.c reads unk0 when choosing music.
+// Proposed name: missionConfigs
 struct S_80367C04 D_hd_code_802E8F94[] = {
   {0x01, 0x01, 0x0000, 0x0190, 0x03E8,
     0x07D0,  0x015F, 0x05DB, 0x01E9, 0x060E,
@@ -532,11 +560,15 @@ struct S_80367C04 D_hd_code_802E8F94[] = {
 };
 
 u8 __alignmentIssue[12] = {0};
-char D_hd_code_802E9F90[] = "BUILDINGS";
-void* D_hd_code_802E9F9C = (void*)0x8030480C; // TODO: D_hd_code_8030480C
-u8 D_hd_code_802E9FA0[2] = { 0x20, 0x53 };
+char D_hd_code_802E9F90[] = "BUILDINGS"; // proposed name: buildingsText
+void* D_hd_code_802E9F9C = (void*)0x8030480C; // TODO: D_hd_code_8030480C; proposed name: buildingsIconData
+u8 D_hd_code_802E9FA0[2] = { 0x20, 0x53 }; // { ' ', 'S' }: plural suffix for "%d MINUTE%c"; proposed name: pluralSuffix
 
 
+// Set the camera field of view for a level: 80.0 (and a flag) if it is one
+// of the five special levels in D_hd_code_802E8F30, else the default 45.0
+// (D_hd_code_80364438 is the FOV passed to guPerspective in 00000.c)
+// Proposed name: SetLevelFov
 void func_hd_code_80262150(u8 arg0) {
   s32 sp4;
 
@@ -553,6 +585,9 @@ void func_hd_code_80262150(u8 arg0) {
   }
 }
 
+// Load an (x, y, z) position for the level from the mission config table into
+// D_hd_code_803EF2EC/F0/F4 (likely a start position)
+// Proposed name: LoadLevelStartPosition
 void func_hd_code_802621DC(u8 arg0) {
   struct S_80367C04* sp4;
 
@@ -562,6 +597,9 @@ void func_hd_code_802621DC(u8 arg0) {
   D_hd_code_803EF2F4 = sp4->unk2A << 5;
 }
 
+// If the level is in D_hd_code_802E8F68 (only level 13), enable a flag and
+// load its rectangle bounds into D_hd_code_803EFEB0..BC
+// Proposed name: LoadLevelRegion
 void func_hd_code_80262238(u8 arg0) {
   s32 sp4;
   u8 sp3;
@@ -585,6 +623,13 @@ void func_hd_code_80262238(u8 arg0) {
   }
 }
 
+// Mission init for a level: load the optional special position from
+// D_hd_code_802E8F74, point D_hd_code_80367C04 at the level's mission config
+// and load its timer/position fields, record the mission start frame, pick
+// the HUD objective icon and target-name string per game mode, DMA the
+// traffic-light textures when starting from the countdown state, set up the
+// HUD icon sprite and reset the lap counter.
+// Proposed name: InitMission
 void func_hd_code_80262320(u8 arg0) {
     s32 sp34;
     u8 sp33;
@@ -689,6 +734,13 @@ void func_hd_code_80262320(u8 arg0) {
     D_hd_code_80367B54 = 0;
 }
 
+// Mission-start countdown, driven by whole seconds since mission init.
+// Second 0: build and show the objective banner ("FINISH %d LAPS IN",
+// "DESTROY %s IN", "CLEAR CARRIER/SHUTTLE PATH", "CAUSE $%d DAMAGE",
+// "FIND %d RDUS IN" + "%d MINUTES %d SECONDS") and play a random announcer
+// clip. Seconds 1-3: countdown beep. Second 4: "go" sound and switch the
+// game state to 4 (mission running).
+// Proposed name: UpdateMissionCountdown
 void func_hd_code_80262840(void) {
     s32 sp34;
     u16 sp32;
@@ -757,6 +809,14 @@ void func_hd_code_80262840(void) {
     }
 }
 
+// Per-frame mission update: compute the remaining time and format the HUD
+// timer. In the countdown state run func_hd_code_80262840; in the
+// mission-over state wait for the fade then transition based on the player's
+// result for the level. While running: time reaching 0 sets the failure flag
+// D_hd_code_803643D9, the last 10 seconds play a rising beep each second,
+// success/failure flags switch to the mission-over state, otherwise dispatch
+// to the mode-specific objective checker.
+// Proposed name: UpdateMission
 void func_hd_code_80262BF4(void) {
     if ((D_hd_code_803643D7 == 0) && (D_hd_code_803643D6 == 0)) {
         D_hd_code_80367BF6 = D_hd_code_80367C04->unk36 - MIN(D_hd_code_80367C04->unk36, func_hd_code_8028604C(sc.unk803156C0 - D_hd_code_80364A58));
@@ -826,6 +886,9 @@ void func_hd_code_80262BF4(void) {
     }
 }
 
+// RDU mode (0x10/0x40) objective check: success flag D_hd_code_803643DA once
+// found count >= goal; HUD shows "found/goal"
+// Proposed name: CheckRduObjective
 void func_hd_code_80262FD0(void) {
   if ((u16) D_hd_code_8036EA7C >= (u32) D_hd_code_80367C04->unk18) {
     D_hd_code_803643DA = 1;
@@ -833,6 +896,10 @@ void func_hd_code_80262FD0(void) {
   proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA7C, D_hd_code_80367C04->unk18);
 }
 
+// Destroy-buildings mode (0x4) objective check: success once destroyed count
+// >= goal; failure when the carrier's progress along its path exceeds the
+// threshold. HUD shows "destroyed/total".
+// Proposed name: CheckBuildingsObjective
 void func_hd_code_8026303C(void) {
   s16 sp1E;
 
@@ -851,6 +918,11 @@ void func_hd_code_8026303C(void) {
   proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
 }
 
+// Target/path modes (0x20/0x80) objective check: mode 0x20 succeeds when all
+// targets are destroyed; mode 0x80 when the carrier reaches the end
+// (D_hd_code_803F7806) or, on the shuttle level (0x32), when everything is
+// cleared. Same carrier-progress failure check as func_hd_code_8026303C.
+// Proposed name: CheckPathObjective
 void func_hd_code_80263140(void) {
   s16 sp2E;
 
@@ -889,6 +961,9 @@ void func_hd_code_80263140(void) {
   }
 }
 
+// Damage mode (0x8) objective check: success once damage dollars >= goal;
+// HUD shows "$%d LEFT"
+// Proposed name: CheckDamageObjective
 void func_hd_code_80263358(void) {
   s32 sp1C;
   s32 temp_t3;
@@ -904,6 +979,15 @@ void func_hd_code_80263358(void) {
   proutSprintf(D_hd_code_80367B60[0], "$%d LEFT", sp1C);
 }
 
+// Race mode (0x2) lap tracker. Waits for the player to first enter the
+// start/finish rectangle, then divides the track into 4 quadrant "boxes" from
+// the player's position and requires crossing them in the configured order
+// (unk12[4]) before a finish-line hit counts as a lap (prevents counting a
+// lap by re-crossing the line). Records per-lap times, tracks the best lap,
+// shows "%d LAPS LEFT!" and multiplies the music tempo value by 0.95 each lap
+// (tempo is us per beat, so the music gets ~5% faster). Success once laps >=
+// goal.
+// Proposed name: UpdateRaceLaps
 void func_hd_code_802633E0(void) {
     s32 sp34;
     u8 sp33;
@@ -966,6 +1050,8 @@ void func_hd_code_802633E0(void) {
     }
 }
 
+// Point-in-rectangle test
+// Proposed name: PointInRect
 s32 func_hd_code_8026394C(s16 x, s16 y, s16 x1, s16 y1, s16 x2, s16 y2) {
   if (x >= x1 && y >= y1 && x < x2 && y < y2) {
     return 1;
@@ -973,6 +1059,12 @@ s32 func_hd_code_8026394C(s16 x, s16 y, s16 x1, s16 y1, s16 x2, s16 y2) {
   return 0;
 }
 
+// Build the mission HUD display list: in race mode the list of lap times
+// (best lap tinted, current lap white, others gray), in other modes the
+// progress counter; the remaining-time clock, blinking (16 of every 20
+// frames) and turning red in the last 10 seconds; the countdown traffic
+// light; and the animated objective icon sprites.
+// Proposed name: DrawMissionHud
 Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
     Gfx* entry; // sp64
     u32 sp60;
@@ -1057,6 +1149,9 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
     return entry;
 }
 
+// Replay turbo: re-apply the recorded turbo start at the right frame during
+// replay playback
+// Proposed name: ApplyReplayTurbo
 void func_hd_code_8026420C(void) {
   if ((D_hd_code_80367BFE != 0) && (D_hd_code_80358064 == D_hd_code_80367B50)) {
     rmonPrintf("Replay turbo ....\n");
@@ -1064,6 +1159,14 @@ void func_hd_code_8026420C(void) {
   }
 }
 
+// Start traffic light: state machine (D_hd_code_80367BC8) that drops the
+// light in (1-2), steps the lamp image down as the countdown runs, watches
+// the accelerator during the light sequence (3-4) - timing it right earns a
+// turbo start (D_hd_code_80367BFE), pressing too early disqualifies it - then
+// slides the light off screen (5). The bottom half renders the light texture
+// in 32-pixel strips with texture rectangles. Not drawn in carrier mode
+// (0x80).
+// Proposed name: DrawTrafficLight
 Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
     Gfx* entry;
     s32 sp78;
@@ -1146,6 +1249,9 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
     return entry;
 }
 
+// Format a time given in tenths of seconds as "MM:SS.T" into arg0
+// (arg2 is unused)
+// Proposed name: FormatTime
 void func_hd_code_80264A34(char* arg0, u16 arg1, u16 arg2) {
   arg0[0] = '0' + (arg1 / 6000);
 
@@ -1165,6 +1271,9 @@ void func_hd_code_80264A34(char* arg0, u16 arg1, u16 arg2) {
   arg0[7] = 0;
 }
 
+// Race-mode timer correction: remaining time = limit - sum of completed lap
+// times, clamping underflow to 0
+// Proposed name: RecalcRaceTimeLeft
 void func_hd_code_80264AEC(void) {
   s32 sp4;
   u16 sp2;
@@ -1181,6 +1290,10 @@ void func_hd_code_80264AEC(void) {
   }
 }
 
+// Map the special levels {40, 43, 44, 45, 46} to indices {0, 5, 4, 2, 1},
+// anything else to 3. Called from the music chooser in 1C460.c
+// (func_hd_code_80261A44) to pick between tunes for certain levels.
+// Proposed name: GetSpecialLevelIndex
 u8 func_hd_code_80264BA4(u8 arg0) {
   u8 sp7;
 
