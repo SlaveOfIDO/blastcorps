@@ -3,13 +3,24 @@
 #include "functions.h"
 #include "structs.h"
 
+// Proposed file name: sky.c
+//
+// This file is the sky/backdrop renderer. The sky is drawn as a screen-space
+// quad (320 wide, coordinates in quarter-pixel units) at the top of the
+// frame, textured with two tiled 32x32 16-bit layers: an RGBA16 color layer
+// and an IA16 layer, blended in 2-cycle mode with the combine LERP
+// (TEXEL1 - TEXEL0) * TEXEL1_ALPHA + TEXEL0. The texture scrolls horizontally
+// with the camera heading and the quad height follows the camera pitch plus a
+// per-level horizon offset. A 60-entry table selects the two texture assets
+// per level (0 = level has no sky).
+
 // BSS Begin
-f32 D_hd_code_8036BFC0;
-u8 D_hd_code_8036BFC4;
-u8 D_hd_code_8036BFC5;
-f32 D_hd_code_8036BFC8;
-f32 D_hd_code_8036BFCC;
-f32 D_hd_code_8036BFD0;
+f32 D_hd_code_8036BFC0; // per-level horizon height offset, computed from the map dimensions in func_hd_code_802729F0; proposed name: skyHorizonOffset
+u8 D_hd_code_8036BFC4; // sky enabled flag (cleared when the level has no sky textures); proposed name: skyEnabled
+u8 D_hd_code_8036BFC5; // sky quad vertex double-buffer index; proposed name: skyVtxBufIdx
+f32 D_hd_code_8036BFC8; // horizontal texture scroll derived from camera heading; proposed name: skyScrollX
+f32 D_hd_code_8036BFCC; // visible sky height in pixels (0 when looking too far down); proposed name: skyVisibleHeight
+f32 D_hd_code_8036BFD0; // amount the horizon sits above the top of the screen (0 unless looking up past it); proposed name: skyHiddenHeight
 // BSS End
 
 extern u32 D_803BE718;
@@ -18,6 +29,12 @@ extern u16 D_803BE720;
 extern u16 D_803BE722;
 
 // Data Begin
+// Per-level pair of sky texture layer descriptors, indexed by levelno:
+// {unk0 = texture asset id (0 = no sky), unk2, unk4 = RAM pointer filled at
+// load time, unk8/unk9 = log2 horizontal/vertical texcoord scale,
+// unkA/unkB = S/T clamp-mirror flags}. Layer 0 is RGBA16, layer 1 IA16.
+// Only two texture sets appear: assets 0x537+0x671 and 0x525+0x670.
+// Proposed name: levelSkyTextures
 struct S_802FA280 D_hd_code_802FA280[60][2] = {
     { { 0x0537, 0x0000, 0x00000000, 0x02, 0x00, 0x00, 0x02 }, { 0x0671, 0x0000, 0x00000000, 0x02, 0x00, 0x00, 0x00 }},
     { { 0x0525, 0x0000, 0x00000000, 0x02, 0x00, 0x00, 0x02 }, { 0x0670, 0x0000, 0x00000000, 0x02, 0x00, 0x00, 0x00 }},
@@ -81,14 +98,26 @@ struct S_802FA280 D_hd_code_802FA280[60][2] = {
     { { 0x0537, 0x0000, 0x00000000, 0x02, 0x00, 0x00, 0x02 }, { 0x0671, 0x0000, 0x00000000, 0x02, 0x00, 0x00, 0x00 }}
 };
 
+// Double-buffered sky quad: x spans 0..0x4FF (320 pixels in quarter-pixel
+// units), z = -1000; the y of vertices 2/3 and all texcoords are rewritten
+// each frame by func_hd_code_80271FD0.
+// Proposed name: skyQuadVtx
 Vtx D_hd_code_802FA820[2][4] = {
   { { { { 0x04FF, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } } , { { { 0x0000, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } } , { { { 0x04FF, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } } , { { { 0x0000, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } } },
   { { { { 0x04FF, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } } , { { { 0x0000, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } }, { { { 0x04FF, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } }, { { { 0x0000, 0x0000, 0xFC18 }, 0x0000, { 0x0000, 0x0000 }, { 0xFF, 0xFF, 0xFF, 0xFF } } } }
 };
 
-u16 D_hd_code_802FA8A0[2] = { 0, 3 };
+u16 D_hd_code_802FA8A0[2] = { 0, 3 }; // render formats of the two sky layers: G_IM_FMT_RGBA, G_IM_FMT_IA; proposed name: skyLayerFormats
 // Data End
 
+// Draw the sky backdrop. arg2 = levelno, arg3 = camera heading (0..4095),
+// arg4 = camera pitch, *arg5 receives the visible sky height in pixels so the
+// caller knows how much of the screen the sky covers. Computes the quad
+// height from pitch + horizon offset and the horizontal texture scroll from
+// heading, rewrites the double-buffered quad's y coordinates and UVs, loads
+// the two 32x32 texture layers into separate TMEM halves, blends them with
+// the 2-cycle combine LERP and draws the quad as two triangles.
+// Proposed name: DrawSky
 Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s16 arg4, s32* arg5) {
     Gfx* entry = arg0;
     u16 sp78[2] = D_hd_code_802FA8A0;
@@ -172,6 +201,15 @@ Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s
     return entry;
 }
 
+// Sky init for a level. arg0 = the pending game state (passed as
+// D_hd_code_80364A98 from InitLevel in 00000.c), arg1 = levelno. Computes the
+// horizon offset from the map area ((D_803BE720 * D_803BE718 +
+// D_803BE722 * D_803BE71C) / 32): 1200000/area for one set of modes,
+// 600000/area for another, 0 otherwise, plus 32 extra for levels 0x34, 0x3B,
+// 0x26 and 0x11. Then loads both sky texture layers for the level via
+// func_hd_code_802A0B00 into memory at the level bump allocator, disabling
+// the sky entirely if the level's texture asset id is 0.
+// Proposed name: InitSky
 void func_hd_code_802729F0(u16 arg0, u16 arg1) {
   s32 sp2C;
   f32 sp28;
@@ -215,6 +253,8 @@ void func_hd_code_802729F0(u16 arg0, u16 arg1) {
   }
 }
 
+// Empty stub
+// Proposed name: SkyStub
 void func_hd_code_80272C40(s32 arg0) {
 
 }
