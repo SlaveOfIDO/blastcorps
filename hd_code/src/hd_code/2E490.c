@@ -8,21 +8,44 @@ void func_hd_code_802A0B00(u16, u8*);
 void func_hd_code_802A0EE0(u16, u8*);
 Gfx* func_hd_code_802742D8(Gfx* gfx, u8 arg1, s16 arg2, s16 arg3, s32 arg4, s32 arg5, s32 arg6, f32 arg7, u8 arg8);
 
+// Proposed file name: hud_sprites.c
+//
+// This file is the HUD sprite system: loading 2D sprites (used for the
+// mission HUD icons, see 1D990.c) and drawing them as texture rectangles or
+// vertex quads. A sprite with n strips is an (n*32) x (n*32) pixel image
+// stored as n horizontal strips of (n*32) x 32 texels, each strip loaded into
+// TMEM separately. Per-sprite flags (D_hd_code_8036C220): 1 = flip texture
+// vertically, 2 = RGBA32 (else RGBA16), 4 = draw via vertex quads instead of
+// texture rectangles, 8 = skip the last strip. Per-draw flags (arg5 of
+// func_hd_code_80272ED8): 1 = drop shadow + sprite, 2 = shadow only,
+// 4 = grayscale silhouette only, 8 = blink (dimmed 7 of every 20 frames).
+
 // BSS Begin
-u8* D_hd_code_8036BFE0[64][2];
-u8 D_hd_code_8036C1E0[64];
-u8 D_hd_code_8036C220[64];
-f32 D_hd_code_8036C260[64];
-u8 D_hd_code_8036C360;
-u8* D_hd_code_8036C368[2][64][2];
+u8* D_hd_code_8036BFE0[64][2]; // texture strip pointers per sprite slot; proposed name: spriteTextures
+u8 D_hd_code_8036C1E0[64]; // strip count per sprite slot (also sets the sprite's size); proposed name: spriteStripCounts
+u8 D_hd_code_8036C220[64]; // flags per sprite slot (see file header); proposed name: spriteFlags
+f32 D_hd_code_8036C260[64]; // base scale per sprite slot; proposed name: spriteScales
+u8 D_hd_code_8036C360; // number of sprite slots in use; proposed name: spriteCount
+u8* D_hd_code_8036C368[2][64][2]; // quad vertex buffers for flag-4 sprites, [frame buffer][slot][main/shadow pass]; proposed name: spriteQuadVtxBufs
 // BSS End
 
 extern u8 D_803B9888;
 
+// Reset the sprite slot counter (frees all loaded sprites)
+// Proposed name: ResetHudSprites
 void func_hd_code_80272C50() {
   D_hd_code_8036C360 = 0;
 }
 
+// Load arg2 sprites into consecutive slots and return the first slot index.
+// arg0 = texture asset ids, arg1 = optional palette asset ids, arg3 = strips
+// per sprite, arg4 = sprite flags, arg5 = base scale. If palettes are given
+// (arg1 != 0), every slot loads the SAME texture set with a different 0x80-
+// byte palette - palette-swapped variants; otherwise each slot gets its own
+// consecutive texture set. Textures and palettes come from the asset loaders
+// func_hd_code_802A0B00/802A0EE0 into level bump allocator memory. Flag-4
+// sprites also reserve double-buffered quad vertex buffers.
+// Proposed name: LoadHudSprites
 u8 func_hd_code_80272C5C(u16* arg0, u16* arg1, u8 arg2, u8 arg3, u8 arg4, f32 arg5) {
   u8* sp3C;
   s32 sp38;
@@ -68,6 +91,15 @@ u8 func_hd_code_80272C5C(u16* arg0, u16* arg1, u8 arg2, u8 arg3, u8 arg4, f32 ar
   return sp28;
 }
 
+// Draw sprite slot arg1 at screen position (arg2, arg3) with alpha arg4,
+// draw flags arg5 (see file header) and scale arg6 (multiplied by the
+// sprite's base scale). Loads each 32-pixel strip and draws it strip by
+// strip: an optional first pass renders a translucent black drop shadow
+// (offset down-left) or a grayscale silhouette, then the main textured pass
+// with alpha fade (using the antialiased TEX_EDGE mode when fully opaque
+// RGBA16 and the game state allows it). Flag-4 sprites are drawn as quads
+// via func_hd_code_802742D8 instead of texture rectangles.
+// Proposed name: DrawHudSprite
 Gfx* func_hd_code_80272ED8(Gfx* arg0, u8 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, f32 arg6) {
     s32 sp104;
     Gfx* entry;
@@ -178,6 +210,12 @@ Gfx* func_hd_code_80272ED8(Gfx* arg0, u8 arg1, s16 arg2, s16 arg3, u8 arg4, u8 a
     return entry;
 }
 
+// Quad path for flag-4 sprites: fill a 4-vertex screen-space quad for strip
+// arg4 of sprite arg1 (position/texcoords scaled by arg7, vertically flipped
+// for flag-1 sprites) and draw it as two triangles. The vertex buffer is
+// picked by frame buffer index (D_hd_code_8035805C) and pass (arg8: 0 = main,
+// 1 = shadow), matching the buffers reserved in func_hd_code_80272C5C.
+// Proposed name: DrawHudSpriteQuad
 Gfx* func_hd_code_802742D8(Gfx* gfx, u8 arg1, s16 arg2, s16 arg3, s32 arg4, s32 arg5, s32 arg6, f32 arg7, u8 arg8) {
     s16* sp34;
     s32 sp30;
@@ -251,6 +289,9 @@ Gfx* func_hd_code_802742D8(Gfx* gfx, u8 arg1, s16 arg2, s16 arg3, s32 arg4, s32 
     return gfx;
 }
 
+// Set up the RDP for 2D HUD drawing: geometry and texturing off, no
+// perspective correction, 1-cycle opaque, bilinear filter
+// Proposed name: BeginHudDraw
 Gfx* func_hd_code_80274868(Gfx* gfx) {
   Gfx* entry = gfx;
 
@@ -265,6 +306,9 @@ Gfx* func_hd_code_80274868(Gfx* gfx) {
   return entry;
 }
 
+// Set up the RDP for shaded/textured 2D drawing (smooth shading and
+// texturing on, 1-cycle opaque)
+// Proposed name: BeginShadedHudDraw
 Gfx* func_hd_code_80274998(Gfx* gfx) {
   Gfx* entry = gfx;
 
@@ -278,6 +322,8 @@ Gfx* func_hd_code_80274998(Gfx* gfx) {
   return entry;
 }
 
+// End 2D HUD drawing: restore perspective-corrected texturing
+// Proposed name: EndHudDraw
 Gfx* func_hd_code_80274AA4(Gfx* gfx) {
   Gfx *entry = gfx;
 
@@ -287,6 +333,8 @@ Gfx* func_hd_code_80274AA4(Gfx* gfx) {
   return entry;
 }
 
+// Append a pipe sync only
+// Proposed name: HudPipeSync
 Gfx* func_hd_code_80274B08(Gfx* gfx) {
   Gfx* entry = gfx;
 
@@ -295,6 +343,9 @@ Gfx* func_hd_code_80274B08(Gfx* gfx) {
   return entry;
 }
 
+// Draw a blinking HUD sprite: visible 28 of every 40 frames, drawn with drop
+// shadow at full alpha between the 2D begin/end setup
+// Proposed name: DrawBlinkingHudSprite
 void func_hd_code_80274B40(Gfx** gfx, struct Model1* arg1, u8 arg2, s16 arg3, s32 arg4) {
   Gfx* entry = *gfx;
 
