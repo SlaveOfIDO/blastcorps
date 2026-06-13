@@ -2,10 +2,11 @@
 #include <ultra64.h>
 
 #include "common.h"
+#include "functions.h"
+#include "game_states.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
-#include "macros.h"
-#include "functions.h"
 #include "yoshi.h"
 
 // Proposed file name: hd.c (the original name - the assert strings in this
@@ -435,7 +436,7 @@ void Thread3(void* arg0) {
               }
             break;
           }
-          case 0x0000000000004000:
+          case WORLD_VIEW_GAME_STATE:
           {
             if (playerNumber != D_hd_code_80364AEA) {
               D_hd_code_80364AE9 = (u8) D_hd_code_80364AEA;
@@ -622,7 +623,7 @@ void Thread3(void* arg0) {
             }
             break;
           }
-          case 0x0000000000000800:
+          case IN_LEVEL_GAME_STATE:
           {
             func_hd_code_80255DC8();
             if (D_hd_code_80364A90 == 0x4000) {
@@ -898,7 +899,7 @@ void Thread3(void* arg0) {
             }
             break;
           }
-          case 0x0000000000040000:
+          case ENTER_NAME_GAME_STATE:
           {
             osSendMesg(&D_80219EF8, (OSMesg)((playerNumber << 0x10) | 0x14 | 0x01000000), OS_MESG_BLOCK);
             osRecvMesg(&D_80219F50, NULL, OS_MESG_BLOCK);
@@ -928,7 +929,7 @@ void Thread3(void* arg0) {
             D_hd_code_802E8BD8 = 1;
             break;
           }
-          case 0x0000100000000000:
+          case TUTORIAL_GAME_STATE:
           {
             func_hd_code_80299C0C();
             D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
