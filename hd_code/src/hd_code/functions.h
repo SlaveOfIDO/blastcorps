@@ -124,7 +124,7 @@ void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1);
 void func_hd_code_802917B0(Gfx**, struct Model1*);                        /* extern */
 void func_hd_code_80292EB8(Gfx**, struct Model1*);                        /* extern */
 void func_hd_code_80295120(Gfx**, struct Model1*);                        /* extern */
-s32 func_hd_code_802976E8(void**);                            /* extern */
+void func_hd_code_802976E8(Gfx**);                            /* extern */
 s32 func_hd_code_802A45D4(s32);                                 /* extern */
 void* func_hd_code_802CEEFC(void*, u8, void*, void*);       /* extern */
 void func_hd_code_802AC61C(s32, s32, s32, u8, s32);     /* extern */
@@ -156,7 +156,7 @@ void func_hd_code_80278E3C();                          /* extern */
 void func_hd_code_8028A42C();                          /* extern */
 void func_hd_code_8028AE88();                          /* extern */
 void func_hd_code_8028B3E0();                          /* extern */
-void func_hd_code_80297530(s32);                       /* extern */
+void func_hd_code_80297530(u8);                       /* extern */
 void func_hd_code_802A0700();                          /* extern */
 void LoadLevel(u32 arg0, void* arg1, s32* arg2);                         /* extern */
 void func_hd_code_80257234();                          /* extern */
