@@ -4,12 +4,19 @@
 #include "variables.h"
 #include "macros.h"
 
-extern u16 D_8036C770;
-extern f32 D_8036C774;
-u64 D_8036C778;
-extern s32 D_8036C780;
-extern u8 D_8036C784;
-extern f32 D_hd_code_802FA930;
+// Proposed file name: fade.c (the original name - the assert in
+// func_hd_code_80275270 references "fade.c")
+//
+// This file is the screen fade system: fading to black before a game state
+// transition (the new state is applied once fully black) and fading back in
+// when a state starts, drawn as a full-screen black rectangle.
+
+extern u16 D_8036C770; // message window id hidden during the fade, restored after fade-in; proposed name: fadeSavedWindow
+extern f32 D_8036C774; // fade-out alpha step per frame; proposed name: fadeOutSpeed
+u64 D_8036C778; // game state to enter once the fade-out completes (0 = not fading out); proposed name: fadeTargetState
+extern s32 D_8036C780; // frame the fade started; proposed name: fadeStartFrame
+extern u8 D_8036C784; // current fade overlay alpha; proposed name: fadeAlpha
+extern f32 D_hd_code_802FA930; // fade-in alpha step per frame; proposed name: fadeInSpeed
 extern u32 D_hd_code_803156C4;
 extern u8 D_hd_code_8035805C;
 extern u32 D_hd_code_80358060;
@@ -17,6 +24,12 @@ extern u64 D_hd_code_80364A90;
 extern u64 D_hd_code_80364A98;
 extern s32 levelno;
 
+// Per-frame fade update + draw: on frame 0 of certain game states start
+// fully black (hiding any open message window for later restore); while
+// fading out, ramp the alpha up and apply the pending game state once fully
+// black; while fading in, ramp it down and restore the saved window at zero.
+// Draws the overlay as a full-screen black rectangle.
+// Proposed name: UpdateDrawFade
 Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
     Gfx* entry;
 
@@ -60,6 +73,9 @@ Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
     return entry;
 }
 
+// Start a fade-out into game state arg0 over arg2 seconds (255 alpha /
+// (arg2 * 60 frames)); most targets also fade the music to silence
+// Proposed name: StartFadeTo
 void func_hd_code_80275270(u64 arg0, f32 arg2) {
   if ((D_8036C778 != 0)) {
     rmonPrintf(ASSERT_MESSAGE, "!postFadeLoop_done", "fade.c", 0x64);
@@ -74,6 +90,8 @@ void func_hd_code_80275270(u64 arg0, f32 arg2) {
   }
 }
 
+// Fade out into game state arg0 quickly (0.25 seconds)
+// Proposed name: StartFadeToFast
 void func_hd_code_80275390(u64 arg0) {
   func_hd_code_80275270(arg0, 0.25f);
 }
@@ -82,6 +100,8 @@ s32 areWeFading(void) {
   return D_8036C778 != 0 ? 1 : 0;
 }
 
+// Return 1 if a message window is saved for restore after the fade
+// Proposed name: HasFadeSavedWindow
 s32 func_hd_code_802753F8(void) {
   return D_8036C770 != 0 ? 1 : 0;
 }

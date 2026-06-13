@@ -3,7 +3,14 @@
 #include "structs.h"
 #include "macros.h"
 
+// Proposed file name: textured_quad.c
+//
+// Two generic helpers for drawing textured quads (billboards/effect sprites)
+// with arbitrary texture format and size.
 
+// Set up the RDP for textured quad drawing: smooth shading, LOD and
+// texturing on, 1-cycle
+// Proposed name: BeginTexturedQuads
 Gfx* func_hd_code_80257540(Gfx* gfx) {
   gDPPipeSync(gfx++);
   gDPSetCycleType(gfx++, G_CYC_1CYCLE);
@@ -15,6 +22,13 @@ Gfx* func_hd_code_80257540(Gfx* gfx) {
 }
 
 
+// Draw a 4-vertex textured quad. arg1 = vertex pointer, arg2 = texture
+// pointer, arg3 packs the texel size in the low byte (G_IM_SIZ_*) and the
+// format (G_IM_FMT_*) in the high byte, arg6 = use the z-buffer. Loads the
+// texture block for the given size, then picks the render/combine mode by
+// format: RGBA and IA draw as translucent clouds with alpha modulation,
+// I draws opaque with intensity modulation.
+// Proposed name: DrawTexturedQuad
 Gfx* func_hd_code_802575F4(Gfx* gfx, s32 arg1, s32 arg2, s16 arg3, s32 width, s32 height, s32 arg6) {
     s32 spBC;
 

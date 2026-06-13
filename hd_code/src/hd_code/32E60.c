@@ -3,6 +3,27 @@
 #include "structs.h"
 #include "variables.h"
 
+// Proposed file name: comms.c
+//
+// This file is the "communications window" - the animated talking-head
+// portrait that appears in a screen corner with a voice line and TV-static
+// effects - plus the driving-skill monitor that decides when the advisor
+// praises or criticizes the player. Skill samples ({speed ok, control ok,
+// vehicle, time}) are recorded into a 50-entry ring buffer
+// (D_8036C8D0, head/tail D_8036CB29/28, entries expire after 1000 frames);
+// tallies of good/bad samples trigger "DOING REALLY WELL", "USING WRONG
+// DIGGER" and "USING DIGGER INCORRECTLY" comms. The window plays 40x40
+// RGBA16 face frames (id lists D_hd_code_802FBDD0..) streamed into the
+// double buffer D_8036CB48, with radio-crackle static bursts via the NOISE
+// combiner.
+
+// Per-frame update (arg0 = frame counter): expire old skill samples, record
+// a new one when the vehicle code flagged it (D_8036CB2F, with metrics in
+// D_8036CB2A/2C/2E), retally and run the praise/criticism checks; at frame
+// 50 play the mission-start advisor clip; and in carrier levels fire the
+// scripted one-shot comms from the level data (D_803BE6FC list) as the
+// carrier passes each z threshold.
+// Proposed name: UpdateCommsAdvisor
 void func_hd_code_80277620(s32 arg0) {
     u8 sp2F;
     struct S_803BE6FC* sp28;
@@ -54,6 +75,9 @@ void func_hd_code_80277620(s32 arg0) {
     D_8036CB2F = 0;
 }
 
+// Praise check: per-vehicle thresholds of consecutive good samples trigger
+// the "doing really well" comms and reset the ring
+// Proposed name: CheckPraise
 void func_hd_code_802778FC(void) {
   switch (D_hd_code_80364456) {                   /* irregular */
     case 5:
@@ -94,6 +118,9 @@ void func_hd_code_802778FC(void) {
   }
 }
 
+// "USING WRONG DIGGER" check: enough good speed samples but almost no good
+// control samples
+// Proposed name: CheckWrongVehicle
 void func_hd_code_80277AE0(void) {
   switch(D_hd_code_80364456) {
     case 3:
@@ -110,6 +137,9 @@ void func_hd_code_80277AE0(void) {
   }
 }
 
+// "USING DIGGER INCORRECTLY" check: many bad speed samples with few good
+// control samples
+// Proposed name: CheckVehicleMisuse
 void func_hd_code_80277B84(void) {
   switch(D_hd_code_80364456) {
     case 3:
@@ -125,6 +155,8 @@ void func_hd_code_80277B84(void) {
   }
 }
 
+// Recompute the good/bad sample tallies (D_8036CB30..33) from the ring
+// Proposed name: TallySkillSamples
 void func_hd_code_80277C20(void) {
   u8 sp7 = D_8036CB28;
 
@@ -151,6 +183,9 @@ void func_hd_code_80277C20(void) {
   }
 }
 
+// Grade the current speed sample against the vehicle's threshold
+// (0 = good, 1 = bad)
+// Proposed name: GradeSpeedSample
 s16 func_hd_code_80277D34(void) {
   switch (D_8036CB2E) {                           /* irregular */
     case 5:
@@ -177,6 +212,9 @@ s16 func_hd_code_80277D34(void) {
   return 1;
 }
 
+// Grade the current control/handling sample against the vehicle's threshold
+// (0 = good, 1 = bad)
+// Proposed name: GradeControlSample
 s16 func_hd_code_80277E08(void) {
   switch (D_8036CB2E) {                           /* irregular */
     case 5:
@@ -203,6 +241,12 @@ s16 func_hd_code_80277E08(void) {
   return 1;
 }
 
+// Open the comms window: arg0 = face animation (0..4, selecting the frame
+// id list, frame count and rate), arg1 = play mode (0 = loop forward,
+// 1 = ping-pong), arg2 = number of loops, arg3 = voice clip to play.
+// Positions the face + border quads top-left or bottom-right (always
+// bottom-right outside demolition mode). Ignored if a window is already up.
+// Proposed name: ShowCommsWindow
 void func_hd_code_80277EDC(u8 arg0, u8 arg1, s32 arg2, s32 arg3) {
     u8 sp27;
 
@@ -309,11 +353,20 @@ void func_hd_code_80277EDC(u8 arg0, u8 arg1, s32 arg2, s32 arg3) {
     }
 }
 
+// Close the comms window immediately
+// Proposed name: HideCommsWindow
 void func_hd_code_80278318(void) {
   D_8036CB34 = 0;
 }
 
 // decomped by inspectredc
+// Draw the comms window: stream the current 40x40 face frame into the
+// double buffer, advance the animation (forward or ping-pong, counting
+// loops, closing when done), apply the TV-static effect - full static with
+// a radio crackle (sfx 0x69) while tuning in, then random short bursts -
+// and draw the face quad (2-cycle NOISE blend by the static alpha) plus the
+// translucent 32x32 RGBA32 border frame.
+// Proposed name: DrawCommsWindow
 void func_hd_code_80278324(Gfx** arg0, s32* arg1, u8 arg2) {
     Gfx* entry;
 

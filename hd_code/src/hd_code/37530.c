@@ -44,14 +44,32 @@ struct S_8036D3D0 {
 }; // Size: 0x1C
 
 
-extern struct S_802FC368 D_hd_code_802FC360[11];
-extern struct S_8036D3D0 D_8036D3D0[0x50];
+// Proposed file name: tracks.c
+//
+// This file is the tire track / skid mark system. Each frame a driving
+// vehicle records a track segment - both wheels' edge points, rotated by the
+// vehicle heading - into an 80-entry ring buffer (D_8036D3D0); consecutive
+// segments connect into triangle strips (a frame gap or the per-vehicle
+// strip length limit starts a new strip), drawn as black translucent
+// geometry with per-vertex alpha. Long strips get a culling bounding box
+// (gSPCullDisplayList). When the ring is nearly full the oldest segments
+// fade out and are retired. Per-level "no track" zones (D_hd_code_802FC360,
+// e.g. water) suppress recording.
+// Segment fields: unk0..unkA = left track edge points, unkC..unk16 = right
+// track edge points, unk18/19 = left/right alpha, unk1A = strip-break flag,
+// unk1B = single-track flag.
 
-extern u8 D_8036DC90;
-extern u8 D_8036DC91;
-extern u8 D_8036DC92;
-extern u32 D_8036DC94;
+extern struct S_802FC368 D_hd_code_802FC360[11]; // per-level no-track zone lists {first, last, level}; proposed name: noTrackZones
+extern struct S_8036D3D0 D_8036D3D0[0x50]; // track segment ring buffer; proposed name: trackSegments
 
+extern u8 D_8036DC90; // ring tail (oldest); proposed name: trackTail
+extern u8 D_8036DC91; // ring head (write position); proposed name: trackHead
+extern u8 D_8036DC92; // segments in the current strip; proposed name: trackStripLen
+extern u32 D_8036DC94; // frame of the last recorded segment (gap = new strip); proposed name: trackLastFrame
+
+// Is (arg0, arg1, arg2) inside one of this level's no-track zones (y range +
+// point-in-triangle tests)?
+// Proposed name: IsInNoTrackZone
 s32 func_hd_code_8027BCF0(s16 arg0, s16 arg1, s16 arg2) {
   s32 index = 0;
   u8 found = 0;
@@ -82,6 +100,8 @@ s32 func_hd_code_8027BCF0(s16 arg0, s16 arg1, s16 arg2) {
   return 0;
 }
 
+// Reset the tire track ring at level init
+// Proposed name: ResetTireTracks
 void func_hd_code_8027BE4C(void) {
   s32 pad;
 
@@ -91,6 +111,14 @@ void func_hd_code_8027BE4C(void) {
   D_8036DC94 = -1;
 }
 
+// Record one tire track segment: arg0 = strip length limit, arg1 = ground y,
+// (arg2, arg3)/(arg4, arg5) = left/right wheel offsets from the vehicle at
+// (arg6, arg7), arg8 = heading (0..4095), arg9 = track half width,
+// arg10/arg11 = the two edge alphas, arg12 = single-track flag. Rotates the
+// wheel offsets by the heading, computes the 4 edge points, starts a new
+// strip after a frame gap and splits strips at the length limit. Skipped
+// inside no-track zones.
+// Proposed name: AddTireTrackSegment
 void func_hd_code_8027BE7C(u8 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s32 arg6, s32 arg7, s16 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12) {
     f32 sp50[4][4];
     f32 sp4C;
@@ -168,6 +196,14 @@ void func_hd_code_8027BE7C(u8 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4, s16 
     }
 }
 
+// Draw all tire tracks: fade the oldest segments, then walk the ring strip
+// by strip building vertex runs (left track edges, then the right track
+// appended unless single-track), black prim color modulated by the
+// per-vertex shade alpha. Strips with enough vertices get an 8-corner
+// bounding box and gSPCullDisplayList so off-screen tracks are skipped. The
+// strip geometry goes into a sub-display list buffer called from the main
+// list.
+// Proposed name: DrawTireTracks
 void func_hd_code_8027C4C8(Gfx** gfx, struct Model1* arg1) {
     Gfx* entry;
     u8 sp9B;
@@ -433,6 +469,9 @@ loop_3:
     *gfx = entry;
 }
 
+// Write the 8 corner vertices of the bounding box (x1..z2) into the vertex
+// array at arg7, for gSPCullDisplayList
+// Proposed name: WriteCullBox
 void func_hd_code_8027D350(s16 x1, s16 y1, s16 z1, s16 x2, s16 y2, s16 z2, Vtx* arg6, s32 arg7) {
   arg6[arg7].v.ob[0] = x1;
   arg6[arg7].v.ob[1] = y1;
@@ -474,6 +513,10 @@ void func_hd_code_8027D350(s16 x1, s16 y1, s16 z1, s16 x2, s16 y2, s16 z2, Vtx* 
   arg6[arg7].v.ob[2] = z2;
 }
 
+// When the ring is nearly full (71+ segments), fade the oldest segment's
+// alphas toward zero and advance the tail once both reach 0 (checking the
+// next entry too so retirement keeps pace)
+// Proposed name: FadeOldTireTracks
 void func_hd_code_8027D5AC(void) {
   s32 sp4;
   u8 sp3;

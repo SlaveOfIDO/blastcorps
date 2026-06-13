@@ -5,33 +5,44 @@
 #include <PR/gbi.h>
 #include <PR/mbi.h>
 
+// Proposed file name: title.c
+//
+// This file covers the title screen (logo and title picture drawing with
+// fades and slides), the attract-demo caption scheduler, and the mission
+// success/failure end sequences (results jingle, announcer clips, failure
+// fade-to-black and the transitions to the results/retry states).
+
 // Data
-u32 D_hd_code_802E8CD0[2] = { 0x1E, 0x50 };
+u32 D_hd_code_802E8CD0[2] = { 0x1E, 0x50 }; // frames to hold the success fanfare before fading, normal vs carrier/demolition modes; proposed name: successHoldFrames
 
 // BSS Begin
-s16 D_hd_code_80366A00;
-s16 D_hd_code_80366A02;
-s16 D_hd_code_80366A04;
+s16 D_hd_code_80366A00; // title logo screen y; proposed name: titleLogoY
+s16 D_hd_code_80366A02; // title picture screen y; proposed name: titlePictureY
+s16 D_hd_code_80366A04; // attract demo playback length in frames (set by LoadDemo in 17210.c); proposed name: demoLength
 s32 pad_80366A08;
 s32 pad_80366A0C;
 s8 D_hd_code_80366A10;
 s8 D_hd_code_80366A11;
-u16 D_hd_code_80366A12;
-s16 D_hd_code_80366A14;
-s16 D_hd_code_80366A16;
-u8 D_hd_code_80366A18;
+u16 D_hd_code_80366A12; // title screen animation state (0 wait, 1 fade picture, 2 slide logo, 3 idle, 4 menu fade); proposed name: titleState
+s16 D_hd_code_80366A14; // title logo alpha; proposed name: titleLogoAlpha
+s16 D_hd_code_80366A16; // title picture / dim overlay alpha; proposed name: titlePictureAlpha
+u8 D_hd_code_80366A18; // set at frame 0x82 of an attract demo; proposed name: demoFlag82
 u8 pad_80366A20[0x180];
-struct S_802FA8B0* D_hd_code_80366BA0;
-s32 D_hd_code_80366BA4;
+struct S_802FA8B0* D_hd_code_80366BA0; // allocated quad vertices (20x79); proposed name: titleQuadVtx
+s32 D_hd_code_80366BA4; // allocated 0x780-byte double buffer; proposed name: titleWorkBuf
 s32 D_hd_code_80366BA8;
 s32 pad_80366BAC;
-s32 D_hd_code_80366BB0[2];
-u32 D_hd_code_80366BB8;
-u32 D_hd_code_80366BBC;
-struct S_80366BC0 D_hd_code_80366BC0;
-struct S_80366BC4 D_hd_code_80366BC4;
+s32 D_hd_code_80366BB0[2]; // title texture pointers: [0] = logo, [1] = title picture; proposed name: titleTextures
+u32 D_hd_code_80366BB8; // frame the success/failure sequence started; proposed name: endSequenceStart
+u32 D_hd_code_80366BBC; // frame the attract demo playback ended (drives the fade-out); proposed name: demoEndFrame
+struct S_80366BC0 D_hd_code_80366BC0; // success sequence state (unk0 = latch, unk2 = message id); proposed name: successSeq
+struct S_80366BC4 D_hd_code_80366BC4; // unk0 = results music playing, unk1 = failure sound played; proposed name: endSeqFlags
 // BSS end
 
+// Attract-demo caption scheduler: at fixed frame counts within each demo
+// (D_hd_code_802E8BEC = demo index) show the matching caption message
+// windows (ids 0x8025..0x8034)
+// Proposed name: UpdateDemoCaptions
 void func_hd_code_8025C5D0(void) {
     switch (D_hd_code_802E8BEC) {
     case 0:
@@ -112,6 +123,12 @@ void func_hd_code_8025C5D0(void) {
     }
 }
 
+// Title/attract overlay: during attract demo playback, once the demo has run
+// past its length fade the screen to black (full-screen shade quad with
+// alpha ramping ~2.1 per frame, then a solid fill) while still drawing the
+// vehicles; otherwise on the title menu draw the title screen
+// (func_hd_code_8025D2B4).
+// Proposed name: DrawTitleOverlay
 Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
     s32 sp6C;
     u32 sp68;
@@ -176,6 +193,9 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
     return entry;
 }
 
+// Allocate and initialize the title quad vertices (20x79, colors zeroed)
+// and the work buffer from the level allocator
+// Proposed name: InitTitleBuffers
 void func_hd_code_8025CE74(void) {
   D_hd_code_80366BA0 = (struct S_802FA8B0*)D_hd_code_80358070;
   D_hd_code_80358070 += 0x40;
@@ -227,6 +247,9 @@ void func_hd_code_8025CE74(void) {
   D_hd_code_80358070 += 0x780;
 }
 
+// DMA a title texture into level memory: 0 = the logo ("titlelogo_usa"),
+// 1 = the title picture ("titlepicture_usa")
+// Proposed name: LoadTitleTexture
 void func_hd_code_8025D0B0(u8 arg0) {
   s32* sp34;
   s32 sp30;
@@ -247,6 +270,10 @@ void func_hd_code_8025D0B0(u8 arg0) {
   D_hd_code_80358070 = &D_hd_code_80358070[sp30];
 }
 
+// Set up the title screen for the pending game state: attract/title states
+// load both textures and set the initial positions/alphas and animation
+// state; the name-entry and world-map states only set the state/alpha
+// Proposed name: InitTitleScreen
 void func_hd_code_8025D184(void) {
   if ((D_hd_code_80364A98 & 2)) {
     func_hd_code_8025D0B0(1);
@@ -275,6 +302,12 @@ void func_hd_code_8025D184(void) {
   D_hd_code_80366A00 = 0x10;
 }
 
+// Draw the title screen. Animates the logo alpha up/down depending on the
+// game state and steps the title animation: wait 60 frames, fade the title
+// picture out, slide the logo up, idle (state 4 fades for menus). Draws the
+// 150x150 title picture and the 280x63 logo in 31-pixel tile strips, the
+// logo with a drop-shadow pass at half alpha before the main pass.
+// Proposed name: DrawTitleScreen
 Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
     Gfx* entry;
     s32 spC0;
@@ -414,6 +447,9 @@ Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
     return entry;
 }
 
+// Load the perspective matrices and draw all three vehicle model passes
+// (used for the attract/title vehicle showcase)
+// Proposed name: DrawVehiclePasses
 void func_hd_code_8025E1E0(Gfx** arg0) {
   Gfx* entry = *arg0;
 
@@ -427,6 +463,13 @@ void func_hd_code_8025E1E0(Gfx** arg0) {
   *arg0 = entry;
 }
 
+// Mission success sequence: on the first frame after success, pick and play
+// the results music (results tune normally; special jingles for levels 40
+// and 50 when not yet completed), show the success message window
+// (id | 0xA000) and play a random announcer clip; once the message is up,
+// fire a second voice line; and when the jingle ends (or the hold timer
+// expires) fade to the results state 0x08000000.
+// Proposed name: UpdateMissionSuccess
 void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
     Gfx* sp24;
 
@@ -495,6 +538,13 @@ block_32:
     *arg0 = sp24;
 }
 
+// Mission failure sequence: on the first failed frame stop the engine SFX,
+// play the failure sound (0x31), fade the music out and show the
+// appropriate message (special handling for levels 49 and 50). After 180
+// frames play sound 0x32 and draw the full-screen fade quad, ramping its
+// vertex alpha to white-out over 90 frames, then transition to retry (0x40),
+// the results state, or the next attract demo.
+// Proposed name: UpdateMissionFailure
 void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
     Gfx* entry;
     u32 sp60;

@@ -8,34 +8,43 @@ extern s32 D_hd_code_80303B00;
 extern s32 D_hd_code_80303B10;
 extern s32 D_hd_code_80303B24;
 
+// Proposed file name: utils2.c (the original name - the assert prints in
+// this file reference "utils2.c")
+//
+// A grab-bag utility file: the vehicle auto-enter region check, two
+// cubic-spline path systems (a simple scripted object path, and the aircraft
+// landing flight paths with altitude callouts and success/abort branches
+// used on the shuttle/jumbo levels), angle/distance/copy helpers, the two
+// random number generators (one time-seeded, one deterministically seeded
+// for replay consistency), and the contextual hint message triggers.
+
 // BSS
 u8 D_hd_code_8036AFB0[0x900]; // TODO: what is this? only referenced in later code
-u8 D_hd_code_8036B8B0;
-s32 D_hd_code_8036B8B4;
-s32 D_hd_code_8036B8B8;
-s32 D_hd_code_8036B8BC;
-u8 D_hd_code_8036B8C0;
-f32 D_hd_code_8036B8C8[4][4];
-s32 D_hd_code_8036B908;
-u8 D_hd_code_8036B90C;
-f32 D_hd_code_8036B910[4][4];
-s32 D_hd_code_8036B950;
-u8 D_hd_code_8036B954;
-u8 D_hd_code_8036B955;
-u8 D_hd_code_8036B958[4];
-u8 D_hd_code_8036B95C;
-u8 D_hd_code_8036B960[4];
-s8 D_hd_code_8036B964;
-u8 D_hd_code_8036B965;
-u8 D_hd_code_8036B966;
-s32 D_hd_code_8036B968;
-s32 D_hd_code_8036B96C;
-s32 D_hd_code_8036B96C;
-u8 D_hd_code_8036B970;
-u8 D_hd_code_8036B971;
+u8 D_hd_code_8036B8B0; // scripted object path active for this level; proposed name: objPathActive
+s32 D_hd_code_8036B8B4; // scripted path output x/y/z; proposed name: objPathX
+s32 D_hd_code_8036B8B8; // proposed name: objPathY
+s32 D_hd_code_8036B8BC; // proposed name: objPathZ
+u8 D_hd_code_8036B8C0; // scripted path config index; proposed name: objPathCfgIdx
+f32 D_hd_code_8036B8C8[4][4]; // scripted path spline basis matrix; proposed name: objPathBasis
+s32 D_hd_code_8036B908; // scripted path t within segment (0..1000); proposed name: objPathT
+u8 D_hd_code_8036B90C; // scripted path segment index; proposed name: objPathSegment
+f32 D_hd_code_8036B910[4][4]; // flight path spline basis matrix; proposed name: flightBasis
+s32 D_hd_code_8036B950; // flight path t within segment (0..1000); proposed name: flightT
+u8 D_hd_code_8036B954; // flight path segment index; proposed name: flightSegment
+u8 D_hd_code_8036B955; // flight path config index; proposed name: flightCfgIdx
+u8 D_hd_code_8036B958[4]; // fallback segment branch indices; proposed name: flightAltSegments
+u8 D_hd_code_8036B95C; // flight branch: 0 = landing, 1 = abort; proposed name: flightBranch
+u8 D_hd_code_8036B960[4]; // segment window for the current evaluation; proposed name: flightSegWindow
+s8 D_hd_code_8036B964; // landing aborted flag; proposed name: flightAborted
+u8 D_hd_code_8036B965; // final-approach checkpoint reached (also checked by the camera in 00000.c); proposed name: flightCheckpoint
+u8 D_hd_code_8036B966; // flight path variant (0 when entering via game state 0x800); proposed name: flightVariant
+s32 D_hd_code_8036B968; // RNG seed 1, time-seeded; proposed name: randSeed
+s32 D_hd_code_8036B96C; // RNG seed 2, deterministically seeded (replay-safe); proposed name: randSeedFixed
+u8 D_hd_code_8036B970; // "vehicle nearby" hint shown; proposed name: hintVehicleNear
+u8 D_hd_code_8036B971; // pending "level unfinished" hint; proposed name: hintUnfinished
 s32 D_hd_code_8036B974;
-u8 D_hd_code_8036B978;
-u8 D_hd_code_8036B979;
+u8 D_hd_code_8036B978; // previous vehicle id (for hint logic); proposed name: hintPrevVehicle
+u8 D_hd_code_8036B979; // last nonzero vehicle id; proposed name: hintLastVehicle
 
 extern u8 D_hd_code_8036C7CC;
 
@@ -49,17 +58,26 @@ extern u8 D_hd_code_803FCD70;
 extern u8 D_hd_code_803FCD75;
 
 // Data
+// Vehicle auto-enter regions: {level, vehicle id, two triangles (x/z pairs)
+// forming the region, pickup distance}; only one entry (level 10)
+// Proposed name: autoEnterRegions
 struct S_802F3C10 D_hd_code_802F3C10[1] = {
   {0x0A, 0x07, 0x09DC, 0x0DB4, 0x0BCF, 0x0D63,
 0x0BCF, 0x0CFF, 0x09DC, 0x0CCD, 0x1F40}
 };
 
+// Scripted object path configs: {level, spline tension, speed scale, point
+// count, ...} for levels 0x26, 0x31, 0x2F
+// Proposed name: objPathConfigs
 struct S_802F3C24 D_hd_code_802F3C24[3] = {
   {0x26, 0.5f, 0x04, 0x08, 0x00, 0x00},
   {0x31, 0.5f, 0x01, 0x26, 0x00, 0x00},
   {0x2F, 0.5f,  0x05, 0x26, 0x00, 0x00}
 };
 
+// Scripted object path control points: {level, point index, pad, x, y, z,
+// speed factor, ...}
+// Proposed name: objPathPoints
 struct S_802F3C48 D_hd_code_802F3C48[90] = {
   {0x26, 0x00, 0x00, 0x00C8, 0x0320, 0x0000, 0x03, 0x00, 0x00, 0x00},
   {0x26, 0x01, 0x00, 0x00C8, 0x0320, 0x0000, 0x03, 0x00, 0x00, 0x00},
@@ -153,6 +171,9 @@ struct S_802F3C48 D_hd_code_802F3C48[90] = {
   {0x2F, 0x27, 0x00, 0x00E1, 0x0096, 0xFF1F, 0x05, 0x00, 0x00, 0x00}
 };
 
+// Aircraft flight path configs: {level, variant, pad, ?, spline tension,
+// ?, minimum altitude (-1 = none), speed scale, segment counts per branch}
+// Proposed name: flightConfigs
 struct S_802F41F0 D_hd_code_802F41E8[3] = {
   { 0x32, 0x01, 0x00, 0x0000, 0.5f, 0x00B4, 0xFFFF, 0x03, 0x14, 0x18, 0x00},
   {0x32, 0x00, 0x00, 0x0000, 0.5f, 0x0000, 0xFFFF, 0x04, 0x05, 0x00, 0x00},
@@ -160,6 +181,10 @@ struct S_802F41F0 D_hd_code_802F41E8[3] = {
 };
 
 // till 802f46bc
+// Aircraft flight path control points: {level, variant, point index, x, y,
+// z, roll, yaw, pitch, speed factor, branch, event id at this point, ...}.
+// Events fire the altitude callouts and the landing/abort branches.
+// Proposed name: flightPoints
 struct S_802F4224 D_hd_code_802F4224[0x31] = {
   {
     0x00000032, 0x00, 0x00, 0x2328, 0x0320, 0x03E8, 0x0000, 0x010E, 0x014A, 0x01,
@@ -360,6 +385,10 @@ struct S_802F4224 D_hd_code_802F4224[0x31] = {
 };
 
 
+// Vehicle auto-enter check: when on foot in a level with an auto-enter
+// region, if the region's vehicle is inside its area (two point-in-triangle
+// tests) and the player is close enough to it, request entering it
+// Proposed name: CheckVehicleAutoEnter
 void func_hd_code_802683E0(void) {
   s32 sp3C;
   u8 sp3B;
@@ -395,6 +424,9 @@ void func_hd_code_802683E0(void) {
   }
 }
 
+// Init the scripted object path for level arg0 (if it has one): build the
+// cubic spline basis matrix from the per-level tension and reset t/segment
+// Proposed name: InitObjectPath
 void func_hd_code_80268664(s32 arg0) {
   f32 sp4;
 
@@ -431,6 +463,11 @@ void func_hd_code_80268664(s32 arg0) {
   }
 }
 
+// Per-frame scripted object path update: find the 4 control points around
+// the current segment, spline-interpolate the position into
+// D_hd_code_8036B8B4/B8/BC, and advance t by the per-level speed times the
+// interpolated per-point speed factor (paused while the mission is over)
+// Proposed name: UpdateObjectPath
 void func_hd_code_802688C4(s32 arg0) {
     s32 sp54;
     s32 sp50;
@@ -478,6 +515,9 @@ void func_hd_code_802688C4(s32 arg0) {
     }
 }
 
+// Evaluate the object-path cubic spline: control points arg0..arg3, powers
+// of t in arg4..arg6, using basis matrix D_hd_code_8036B8C8
+// Proposed name: EvalObjectPathSpline
 f32 func_hd_code_80268D84(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
   s32 spC;
   s32 sp8;
@@ -492,6 +532,9 @@ f32 func_hd_code_80268D84(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
   return spC * arg6 + arg5 * sp8 + arg4 * sp4 + sp0;
 }
 
+// Return 1 if level arg0 has an aircraft flight path (also exports its
+// aircraft type byte)
+// Proposed name: HasFlightPath
 s32 func_hd_code_80268EE8(s32 arg0) {
   s32 sp4 = 0;
 
@@ -505,6 +548,11 @@ s32 func_hd_code_80268EE8(s32 arg0) {
   return 0;
 }
 
+// Init the aircraft flight path for the current level: select the config by
+// level and variant (variant 0 when entering through game state 0x800),
+// build the spline basis from its tension, set the path scale and reset all
+// progress/branch state
+// Proposed name: InitFlightPath
 void func_hd_code_80268F54(void) {
   u8 sp7;
   f32 sp0;
@@ -552,6 +600,16 @@ void func_hd_code_80268F54(void) {
   D_hd_code_8036B965 = 0;
 }
 
+// Per-frame aircraft flight path update: spline-interpolate the aircraft
+// position (D_hd_code_803FCD48/4C/50) and orientation (yaw/pitch/roll in
+// 0..4095 units, with angle unwrapping), clamp to the configured minimum
+// altitude, and advance t. At each control point fire its event: end of the
+// landing branch = mission success (or a state change for the sequence
+// variant), end of the abort branch = failure; event 1 checks whether all
+// buildings are destroyed and diverts to the abort branch if not; other
+// events show the cockpit callouts ("3000 FT!", "ON FINAL APPROACH!",
+// "SUCCESSFUL LANDING!", "LANDING ABORTED!", "DITCHING IN SEA!").
+// Proposed name: UpdateFlightPath
 void func_hd_code_80269258(void) {
     s32 sp6C;
     s32 sp68;
@@ -761,6 +819,8 @@ void func_hd_code_80269258(void) {
     }
 }
 
+// Evaluate the flight-path cubic spline (basis matrix D_hd_code_8036B910)
+// Proposed name: EvalFlightSpline
 f32 func_hd_code_8026A184(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
   s32 spC;
   s32 sp8;
@@ -775,6 +835,9 @@ f32 func_hd_code_8026A184(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
   return spC * arg6 + arg5 * sp8 + arg4 * sp4 + sp0;
 }
 
+// Unwrap *arg1 (degrees) to within 180 of arg0, for smooth angle
+// interpolation
+// Proposed name: UnwrapAngle
 void func_hd_code_8026A2E8(f32 arg0, f32* arg1) {
   f32 sp4 = *arg1 - arg0;
 
@@ -785,6 +848,8 @@ void func_hd_code_8026A2E8(f32 arg0, f32* arg1) {
   }
 }
 
+// Convert a non-negative integer to a decimal ASCII string
+// Proposed name: IntToString
 void func_hd_code_8026A378(s32 arg0, s8* arg1) {
   s32 sp4;
   u8 sp3;
@@ -813,6 +878,9 @@ void func_hd_code_8026A378(s32 arg0, s8* arg1) {
   *arg1 = 0;
 }
 
+// Build a matrix that rotates around the point (arg0, arg1, arg2) by roll
+// arg3 (about z) then yaw arg4 (about y), angles in 0..4095 units
+// Proposed name: BuildPivotRotationMtx
 void func_hd_code_8026A454(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, Mtx* arg5) {
   f32 sp60[4][4];
   f32 sp20[4][4];
@@ -827,6 +895,8 @@ void func_hd_code_8026A454(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, Mtx
   guMtxF2L(sp60, arg5);
 }
 
+// Copy arg2 bytes in 8-byte chunks (used all over for Vtx copies)
+// Proposed name: CopyU64s
 void func_hd_code_8026A5CC(u64* arg0, u64* arg1, s32 arg2) {
   register s32 a3;
 
@@ -841,6 +911,8 @@ void func_hd_code_8026A5CC(u64* arg0, u64* arg1, s32 arg2) {
   }
 }
 
+// 2D distance between (arg0, arg1) and (arg2, arg3)
+// Proposed name: Distance2D
 s32 func_hd_code_8026A610(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
   s64 sp30;
   s64 sp28;
@@ -853,6 +925,8 @@ s32 func_hd_code_8026A610(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
   return (s32) sqrtf(sp30 + sp28);
 }
 
+// 3D distance between (arg0, arg1, arg2) and (arg3, arg4, arg5)
+// Proposed name: Distance3D
 s32 func_hd_code_8026A6F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
   s64 sp38;
   s64 sp30;
@@ -868,6 +942,8 @@ s32 func_hd_code_8026A6F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
   return sqrtf(sp38 + sp30 + sp28);
 }
 
+// Random integer in [arg0, arg1] from the time-seeded LCG
+// Proposed name: RandRange
 s32 func_hd_code_8026A828(s32 arg0, s32 arg1) {
   f32 sp4;
 
@@ -877,10 +953,15 @@ s32 func_hd_code_8026A828(s32 arg0, s32 arg1) {
   return sp4 + 0.5;
 }
 
+// Seed the time-based RNG from the CPU cycle counter
+// Proposed name: SeedRand
 void func_hd_code_8026A8BC(void) {
   D_hd_code_8036B968 = (s32)osGetCount();
 }
 
+// Random integer in [arg0, arg1] from the deterministically seeded LCG
+// (constant seed each level, so replays stay in sync)
+// Proposed name: RandRangeFixed
 s32 func_hd_code_8026A8E0(s32 arg0, s32 arg1) {
   f32 sp4;
 
@@ -890,10 +971,14 @@ s32 func_hd_code_8026A8E0(s32 arg0, s32 arg1) {
   return sp4 + 0.5;
 }
 
+// Reset the deterministic RNG to its constant seed
+// Proposed name: SeedRandFixed
 void func_hd_code_8026A974(void) {
   D_hd_code_8036B96C = 0x9BA0D;
 }
 
+// Reset the hint message state at level init
+// Proposed name: ResetHints
 void func_hd_code_8026A988(void) {
   D_hd_code_8036B970 = 0;
   D_hd_code_8036B971 = 0;
@@ -902,6 +987,12 @@ void func_hd_code_8026A988(void) {
   D_hd_code_8036B979 = 0;
 }
 
+// Per-frame contextual hint triggers: the "another vehicle is nearby" hint
+// when driving within 100 units of an enterable vehicle (rearmed once it is
+// 400+ away), level-specific hints (levels 0, 0x12 regions, vehicle 7 in
+// level 0), and the "this level still has more to do" hints after finishing
+// without a medal
+// Proposed name: UpdateHints
 void func_hd_code_8026A9B4(void) {
     struct UnknownStruct_803644BC* sp3C;
     u8 sp3B;

@@ -3,6 +3,20 @@
 #include "structs.h"
 #include "variables.h"
 
+// Proposed file name: target_markers.c
+//
+// This file draws the pulsing corner-bracket markers around the current
+// target building and contains the world-to-screen projection helper used
+// throughout the HUD. Key variables (declared elsewhere): D_8036C790 = the
+// current target's 4 corner points (fed by the building system),
+// D_8036C794/D_8036C798 = the locked-on target and its id, D_8036C7A0[10] =
+// recently marked targets (not re-marked until they leave the screen),
+// D_8036C7C8 = distance to the locked target (drives the green-to-red
+// color), D_hd_code_802FAD40/44/48 = the bracket pulse animation, and
+// D_hd_code_8036C7CC = how many marker points were on screen this frame.
+
+// Reset the marked-target list at level init
+// Proposed name: ResetTargetMarkers
 void func_hd_code_80275430(void)
 {
   s32 sp4;
@@ -15,6 +29,14 @@ void func_hd_code_80275430(void)
   D_hd_code_8036C7CC = 0;
 }
 
+// Target marker update + draw: shows the one-time "path blocked" hint, then
+// locks onto the current target building when its projected bounding box
+// comes on screen (and it hasn't been marked recently). While locked,
+// projects the 4 corners each frame, colors the brackets by distance (green
+// far, red near, like the carrier arrow), draws 4 corner quads pulsing in
+// and out (5 half-cycles, then the marker is dismissed), and finally prunes
+// off-screen entries from the marked list.
+// Proposed name: UpdateDrawTargetMarkers
 void func_hd_code_80275478(struct Model1* arg0, Gfx** arg1, s32 arg2) {
     s16 sp76;
     s16 sp74;
@@ -189,6 +211,9 @@ void func_hd_code_80275478(struct Model1* arg0, Gfx** arg1, s32 arg2) {
     *arg1 = entry;
 }
 
+// Set up the RDP for marker drawing and load the 32x32 IA8 marker texture
+// (D_hd_code_802FA940); arg1 != 0 skips the ortho matrix load
+// Proposed name: BeginMarkerDraw
 Gfx* func_hd_code_80275DA4(Gfx* gfx, u8 arg1) {
   Gfx* entry;
 
@@ -209,10 +234,16 @@ Gfx* func_hd_code_80275DA4(Gfx* gfx, u8 arg1) {
   return entry;
 }
 
+// Append a flat-colored marker quad (single color for all corners)
+// Proposed name: AddMarkerQuad
 Gfx *func_hd_code_80276080(struct Model1* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10) {
   return func_hd_code_80276130(arg0, (s32) (u8) arg1, arg2, arg3, arg4, arg5, arg6, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10);
 }
 
+// Fill a 4-vertex screen-space quad at (arg3, arg4) +- (arg5, arg6) with
+// per-corner colors; arg1 (0..3) selects one of four texcoord orientations
+// so the same texture faces each screen edge. Returns the next vertex index.
+// Proposed name: FillMarkerQuad
 s32 func_hd_code_80276130(struct Model1* arg0, u8 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17, u8 arg18, u8 arg19, u8 arg20, u8 arg21, u8 arg22) {
 
     switch (arg1) {                              /* irregular */
@@ -313,6 +344,9 @@ s32 func_hd_code_80276130(struct Model1* arg0, u8 arg1, s32 arg2, s32 arg3, s32 
     return arg2;
 }
 
+// Drop entries from the marked-target list once their box is fully off
+// screen, allowing them to be marked again later
+// Proposed name: PruneMarkedTargets
 void func_hd_code_8027656C(struct Model1* arg0) {
     s32 sp5C;
     s32 sp58;
@@ -386,6 +420,8 @@ void func_hd_code_8027656C(struct Model1* arg0) {
     }
 }
 
+// Add the locked target to the marked list
+// Proposed name: MarkCurrentTarget
 void func_hd_code_8027684C(void) {
     s32 i = 0;
 
@@ -398,6 +434,8 @@ void func_hd_code_8027684C(void) {
     }
 }
 
+// Is the current target already in the marked list?
+// Proposed name: IsTargetMarked
 s32 func_hd_code_802768A8(void) {
   s32 i;
 
@@ -411,6 +449,12 @@ s32 func_hd_code_802768A8(void) {
   return 0;
 }
 
+// Project a world point to screen coordinates: through up to three optional
+// extra matrices (arg6..arg8), then the modelview and projection, perspnorm
+// scale, w divide and viewport transform (arg9 = resolution scale, normally
+// 1.0). Returns (0x4000, 0x4000) for points behind the camera; results are
+// clamped to +-16384.
+// Proposed name: WorldToScreen
 void func_hd_code_8027690C(struct Model1* arg0, f32 arg1, f32 arg2, f32 arg3, s16* arg4, s16* arg5, s32 arg6, s32 arg7, s32 arg8, f32 arg9) {
   f32 sp4C = 1.0f;
   if (arg8 != 0) {
@@ -452,6 +496,9 @@ void func_hd_code_8027690C(struct Model1* arg0, f32 arg1, f32 arg2, f32 arg3, s1
   *arg5 = arg2;
 }
 
+// Multiply the homogeneous point (arg1, arg2, arg3, arg4) by fixed-point
+// matrix arg0, returning x/y/z/w
+// Proposed name: TransformPoint
 void func_hd_code_80276D1C(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32* arg5, f32* arg6, f32* arg7, f32* arg8) {
   f32 sp18[4][4];
 
@@ -463,6 +510,11 @@ void func_hd_code_80276D1C(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f3
   *arg8 = sp18[0][3] * arg1 + sp18[1][3] * arg2 + sp18[2][3] * arg3 + sp18[3][3];
 }
 
+// Draw a yellow edge-of-screen indicator for the world position
+// (arg3, arg4, arg5) when it is off screen: project it, clamp the result to
+// the screen border and draw a marker quad rotated by the camera heading
+// (used in missile view to point back at the player's vehicle)
+// Proposed name: DrawOffscreenIndicator
 void func_hd_code_80276E50(Gfx** arg0, struct Model1* arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s16 sp10E;
     s16 sp10C;
@@ -534,6 +586,9 @@ void func_hd_code_80276E50(Gfx** arg0, struct Model1* arg1, u8 arg2, s32 arg3, s
     *arg0 = entry;
 }
 
+// Allocate two 0xC80-byte double buffers (D_8036CB48) for the following
+// effect system and reset its counters
+// Proposed name: InitEffectBuffers
 void func_hd_code_802775C0() {
   D_8036CB34 = 0;
 

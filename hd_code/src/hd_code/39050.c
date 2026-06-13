@@ -78,6 +78,17 @@ struct S_802FC3F0 {
   u8 pad33;
 }; // Size: 0x34
 
+// Proposed file name: level_fx.c
+//
+// A bundle of per-level world effects: bridges that sag under vehicle weight
+// (sine-profile vertex deformation scaled by a per-vehicle weight factor),
+// the animated water surface (a double-buffered grid whose vertex heights
+// are the sum of two sine waves, textured with three cross-fading water
+// textures or an env-mapped single texture), drifting debris quads, a hidden
+// touchable pickup, the flashing warning icon for hover vehicles, and the
+// expanding red shockwave + screen tint of the nuclear explosion when the
+// missile carrier detonates.
+
 void func_hd_code_8027DA10(s32, s32, s32);                   /* extern */
 void func_hd_code_802C1F30(s32, s32, s32, s32, s32);     /* extern */
 f32 func_hd_code_8027DB5C(s32*, s32*, s32);             /* extern */
@@ -129,6 +140,10 @@ extern u8 D_8036E4D3;
 extern s32 D_8036E4D4;
 
 
+// Per-frame bridge sag for the levels that have flexible bridges (0, 4, 15,
+// 16, 20): apply the weight-based sine deformation to each bridge geometry
+// group, with per-level maximum depths (<< 16 fixed point)
+// Proposed name: UpdateBridgeSag
 void func_hd_code_8027D810(s32 arg0) {
   switch (arg0) {
     case 0:
@@ -152,6 +167,9 @@ void func_hd_code_8027D810(s32 arg0) {
   }
 }
 
+// Animate a traveling sine wave along bridge group arg0 (arg1 segments,
+// amplitude arg2), advancing the wave phase each call
+// Proposed name: UpdateBridgeWave
 void func_hd_code_8027D8F4(s32 arg0, s32 arg1, s32 arg2) {
   s32 sp34;
   s32 sp30;
@@ -171,6 +189,10 @@ void func_hd_code_8027D8F4(s32 arg0, s32 arg1, s32 arg2) {
   D_hd_code_802FC51C++;
 }
 
+// Sag bridge geometry group arg0: depth = half-sine profile across its arg1
+// segments, scaled by the heaviest vehicle currently on the bridge (up to
+// arg2 max depth)
+// Proposed name: ApplyBridgeSag
 void func_hd_code_8027DA10(s32 arg0, s32 arg1, s32 arg2) {
   f32 sp64;
   f32 sp60;
@@ -196,6 +218,11 @@ void func_hd_code_8027DA10(s32 arg0, s32 arg1, s32 arg2) {
   }
 }
 
+// Compute the bridge sag amount: for every loaded vehicle standing on the
+// bridge quad, weight = its mass factor times how close it is to the middle
+// of the span (0 at the ends, 1 in the middle); return the maximum times
+// arg2
+// Proposed name: ComputeBridgeSag
 f32 func_hd_code_8027DB5C(s32* arg0, s32* arg1, s32 arg2) {
   s32 sp2C;
   f32 sp28;
@@ -230,6 +257,9 @@ f32 func_hd_code_8027DB5C(s32* arg0, s32* arg1, s32 arg2) {
   return (f32) arg2 * sp28;
 }
 
+// Fractional position (0..1) of point (arg0, arg1) along the bridge span,
+// computed by intersecting lines through the span's end edges
+// Proposed name: GetBridgeFraction
 f32 func_hd_code_8027DD88(s32 arg0, s32 arg1, s32* arg2, s32* arg3) {
   f32 sp7C;
   f32 sp78;
@@ -300,6 +330,8 @@ f32 func_hd_code_8027DD88(s32 arg0, s32 arg1, s32* arg2, s32* arg3) {
   return sp44;
 }
 
+// Is the point inside the bridge quad (two point-in-triangle tests)?
+// Proposed name: IsOnBridge
 s32 func_hd_code_8027E164(s32 arg0, s32 arg1, struct S_802AC4C4* arg2, struct S_802AC4C4* arg3) {
   if (func_hd_code_802AC4C4(arg0, arg1, arg2->unk0, arg3->unk0, arg2->unk4, arg3->unk4, arg2->unk8, arg3->unk8) != 0) {
     return 1;
@@ -310,6 +342,8 @@ s32 func_hd_code_8027E164(s32 arg0, s32 arg1, struct S_802AC4C4* arg2, struct S_
   return 0;
 }
 
+// Per-vehicle weight factor for the bridge sag ("DIGGER WEIGHT NOT SET")
+// Proposed name: GetVehicleWeight
 f32 func_hd_code_8027E228(u8 arg0) {
   switch (arg0) {
     case 0x0:
@@ -346,6 +380,14 @@ f32 func_hd_code_8027E228(u8 arg0) {
   }
 }
 
+// Init the animated water surface for level arg0 (config table
+// D_hd_code_802FC3F0: grid size, area bounds, base level + two wave
+// amplitudes, wave periods/speeds, env-map flag, texture ids, render modes):
+// allocate the double-buffered grid vertices, cull-box vertex arrays and
+// display list buffers, load the water texture(s) (three cycling textures
+// unless env-mapped), and fill in the grid x/z positions with zig-zag
+// texcoords.
+// Proposed name: InitWaterSurface
 void func_hd_code_8027E344(s32 arg0) {
     s32 sp44;
     s32 sp40;
@@ -435,6 +477,10 @@ void func_hd_code_8027E344(s32 arg0) {
     D_8036DCB0 = 0;
 }
 
+// Animate the water (frame buffer arg0): advance the wave time and the
+// texture cross-fade, then recompute every grid vertex height as the sum of
+// an x-based and a z-based sine wave
+// Proposed name: UpdateWaterSurface
 void func_hd_code_8027E9B8(u8 arg0) {
   s32 sp34;
   s32 sp30;
@@ -472,6 +518,10 @@ void func_hd_code_8027E9B8(u8 arg0) {
   }
 }
 
+// Sample the water surface height at world (arg0, arg1) into *arg2 using
+// the same two sine waves; returns 0 (with the base level) outside the
+// water area or when the level has no water
+// Proposed name: GetWaterHeight
 u8 func_hd_code_8027EED8(s16 arg0, s16 arg1, s16* arg2) {
   f32 pad2C;
   f32 sp28;
@@ -499,6 +549,13 @@ u8 func_hd_code_8027EED8(s16 arg0, s16 arg1, s16* arg2) {
   return 1;
 }
 
+// Draw the water surface for render pass arg2: either env-mapped (single
+// 32x32 texture, lit) or the two current cycling textures blended in 2-cycle
+// mode by PRIM_LOD_FRAC (the cross-fade between water frames). Builds the
+// grid triangle strips into a sub display list, emitting a culling bounding
+// box for every 16 rows so off-screen water is skipped; env-mapped water
+// also gets face normals computed per triangle.
+// Proposed name: DrawWaterSurface
 void func_hd_code_8027F1F8(Gfx** gfx, u8 arg1, s32 arg2) {
     Gfx* entry;
     s32 sp130;
@@ -693,6 +750,9 @@ void func_hd_code_8027F1F8(Gfx** gfx, u8 arg1, s32 arg2) {
     *gfx = entry;
 }
 
+// Compute the face normal of the triangle (arg1, arg2, arg3) and store it
+// (scaled to 120) into all three vertices' normals
+// Proposed name: SetFaceNormal
 void func_hd_code_802802D4(Vtx* arg0, s32 arg1, s32 arg2, s32 arg3) {
   f32 sp44[3];
   f32 sp38[3];
@@ -738,6 +798,9 @@ void func_hd_code_802802D4(Vtx* arg0, s32 arg1, s32 arg2, s32 arg3) {
   arg0[arg3].v.cn[3] = 0;
 }
 
+// Write the 8 corner vertices of a bounding box for gSPCullDisplayList
+// (same helper as in 37530.c)
+// Proposed name: WriteCullBox
 void func_hd_code_8028072C(Vtx* arg0, s16 x1, s16 y1, s16 z1, s16 x2, s16 y2, s16 z2) {
   arg0[0].v.ob[0] = x1;
   arg0[0].v.ob[1] = y1;
@@ -772,6 +835,10 @@ void func_hd_code_8028072C(Vtx* arg0, s16 x1, s16 y1, s16 z1, s16 x2, s16 y2, s1
   arg0[7].v.ob[2] = z2;
 }
 
+// Init the drifting debris for level arg0 (config D_hd_code_802FC494: area
+// bounds, y range, count, size ranges, texture + dimensions, alpha):
+// randomize each quad's position, size, drift speed and phase
+// Proposed name: InitDriftingDebris
 void func_hd_code_802807D8(u8 arg0) {
     s32 sp34;
     s32 sp30;
@@ -842,6 +909,10 @@ void func_hd_code_802807D8(u8 arg0) {
     }
 }
 
+// Update + draw the drifting debris: each quad drifts via the wind function
+// func_hd_code_802CE65C, wrapping around the area bounds, and is drawn as a
+// flat translucent IA16 quad
+// Proposed name: DrawDriftingDebris
 void func_hd_code_80280F34(Gfx** gfx, u8 arg1) {
     Gfx* entry;
     s32 sp88;
@@ -919,6 +990,10 @@ void func_hd_code_80280F34(Gfx** gfx, u8 arg1) {
     *gfx = entry;
 }
 
+// Init the hidden pickup for level arg0 (table D_hd_code_802FC520, one
+// entry): place its 32x32 textured quad (texture 0x546) at the fixed world
+// position and mark it active
+// Proposed name: InitHiddenPickup
 void func_hd_code_80281A70(s32 arg0) {
   s32 sp1C;
   s32 sp18;
@@ -950,6 +1025,10 @@ void func_hd_code_80281A70(s32 arg0) {
   D_8036E4CA = 0;
 }
 
+// Hidden pickup proximity check: collecting it (within 40 units) plays the
+// pickup sounds (0xB0 + looping 0xCF) and starts a 400-frame active effect
+// timer (D_8036E4C8/D_8036E4CA)
+// Proposed name: UpdateHiddenPickup
 void func_hd_code_80281CE4(void) {
   s32 sp24;
   s32 sp20;
@@ -974,6 +1053,8 @@ void func_hd_code_80281CE4(void) {
   }
 }
 
+// Draw the uncollected hidden pickup quads
+// Proposed name: DrawHiddenPickups
 void func_hd_code_80281E44(Gfx** gfx) {
   Gfx* entry = *gfx;
   s32 i;
@@ -1001,6 +1082,8 @@ void func_hd_code_80281E44(Gfx** gfx) {
   *gfx = entry;
 }
 
+// Load the warning icon texture (asset 0xA98) and reset its state
+// Proposed name: InitWarningIcon
 void func_hd_code_802821D0(void) {
   D_8036E4CC = D_hd_code_80358070;
   func_hd_code_802A0B00(0xA98U, NULL);
@@ -1009,6 +1092,10 @@ void func_hd_code_802821D0(void) {
   D_8036E4D2 = 0;
 }
 
+// Hover-vehicle warning icon: while driving a hovering vehicle (ids 7, 0xB,
+// 0x11, 0x12) whose status check (func_hd_code_8029DBF0) fails, show the
+// 32x32 warning icon at full alpha, fading out once the condition clears
+// Proposed name: DrawHoverWarning
 void func_hd_code_80282224(Gfx** gfx, u8 arg1) {
     Gfx* entry = *gfx;
     u8 sp7B = arg1 == 7 || arg1 == 0xB || arg1 == 0x11 || arg1 == 0x12;
@@ -1055,11 +1142,19 @@ void func_hd_code_80282224(Gfx** gfx, u8 arg1) {
     *gfx = entry;
 }
 
+// Reset the nuclear explosion effect state
+// Proposed name: ResetNukeEffect
 void func_hd_code_80282728(void) {
   D_8036E4D3 = 0;
   D_8036E4D4 = 0;
 }
 
+// The nuclear explosion when the mission fails on a carrier level: once the
+// detonation flag (D_803EF6FF) is set, tint the whole screen dark red and
+// grow up to two translucent red shockwave spheres from the carrier position
+// (scale +0.06 per frame, the second starting 10 frames later), driving the
+// camera shake/rumble (func_hd_code_802AC1A0) by the first sphere's radius.
+// Proposed name: DrawNukeExplosion
 void func_hd_code_8028273C(Gfx** gfx, u8 arg1) {
     Gfx* entry = *gfx;
     f32 sp9C[4][4];

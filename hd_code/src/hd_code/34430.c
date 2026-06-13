@@ -26,10 +26,29 @@ extern s8 D_hd_code_8030C64C;
 
 #define EPSILON (1e-08)
 
+// Proposed file name: mb.c (the original name - the asserts in this file
+// reference "mb.c", presumably "motion blur")
+//
+// This file is the motion blur / after-image effect: each frame the camera
+// (eye + look-at) is recorded into an 11-entry ring (D_8036CB60), the world
+// is rendered from the player camera into a small 120x90 RGBA16 offscreen
+// buffer (D_8036D170) as a separate RSP task, and that captured image is
+// re-projected as translucent curved screen meshes placed at past camera
+// orientations (via inverted look-at matrices), producing trailing ghost
+// frames with fading alpha. State: D_8036D178 (0 = off, 1 = ramping up,
+// 3 = hold, 2 = ramping down), D_8036D180 = active ghost count,
+// D_8036D17C = max ghosts, D_8036D184 = playback advance per ghost,
+// D_8036D174 = capture FOV.
+
 void func_hd_code_8027A7DC(Gfx**, s32, s32);
 u8 func_hd_code_802796D8(s32, s32*, s32*);
 u8 invertTransformMatrix(f32[4][4], f32[4][4]);
 
+// Copy the display list [arg0, arg1) into freshly allocated level memory,
+// rewriting every render-mode setting through a 3-entry translation table
+// (opaque -> translucent equivalents) - used to make a ghost/translucent
+// version of a model's display list
+// Proposed name: CloneDisplayListXlu
 void func_hd_code_80278BF0(Gfx* arg0, Gfx* arg1, Gfx** arg2) {
   Gfx* entry;
   s8 sp3B;
@@ -78,6 +97,9 @@ void func_hd_code_80278BF0(Gfx* arg0, Gfx* arg1, Gfx** arg2) {
   gSPEndDisplayList(entry++);
 }
 
+// Allocate the 120x90 capture buffer (0x5460 bytes) from the level
+// allocator and reset all motion blur state
+// Proposed name: InitMotionBlur
 void func_hd_code_80278E3C(void) {
 
   func_hd_code_80257490(D_hd_code_80358070, 0x40);
@@ -92,6 +114,12 @@ void func_hd_code_80278E3C(void) {
   D_hd_code_80367C00 = 0;
 }
 
+// Start the motion blur: arg0 = ghost frame count (max 10), arg1 = playback
+// advance per ghost (max 1.0), arg2 scales the capture FOV (atan of
+// arg2 / distance between the two latest camera samples). Builds the curved
+// screen mesh - 6 horizontal strips at radius 100 spanning the FOV - that
+// the captured image is projected onto.
+// Proposed name: StartMotionBlur
 void func_hd_code_80278EB0(s32 arg0, f32 arg1, s32 arg2) {
     f32 spB0[4][4];
     f32 sp70[4][4];
@@ -165,6 +193,8 @@ void func_hd_code_80278EB0(s32 arg0, f32 arg1, s32 arg2) {
     }
 }
 
+// Request the motion blur to ramp down (immediate stop if barely started)
+// Proposed name: StopMotionBlur
 void func_hd_code_802794A4(void) {
   if (D_hd_code_80367C00 == 0) {
     if (D_8036D180 < 2) {
@@ -175,14 +205,21 @@ void func_hd_code_802794A4(void) {
   }
 }
 
+// Kill the motion blur immediately
+// Proposed name: KillMotionBlur
 void func_hd_code_802794E4(void) {
   D_8036D178 = 0;
 }
 
+// Is the motion blur active?
+// Proposed name: IsMotionBlurActive
 u8 func_hd_code_802794F0() {
   return !(D_8036D178 == 0);
 }
 
+// Record this frame's camera sample into the ring: (arg0..arg2) = look-at
+// point (<< 5 fixed point), (arg3..arg5) = eye position (<< 16 fixed point)
+// Proposed name: RecordCameraSample
 void func_hd_code_80279514(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
   D_8036CB60[D_8036CC68].unk0 = (f32) arg3 / 65536.0;
   D_8036CB60[D_8036CC68].unk4 = (f32) arg4 / 65536.0;
@@ -204,6 +241,9 @@ void func_hd_code_80279514(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
   }
 }
 
+// Get the ring indices arg0 steps back: *arg1 = that sample, *arg2 = the one
+// before it. Returns 0 if the ring doesn't go back that far.
+// Proposed name: GetCameraSample
 u8 func_hd_code_802796D8(s32 arg0, s32* arg1, s32* arg2) {
   s32 sp4 = D_8036CC68;
 
@@ -230,6 +270,12 @@ u8 func_hd_code_802796D8(s32 arg0, s32* arg1, s32* arg2) {
   return 1;
 }
 
+// Render the world display list arg6 (segments arg7/arg8, env alpha arg9)
+// from the camera given by look-at (arg0..arg2, << 5) and eye (arg3..arg5,
+// << 16) into the 120x90 offscreen capture buffer, with the blur FOV,
+// submitted as its own RSP task. Called every frame from the game loop while
+// the blur is active.
+// Proposed name: RenderBlurFrame
 void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
     Gfx* entry;
     u16 spDA;
@@ -298,6 +344,12 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
     }
 }
 
+// Draw the motion blur ghosts: ramp the ghost count up/down per the state,
+// then for each ghost interpolate a past camera from the ring, invert its
+// look-at matrix to place the curved screen mesh in world space facing that
+// camera, and draw the captured image on it in 120x15 strips with linearly
+// fading alpha (noise dither for the translucency).
+// Proposed name: DrawMotionBlur
 void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
     Gfx* entry = *gfx;
     u8 sp14B;
@@ -437,6 +489,9 @@ void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
     }
 }
 
+// Draw one 120x15 strip of the captured blur frame (arg1 = byte offset into
+// the capture buffer, arg2 = base vertex index)
+// Proposed name: DrawBlurStrip
 void func_hd_code_8027A7DC(Gfx** gfx, s32 arg1, s32 arg2) {
   Gfx* entry = *gfx;
   s32 pad;
@@ -448,6 +503,8 @@ void func_hd_code_8027A7DC(Gfx** gfx, s32 arg1, s32 arg2) {
 
 }
 
+// Undo the pivoting row swaps after the 3x3 inversion
+// Proposed name: UnpivotInverse3
 void func_hd_code_8027AA04(f32 arg0[][3], s32 arg1, s32 arg2, s32 arg3) {
   s32 spC;
   s32 sp8;
@@ -489,6 +546,9 @@ void func_hd_code_8027AA04(f32 arg0[][3], s32 arg1, s32 arg2, s32 arg3) {
   }
 }
 
+// Gauss-Jordan elimination steps 2 and 3 of the 3x3 inversion (after the
+// first pivot column arg2 is done); returns 0 if singular
+// Proposed name: InvertMtx3Tail
 s32 func_hd_code_8027AC00(f32 arg0[3][3], f32 arg1[][3], s32 arg2) {
     s32 sp34;
     s32 sp30;
@@ -573,6 +633,9 @@ s32 func_hd_code_8027AC00(f32 arg0[3][3], f32 arg1[][3], s32 arg2) {
     return 1;
 }
 
+// Invert a 3x3 matrix in place by Gauss-Jordan elimination with partial
+// pivoting, writing the inverse to arg1; returns 0 if singular
+// Proposed name: InvertMtx3
 s32 func_hd_code_8027B200(f32 arg0[3][3], f32 arg1[3][3]) {
   s32 sp5C;
   s32 sp58;
@@ -638,6 +701,9 @@ s32 func_hd_code_8027B200(f32 arg0[3][3], f32 arg1[3][3]) {
   return 1;
 }
 
+// Reduce the projective part of a 4x4 matrix before inversion (extracts the
+// translation column and w scale, pivoting if w is ~0); returns 0 on failure
+// Proposed name: ReduceMtx4Projective
 s32 func_hd_code_8027B5D0(f32 arg0[4][4], f32 arg1[4], f32* arg2, s32* arg3) {
   s32 sp14;
   s32 sp10;

@@ -19,14 +19,24 @@ ALSoundState *sndSetupSound(ALBank*, ALSound *);            /* extern */
 void sndCreatePostEvent(ALSoundState *state, s16 eventType, s32 arg2);
 void sndUnlinkClearSound(ALSoundState *state);
 
+// Proposed file name: sndplayer.c (Rare's modified version of libultra's
+// audio/sndplayer.c)
+//
+// This file is the sound effect player: a heavily customized libultra sound
+// player with extra features - per-slot SFX volumes (keyMap->keyMin & 0x3F
+// is the sound's slot), behavior flags packed into keyMap fields (unk3e:
+// 1 = chain tail, 2 = looping/no decay, 4 = voice allocated, 0x10 = chained
+// follow-up sound, 0x20 = pitch wobble, 0x40/0x50 = high priority), chained
+// multi-part sounds, and voice stealing when the voice limit is hit.
+
 // BSS Begin
-ALSndPlayer D_hd_code_80366BD0;
+ALSndPlayer D_hd_code_80366BD0; // the sound player instance behind g_sndPlayerPtr; proposed name: g_sndPlayer
 s16 *g_sndSfxSlotVolume;
 // BSS End
 
 // Data
-ALLink D_hd_code_802E8CE0 = { NULL, NULL };
-ALLink *D_hd_code_802E8CE8 = NULL;
+ALLink D_hd_code_802E8CE0 = { NULL, NULL }; // active sound list (next = head, prev = tail); proposed name: g_sndActiveList
+ALLink *D_hd_code_802E8CE8 = NULL; // free sound state list head; proposed name: g_sndFreeList
 ALSndPlayer *g_sndPlayerPtr = &D_hd_code_80366BD0;
 s16 g_sndAllocatedVoicesCount = 0;
 
@@ -875,6 +885,8 @@ void sndDeactivateAllSfxByFlag_3(void)
   sndDeactivateAllSfxByFlag(3);
 }
 
+// Deactivate every active sound that belongs to SFX slot arg0
+// Proposed name: sndDeactivateSlot
 void func_hd_code_80260A30(u8 arg0) {
   OSIntMask sp24;
   ALSoundState* sp20;

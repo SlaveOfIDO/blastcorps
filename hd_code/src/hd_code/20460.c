@@ -54,19 +54,36 @@ extern u32 D_hd_code_8036B968;
 extern s32 D_hd_code_80368044;
 extern s32 D_hd_code_80368048;
 
+// Proposed file name: survivors.c
+//
+// This file is the survivor (civilian) system: up to 20 people who run out
+// of destroyed buildings, scatter, flee from the player when approached, and
+// take turns calling to be rescued. They are drawn as camera-facing 20x32
+// billboards with a 6-frame running animation and an 8-frame waving
+// animation in three view-angle variants (the side view mirrored via
+// texcoords). Struct fields: unk0/2/4 = position, unk6/8 = scatter target,
+// unkA/C/E = home center and radius, unk10 = activation radius, unk12 = grid
+// cell, unk13/14 = animation frame/counter, unk15 = state (0 = free,
+// 1 = idle, 2 = calling for rescue, 3 = rescued, 4 = fleeing, 5 = running
+// out), unk16 = base run angle, unk18 = facing angle, unk1A/1B = flee
+// direction + hysteresis, unk1C = run speed, unk20 = closest distance so
+// far to the scatter target.
+
 // BSS Begin
-struct S_80367D60 D_hd_code_80367D60[0x14]; // size 0x24
-s32 D_hd_code_80368030;
-s16 D_hd_code_80368034;
-s16 D_hd_code_80368036;
-s32 D_hd_code_80368038;
-s32 D_hd_code_8036803C;
-s32 D_hd_code_80368040;
-s32 D_hd_code_80368044;
-s32 D_hd_code_80368048;
+struct S_80367D60 D_hd_code_80367D60[0x14]; // size 0x24; the survivor array; proposed name: survivors
+s32 D_hd_code_80368030; // selected survivor's y (<< 5); proposed name: survivorBeaconY
+s16 D_hd_code_80368034; // current movement step x; proposed name: survivorStepX
+s16 D_hd_code_80368036; // current movement step z; proposed name: survivorStepZ
+s32 D_hd_code_80368038; // countdown until the calling survivor gives up; proposed name: survivorCallTimer
+s32 D_hd_code_8036803C; // index of the survivor currently calling; proposed name: survivorCallIdx
+s32 D_hd_code_80368040; // survivor count to restore on level re-init; proposed name: survivorCountSaved
+s32 D_hd_code_80368044; // saved player x/z (set with the carrier beacon); proposed name: survivorSavedX
+s32 D_hd_code_80368048; // proposed name: survivorSavedZ
 // BSS End
 
 // Data
+// Base survivor billboard quad (12 wide, 20 tall)
+// Proposed name: survivorBillboardVtx
 Vtx D_hd_code_802E9FB0[4] = {
   { 6, 20, 6, 0, 0, 992, 0xFF, 0xFF, 0xFF, 0xFF },
   {-6, 20, -6, 0, 608, 992, 0xFF, 0xFF, 0xFF, 0xFF  },
@@ -76,6 +93,9 @@ Vtx D_hd_code_802E9FB0[4] = {
 #include "20460_textures.h"
 
 
+// Reset all survivors at level init; arg0 != 0 restores the saved rescue
+// counter (D_hd_code_8036EA79) instead of zeroing it
+// Proposed name: InitSurvivors
 void func_hd_code_80264C20(s32 arg0) {
   s32 sp1C;
 
@@ -93,6 +113,12 @@ void func_hd_code_80264C20(s32 arg0) {
   return;
 }
 
+// Spawn arg5 survivors at (arg0, arg1, arg2) - e.g. out of a destroyed
+// building - with home radius arg3 (clamped to 200) and grid cell arg4.
+// Each gets a randomized home center and scatter target, bumps the rescue
+// counter, triggers the survivor hint message, and the third one spawned
+// plays a scream (sfx 0x24).
+// Proposed name: SpawnSurvivors
 void func_hd_code_80264CB4(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, s32 arg5) {
   s32 pad24;
   s32 sp20;
@@ -149,12 +175,19 @@ void func_hd_code_80264CB4(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, s32 
   }
 }
 
+// Per-frame survivor update: flee behavior, running-out movement, and the
+// calling-survivor selection
+// Proposed name: UpdateSurvivors
 void func_hd_code_8026510C(void) {
   func_hd_code_80265428();
   func_hd_code_8026513C();
   func_hd_code_80265E48();
 }
 
+// Move running-out survivors (state 5) toward their scatter target at 5
+// units per frame, switching to idle (state 1) on arrival or when no longer
+// getting closer
+// Proposed name: UpdateSurvivorRunOut
 void func_hd_code_8026513C(void) {
   s16 sp2E;
   s16 sp2C;
@@ -201,6 +234,12 @@ void func_hd_code_8026513C(void) {
   }
 }
 
+// Survivor flee behavior: when the player is inside a survivor's activation
+// box, step it each frame in whichever of the two candidate directions ends
+// up farther from the player (with a 5-frame hysteresis to avoid jitter),
+// clamped to its home area; turning flips the facing angle by 180 degrees.
+// The calling survivor screams when it starts fleeing.
+// Proposed name: UpdateSurvivorFlee
 void func_hd_code_80265428(void) {
     s32 sp34;
     s32 pad30;
@@ -292,6 +331,9 @@ void func_hd_code_80265428(void) {
     }
 }
 
+// Is the player inside survivor arg0's activation box (home center +-
+// 1.5x radius)?
+// Proposed name: IsPlayerNearSurvivor
 s32 func_hd_code_80265A0C(s32 arg0) {
   s16 sp6;
   s16 sp4;
@@ -316,6 +358,10 @@ s32 func_hd_code_80265A0C(s32 arg0) {
   return 1;
 }
 
+// Compute survivor arg0's movement step (D_hd_code_80368034/36) from its run
+// angle relative to the player heading, with the run speed ramping toward a
+// value derived from the player's speed; also updates its facing angle
+// Proposed name: ComputeSurvivorStep
 void func_hd_code_80265B7C(s32 arg0) {
   s16 sp26;
   s16 sp24;
@@ -366,6 +412,13 @@ void func_hd_code_80265B7C(s32 arg0) {
   }
 }
 
+// Calling-survivor selection: when the current one is rescued
+// (D_hd_code_803EF32D) mark it state 3 and reset; if the call timer expires,
+// give up on it. Then pick the next caller - normally the survivor nearest
+// the level start position, or the farthest one after a timeout - set the
+// beacon position (D_hd_code_803EF308/0C) and play the "over here!" call
+// (sfx 0x25) with volume by distance.
+// Proposed name: UpdateSurvivorCall
 void func_hd_code_80265E48(void) {
     s32 sp44;
     s32 sp40;
@@ -454,6 +507,9 @@ void func_hd_code_80265E48(void) {
     }
 }
 
+// Point the beacon at the missile carrier position instead (used by the
+// shuttle-level setup), saving the player position
+// Proposed name: SetBeaconToCarrier
 void func_hd_code_802661EC(void) {
   D_hd_code_803EF308 = D_hd_code_803EF6DC;
   D_hd_code_803EF30C = D_hd_code_803EF6E4;
@@ -463,6 +519,13 @@ void func_hd_code_802661EC(void) {
   D_hd_code_80368038 = 0x7D0;
 }
 
+// Draw the survivors as camera-facing billboards: moving ones with the
+// 6-frame running animation; standing/waving ones with the 8-frame waving
+// animation, choosing front/side/back textures from the facing angle
+// relative to the camera (side view mirrored via texcoords); and the
+// rescued one rendered at the carry position (D_hd_code_803EF310/314/318).
+// Skips survivors whose grid cell is not loaded.
+// Proposed name: DrawSurvivors
 void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
     Gfx* entry;
     s32 sp168;
@@ -733,6 +796,9 @@ void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
     *arg0 = entry;
 }
 
+// Visibility check: is the survivor's grid cell in the loaded world cell
+// list (same pattern as the RDU check in 2B3F0.c)?
+// Proposed name: IsSurvivorCellLoaded
 s32 func_hd_code_80267614(struct S_80367D60* arg0) {
   s32 spC;
   u8 spB;

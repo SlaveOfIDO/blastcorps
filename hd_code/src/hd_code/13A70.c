@@ -4,7 +4,17 @@
 #include "functions.h"
 #include "variables.h"
 
+// Proposed file name: shadows.c
+//
+// This file manages the object blob-shadow system: registering and updating
+// entries in the shadow texture list D_hd_code_803643C8 (declared in
+// 00000.c), generating each shadow silhouette by rendering the object's
+// model top-down into a 64x64 texture in a separate RSP task, and drawing
+// the growing shadow spots under falling objects.
+
 // Data begin
+// 64x64 viewport for the shadow render-to-texture pass
+// Proposed name: shadowViewport
 Vp D_hd_code_802E8C60 = {
   {
     {0x0080, 0x0080, 0x01FF, 0x0000},
@@ -15,15 +25,18 @@ Vp D_hd_code_802E8C60 = {
 
 // BSS begin
 
-Gfx D_hd_code_803650B0[40];
-Mtx D_hd_code_803651F0;
-Mtx D_hd_code_80365230;
-Mtx D_hd_code_80365270;
-Mtx D_hd_code_803652B0;
-Mtx D_hd_code_803652F0;
-s32 D_hd_code_80365330;
+Gfx D_hd_code_803650B0[40]; // display list buffer for the shadow render task; proposed name: shadowTaskDl
+Mtx D_hd_code_803651F0; // matrices for the shadow render task (projection, translate, rotations); proposed name: shadowProjMtx
+Mtx D_hd_code_80365230; // proposed name: shadowObjTransMtx
+Mtx D_hd_code_80365270; // proposed name: shadowRotXMtx
+Mtx D_hd_code_803652B0; // proposed name: shadowRotYMtx
+Mtx D_hd_code_803652F0; // proposed name: shadowDistMtx
+s32 D_hd_code_80365330; // pointer to the 64x64 IA8 texture used for falling-object shadows; proposed name: fallingShadowTex
 // BSS end
 
+// Append a shadow entry for owner id arg0 to the shadow texture list:
+// arg1 = render distance/scale, arg2/arg3 = quad half extents
+// Proposed name: AddShadowEntry
 void func_hd_code_80258230(u8 arg0, s32 arg1, s16 arg2, s16 arg3) {
   D_hd_code_803643C8.end->unk1022 = arg0;
   D_hd_code_803643C8.end->unk1023 = 0;
@@ -36,6 +49,13 @@ void func_hd_code_80258230(u8 arg0, s32 arg1, s16 arg2, s16 arg3) {
   D_hd_code_803643C8.end++;
 }
 
+// Update the shadow entry of owner arg0: position (arg1..arg3), object top y
+// (arg4) and rotation (arg5/arg6/arg7 = pitch/roll/yaw). For the flying
+// vehicle (id 9, the J-Bomb) the shadow is instead projected down onto
+// whatever is below - a building roof (func_hd_code_802ABEDC) or the ground
+// (func_hd_code_8027EED8 height query), picking the closest surface;
+// unk1023 records which case applies.
+// Proposed name: UpdateShadowEntry
 void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
   u8 sp37;
   struct Texture* sp30;
@@ -95,6 +115,8 @@ void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
   }
 }
 
+// Get the shadow's resting y (the surface it is projected onto)
+// Proposed name: GetShadowY
 s32 func_hd_code_802584BC(u8 arg0) {
   struct Texture* sp4;
 
@@ -108,6 +130,8 @@ s32 func_hd_code_802584BC(u8 arg0) {
   return 0;
 }
 
+// Get the shadow owner's stored object y
+// Proposed name: GetShadowObjectY
 s32 func_hd_code_80258500(u8 arg0) {
   struct Texture* sp4;
 
@@ -121,6 +145,12 @@ s32 func_hd_code_80258500(u8 arg0) {
   return 0;
 }
 
+// Generate a shadow silhouette: render the object's model display list arg5
+// (with data segments arg6/arg7) top-down (rotated -90 degrees around X)
+// into the entry's 64x64 CI8 texture as a flat primitive-colored silhouette,
+// submitted as its own small RSP task via func_hd_code_80284E54. Called
+// whenever the model has animated so the blob shadow matches its shape.
+// Proposed name: RenderShadowTexture
 void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, s32 *arg5, s32 *arg6, s32 *arg7) {
     Gfx *entry;
     u16 sp9A;
@@ -169,6 +199,12 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
     func_hd_code_80284E54(&D_hd_code_803650B0, entry - D_hd_code_803650B0, 1, 0, 0x61F, 0);
 }
 
+// Draw the shadow spots under falling objects: walks the world object list
+// (D_hd_code_803F4030) for object types 0xBA..0xBC and draws a flat 64x64
+// IA8 quad at the object's ground y, growing as the object falls closer
+// (size = 60 - heightAboveGround/800). One special object in level 0x10
+// draws z-buffered.
+// Proposed name: DrawFallingObjectShadows
 void func_hd_code_80258B78(Gfx** arg0, struct Model1* arg1) {
     Gfx* entry;
     s32 sp70;

@@ -5,26 +5,41 @@
 #include "variables.h"
 #include "macros.h"
 
+// Proposed file name: drawtext.c (the original name - the assert in
+// func_hd_code_80259EC4 references "drawtext.c")
+//
+// This file is the text renderer. Characters are queued per frame as
+// 4-vertex quads with gradient colors into a double-buffered vertex array,
+// each tagged with its 32x32 I4 glyph texture; on flush the queue is
+// shell-sorted so glyphs sharing a texture batch into one TMEM load. Two
+// charsets exist: 0 = ASCII strings, 1 = u16 code strings (0x1000+ control
+// codes / button icon glyphs).
+
 // Data start
-s32 D_hd_code_802E8C70 = 0;
-s32 characterIndex = 0;
-s32 D_hd_code_802E8C78 = 0;
+s32 D_hd_code_802E8C70 = 0; // index of the first queued character not yet flushed; proposed name: textFlushedIndex
+s32 characterIndex = 0; // total characters queued this frame
+s32 D_hd_code_802E8C78 = 0; // vertex write index (4 per character); proposed name: textVtxIndex
 s32 pad1 = 0; // unused struct data?
 s32 pad2 = 0x20200000; // unused struct data?
-f32 D_hd_code_802E8C84[2] = { 0.6f, 0.95f };
-s16 D_hd_code_802E8C8C[2] = { 0x002A, 0x1000 };
-s16 D_hd_code_802E8C90[2] = { 0x0026, 0x1005 };
-u16 D_hd_code_802E8C94[2] = { 0x0020, 0x1002 };
-u16 D_hd_code_802E8C98[2] = { 0x0000, 0x0FFE };
+f32 D_hd_code_802E8C84[2] = { 0.6f, 0.95f }; // proportional advance factor per charset; proposed name: textAdvanceFactor
+s16 D_hd_code_802E8C8C[2] = { 0x002A, 0x1000 }; // full-advance character per charset ('*'); proposed name: textFullAdvanceChar
+s16 D_hd_code_802E8C90[2] = { 0x0026, 0x1005 }; // invisible character per charset ('&'); proposed name: textHiddenChar
+u16 D_hd_code_802E8C94[2] = { 0x0020, 0x1002 }; // space character per charset; proposed name: textSpaceChar
+u16 D_hd_code_802E8C98[2] = { 0x0000, 0x0FFE }; // string terminator per charset; proposed name: textTerminator
 u16 D_hd_code_802E8C9C[4] = { 0x0023, 0x1001, 0x1003, 0x0FFE };
 // Data end
 
 // BSS start
-struct S_80365340_Wrapper D_hd_code_80365340;
-Vtx* D_hd_code_80365348[2];
+struct S_80365340_Wrapper D_hd_code_80365340; // character queue: {sort key/code, quad index, glyph texture ptr} per char; proposed name: textQueue
+Vtx* D_hd_code_80365348[2]; // double-buffered character vertex buffers; proposed name: textVtxBufs
 s32 maxCharacters;
 // BSS end
 
+// Allocate the per-frame text vertex buffers and character queue from the
+// level allocator - capacity depends on the pending game state (0x200 for
+// menu-heavy states, ~0xA0 in-game) - then init the font
+// (func_hd_code_8025B070)
+// Proposed name: InitTextBuffers
 void func_hd_code_802592F0() {
   s32 sp1C;
 
@@ -51,12 +66,17 @@ void func_hd_code_802592F0() {
   func_hd_code_8025B070();
 }
 
+// Reset the per-frame character queue
+// Proposed name: ResetTextQueue
 void func_hd_code_80259450(void) {
   D_hd_code_802E8C70 = 0;
   characterIndex = 0;
   D_hd_code_802E8C78 = 0;
 }
 
+// Set up the RDP for text drawing: translucent, texture alpha modulated,
+// bilinear
+// Proposed name: BeginTextDraw
 void func_hd_code_8025946C(Gfx** arg0, struct Model1* arg1) {
   Gfx *entry;
 
@@ -75,6 +95,8 @@ void func_hd_code_8025946C(Gfx** arg0, struct Model1* arg1) {
 }
 
 // probably shell sort
+// Generic shell sort with caller-provided element size and comparator
+// Proposed name: ShellSort
 void func_hd_code_802595E0(u8* base, s32 elements, s32 size, s32 (*cmp)(u16*, u16*)) {
   s32 sp124;
   s32 sp120;
@@ -103,6 +125,8 @@ void func_hd_code_802595E0(u8* base, s32 elements, s32 size, s32 (*cmp)(u16*, u1
   }
 }
 
+// Byte-wise memory copy used by the sort
+// Proposed name: MemCopy
 void func_hd_code_802597D8(u8* arg0, u8* arg1, s32 arg2) {
   s32 sp4;
   for(sp4 = 0; sp4 < arg2; sp4++) {
@@ -110,10 +134,16 @@ void func_hd_code_802597D8(u8* arg0, u8* arg1, s32 arg2) {
   }
 }
 
+// u16 key comparator for the character sort
+// Proposed name: CompareU16
 s32 func_hd_code_80259814(u16* arg0, u16* arg1) {
   return *arg0 - *arg1;
 }
 
+// Flush the queued characters: sort the pending range by glyph code so
+// characters sharing a texture batch together, then for each character load
+// its glyph texture (only when it changes) and draw its quad
+// Proposed name: FlushTextQueue
 void func_hd_code_80259824(Gfx** arg0, struct Model1* arg1) {
   s32 sp54;
   Gfx* entry;
@@ -143,6 +173,8 @@ void func_hd_code_80259824(Gfx** arg0, struct Model1* arg1) {
   *arg0 = entry;
 }
 
+// Draw all queued text with the current matrices
+// Proposed name: DrawQueuedText
 void func_hd_code_80259BD4(Gfx** arg0, struct Model1* arg1) {
   Gfx* sp1C;
 
@@ -152,6 +184,8 @@ void func_hd_code_80259BD4(Gfx** arg0, struct Model1* arg1) {
   *arg0 = sp1C;
 }
 
+// Load the screen-space ortho matrices, then draw all queued text
+// Proposed name: DrawQueuedTextOrtho
 void func_hd_code_80259C24(Gfx** arg0, struct Model1* arg1) {
   Gfx* entry;
 
@@ -165,14 +199,32 @@ void func_hd_code_80259C24(Gfx** arg0, struct Model1* arg1) {
 }
 
 
+// Queue a text string with a single flat color: arg1 = ASCII string,
+// arg2 = u16 code string, arg3 = monospace flag, arg4 = justification mode,
+// arg5/arg6 = x/y, arg7/arg8 = char width/height, arg9 = direction,
+// arg10..13 = RGBA
+// Proposed name: DrawText
 void func_hd_code_80259CCC(struct Model1* arg0, const char* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11, s32 arg12, s32 arg13) {
   func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13);
 }
 
+// Queue a text string with a vertical color gradient (top RGBA arg10..13,
+// bottom RGBA arg14..17)
+// Proposed name: DrawTextGradient
 void func_hd_code_80259DC8(struct Model1* arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17) {
   func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) arg9, (s32) arg10, (s32) arg11, (s32) arg12, (s32) arg13, (s32) arg10, (s32) arg11, (s32) arg12, (s32) arg13, (s32) arg14, (s32) arg15, (s32) arg16, (s32) arg17, (s32) arg14, (s32) arg15, (s32) arg16, (s32) arg17);
 }
 
+// Core text layout: walks the string (forward or backward depending on the
+// direction flag sp67, giving left/right alignment; arg4 selects a computed
+// start position via func_hd_code_8025B498), maps each ASCII character to a
+// glyph index (texture id 0xF4C+; charset 1 codes map to button-icon glyphs
+// 0xD4C+), advances proportionally using a per-character width factor (0.21
+// default, 0.25 for digits, narrower for I/M/W) or fixed-width centering in
+// monospace mode, skips space/hidden characters, and appends a 4-vertex quad
+// with per-corner colors plus a queue entry (code, quad index, glyph texture
+// from func_hd_code_8025B0B8).
+// Proposed name: LayoutText
 void func_hd_code_80259EC4(s32 arg0, u8* sp44_a1, u16* sp48_a2, u8 arg3, s32 arg4, f32 arg5, s32 arg6, f32 arg7, s32 arg8, u8 sp67, u8 sp44_a10, u8 sp44_a11, u8 sp44_a12, u8 sp44_a13, u8 sp44_a14, u8 sp44_a15, u8 sp44_a16, u8 sp44_a17, u8 sp44_a18, u8 sp44_a19, u8 sp48_a20, u8 sp48_a21, u8 sp48_a22, u8 sp48_a23, u8 sp48_a24, u8 sp48_a25) {
     u16 sp3E;
     u8* sp38;
