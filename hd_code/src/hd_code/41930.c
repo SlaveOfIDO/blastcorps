@@ -18,6 +18,16 @@ struct S_802E8F38 {
   s16 pad6;
 };
 
+// Proposed file name: academy.c (the original name - the asserts in
+// func_hd_code_80286330 reference "academy.c")
+//
+// This file drives the single-player campaign progression. Each player's
+// progress is a stage counter (players[playerNumber].unk91); completing the
+// requirements of a stage (enough levels cleared in a rank, the academy,
+// score milestones, etc.) advances it, which in turn unlocks the next
+// cutscene, the vehicle academy, the bonus levels, or the ending. unk90 is a
+// bitmask of academy tests passed, unkA is the player's overall rank/score.
+
 void func_hd_code_80260C20(u8, f32);                     /* extern */
 void func_801F8354(u8);                                /* extern */
 void func_hd_code_802995F0(s32);                         /* extern */
@@ -35,6 +45,12 @@ extern struct S_80367C04 D_hd_code_802E8F94[];
 extern s32 D_hd_code_802FA26C;
 
 
+// Show the cutscene / congratulations message for the player's current
+// campaign stage (skipping the few stages that have no message): set the
+// state to the cutscene state, load the matching tune, and for the
+// "new rank" stage build the "IN <place>." text from the next uncompleted
+// region
+// Proposed name: ShowStageCutscene
 void func_hd_code_802860F0(void) {
   u8 sp37;
   s32 sp30;
@@ -68,12 +84,19 @@ void func_hd_code_802860F0(void) {
   }
 }
 
+// Start the cutscene's tune on its first frame (per-stage tune table
+// D_hd_code_802FDA70)
+// Proposed name: StartStageCutsceneMusic
 void func_hd_code_802862DC(void) {
   if (D_hd_code_80358060 == 0) {
     func_hd_code_80260C20(D_hd_code_802FDA70[players[playerNumber].unk91], 1.0f);
   }
 }
 
+// Transition out of a cutscene to whatever follows the current campaign
+// stage: the world map, the credits, the academy (stage 6, level 50), a
+// bonus/special level, or the ending sequence
+// Proposed name: ExitStageCutscene
 void func_hd_code_80286330(void) {
   switch (players[playerNumber].unk91) {
     case 2:
@@ -120,6 +143,13 @@ void func_hd_code_80286330(void) {
   }
 }
 
+// Advance the player's campaign stage as far as its requirements allow:
+// repeatedly checks the current stage's unlock condition (all levels of a
+// rank cleared, all academy tests passed, a specific level cleared, a score
+// threshold reached...) and bumps the stage until one isn't met. The "give
+// every coin" debug flag (D_hd_code_802FA26C) forces advancement. Returns 1
+// if the stage changed (so a new cutscene should play).
+// Proposed name: AdvanceCampaignStage
 s32 func_hd_code_8028653C(void) {
     s32 sp34;
     UnknownData8024C414* sp30;

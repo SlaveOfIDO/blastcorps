@@ -54,6 +54,18 @@ struct S_80288DF0 {
   s32 unk4;
 }; // Size: 0x8
 
+// Proposed file name: particles.c
+//
+// This file is the generic particle-burst effect system used for explosions,
+// dust, debris and similar. A burst spawns from a per-effect template
+// (S_8036EC30 in D_hd_code_802C4A20: animation frame-id lists, sprite
+// dimensions/format, particle count, spawn count per frame, life span,
+// spread/speed ranges, gravity, bounce floor, colors). Up to 50 live
+// particles (D_8036EC38) are simulated with velocity + gravity + a ground
+// bounce, each playing through its frame animation, and drawn as
+// camera-facing billboards. Frame textures are demand-loaded and cached
+// (D_80370B90 / D_80370B98), and particles are depth-sorted before drawing.
+
 void func_hd_code_80289EF4(Gfx**);                     /* extern */
 u32 func_hd_code_8028A0A0(s16);
 void func_hd_code_8028A1D0(struct S_80288DF0*, s32);                   /* extern */
@@ -77,6 +89,9 @@ extern s16 D_80370B98[];
 extern s32 D_80370BB0;
 extern s32 D_80370BB4;
 
+// Init the particle system at level start: clear all 50 particle slots and
+// allocate the frame-texture cache buffer
+// Proposed name: InitParticles
 void func_hd_code_80288220(void) {
   s32 sp4;
 
@@ -90,6 +105,11 @@ void func_hd_code_80288220(void) {
   D_hd_code_80358070 += 0x1400;
 }
 
+// Start a particle burst of template arg0 at world (arg1, arg2, arg3) with
+// floor y arg4: select the template, build the base billboard quad from its
+// sprite size/colors, reset the texture cache and arm the spawner. Returns 0
+// if a burst is already active.
+// Proposed name: StartParticleBurst
 s32 func_hd_code_80288284(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 pad4;
     s32 sp8;
@@ -159,6 +179,13 @@ s32 func_hd_code_80288284(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     return 0;
 }
 
+// Per-frame particle update: while the burst is active, spawn this frame's
+// batch of new particles (random direction/elevation/spin/lifetime from the
+// template), advance every live particle through its animation phases
+// (spawn -> loop -> die frame lists), integrate position with gravity, bounce
+// off the floor, and retire expired particles. Sets a short cooldown when the
+// last particle dies.
+// Proposed name: UpdateParticles
 void func_hd_code_802886A0(void) {
     s32 sp9C;
     s32 sp98;
@@ -277,6 +304,12 @@ void func_hd_code_802886A0(void) {
     }
 }
 
+// Draw the live particles (frame buffer arg1): resolve each particle's
+// current animation frame texture (cached/loaded via func_hd_code_8028A0A0),
+// depth-sort the particles, then for each draw a billboard quad rotated to
+// face the camera (pitch from the camera-to-particle vector, yaw from the
+// camera heading), batching identical textures.
+// Proposed name: DrawParticles
 void func_hd_code_80288DF0(Gfx** gfx, u8 arg1) {
     s32 sp2FC;
     s32 sp2F8;
@@ -427,6 +460,9 @@ void func_hd_code_80288DF0(Gfx** gfx, u8 arg1) {
 }
 
 
+// Set up the RDP for particle drawing: z-buffered translucent, smooth
+// shaded, combine mode by the template's texture format
+// Proposed name: BeginParticleDraw
 void func_hd_code_80289EF4(Gfx** gfx) {
   Gfx* entry = *gfx;
 
@@ -451,6 +487,9 @@ void func_hd_code_80289EF4(Gfx** gfx) {
   *gfx = entry;
 }
 
+// Get the physical address of frame texture arg0, loading it into the next
+// cache slot (and recording its id) if not already cached this burst
+// Proposed name: GetParticleFrameTexture
 u32 func_hd_code_8028A0A0(s16 arg0) {
   u8 sp27 = 0;
   s32 sp20 = 0;
@@ -476,6 +515,9 @@ u32 func_hd_code_8028A0A0(s16 arg0) {
   return osVirtualToPhysical(sp1C);
 }
 
+// Shell-sort the particle draw list arg0 (arg1 entries) by texture address
+// so same-texture particles batch together
+// Proposed name: SortParticlesByTexture
 void func_hd_code_8028A1D0(struct S_80288DF0* arg0, s32 arg1) {
   s32 sp14;
   s32 sp10;

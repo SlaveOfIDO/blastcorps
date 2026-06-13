@@ -22,6 +22,21 @@ extern s32 D_hd_code_80358064;
 extern u8 D_8036EB94[4];
 extern u8 D_8036EB9C[4];
 
+// Proposed file name: stats_perm.c (the original name - the asserts in
+// func_hd_code_80285814 reference "stats_perm.c")
+//
+// This file handles the per-level statistics: the four scored objectives -
+// buildings destroyed (D_8036EA78 / target D_8036EB92), RDUs found
+// (D_8036EA7C / D_8036EB90), points/communication points (D_8036EA79 /
+// D_8036EB93), and the time/par - their percentages and the results-screen
+// text/highlights, the per-level medal save bits, and the controller-pak
+// save record. Mirror snapshots of the stats block (D_8036EA60/80/90) hold
+// the values at level start / last checkpoint for comparison.
+
+// Load the level's target stats for the current player at level start:
+// the par time (from the medal-tier table D_hd_code_80364EF0), the current
+// medal, and whether the level is already completed (D_8036EB98)
+// Proposed name: LoadLevelStats
 void func_hd_code_80285190(void) {
   s32 sp4;
 
@@ -40,6 +55,12 @@ void func_hd_code_80285190(void) {
   D_8036EB98 = 0;
 }
 
+// Build the results-screen stat lines and highlights: format the four
+// objective rows ("count (percent%)", money, time), and set each row's
+// window flags - highlighting (flag 4) the objectives that improved over the
+// saved snapshot. Returns the overall completion percentage (average of the
+// scored objectives; 2 of 3 when there's no controller pak).
+// Proposed name: BuildStatsScreen
 u32 func_hd_code_802852EC(void) {
     s32 sp5C;
     s32 sp58;
@@ -122,6 +143,11 @@ u32 func_hd_code_802852EC(void) {
     return (sp5C + sp58 + sp54) / 3U;
 }
 
+// Switch to the player selected on the world map: re-init the level, and if
+// it's a completed demolition level with a valid save record, recreate the
+// pak status block and restore the destroyed-buildings state. Returns 1 if
+// the saved state was applied. Snapshots the stats into all mirror copies.
+// Proposed name: SwitchToSelectedPlayer
 u8 func_hd_code_80285814(void) {
   u8 sp27;
   u8 coin;
@@ -166,6 +192,8 @@ u8 func_hd_code_80285814(void) {
   return sp27;
 }
 
+// Copy a 16-byte stats block from arg0 to arg1 (snapshot/restore)
+// Proposed name: CopyStatsBlock
 void func_hd_code_80285A78(u8* arg0, u8* arg1) {
   u32 sp4;
 
@@ -174,15 +202,24 @@ void func_hd_code_80285A78(u8* arg0, u8* arg1) {
   }
 }
 
+// Mark sub-objective arg0 (one of the high save bits) as achieved on this
+// level and flag the save as dirty
+// Proposed name: SetObjectiveBit
 void func_hd_code_80285AB0(u8 arg0) {
   D_hd_code_80364A87 |= 2;
   players[playerNumber].unk54[levelno] |= (1 << (arg0 + 0x1F));
 }
 
+// Has sub-objective arg0 been achieved on this level?
+// Proposed name: GetObjectiveBit
 s32 func_hd_code_80285B10(u8 arg0) {
   return (players[playerNumber].unk54[levelno] & (1 << (arg0 + 0x1F))) ? 1 : 0;
 }
 
+// Demolition-level checkpoint: when a completed non-demolition objective is
+// re-cleared, save the result, fade to the results state and mark the level
+// done
+// Proposed name: TriggerLevelCheckpoint
 void func_hd_code_80285B68(s32 arg0) {
   if (D_hd_code_80364A90 & 0x104) {
     if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_802E8F94[levelno].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
@@ -195,10 +232,16 @@ void func_hd_code_80285B68(s32 arg0) {
   }
 }
 
+// Show the "level complete" message window (0x47)
+// Proposed name: ShowLevelCompleteMessage
 void func_hd_code_80285CA0() {
   func_hd_code_8026AD30(0x47);
 }
 
+// Check each scored objective for newly hitting 100% this frame and fire the
+// matching "all X found/destroyed" announcement window (0x39-0x3B), plus a
+// special fanfare (0x3C + sfx 0xC6) when all three are complete at once
+// Proposed name: CheckObjectivesComplete
 void func_hd_code_80285CC0() {
   s32 sp34;
   s32 sp30;
@@ -248,6 +291,10 @@ void func_hd_code_80285CC0() {
   }
 }
 
+// Show the time-bonus / par result window: temporarily add the elapsed-time
+// bonus into the stats, rebuild the screen, then open window 0x06 with the
+// time row highlighted (arg0 = level start frame)
+// Proposed name: ShowTimeBonus
 void func_hd_code_80285EF4(s32 arg0) {
   s32 sp1C;
 
@@ -270,14 +317,21 @@ void func_hd_code_80285EF4(s32 arg0) {
   D_hd_code_802E8BD8 = 1;
 }
 
+// Convert a time value in the stat units back to frames (x6)
+// Proposed name: TimeUnitsToFrames
 s32 func_hd_code_80286038(u16 arg0) {
   return arg0  * 6;
 }
 
+// Convert frames to the stat time units (frames / 6, capped), used by the
+// timer/par calculations
+// Proposed name: FramesToTimeUnits
 u16 func_hd_code_8028604C(s32 arg0) {
   return MIN(0xEA5F, arg0 / 6U);
 }
 
+// Has level lvl been completed (medal 1..5)?
+// Proposed name: IsLevelCompleted
 u8 func_hd_code_80286090(s32 lvl) {
   return (players[playerNumber].unk18[lvl] > 0 && players[playerNumber].unk18[lvl] < 6)?1:0;
 }

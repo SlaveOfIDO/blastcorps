@@ -11,6 +11,17 @@ extern s32* D_hd_code_802FDB34;
 extern OSIoMesg D_80370C58;
 extern OSMesgQueue D_hd_code_803150A0;
 
+// Proposed file name: dma.c
+//
+// This file contains the cartridge DMA primitive used everywhere to stream
+// data from ROM (with optional gzip / texture decompression on the way in),
+// and the loader that pulls the front-end menu overlay into RAM the first
+// time it is needed.
+
+// Load the front-end menu overlay into its fixed RAM region (0x801E7000) on
+// first use: blank the screen, invalidate the caches, DMA the overlay from
+// ROM, zero the remaining space, and run its init (func_801F57B0)
+// Proposed name: LoadFrontEndOverlay
 void func_hd_code_8028B3E0(void) {
   s32 sp24;
 
@@ -27,6 +38,13 @@ void func_hd_code_8028B3E0(void) {
   }
 }
 
+// The cartridge DMA primitive (already named). arg0 = ROM source, arg1 =
+// RAM dest, *arg2 = byte count, arg3/arg4 = decompression-mode flags
+// (nonzero routes the data through a scratch buffer at 0x8021ED00 and then a
+// decompressor), arg5 = decompressor select: 1 = gzip (func_hd_code_8025C230),
+// 2 = texture codec (func_hd_code_802C4070). Transfers in 0x4000-byte chunks
+// plus the remainder; when decompressing, writes the decompressed size back
+// to *arg2.
 void InitiateDma(u8* arg0, u8* arg1, s32* arg2, u8 arg3, u8 arg4, u8 arg5) {
   u32 sp44;
   u32 sp40;

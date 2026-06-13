@@ -18,11 +18,30 @@ extern s8 D_803ED40A;
 extern s16 D_803ED400;
 extern s16 D_803F7C34;
 
+// Proposed file name: steering.c
+//
+// This file converts the camera-relative analog stick into a vehicle's
+// turn/accelerate inputs for the "steer toward where you push" control
+// schemes (on foot and similar vehicles). It computes the world heading the
+// stick is pointing at (stick direction plus camera yaw), compares it to the
+// vehicle's current heading (D_80370C70), and emits turn-left / turn-right
+// (button bits 0x200 / 0x100) plus forward speed, with a lock-on window so a
+// chosen direction sticks until roughly reached. Angles are in the 0..65535
+// turn unit.
+
+// Reset the steering lock-on state
+// Proposed name: ResetSteering
 void func_hd_code_8028B720(void) {
   D_80370C75 = 0;
   D_803ED40A = 0;
 }
 
+// Camera-relative steering for vehicle type arg2: from the stick (*arg0 x,
+// *arg1 y) compute the target world heading and magnitude, then decide
+// turn direction (func_hd_code_8028BA1C) - or hold the locked-in heading -
+// returning the result as a synthetic left/right press in *arg0 and the
+// forward speed in *arg1
+// Proposed name: SteerTowardStick
 void func_hd_code_8028B734(s8* arg0, s8* arg1, u8 arg2) {
   s8 sp37;
   s8 sp36;
@@ -69,6 +88,11 @@ void func_hd_code_8028B734(s8* arg0, s8* arg1, u8 arg2) {
   }
 }
 
+// Decide which way to turn from current heading arg0 to target arg1: if the
+// difference exceeds a speed-dependent threshold flip the "turn the long way"
+// state (*arg2) and coast, otherwise return 0x100 (right) or 0x200 (left)
+// for the shorter turn; sets the "aligned" flag when within the deadband
+// Proposed name: ChooseTurnDirection
 u16 func_hd_code_8028BA1C(s16 arg0, s16 arg1, s8* arg2, u8 arg3) {
   s16 spE;
   u16 spC;
@@ -99,6 +123,9 @@ u16 func_hd_code_8028BA1C(s16 arg0, s16 arg1, s8* arg2, u8 arg3) {
   return 0x200U;
 }
 
+// Bearing in degrees (0..360) from (arg0, arg1) to (arg2, arg3) via the
+// quadrant-resolved acos helper below
+// Proposed name: BearingDegrees
 f32 func_hd_code_8028BBF4(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
   f32 sp1C;
 
@@ -114,6 +141,9 @@ f32 func_hd_code_8028BBF4(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
   return sp1C;
 }
 
+// acos(arg1 / hypot(arg0,arg1)) in degrees, via the fixed-point arccos
+// lookup func_hd_code_802AD7D4
+// Proposed name: AcosDegrees
 f32 func_hd_code_8028BD88(f32 arg0, f32 arg1) {
   s32 sp1C;
   f32 sp18;
@@ -127,6 +157,9 @@ f32 func_hd_code_8028BD88(f32 arg0, f32 arg1) {
 }
 
 
+// Set the directional + L/R button bits in *arg0 from a raw stick position
+// (the simple, non-steering control mapping; Z also presses L+R)
+// Proposed name: StickToButtonsRaw
 void func_hd_code_8028BE70(u16* arg0, s8 arg1, s8 arg2) {
   if (!(*arg0 & 0x200) && (arg1 < -0x32)) {
     *arg0 |= 0x200;
@@ -145,6 +178,10 @@ void func_hd_code_8028BE70(u16* arg0, s8 arg1, s8 arg2) {
   }
 }
 
+// Steering control for vehicle type arg3 that also drives via button bits:
+// from the stick magnitude gate turning/forward thresholds, then OR in the
+// turn direction (func_hd_code_8028BA1C) and forward/accelerate bits
+// Proposed name: SteerToButtons
 void func_hd_code_8028BF34(u16* arg0, s8 arg1, s8 arg2, u8 arg3) {
   s16 sp2E;
   s16 sp2C;

@@ -14,6 +14,19 @@ extern OSScTask D_8036E698[][2];
 extern u64 D_hd_code_80367750;
 extern u64 D_hd_code_8036AFB0;
 
+// Proposed file name: rsp_task.c
+//
+// This file submits graphics display lists to the RSP as scheduler tasks and
+// waits for them to complete. It holds a small table of microcode entry
+// points (D_8036E660 = text, D_8036E678 = data) for the different render
+// passes - slot 0 is the front-end menu microcode, slots 1-3 the in-game
+// microcode. Up to 5 concurrent task slots are tracked, each double-buffered
+// per frame, with the in-flight flags in D_8036E68C.
+
+// Populate the microcode entry-point table: slot 0 points at the front-end
+// menu's microcode (in the separate hd_front_end overlay), slots 1-3 at the
+// shared in-game microcode
+// Proposed name: InitMicrocodeTable
 void func_hd_code_80284DB0(void) {
   D_8036E660[0] = &D_80207090; // func_hd_front_end_80207090
   D_8036E678[0] = &D_80210690; // some rodata in hd_front_end
@@ -25,6 +38,14 @@ void func_hd_code_80284DB0(void) {
   D_8036E678[3] = &D_hd_code_8030E390;
 }
 
+// Submit display list arg0 (arg1 commands) to the RSP on task slot arg2,
+// using that slot's microcode. Fills in an OSScTask (boot/main microcode,
+// DRAM stack, output buffer, yield buffer, target framebuffer), marks the
+// slot in-flight, writes back the data cache (the whole cache if arg5,
+// otherwise just the task/list/graphics-context), and queues it to the
+// scheduler. arg3 enables a task flag (0x40), arg4 is a tag returned in the
+// completion message.
+// Proposed name: SubmitGfxTask
 void func_hd_code_80284E54(Gfx* arg0, s32 arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5) {
   OSScTask* sp1C;
   s32 sp18;
@@ -71,6 +92,9 @@ void func_hd_code_80284E54(Gfx* arg0, s32 arg1, u8 arg2, s32 arg3, s32 arg4, s32
   osSendMesg(&sc.interruptQ, sp1C, 1);
 }
 
+// Block until the task tagged arg0 reports completion, clearing each
+// finished slot's in-flight flag along the way (warns on unexpected tags)
+// Proposed name: WaitForGfxTask
 void func_hd_code_80285110(s32 arg0) {
   u32 sp1C;
 

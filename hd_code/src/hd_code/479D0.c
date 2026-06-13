@@ -40,12 +40,25 @@ struct S_AmmoData {
 
 }; // Size: unknown
 
+// Proposed file name: crates.c
+//
+// This file is the collectible crate system: 3D textured boxes placed in a
+// level that the player collects by driving close, incrementing a vehicle
+// ammo/charge counter (D_803F8B72 or D_803EDC00, the counters shown by the
+// vehicle gauges in 42240.c) and fading out. Each crate type's geometry,
+// textures, pickup radius and which counter it feeds come from the
+// D_hd_code_802FDB40 template table; live crates live in D_8039AF00.
+
 void func_hd_code_8028C41C(Vtx* arg0, u8 arg1, s16 x, s16 y, s16 z);
 
 extern struct S_8039AF00 D_8039AF00[];
 extern s32 D_8039B068;
 extern struct S_802FDB40 D_hd_code_802FDB40[];
 
+// Build the live crate list from the level's crate placements [arg0, arg1):
+// copy position and type, load the two textures for that type, allocate and
+// fill the 8-vertex box geometry
+// (already partially named: LoadLevelAmmo)
 void LoadLevelAmmo(struct S_AmmoData* arg0, s32 arg1) {
   D_8039B068 = 0;
   while ((s32)arg0 != arg1) {
@@ -69,6 +82,9 @@ void LoadLevelAmmo(struct S_AmmoData* arg0, s32 arg1) {
   }
 }
 
+// Fill the 8 corner vertices of a crate box of type arg1 at (x, y, z), using
+// the type's min/max extents and box-mapped texcoords
+// Proposed name: BuildCrateBox
 void func_hd_code_8028C41C(Vtx* arg0, u8 arg1, s16 x, s16 y, s16 z) {
   arg0[0].v.ob[0] = D_hd_code_802FDB40[arg1].unk2 + x;
   arg0[0].v.ob[1] = D_hd_code_802FDB40[arg1].unk4 + y;
@@ -112,6 +128,12 @@ void func_hd_code_8028C41C(Vtx* arg0, u8 arg1, s16 x, s16 y, s16 z) {
   arg0[7].v.tc[0] = 0;
 }
 
+// Per-frame crate update (arg0 = current vehicle): for each uncollected
+// crate, register it with the collision system - or, if it is meant for the
+// current vehicle and the player is within its pickup radius, collect it
+// (play sfx 0x70, bump the matching counter by 10, start its fade-out).
+// Collected crates fade their alpha out.
+// Proposed name: UpdateCrates
 void func_hd_code_8028C874(u8 arg0) {
   s32 i;
   s32 distance;
@@ -156,6 +178,11 @@ void func_hd_code_8028C874(u8 arg0) {
   }
 }
 
+// Draw the crates: each visible box is drawn with its main texture on the
+// four side faces (UV-remapped per face via gSPModifyVertex) and a second
+// texture on the top, opaque while live and translucent (by alpha) while
+// fading out
+// Proposed name: DrawCrates
 void func_hd_code_8028CB30(Gfx** gfx, s32* arg1) {
     Gfx* entry = *gfx;
     s32 spE0;

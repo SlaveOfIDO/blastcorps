@@ -5,6 +5,18 @@
 #include "variables.h"
 #include "yoshi.h"
 
+// Proposed file name: controller.c (the original name - the assert in
+// func_hd_code_8028B240 references "controller.c")
+//
+// This file polls the N64 controller and turns it into the game's input
+// state. Each frame it reads the pad, applies the active control scheme
+// (per-vehicle, and the alternate "tank/digital" scheme some vehicles can
+// toggle), runs the playback/record hooks (17210.c) outside live play, then
+// fans the button bitmask out into individual current/previous button flags
+// (D_80370C15..) and the stick into deadzoned/clamped axes. Button bits:
+// 0x200/0x100 = stick-derived left/right, 0x8000/0x4000 = stick up/down or
+// Z/R, 0x1000 = Start, 0x20/0x10 = L/R, 2/4/8/1 = C buttons, 0x2000 = Z.
+
 void func_hd_code_8028ADF0(u8, u8, OSContPad*, s8*, s8*); /* extern */
 void func_hd_code_8028B190(s8*, s8*);                  /* extern */
 void func_hd_code_8028B734(s8*, s8*, u8);              /* extern */
@@ -39,6 +51,9 @@ extern s32 D_80370BC0;
 extern char* D_hd_code_802FDB18[3]; // Strings from asm files
 extern u32 D_hd_code_802FDB24[];
 
+// Initialize the controller subsystem (message queue, SI event, osContInit)
+// and return the connected-controller bitmask
+// Proposed name: InitController
 u8 func_hd_code_8028A370(void) {
   u32 pad;
   u8 sp1B;
@@ -52,6 +67,8 @@ u8 func_hd_code_8028A370(void) {
   return sp1B;
 }
 
+// Kick off an async controller read for this frame (unless the pak is busy)
+// Proposed name: StartControllerRead
 void func_hd_code_8028A3E4(void) {
   if (!D_8039C4B0) {
     func_hd_code_8028A42C();
@@ -60,6 +77,8 @@ void func_hd_code_8028A3E4(void) {
   }
 }
 
+// Drain any pending controller-read completion message
+// Proposed name: FlushControllerRead
 void func_hd_code_8028A42C(void) {
   if (D_80370C10 != 0) {
     osRecvMesg(&D_80370BF8, NULL, 1);
@@ -67,6 +86,14 @@ void func_hd_code_8028A42C(void) {
   }
 }
 
+// Per-frame input update: collect the controller read (zeroing on error),
+// save previous button/stick state, suppress input during the level intro,
+// then route through the recording/playback system or the live control
+// scheme - menus feed the menu input, gameplay applies the per-vehicle
+// scheme (alternate scheme when the player toggled it). Finally explode the
+// button mask into the individual edge-detected button flags and the
+// deadzoned stick axes.
+// Proposed name: UpdateInput
 void func_hd_code_8028A470(void) {
     OSContPad* sp44;
     s32 pad;
@@ -282,6 +309,11 @@ void func_hd_code_8028A470(void) {
 void func_hd_code_8028AFA4(u16, s8*, s8*);             /* extern */
 void func_hd_code_8028B0E8(OSContPad*, s8, s8);        /* extern */
 
+// Apply the digital/"D-pad style" control scheme: turn the C/Z/R buttons
+// into a synthetic stick (func_hd_code_8028AFA4) unless arg1, deadzone-clamp
+// it, and feed it back as synthetic button presses (func_hd_code_8028B0E8).
+// arg0 = whether the y axis should be zeroed when not paused.
+// Proposed name: ApplyDigitalScheme
 void func_hd_code_8028ADF0(u8 arg0, u8 arg1, OSContPad* arg2, s8* arg3, s8* arg4) {
   if ((arg0 == 0) && (D_hd_code_802E8BD0 == 0)) {
     *arg4 = 0;
@@ -295,6 +327,8 @@ void func_hd_code_8028ADF0(u8 arg0, u8 arg1, OSContPad* arg2, s8* arg3, s8* arg4
   }
 }
 
+// Zero all current/previous button and stick input state
+// Proposed name: ClearInputState
 void func_hd_code_8028AE88(void) {
   D_80370C27 = 0;
   D_80370C26 = 0;
@@ -323,6 +357,8 @@ void func_hd_code_8028AE88(void) {
   D_80370C38 = 0;
 }
 
+// Synthesize stick axes (+-0x50) from the directional button bits
+// Proposed name: ButtonsToStick
 void func_hd_code_8028AFA4(u16 arg0, s8* arg1, s8* arg2) {
   if (arg0 & 0x200) {
     *arg1 = -0x50;
@@ -338,6 +374,9 @@ void func_hd_code_8028AFA4(u16 arg0, s8* arg1, s8* arg2) {
   }
 }
 
+// Quantize the stick to 8 directions (-0x50/0/+0x50 per axis) for certain
+// vehicles, with a deadzone
+// Proposed name: SnapStick8Way
 void func_hd_code_8028B000(s8* arg0, s8* arg1) {
   switch (D_hd_code_80364456) {
     case 1:
@@ -370,6 +409,8 @@ void func_hd_code_8028B000(s8* arg0, s8* arg1) {
   }
 }
 
+// Set the directional button bits from a (synthetic) stick position
+// Proposed name: StickToButtons
 void func_hd_code_8028B0E8(OSContPad* arg0, s8 arg1, s8 arg2) {
   if (!(arg0->button & 0x200) && (arg1 < -0x32)) {
     arg0->button |= 0x200;
@@ -386,6 +427,8 @@ void func_hd_code_8028B0E8(OSContPad* arg0, s8 arg1, s8 arg2) {
 }
 
 
+// Apply the stick deadzone (+-9 -> 0) and clamp to +-0x50
+// Proposed name: DeadzoneClampStick
 void func_hd_code_8028B190(s8* arg0, s8* arg1) {
   if ((*arg0 < 0xA) && (*arg0 >= -9)) {
     *arg0 = 0;
@@ -413,6 +456,9 @@ void func_hd_code_8028B190(s8* arg0, s8* arg1) {
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/45BB0/D_hd_code_8030CC18.s")
 
+// Open the "CONTROL METHOD:" selection window for the current vehicle,
+// showing its available scheme name and the current choice
+// Proposed name: ShowControlMethodMenu
 void func_hd_code_8028B240(void) {
   char* sp24[3] = D_hd_code_802FDB18;
   char* sp20 = "CONTROL METHOD:";

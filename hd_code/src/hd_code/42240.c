@@ -6,6 +6,15 @@
 
 s32 func_hd_code_802A0CC8(s16, s32);
 
+// Proposed file name: vehicle_gauges.c
+//
+// This file draws the vehicle-specific HUD gauges that only appear while
+// driving a particular vehicle, each fading in/out (alpha ramp of 10/frame)
+// as you enter/leave that vehicle: a dial gauge with a rotating needle for
+// vehicle 3 (the Skyfall - the dial shows D_803EE3B1 as a percentage), and
+// two icon + numeric-counter widgets for vehicles 0xA and 1. The current
+// vehicle id is passed in as arg3.
+
 extern u8 D_803EE3B1;
 extern u8 *D_8036EC00; // Texture
 extern Vtx* D_8036EC04;
@@ -22,6 +31,9 @@ extern Vtx* D_8036EC24;
 extern s16 D_8036EC28;
 extern u8 D_hd_code_80364A6C;
 
+// Init the vehicle-3 dial gauge: load its 40x40 face texture (0x760),
+// allocate matrices, and set up the face quad plus the small needle quad
+// Proposed name: InitDialGauge
 void func_hd_code_80286A00(void) {
   D_hd_code_80364A68 = 1;
 
@@ -80,6 +92,10 @@ void func_hd_code_80286A00(void) {
   D_8036EC10 = 0;
 }
 
+// Draw the dial gauge (visible only in vehicle 3, fading in/out): the
+// textured face, then the needle rotated to (D_803EE3B1/100 * 180 + 270)
+// degrees
+// Proposed name: DrawDialGauge
 void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
     Gfx* entry = *gfx;
 
@@ -132,6 +148,9 @@ void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
     *gfx = entry;
 }
 
+// Init the vehicle-0xA counter widget: load its 32x32 icon texture (0x996)
+// and set up the icon quad
+// Proposed name: InitCounterA
 void func_hd_code_802873AC(void) {
   D_hd_code_80364A6A = 1;
   D_8036EC14 = D_hd_code_80358070;
@@ -166,6 +185,9 @@ void func_hd_code_802873AC(void) {
   D_8036EC1C = 0;
 }
 
+// Draw the vehicle-0xA counter widget (fading in/out): the icon plus the
+// numeric value D_803F8B72 rendered as gradient text
+// Proposed name: DrawCounterA
 void func_hd_code_80287530(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
   Gfx* entry = *gfx;
   s8 spB8[20];
@@ -210,6 +232,9 @@ void func_hd_code_80287530(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
   *gfx = entry;
 }
 
+// Init the vehicle-1 counter widget: load its 32x32 icon texture (0x998)
+// and set up the icon quad
+// Proposed name: InitCounterB
 void func_hd_code_80287AE4(void) {
   D_hd_code_80364A6C = 1;
 
@@ -245,6 +270,9 @@ void func_hd_code_80287AE4(void) {
   D_8036EC28 = 0;
 }
 
+// Draw the vehicle-1 counter widget (fading in/out): the icon plus the
+// numeric value D_803EDC00 rendered as gradient text
+// Proposed name: DrawCounterB
 void func_hd_code_80287C68(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
   Gfx* entry = *gfx;
   s8 spB8[20];

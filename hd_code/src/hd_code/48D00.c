@@ -50,6 +50,18 @@ struct S_802FDB98 {
   s16 unk16;
 }; // Size: 0x18
 
+// Proposed file name: tnt.c
+//
+// This file is the explosive/TNT object system: timed or trigger-detonated
+// boxes (the crates the player has to set off, the depots that chain-react,
+// and the missile-detonator targets). Each object (S_8039B070) has a fuse
+// timer (unk10/unk12), a detonation/destroyed state, a glowing/pulsing
+// texture (the prim color in unk20 oscillates), proximity collision against
+// the player and the missile (unk1E = blast radius), and chained explosions.
+// Templates come from D_hd_code_802FDB98; live objects from D_8039B070.
+// At the end of the file are two boot-time controller-detection helpers
+// (splat grouped them here by address).
+
 void func_hd_code_8028DA5C(Vtx*, u8);                   /* extern */
 struct S_8039B070* func_hd_code_8028DE94();
 void func_hd_code_802CDA10(s32, s32, s32);
@@ -82,6 +94,10 @@ struct S_Tnt {
     s16 unkA;
 }; // Size: 0xC
 
+// Build the live TNT list from the level's placements [arg0, arg1): copy
+// position (snapping y to the ground), type, fuse length and chain target,
+// load the type's four textures, and build the 8-vertex box geometry
+// (already named: LoadLevelTnt)
 void LoadLevelTnt(struct S_Tnt* arg0, s32 arg1) {
     D_8039B610 = 0;
     D_8039B614 = 0;
@@ -124,6 +140,9 @@ void LoadLevelTnt(struct S_Tnt* arg0, s32 arg1) {
     }
 }
 
+// Fill the 8 corner vertices of a TNT box of type arg1 from the type's
+// min/max extents, with box-mapped texcoords
+// Proposed name: BuildTntBox
 void func_hd_code_8028DA5C(Vtx* arg0, u8 arg1) {
   arg0[0].v.ob[0] = D_hd_code_802FDB98[arg1].unk2;
   arg0[0].v.ob[1] = D_hd_code_802FDB98[arg1].unk4;
@@ -174,6 +193,10 @@ void func_hd_code_8028DA5C(Vtx* arg0, u8 arg1) {
   arg0[7].v.tc[0] = 0;
 }
 
+// Detonate TNT object arg0: spawn the explosion at its position, start its
+// short destroyed timer, set the camera shake, stop its looping sounds and
+// play the boom (and re-arm the warning beep on another live object)
+// Proposed name: DetonateTnt
 void func_hd_code_8028DD64(u8 arg0) {
   struct S_8039B070* sp1C;
 
@@ -195,6 +218,9 @@ void func_hd_code_8028DD64(u8 arg0) {
   sndPlaySfx(D_hd_code_80367738, 0x10, NULL);
 }
 
+// Find a live, already-triggered TNT object (used to move the warning beep
+// to another active fuse); returns NULL if none
+// Proposed name: FindTriggeredTnt
 struct S_8039B070* func_hd_code_8028DE94(void) {
   s32 sp4;
 
@@ -207,6 +233,13 @@ struct S_8039B070* func_hd_code_8028DE94(void) {
   return 0;
 }
 
+// Per-frame TNT update (arg0 = current vehicle). For each object: handle the
+// post-detonation explosion delay (firing the chain target), count down a
+// triggered fuse (detonating at 0), pulse the glow color, run collision
+// against the player/missile to trigger or destroy it, compute the blast
+// radius pushing the player, register it with the collision system, and
+// manage its warning/burning looping sounds.
+// Proposed name: UpdateTnt
 void func_hd_code_8028DF14(u8 arg0) {
     s32 sp4C;
     u8 sp4B;
@@ -360,6 +393,10 @@ void func_hd_code_8028DF14(u8 arg0) {
     D_8039B620 = (s8) arg0;
 }
 
+// Draw the TNT boxes: each live box is drawn with its four textures (two
+// per face pair, 2-cycle LOD-blended), positioned and spun by its yaw, with
+// the pulsing prim color for the glow
+// Proposed name: DrawTnt
 void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1) {
     Gfx* entry;
     s32 sp1A0;
@@ -452,6 +489,9 @@ void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1) {
     *gfx = entry;
 }
 
+// Begin tracking TNT objects sitting on moveable geometry group arg0 (so
+// they ride along with it): record their offset within the platform
+// Proposed name: AttachTntToPlatform
 void func_hd_code_8028F6B4(u8 arg0) {
   s32 sp24;
 
@@ -464,6 +504,9 @@ void func_hd_code_8028F6B4(u8 arg0) {
   }
 }
 
+// Move the platform-attached TNT objects along with moveable geometry group
+// arg0 each frame, re-snapping their ground height and re-checking collision
+// Proposed name: MoveTntWithPlatform
 void func_hd_code_8028F794(u8 arg0) {
   s32 sp24;
   s16 sp22;
@@ -485,6 +528,8 @@ void func_hd_code_8028F794(u8 arg0) {
   }
 }
 
+// Clear the platform-attached flag on all TNT objects
+// Proposed name: DetachAllTnt
 void func_hd_code_8028F93C(void) {
   s32 sp4;
 
@@ -493,6 +538,9 @@ void func_hd_code_8028F93C(void) {
   }
 }
 
+// Set D_803A7424 if point (arg0, arg1, arg2) is within any live TNT's radius
+// (collision query used by other systems)
+// Proposed name: TestPointAgainstTnt
 void func_hd_code_8028F994(s32 arg0, s32 arg1, s32 arg2) {
   s32 sp24;
 
@@ -509,6 +557,9 @@ void func_hd_code_8028F994(s32 arg0, s32 arg1, s32 arg2) {
   }
 }
 
+// As above but with an extra radius margin arg3, and ignoring
+// platform-attached objects
+// Proposed name: TestSphereAgainstTnt
 void func_hd_code_8028FAC0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
   s32 sp24;
   s32 sp20;
@@ -528,6 +579,10 @@ void func_hd_code_8028FAC0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
   }
 }
 
+// Boot-time controller check: read controller 1 once and record whether
+// Start is held (D_hd_code_802FDBD0) and whether it's held with no pak
+// present (D_hd_code_802FDBD4) - used to pick the initial boot mode
+// Proposed name: CheckBootButtons
 void func_hd_code_8028FC10(void) {
   u8 sp3F;
   u8 sp3E;
@@ -546,6 +601,9 @@ void func_hd_code_8028FC10(void) {
   D_hd_code_802FDBD4 = sp3E != 0 && D_hd_code_802FDBD0 == 0;
 }
 
+// Query which of the 4 controller ports have a connected, error-free
+// controller (bitmask into *arg1); returns controller 0's error code
+// Proposed name: QueryControllers
 u8 func_hd_code_8028FCD4(OSMesgQueue* arg0, u8* arg1) {
   OSContStatus sp20[4];
   s32 sp1C;
