@@ -68,8 +68,8 @@ segments:
     - [0x4EBE0, c, hd_code/4EBE0] # done
     - [0x50670, c, hd_code/50670] # done
     - [0x51690, c, hd_code/51690] # done
-    - [0x52D70, asm, hd_code/52D70]
-    - [0x53220, asm, hd_code/53220]
+    - [0x52D70, c, hd_code/52D70] # done
+    - [0x53220, asm, hd_code/53220] # next rodata
     - [0x54E30, asm, hd_code/54E30]
     - [0x55970, asm, hd_code/55970]
     - [0x55D40, asm, hd_code/55D40]

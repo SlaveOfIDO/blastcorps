@@ -10,14 +10,6 @@ struct S_8020D7E4 {
   u8 pad4[0x30-0x4];
 };
 
-struct S_802E8F38 {
-  u8 unk0;
-  u8 pad1;
-  s16 pad2;
-  s16 pad4;
-  s16 pad6;
-};
-
 // Proposed file name: academy.c (the original name - the asserts in
 // func_hd_code_80286330 reference "academy.c")
 //
@@ -37,7 +29,6 @@ void func_801ED4B8();                                  /* extern */
 extern u8 D_hd_code_802FDA70[];
 extern struct S_8020D7E4 D_8020D7E4[];
 extern u8 D_8036EBA0[];
-extern struct S_802E8F38 D_hd_code_802E8F38[6];
 extern u8 D_hd_code_802FDA60[];
 extern u8 D_hd_code_803643D5;
 extern u8 frontEndPresent;

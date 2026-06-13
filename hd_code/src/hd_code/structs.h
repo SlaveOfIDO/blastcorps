@@ -534,4 +534,12 @@ struct S_8039C550 {
   /* 0x34 */ s32 unk34;
 };
 
+struct S_802E8F38 {
+  u8 unk0;
+  u8 pad1;
+  s16 unk2;
+  s16 unk4;
+  s16 unk6;
+};
+
 #endif
