@@ -90,6 +90,16 @@ struct S_SquareBlockData2 {
 }; // Size: 0xA
 
 
+// Proposed file name: blocks.c
+//
+// This file is the pushable-block puzzle system: square blocks the player
+// shoves around the level (D_8039C550, loaded from the level) that home in on
+// and drop into matching sockets/holes (D_8039C718), bouncing to a rest and
+// then triggering the socket's effect (e.g. raising a platform via
+// func_hd_code_802CEA68 / func_hd_code_80291724). Block templates come from
+// D_hd_code_802FDE8C/88, sockets can also spawn a trigger marker
+// (D_8039C800). Blocks can also ride moveable platforms.
+
 void func_hd_code_80291724(s32);                        /* extern */
 void func_hd_code_802CEA68(s32, s32);                  /* extern */
 void func_hd_code_802CE9A4();                          /* extern */
@@ -114,6 +124,12 @@ extern s32 D_8039C95C;
 extern s32 D_803FB8B0;
 extern struct S_802FDE88 D_hd_code_802FDE88[];
 
+// Build the level's blocks and sockets from the placement blob [arg0, arg1):
+// a count-prefixed array of blocks (position, type, snapped ground height,
+// loaded texture) followed by a count-prefixed array of sockets (position,
+// type, attached collision data); sockets that drive a trigger also get a
+// marker entry in D_8039C800
+// (already named: LoadLevelSquareBlocks)
 void LoadLevelSquareBlocks(u8* arg0, s32 arg1) {
     s32 sp1C;
 
@@ -188,6 +204,15 @@ void LoadLevelSquareBlocks(u8* arg0, s32 arg1) {
     }
 }
 
+// Per-frame block update (arg0 = current vehicle). For each block not yet
+// homing or settled: clear its push velocity, move it by any pending push
+// while re-snapping to the ground, check whether the player/missile is close
+// enough to shove it (accumulating a push speed capped per vehicle), and -
+// when it lines up over a matching-type socket within range - latch onto
+// that socket. Homing blocks slide toward the socket center, then drop with a
+// damped bounce; on settling they fire the socket's trigger. Also manages the
+// rolling/landing sounds.
+// Proposed name: UpdateBlocks
 void func_hd_code_802906C0(u8 arg0) {
     s32 sp74;
     s32 sp70;
@@ -398,6 +423,9 @@ void func_hd_code_802906C0(u8 arg0) {
     D_8039C95C = D_803EF6E4;
 }
 
+// Mark the trigger marker belonging to socket arg0 as activated (block
+// dropped in)
+// Proposed name: ActivateBlockTrigger
 void func_hd_code_80291724(s32 arg0) {
   u8 sp7 = 0;
   s32 sp0 = 0;
@@ -412,6 +440,9 @@ void func_hd_code_80291724(s32 arg0) {
   }
 }
 
+// Draw the blocks: each block's per-type display list (D_hd_code_802FDC08)
+// translated to its position, decal-textured
+// Proposed name: DrawBlocks
 void func_hd_code_802917B0(Gfx** gfx, struct Model1* arg1) {
   Gfx* entry = *gfx;
   s32 sp80;
@@ -441,6 +472,9 @@ void func_hd_code_802917B0(Gfx** gfx, struct Model1* arg1) {
 
 void func_hd_code_802AACD4(u8, s32, s32, s16*, s16*);
 
+// Begin tracking blocks resting on moveable geometry group arg0 (record
+// their offset within the platform so they ride along)
+// Proposed name: AttachBlocksToPlatform
 void func_hd_code_80291ED8(u8 arg0) {
   s32 i;
 
@@ -453,6 +487,9 @@ void func_hd_code_80291ED8(u8 arg0) {
   }
 }
 
+// Move the platform-attached blocks along with moveable geometry group arg0,
+// re-snapping their ground height
+// Proposed name: MoveBlocksWithPlatform
 void func_hd_code_80291FAC(u8 arg0) {
   s32 sp24;
 
@@ -464,6 +501,8 @@ void func_hd_code_80291FAC(u8 arg0) {
   }
 }
 
+// Clear the platform-attached flag on all blocks
+// Proposed name: DetachAllBlocks
 void func_hd_code_80292084(void) {
   s32 sp4;
 
@@ -472,6 +511,9 @@ void func_hd_code_80292084(void) {
   }
 }
 
+// Collision query: set D_803A7424 if the sphere at (arg0, arg1, arg2) with
+// extra radius arg3 overlaps any non-settled, non-attached block
+// Proposed name: TestSphereAgainstBlocks
 void func_hd_code_802920DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
   s32 sp24;
   s32 sp20;

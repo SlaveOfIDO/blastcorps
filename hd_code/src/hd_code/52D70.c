@@ -4,18 +4,28 @@
 #include "variables.h"
 #include "macros.h"
 
-u8 func_hd_code_8029766C(u8, u8*);                  /* extern */
 extern s16 D_8039CAB0;
 extern s16 D_8039CAB2;
 extern s16 D_8039CAB4;
-extern u8 D_8039CAB6;
 extern u8 D_8039CAB8;
 extern Mtx* D_8039CAC4;
 extern u8 D_8039CAC8;
 extern Gfx* D_8039CABC;
 extern void* D_8039CAC0;
 
+// Proposed file name: academy_marker.c
+//
+// This file handles the academy-test location marker: on the six special
+// academy levels (positions in D_hd_code_802E8F38, the same table used by the
+// campaign code in 41930.c) a marker is placed that the player must drive to.
+// Reaching it sets the matching bit in the player's academy-passed mask
+// (unk90) and triggers the completion state. D_8039CAB7 = marker active,
+// D_8039CAB8 = player currently inside it.
 
+// Set up the academy marker when entering an academy level: if the level has
+// an entry in D_hd_code_802E8F38, record its position and allocate its
+// matrices; otherwise disable the marker
+// Proposed name: InitAcademyMarker
 void func_hd_code_80297530(u8 arg0) {
   u8 sp1F;
   u8 sp1E;
@@ -43,6 +53,9 @@ void func_hd_code_80297530(u8 arg0) {
   D_8039CAB7 = 0;
 }
 
+// Look up level arg0 in the academy position table; returns 1 and the index
+// (*arg1) if found
+// Proposed name: FindAcademyLevel
 u8 func_hd_code_8029766C(u8 arg0, u8* arg1) {
   u8 sp7;
   s32 sp0;
@@ -62,6 +75,8 @@ u8 func_hd_code_8029766C(u8 arg0, u8* arg1) {
   return sp7;
 }
 
+// Draw the academy marker's display list (when active)
+// Proposed name: DrawAcademyMarker
 void func_hd_code_802976E8(Gfx** gfx) {
   Gfx* entry = *gfx;
 
@@ -76,6 +91,11 @@ void func_hd_code_802976E8(Gfx** gfx) {
   *gfx = entry;
 }
 
+// Per-frame academy marker proximity check: when the player at
+// (arg0, arg1, arg2) drives within 0x50 units of the marker, mark this
+// academy test passed (set its bit, trigger state 0x1000000000); requires
+// leaving a 0x8D radius before it can re-trigger
+// Proposed name: CheckAcademyMarker
 void func_hd_code_80297804(s32 arg0, s32 arg1, s32 arg2) {
   if ((D_8039CAB7 != 0) && (players[playerNumber].unk91 < 5)) {
     if (D_8039CAB8 != 0) {
@@ -90,6 +110,9 @@ void func_hd_code_80297804(s32 arg0, s32 arg1, s32 arg2) {
   }
 }
 
+// Commit the academy-passed mask back to the player's save (also lets the
+// "give all coins" debug flag + Z mark it passed)
+// Proposed name: SaveAcademyProgress
 void func_hd_code_80297960(void) {
   if ((D_hd_code_802FA268 != 0) && (D_80370C28 & 0x2000) && (D_8039CAB7 != 0)) {
     D_8039CAC8 |= 1 << D_8039CAB6;

@@ -27,6 +27,18 @@ struct S_802FF150 {
   u8 unk28;
 }; // Size: 0x2C
 
+// Proposed file name: ghostdigger.c (the original name - the assert in
+// func_hd_code_80295AE0 references "ghostdigger.c")
+//
+// This file is the race "ghost" system: while racing, the player's vehicle
+// position/orientation is sampled every frame with a timestamp into a buffer
+// (D_8039CA68[1]); if the run beats the saved best time it is copied to the
+// ghost buffer (D_8039CA68[0]) at 0x80055400. On later runs the ghost is
+// replayed - its transform interpolated to the current race time - and drawn
+// as a translucent copy of the vehicle. The buffers live at fixed RAM
+// addresses; up to 0xCCC samples. The last function here is an unrelated
+// per-region override of the loaded-world-cell list.
+
 s32 func_hd_code_80286038(u16);                       /* extern */
 void func_hd_code_80295394(s32*, s32*, s32*, s16*, s16*, s16*); /* extern */
 void func_hd_code_802AA6D0(s32, s32, s32, s16, s32, s32, s32, Mtx*); /* extern */
@@ -58,6 +70,9 @@ extern s8 D_hd_code_8030CD7C;
 extern u16 D_803C30A8[];
 extern struct S_802FF150 D_hd_code_802FF150[];
 
+// One-time ghost init: point the ghost and record buffers at their fixed RAM
+// addresses and reset the best time
+// Proposed name: InitGhost
 void func_hd_code_80294E30(void) {
   D_8039CA68[0] = (struct S_8039CA68*)0x80055400;
   D_8039CA68[1] = (struct S_8039CA68*)0x80065400;
@@ -65,6 +80,8 @@ void func_hd_code_80294E30(void) {
   D_8039CA7D = 0;
 }
 
+// Start recording a new run: reset the sample count and enable recording
+// Proposed name: StartGhostRecord
 void func_hd_code_80294E88(void) {
   D_8039CA70[1] = 0;
   D_8039CA80 = -1;
@@ -72,6 +89,9 @@ void func_hd_code_80294E88(void) {
   D_8039CA8C = 0;
 }
 
+// Start playing back the saved ghost (if one exists): reset the playback
+// cursor and enable drawing
+// Proposed name: StartGhostPlayback
 void func_hd_code_80294EB8(void) {
   if (D_8039CA7D != 0) {
     D_8039CA61 = 1;
@@ -81,6 +101,9 @@ void func_hd_code_80294EB8(void) {
   }
 }
 
+// Record one ghost sample this frame: the player's position, orientation and
+// the elapsed race time (warns and stops on buffer overrun)
+// Proposed name: RecordGhostSample
 void func_hd_code_80294F00(void) {
   if (D_hd_code_80364A90 & 0x104) {
     if (D_8039CA80 == -1) {
@@ -102,6 +125,10 @@ void func_hd_code_80294F00(void) {
   }
 }
 
+// Draw the ghost vehicle: sample its interpolated transform for the current
+// race time (func_hd_code_80295394), build its matrix and draw the vehicle's
+// display list translucently (prim alpha 0x64)
+// Proposed name: DrawGhost
 void func_hd_code_80295120(Gfx** gfx, struct Model1* arg1) {
   Gfx* entry = *gfx;
   s32 sp60;
@@ -129,6 +156,10 @@ void func_hd_code_80295120(Gfx** gfx, struct Model1* arg1) {
   *gfx = entry;
 }
 
+// Sample the ghost's position (arg0..2) and orientation (arg3..5) at the
+// current race time, linearly interpolating between the two bracketing
+// recorded samples (angles wrapped via func_hd_code_80295924)
+// Proposed name: SampleGhost
 void func_hd_code_80295394(s32* arg0, s32* arg1, s32* arg2, s16* arg3, s16* arg4, s16* arg5) {
     u8 sp2F;
     s32 sp28;
@@ -180,6 +211,9 @@ void func_hd_code_80295394(s32* arg0, s32* arg1, s32* arg2, s16* arg3, s16* arg4
     *arg5 = func_hd_code_80295924(D_8039CA68[0][D_8039CA78].unk10, D_8039CA68[0][sp24].unk10, sp18);
 }
 
+// Interpolate between two angles (0..4095) by arg2, taking the shorter way
+// around and wrapping the result
+// Proposed name: LerpAngle
 s16 func_hd_code_80295924(s16 arg0, s16 arg1, f32 arg2) {
   s16 sp6 = arg1 - arg0;
 
@@ -205,6 +239,9 @@ s16 func_hd_code_80295924(s16 arg0, s16 arg1, f32 arg2) {
   return arg2;
 }
 
+// If this run's time arg0 beats the saved ghost time, copy the recorded run
+// into the ghost buffer and store the new best time
+// Proposed name: SaveGhostIfBest
 void func_hd_code_80295A20(u32 arg0) {
   u8* spC;
   u8* sp8;
@@ -229,6 +266,10 @@ void func_hd_code_80295A20(u32 arg0) {
   }
 }
 
+// Patch the vehicle display list [gfx, arg1) for ghost rendering: force the
+// combine to modulate-by-prim and translate each render mode through a
+// 6-entry table to its translucent equivalent
+// Proposed name: PatchGhostDisplayList
 void func_hd_code_80295AE0(Gfx* gfx, Gfx* arg1) {
   s8 sp3F;
   s32 sp38;
@@ -271,6 +312,11 @@ void func_hd_code_80295AE0(Gfx* gfx, Gfx* arg1) {
   }
 }
 
+// Override the loaded-world-cell list (D_803C30A8) when the player at
+// (arg1, arg2) is inside a special region of level arg0 (table
+// D_hd_code_802FF150) - forces a custom set of world cells to be considered
+// loaded there
+// Proposed name: ApplyRegionCellOverride
 void func_hd_code_80295C70(u8 arg0, s32 arg1, s32 arg2) {
   s32 sp2C;
   s32 sp28;

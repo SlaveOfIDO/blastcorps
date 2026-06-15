@@ -11,6 +11,19 @@ extern void* D_8039CA9C;
 extern s32 D_6A8DA0;
 Gfx* func_hd_code_8029700C(Gfx*, s16, s16);         /* extern */
 
+// Proposed file name: controller_display.c
+//
+// This file draws the on-screen N64 controller graphic that visualizes the
+// inputs being played back during the attract-mode demos: the controller
+// body (from controllertextures.raw), highlighted buttons (A/B/C/Start/Z/R
+// each in their own color when held), the analog stick offset, and the
+// Z/R trigger and D-pad textures. The displayed input comes from the
+// playback button/stick state (D_80370C30/32/33).
+
+// Allocate and DMA the controller display textures from ROM
+// (controllertextures.raw) into level memory, carving out the body, stick,
+// trigger and D-pad sub-textures
+// Proposed name: InitControllerDisplay
 void func_hd_code_80295E50(void) {
   s32 sp24;
 
@@ -25,6 +38,11 @@ void func_hd_code_80295E50(void) {
   D_8039CAA2 = 1;
 }
 
+// Draw the controller display at screen (arg2, arg3) with alpha arg4: a drop
+// shadow then the body image, the Z/R trigger and D-pad textures when held,
+// each pressed face button as a colored overlay (blue A, green B, red Start,
+// gray C-buttons), and the analog stick nub offset by the stick position.
+// Proposed name: DrawControllerDisplay
 Gfx* func_hd_code_80295EFC(s32 arg0, Gfx* gfx, s16 arg2, s16 arg3, u8 arg4) {
     Gfx* entry = gfx;
     s32 sp118;
@@ -179,6 +197,9 @@ Gfx* func_hd_code_80295EFC(s32 arg0, Gfx* gfx, s16 arg2, s16 arg3, u8 arg4) {
     return entry;
 }
 
+// Draw the 80x80 controller body image at (arg1, arg2) in 31-pixel tiles
+// (the texture is too big for one TMEM load)
+// Proposed name: DrawControllerBody
 Gfx* func_hd_code_8029700C(Gfx* arg0, s16 arg1, s16 arg2) {
   s32 sp44;
   s32 sp40;

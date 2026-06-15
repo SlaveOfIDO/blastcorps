@@ -41,12 +41,23 @@ struct S_802FE3C0 {
   s32 pad5B4;
 }; // Size: 0x5B8
 
+// Proposed file name: projectiles.c
+//
+// This file is the ballistic projectile system (up to 4 in flight at once,
+// D_8039C960): an object is launched with a speed toward a target, flies a
+// gravity arc, and detonates on hitting terrain, a building or the world
+// edge - colliding objects can damage buildings (D_hd_code_803643D9) and
+// spawn explosions. Used for thrown/fired objects like boulders. Projectile
+// templates (collision model, explosion ids) come from D_hd_code_802FE3C0.
+
 void func_hd_code_80292DDC(s32);
 
 extern struct S_8039C960 D_8039C960[4];
 extern u16 D_803BE716;
 extern struct S_802FE3C0 D_hd_code_802FE3C0[];
 
+// Clear all projectile slots at level init
+// Proposed name: InitProjectiles
 void func_hd_code_80292240(void) {
   s32 sp4;
 
@@ -55,6 +66,11 @@ void func_hd_code_80292240(void) {
   }
 }
 
+// Launch a projectile of type arg7 from (arg1, arg2, arg3) toward
+// (arg4, arg5, arg6) at speed arg0 (arg8 = collision flag): claim a free
+// slot, set the velocity from the normalized direction, and store the
+// initial yaw (quadrant atan). Returns 0 if no slot is free.
+// Proposed name: LaunchProjectile
 s32 func_hd_code_80292288(s16 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, u8 arg7, s16 arg8) {
   s32 sp2C;
   u8 sp2B;
@@ -111,6 +127,12 @@ s32 func_hd_code_80292288(s16 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
   return 1;
 }
 
+// Per-frame projectile update: advance each live projectile along its arc
+// (x/z linear, y under -12 gravity), update its pitch, and detonate it
+// (func_hd_code_80292DDC) when it leaves the map, drops below ground, or hits
+// a building/the terrain - damaging the struck building and spawning the
+// per-template trail/impact explosions. Also fades the projectile's tint.
+// Proposed name: UpdateProjectiles
 void func_hd_code_80292830(void) {
     s32 sp34;
     s16 sp32;
@@ -170,6 +192,9 @@ void func_hd_code_80292830(void) {
     }
 }
 
+// Detonate projectile arg0: free its slot, spawn the impact explosion, set
+// the camera shake and play the boom (sfx 0x10)
+// Proposed name: DetonateProjectile
 void func_hd_code_80292DDC(s32 arg0) {
   D_8039C960[arg0].unk28 = 0;
   func_hd_code_802AC61C(D_8039C960[arg0].unk0, D_8039C960[arg0].unk4, D_8039C960[arg0].unk8, D_hd_code_802FE3C0[D_8039C960[arg0].unk18].unk5A8, D_hd_code_802FE3C0[D_8039C960[arg0].unk18].unk5A4);
@@ -178,6 +203,10 @@ void func_hd_code_80292DDC(s32 arg0) {
   sndPlaySfx(D_hd_code_80367738, 0x10, NULL);
 }
 
+// Draw the in-flight projectiles (after their first couple frames): each
+// scaled, oriented to its pitch/yaw, tinted by its fade value, drawn from its
+// per-type display list
+// Proposed name: DrawProjectiles
 void func_hd_code_80292EB8(Gfx** gfx, struct Model1* arg1) {
   Gfx* entry;
   s32 spD8;
