@@ -10,7 +10,7 @@
 
 // BSS Begin
 u8* D_hd_code_803669C0; // compressed input data pointer; proposed name: gzInput
-s32 D_hd_code_803669C4; // decompressed output pointer; proposed name: gzOutput
+u8* D_hd_code_803669C4; // decompressed output pointer; proposed name: gzOutput
 s32 pad_803669C8;
 s32 D_hd_code_803669CC; // offset recorded past the header (+8); proposed name: gzDataStart
 s32 pad_803669D0;
@@ -21,7 +21,7 @@ s32 pad_803669E0;
 s32 pad_803669E4;
 s32 D_hd_code_803669E8;
 s32 D_hd_code_803669EC; // input read offset; proposed name: gzReadOfs
-s32 D_hd_code_803669F0; // output write offset; proposed name: gzWriteOfs
+u32 D_hd_code_803669F0; // output write offset; proposed name: gzWriteOfs
 // BSS End
 
 // Decompress a gzip stream: *arg0 = source, *arg1 = destination, arg2 = a
@@ -39,7 +39,7 @@ void func_hd_code_8025C230(s32* arg0, s32* arg1, s32 arg2) {
   }
   D_hd_code_802E8CC0 = func_hd_code_8025C30C();
   if (D_hd_code_802E8CC0 >= 0) {
-    func_hd_code_802994F8();
+    inflate();
     *arg0 += D_hd_code_803669EC;
     *arg1 += D_hd_code_803669F0;
   }

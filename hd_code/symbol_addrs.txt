@@ -440,3 +440,11 @@ frontEndPresent = 0x80370C50;
 players = 0x80364AF0; // size:0x400
 D_8036EC38 = 0x8036EC38; // size:0x640
 D_hd_code_802FE980 = 0x802FE980; // size:0x84
+
+huft_build = 0x80297FE0;
+inflate_codes = 0x8029867C;
+inflate_stored = 0x80298A84;
+inflate_fixed = 0x80298C18;
+inflate_dynamic = 0x80298DC0;
+inflate_block = 0x802993AC;
+inflate = 0x802994F8;

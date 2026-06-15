@@ -33,7 +33,6 @@ Gfx* func_hd_code_80275DA4(Gfx*, u8);                /* extern */
 Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
 s32 func_hd_code_8025B558(u16*);                    /* extern */
 void func_hd_code_8026BA7C(struct S_802F8BDC*);        /* extern */
-s32 func_hd_code_80297EF8(s32);                     /* extern */
 Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2);
 
 extern u16 D_hd_code_802E8C98[];

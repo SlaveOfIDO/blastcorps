@@ -5,6 +5,7 @@
 #include <PR/libaudio.h>
 #include "structs.h"
 #include "snd.h"
+#include "inflate.h"
 #include <PR/os.h>
 #include <PR/sched.h>
 
@@ -223,13 +224,13 @@ extern s32 D_hd_code_80366998;
 extern s32 D_hd_code_8036699C;
 extern s32 D_hd_code_803669A0;
 extern s32 D_hd_code_803669B4;
-extern s32 D_hd_code_803669C4;
+extern u8* D_hd_code_803669C4;
 extern s32 D_hd_code_803669CC;
 extern s32 D_hd_code_803669D8;
 extern s32 D_hd_code_803669DC;
 extern s32 D_hd_code_803669E8;
 extern s32 D_hd_code_803669EC;
-extern s32 D_hd_code_803669F0;
+extern u32 D_hd_code_803669F0;
 extern ALCSPlayer* D_hd_code_80367734;
 extern s32 D_hd_code_80367740;
 extern s32 D_hd_code_8036B8B4;
@@ -243,7 +244,7 @@ extern s32 D_hd_code_8036EA84;
 extern s32 D_hd_code_8036EA90;
 extern s32 D_hd_code_8036EA94;
 extern s32 D_hd_code_80370C38;
-extern s32 D_hd_code_8039CAE0;
+extern struct huft* D_hd_code_8039CAE0;
 extern s32 D_hd_code_803BE6E0;
 extern s32 D_hd_code_803BE6E4;
 extern s32 D_hd_code_803BE6E8;
@@ -709,5 +710,6 @@ extern ALSoundState D_8036DCD8;
 extern u8 D_8036E4CA;
 extern s32 D_hd_code_803156C0;
 extern struct S_802E8F38 D_hd_code_802E8F38[6];
+extern u8 D_8039CAB6;
 
 #endif
