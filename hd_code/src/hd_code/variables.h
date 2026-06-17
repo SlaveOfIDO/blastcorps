@@ -710,5 +710,6 @@ extern u8 D_8036E4CA;
 extern s32 D_hd_code_803156C0;
 extern struct S_802E8F38 D_hd_code_802E8F38[6];
 extern u8 D_8039CAB6;
+extern u8 D_hd_code_803643D4;
 
 #endif

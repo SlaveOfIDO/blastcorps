@@ -51,7 +51,6 @@ extern void* D_803BDB04;
 extern void* D_803BDB08;
 extern u8 D_8039CA7D;
 extern u32 D_8039CA88;
-extern u8 D_hd_code_803643D4;
 extern u8 D_8039CA7D;
 extern s32 D_8039CA70[2];
 extern s32 D_8039CA80;
