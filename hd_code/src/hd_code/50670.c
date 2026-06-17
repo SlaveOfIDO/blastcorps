@@ -49,7 +49,6 @@ extern u8 D_8039CA7C;
 extern void* D_803BDB00;
 extern void* D_803BDB04;
 extern void* D_803BDB08;
-extern u32 D_hd_code_802FF0D0[];
 extern u8 D_8039CA7D;
 extern u32 D_8039CA88;
 extern u8 D_hd_code_803643D4;
@@ -65,10 +64,34 @@ extern s32 D_8039CA84;
 extern struct S_8039CA68* D_8039CA68[2];
 extern s32 D_8039CA80;
 extern s16 D_803ED390[3];
-extern Gfx D_hd_code_802FF11C[];
 extern s8 D_hd_code_8030CD7C;
 extern u16 D_803C30A8[];
-extern struct S_802FF150 D_hd_code_802FF150[];
+
+// <data>
+u32 D_hd_code_802FF0D0[19] = {
+  0x00004E20, 0x00001B58, 0x00006590, 0x00002AF8,
+  0x00002710, 0x00004268, 0x00001B58, 0x00003A98,
+  0x000032C8, 0x00004268, 0x00003E80, 0x000088B8,
+  0x00000000, 0x00004268, 0x000055F0, 0x000032C8,
+  0x00002134, 0x000088B8, 0x000088B8
+};
+
+u32 D_hd_code_802FF11C[6][2] = {
+  { 0x00552078, 0x005049D8 },
+  { 0x005049D8, 0x005049D8 },
+  { 0x00553078, 0x005049D8 },
+  { 0x0C192078, 0x0C1849D8 },
+  { 0x0C1849D8, 0x0C1849D8 },
+  { 0x0C193078, 0x0C1849D8 }
+};
+
+u32 pad_802FF14C = 0;
+
+struct S_802FF150 D_hd_code_802FF150[1] = {
+  { 0x00028A00, 0x00028A00, 0x00032C80, 0x00032C80, 0x00012340, 0x0001B580, 0x00012340, 0x0001B580, { 0x01, 0x02, 0x04, 0x05, 0x08, 0xFF, 0x00, 0x00 }, 0x09 }
+};
+
+// </data>
 
 // One-time ghost init: point the ghost and record buffers at their fixed RAM
 // addresses and reset the best time
@@ -291,7 +314,7 @@ void func_hd_code_80295AE0(Gfx* gfx, Gfx* arg1) {
           sp37 = 0;
 
           while ((sp37 == 0) && (sp30 < 6)) {
-            if (D_hd_code_802FF11C[sp30].words.w0 == sp2C) {
+            if (D_hd_code_802FF11C[sp30][0] == sp2C) {
               sp37 = 1;
             } else {
               sp30 += 1;
@@ -301,7 +324,7 @@ void func_hd_code_80295AE0(Gfx* gfx, Gfx* arg1) {
           if (sp37 == 0) {
             rmonPrintf(ASSERT_MESSAGE, "found", "ghostdigger.c", 0x152);
           }
-          gfx->words.w1 = D_hd_code_802FF11C[sp30].words.w1;
+          gfx->words.w1 = D_hd_code_802FF11C[sp30][1];
         }
         gfx++;
         break;

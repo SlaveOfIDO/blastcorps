@@ -16,13 +16,20 @@ extern f32 D_8036C774; // fade-out alpha step per frame; proposed name: fadeOutS
 u64 D_8036C778; // game state to enter once the fade-out completes (0 = not fading out); proposed name: fadeTargetState
 extern s32 D_8036C780; // frame the fade started; proposed name: fadeStartFrame
 extern u8 D_8036C784; // current fade overlay alpha; proposed name: fadeAlpha
-extern f32 D_hd_code_802FA930; // fade-in alpha step per frame; proposed name: fadeInSpeed
 extern u32 D_hd_code_803156C4;
 extern u8 D_hd_code_8035805C;
 extern u32 D_hd_code_80358060;
 extern u64 D_hd_code_80364A90;
 extern u64 D_hd_code_80364A98;
 extern s32 levelno;
+
+// <data>
+struct S_802FA8B0 D_hd_code_802FA8B0[2] = {
+    { { { { { 0x0000, 0x0000, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }, { { { 0x013F, 0x0000, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }, { { { 0x013F, 0x00EF, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }, { { { 0x0000, 0x00EF, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } } } },
+    { { { { { 0x0000, 0x0000, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }, { { { 0x013F, 0x0000, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }, { { { 0x013F, 0x00EF, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }, { { { 0x0000, 0x00EF, 0xFFF6 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } } } }
+};
+f32 D_hd_code_802FA930 = 8.0f; // fade-in alpha step per frame; proposed name: fadeInSpeed
+// </data>
 
 // Per-frame fade update + draw: on frame 0 of certain game states start
 // fully black (hiding any open message window for later restore); while

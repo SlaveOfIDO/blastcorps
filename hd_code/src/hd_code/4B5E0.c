@@ -15,11 +15,6 @@ struct S_8039C718 {
     s32 unk18;
 };
 
-struct S_802FDE90 {
-    s32 unk0;
-    u8 pad4[0x28C];
-};
-
 struct S_8039C800 {
     s32 unk0;
     s32 unk4;
@@ -41,13 +36,18 @@ struct S_8039C800 {
     u8 unk27;
 }; // Size: 0x28
 
-struct S_802FDE88 {
-    s16 unk0;
-    s32 pad4;
-    s32 unk8;
-    u8 padC[0x290 - 0xC];
-};
-
+struct S_802FDC08
+{
+  /* 0x000 */ Gfx unk0[40];
+  /* 0x140 */ Vtx unk140[20];
+  /* 0x280 */ s16 unk280;
+  /* 0x282 */ u8 unk282;
+  /* 0x283 */ u8 unk283;
+  /* 0x284 */ s16 unk284;
+  /* 0x286 */ s16 unk286;
+  /* 0x288 */ s32 unk288;
+  /* 0x28C */ u32 pad28C;
+}; // Size: 0x290
 
 
 struct S_8039C720 {
@@ -65,13 +65,6 @@ struct S_8039C724 {
   s32 unk0;
   u8 pad4[0x18];
 };
-
-struct S_802FDE8C {
-  s16 unk0;
-  s16 unk2;
-  u8 pad4[0x28C];
-};
-
 
 struct S_SquareBlockData1 {
   s16 unk0;
@@ -97,7 +90,7 @@ struct S_SquareBlockData2 {
 // and drop into matching sockets/holes (D_8039C718), bouncing to a rest and
 // then triggering the socket's effect (e.g. raising a platform via
 // func_hd_code_802CEA68 / func_hd_code_80291724). Block templates come from
-// D_hd_code_802FDE8C/88, sockets can also spawn a trigger marker
+// D_hd_code_802FDC08, sockets can also spawn a trigger marker
 // (D_8039C800). Blocks can also ride moveable platforms.
 
 void func_hd_code_80291724(s32);                        /* extern */
@@ -105,9 +98,6 @@ void func_hd_code_802CEA68(s32, s32);                  /* extern */
 void func_hd_code_802CE9A4();                          /* extern */
 void func_hd_code_802CE9C8(void*, u8, u8);             /* extern */
 
-extern s16 D_hd_code_802FDBE0[];
-extern Gfx D_hd_code_802FDC08[][82];
-extern struct S_802FDE8C D_hd_code_802FDE8C[];
 extern struct S_8039C720 D_8039C720[];
 extern s32 D_8039C710;
 extern struct S_8039C718 D_8039C718[];
@@ -122,7 +112,115 @@ extern s32 D_8039C954;
 extern s32 D_8039C958;
 extern s32 D_8039C95C;
 extern s32 D_803FB8B0;
-extern struct S_802FDE88 D_hd_code_802FDE88[];
+
+// <data>
+s16 D_hd_code_802FDBE0[20] = {
+  0x0000, 0x0087, 0x0069, 0x0096,
+  0x0096, 0x0087, 0x0000, 0x0096,
+  0x00C8, 0x07D0, 0x00AF, 0x0000,
+  0x0000, 0x00C3, 0x00BE, 0x00B9,
+  0x0069, 0x0000, 0x0000, 0x0000
+};
+
+struct S_802FDC08 D_hd_code_802FDC08[3] = {
+  {
+    {
+      gsSPVertex(0x002FDD48, 8, 0),
+      gsSP1Triangle(0, 1, 2, 0),
+      gsSP1Triangle(0, 2, 3, 0),
+      gsSP1Triangle(4, 1, 0, 0),
+      gsSP1Triangle(1, 4, 5, 0),
+      gsSP1Triangle(7, 5, 4, 0),
+      gsSP1Triangle(5, 7, 6, 0),
+      gsSP1Triangle(7, 3, 2, 0),
+      gsSP1Triangle(6, 7, 2, 0),
+      gsSPModifyVertex(5, G_MWO_POINT_ST, 0x00000000),
+      gsSPModifyVertex(6, G_MWO_POINT_ST, 0x07E00000),
+      gsSP1Triangle(5, 2, 1, 0),
+      gsSP1Triangle(2, 5, 6, 0),
+      gsSPEndDisplayList(),
+  },
+{
+    { { { 0x001E, 0x0000, 0xFFE2 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0x001E, 0x001E, 0xFFE2 }, 0x0000, { 0x0000, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0x001E, 0x001E, 0x001E }, 0x0000, { 0x07E0, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0x001E, 0x0000, 0x001E }, 0x0000, { 0x07E0, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0xFFE2, 0x0000, 0xFFE2 }, 0x0000, { 0x07E0, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0xFFE2, 0x001E, 0xFFE2 }, 0x0000, { 0x07E0, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0xFFE2, 0x001E, 0x001E }, 0x0000, { 0x0000, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    { { { 0xFFE2, 0x0000, 0x001E }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }
+},
+    0x048C, 0x40, 0x20,
+    0x0640, 0x001E,
+    0x000003C0,
+    0x00000000
+  },
+  {
+      {
+        gsSPVertex(0x002FDFD8, 8, 0),
+        gsSP1Triangle(2, 1, 0, 0),
+        gsSP1Triangle(3, 2, 0, 0),
+        gsSP1Triangle(0, 1, 4, 0),
+        gsSP1Triangle(5, 4, 1, 0),
+        gsSP1Triangle(4, 5, 7, 0),
+        gsSP1Triangle(6, 7, 5, 0),
+        gsSP1Triangle(2, 3, 7, 0),
+        gsSP1Triangle(2, 7, 6, 0),
+        gsSPModifyVertex(5, G_MWO_POINT_ST, 0x00000000),
+        gsSPModifyVertex(6, G_MWO_POINT_ST, 0x07E00000),
+        gsSP1Triangle(1, 2, 5, 0),
+        gsSP1Triangle(6, 5, 2, 0),
+        gsSPEndDisplayList(),
+    },
+    {
+        { { { 0x002A, 0x0000, 0x0000 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x002A, 0x001E, 0x0000 }, 0x0000, { 0x0000, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x001E, 0xFFD6 }, 0x0000, { 0x07E0, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x0000, 0xFFD6 }, 0x0000, { 0x07E0, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x0000, 0x002A }, 0x0000, { 0x07E0, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x001E, 0x002A }, 0x0000, { 0x07E0, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0xFFD6, 0x001E, 0x0000 }, 0x0000, { 0x0000, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0xFFD6, 0x0000, 0x0000 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } }
+    },
+    0x048C, 0x40, 0x20,
+0x0640, 0x001E,
+0x000003C0,
+0x00000000
+  },
+  {
+      {
+        gsSPVertex(0x002FDFD8, 8, 0),
+        gsSP1Triangle(2, 1, 0, 0),
+        gsSP1Triangle(3, 2, 0, 0),
+        gsSP1Triangle(0, 1, 4, 0),
+        gsSP1Triangle(5, 4, 1, 0),
+        gsSP1Triangle(4, 5, 7, 0),
+        gsSP1Triangle(6, 7, 5, 0),
+        gsSP1Triangle(2, 3, 7, 0),
+        gsSP1Triangle(2, 7, 6, 0),
+        gsSPModifyVertex(5, G_MWO_POINT_ST, 0x00000000),
+        gsSPModifyVertex(6, G_MWO_POINT_ST, 0x07E00000),
+        gsSP1Triangle(1, 2, 5, 0),
+        gsSP1Triangle(6, 5, 2, 0),
+        gsSPEndDisplayList(),
+    },
+    {
+        { { { 0x002A, 0x0000, 0x0000 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x002A, 0x001E, 0x0000 }, 0x0000, { 0x0000, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x001E, 0xFFD6 }, 0x0000, { 0x07E0, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x0000, 0xFFD6 }, 0x0000, { 0x07E0, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x0000, 0x002A }, 0x0000, { 0x07E0, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0x0000, 0x001E, 0x002A }, 0x0000, { 0x07E0, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0xFFD6, 0x001E, 0x0000 }, 0x0000, { 0x0000, 0x03E0 }, { 0x00, 0x00, 0x00, 0x00 } } },
+        { { { 0xFFD6, 0x0000, 0x0000 }, 0x0000, { 0x0000, 0x0000 }, { 0x00, 0x00, 0x00, 0x00 } } },
+    },
+    0x048C, 0x40, 0x20,
+    0x0500, 0x0028,
+    0x000003C0,
+    0x00000000
+  }
+};
+// </data>
 
 // Build the level's blocks and sockets from the placement blob [arg0, arg1):
 // a count-prefixed array of blocks (position, type, snapped ground height,
@@ -163,7 +261,7 @@ void LoadLevelSquareBlocks(u8* arg0, s32 arg1) {
             D_8039C550[sp1C].unk14 = 0;
             D_8039C550[sp1C].unk18 = 0;
             D_8039C550[sp1C].unk29 = 0;
-            D_8039C550[sp1C].unk30 = func_hd_code_802A0CC8(D_hd_code_802FDE88[D_8039C550[sp1C].unk10].unk0, 0);
+            D_8039C550[sp1C].unk30 = func_hd_code_802A0CC8(D_hd_code_802FDC08[D_8039C550[sp1C].unk10].unk280, 0);
         }
 
         D_8039C7F8 = *(s16*)arg0;
@@ -174,7 +272,7 @@ void LoadLevelSquareBlocks(u8* arg0, s32 arg1) {
             D_8039C718[sp1C].unk4 = ((struct S_SquareBlockData2*)arg0)->unk2 << 5;
             D_8039C718[sp1C].unk8 = ((struct S_SquareBlockData2*)arg0)->unk4 << 5;
             D_8039C718[sp1C].unk10 = ((struct S_SquareBlockData2*)arg0)->unk6;
-            D_8039C718[sp1C].unkC = (s32) (D_8039C718[sp1C].unk4 - D_hd_code_802FDE88[D_8039C718[sp1C].unk10].unk8);
+            D_8039C718[sp1C].unkC = (s32) (D_8039C718[sp1C].unk4 - D_hd_code_802FDC08[D_8039C718[sp1C].unk10].unk288);
             D_8039C718[sp1C].unk11 = 0;
             D_8039C718[sp1C].unk14 = D_803FB8B0;
             func_hd_code_802CE9C8(arg0 + 10, ((struct S_SquareBlockData2*)arg0)->unk7, D_8039C718[sp1C].unk10);
@@ -255,7 +353,7 @@ void func_hd_code_802906C0(u8 arg0) {
                         sp64 = (s32) (D_8039C550[sp74].unk4 - D_8039C718[sp70].unk4) >> 5;
                         sp60 = (s32) (D_8039C550[sp74].unk8 - D_8039C718[sp70].unk8) >> 5;
                         sp54 = (s32) sqrtf((f32) ((sp68 * sp68) + (sp64 * sp64) + (sp60 * sp60)));
-                        if (sp54 <= D_hd_code_802FDE8C[D_8039C550[sp74].unk10].unk2) {
+                        if (sp54 <= D_hd_code_802FDC08[D_8039C550[sp74].unk10].unk286) {
                             D_8039C550[sp74].unk24 = func_hd_code_8026A610(D_8039C550[sp74].unk0, D_8039C550[sp74].unk8, D_8039C718[sp70].unk0, D_8039C718[sp70].unk8);
                             D_8039C550[sp74].unk1C = D_8039C550[sp74].unk4;
                             D_8039C550[sp74].unk12 = 1;
@@ -268,7 +366,7 @@ void func_hd_code_802906C0(u8 arg0) {
                 }
             }
             func_hd_code_802CE4F0(D_8039C550[sp74].unk0, D_8039C550[sp74].unk4, D_8039C550[sp74].unk8);
-            sp6F = func_hd_code_802CDF94(D_hd_code_802FDE8C[D_8039C550[sp74].unk10].unk0);
+            sp6F = func_hd_code_802CDF94(D_hd_code_802FDC08[D_8039C550[sp74].unk10].unk284);
             if (sp6F != 0) {
                 if ((D_803F932D == 0) && (D_803F932E != 0)) {
                     D_803ED40C = 1;
@@ -297,8 +395,8 @@ void func_hd_code_802906C0(u8 arg0) {
                 sp5B = 0;
                 sp5E = D_803A7410,
                 sp5C = D_803A7412;
-                func_hd_code_802CE5BC(D_8039C550[sp74].unk0, D_8039C550[sp74].unk4, D_8039C550[sp74].unk8, (s32) D_hd_code_802FDE8C[D_8039C550[sp74].unk10].unk0, 0xC8, (s32) D_8039C550[sp74].unk10);
-                func_hd_code_802CDB70(D_hd_code_802FDE8C[D_8039C550[sp74].unk10].unk0, 0);
+                func_hd_code_802CE5BC(D_8039C550[sp74].unk0, D_8039C550[sp74].unk4, D_8039C550[sp74].unk8, (s32) D_hd_code_802FDC08[D_8039C550[sp74].unk10].unk284, 0xC8, (s32) D_8039C550[sp74].unk10);
+                func_hd_code_802CDB70(D_hd_code_802FDC08[D_8039C550[sp74].unk10].unk284, 0);
                 if ((sp5E != D_803A7410) || (sp5C != D_803A7412)) {
                     sp5B = 1;
                 }
@@ -318,7 +416,7 @@ void func_hd_code_802906C0(u8 arg0) {
                 }
             }
             if (((sp43 != 0) || (arg0 == 0)) && ((D_8039C550[sp74].unk12 == 0))) {
-                func_hd_code_802CE880(sp74, D_8039C550[sp74].unk0, D_8039C550[sp74].unk4, D_8039C550[sp74].unk8, (s32) D_hd_code_802FDE8C[D_8039C550[sp74].unk10].unk0);
+                func_hd_code_802CE880(sp74, D_8039C550[sp74].unk0, D_8039C550[sp74].unk4, D_8039C550[sp74].unk8, (s32) D_hd_code_802FDC08[D_8039C550[sp74].unk10].unk284);
                 D_8039C550[sp74].unkC = 0;
             } else {
                 func_hd_code_802CE90C(sp74);
@@ -461,8 +559,8 @@ void func_hd_code_802917B0(Gfx** gfx, struct Model1* arg1) {
     guTranslate(&arg1->unkB00[sp80], (f32) D_8039C550[sp80].unk0 / 32.0f, (f32) D_8039C550[sp80].unk4 / 32.0f, (f32) D_8039C550[sp80].unk8 / 32.0f);
     gSPMatrix(entry++, (u32) &D_2000000.unkB00[sp80], G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    gDPLoadTextureBlock(entry++, (s32)D_8039C550[sp80].unk30 + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_hd_code_802FDC08[D_8039C550[sp80].unk10][0x280/0x8].texture.tile, D_hd_code_802FDC08[D_8039C550[sp80].unk10][0x280/0x8].texture.on, /* pal = */0,  G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_802FDC08[D_8039C550[sp80].unk10]));
+    gDPLoadTextureBlock(entry++, (s32)D_8039C550[sp80].unk30 + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_hd_code_802FDC08[D_8039C550[sp80].unk10].unk282, D_hd_code_802FDC08[D_8039C550[sp80].unk10].unk283, /* pal = */0,  G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_802FDC08[D_8039C550[sp80].unk10].unk0));
     gSPPopMatrix(entry++, G_MTX_MODELVIEW);
   }
   gDPPipeSync(entry++);
@@ -526,7 +624,7 @@ void func_hd_code_802920DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
   for(sp24 = 0; sp24 < D_8039C710; sp24++) {
     if ((D_8039C550[sp24].unk11 == 0) && (D_8039C550[sp24].unk29 == 0)) {
       sp20 = func_hd_code_8026A6F0(arg0, arg1, arg2, D_8039C550[sp24].unk0 >> 5, D_8039C550[sp24].unk4 >> 5, D_8039C550[sp24].unk8 >> 5);
-      if (sp20 <= ((D_hd_code_802FDE8C[D_8039C550[sp24].unk10].unk0 >> 5) + arg3)) {
+      if (sp20 <= ((D_hd_code_802FDC08[D_8039C550[sp24].unk10].unk284 >> 5) + arg3)) {
         D_803A7424 = 1;
       }
     }

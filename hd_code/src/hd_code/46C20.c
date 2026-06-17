@@ -7,7 +7,7 @@
 void func_801F57B0();
 void func_hd_code_802C4070(void**, void**, u32, u8);
 extern void** D_hd_code_802FDB30;
-extern s32* D_hd_code_802FDB34;
+extern void** D_hd_code_802FDB34;
 extern OSIoMesg D_80370C58;
 extern OSMesgQueue D_hd_code_803150A0;
 
@@ -18,6 +18,11 @@ extern OSMesgQueue D_hd_code_803150A0;
 // and the loader that pulls the front-end menu overlay into RAM the first
 // time it is needed.
 
+// <data>
+void** D_hd_code_802FDB30 = (void**)0x803FFFF8;
+void** D_hd_code_802FDB34 = (void**)0x803FFFFC;
+// </data>
+
 // Load the front-end menu overlay into its fixed RAM region (0x801E7000) on
 // first use: blank the screen, invalidate the caches, DMA the overlay from
 // ROM, zero the remaining space, and run its init (func_801F57B0)
@@ -25,7 +30,7 @@ extern OSMesgQueue D_hd_code_803150A0;
 void func_hd_code_8028B3E0(void) {
   s32 sp24;
 
-  sp24 = *D_hd_code_802FDB34 - (s32)*D_hd_code_802FDB30;
+  sp24 = (s32)*D_hd_code_802FDB34 - (s32)*D_hd_code_802FDB30;
   osViBlack(1U);
   if (frontEndPresent == 0) {
     osInvalDCache((void* )0x801E7000, 0x37D00);

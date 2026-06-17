@@ -2843,7 +2843,7 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2) {
                 guMtxF2L(spF0, &arg1->unk2C0[sp140]);
 
                 if (spAB) {
-                    gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_802FA940), G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_802FA940), G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                     spAC = spAE = 32;
                 } else {
                     gDPLoadTextureBlock(entry++, K0_TO_PHYS((s32)(D_hd_code_803643C8.textures[sp140].data)), G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);

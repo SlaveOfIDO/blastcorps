@@ -292,7 +292,7 @@ extern s32 D_hd_code_802E8CC0;
 extern s32 D_hd_code_802E8CC4;
 extern s32 D_hd_code_802FA254;
 extern s32 D_hd_code_802FA268;
-extern s32 D_hd_code_802FA940;
+extern u8 D_hd_code_802FA940[32*32];
 extern s32 D_hd_code_80304904;
 extern s32 D_hd_code_80304910;
 extern s32 D_hd_code_8030491C;
@@ -521,7 +521,6 @@ extern u8 D_hd_code_802E8BF0;
 extern u8 D_hd_code_802E8BF8;
 extern u8 D_hd_code_802F4868[8];
 extern u8 D_hd_code_802F4870[];
-extern u8 D_hd_code_802FA8BC;
 extern u8 D_hd_code_802FDBD0;
 extern u8 D_hd_code_802FDBD4;
 extern u8 D_hd_code_803643D6;
@@ -641,7 +640,7 @@ extern u8 D_8036CB38;
 extern Vtx* D_8036CB40;
 extern u8 D_8036CB44;
 extern u8 D_8036CB51;
-extern u8 D_hd_code_802FAD50[];
+extern u32 D_hd_code_802FAD50[];
 extern u8 D_8036CB35;
 extern u8 D_8036CB36;
 extern u8 D_8036CB37;
@@ -654,11 +653,11 @@ extern Vtx* D_8036CB40;
 extern u8 D_8036CB44;
 extern u8 D_8036CB50;
 extern Vtx D_hd_code_802FBD50[];
-extern Vtx D_hd_code_802FBDD0[]; // wild guess
-extern Vtx D_hd_code_802FBDEC[]; // wild guess
-extern Vtx D_hd_code_802FBE18[]; // wild guess
-extern Vtx D_hd_code_802FBE44[]; // wild guess
-extern Vtx D_hd_code_802FBE80[]; // wild guess
+extern u16 D_hd_code_802FBDD0[];
+extern u16 D_hd_code_802FBDEC[]; // wild guess
+extern u16 D_hd_code_802FBE18[]; // wild guess
+extern u16 D_hd_code_802FBE44[]; // wild guess
+extern u16 D_hd_code_802FBE80[]; // wild guess
 extern s16 D_8036CB2A;
 extern u16 D_hd_code_8035807C;
 extern struct vec3s* D_8036C7A0[10];

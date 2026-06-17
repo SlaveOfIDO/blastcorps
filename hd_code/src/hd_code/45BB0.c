@@ -48,8 +48,11 @@ extern void* D_80370BF0;
 extern u8 D_80370C10;
 extern u8 D_80370C35;
 extern s32 D_80370BC0;
-extern char* D_hd_code_802FDB18[3]; // Strings from asm files
-extern u32 D_hd_code_802FDB24[];
+
+// <data>
+s32 D_hd_code_802FDB10 = 0; // unused
+s8 D_hd_code_802FDB14 = 0;
+// </data>
 
 // Initialize the controller subsystem (message queue, SI event, osContInit)
 // and return the connected-controller bitmask
@@ -450,15 +453,20 @@ void func_hd_code_8028B190(s8* arg0, s8* arg1) {
   }
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/45BB0/D_hd_code_8030CBF0.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/45BB0/D_hd_code_8030CC04.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/45BB0/D_hd_code_8030CC18.s")
-
 // Open the "CONTROL METHOD:" selection window for the current vehicle,
 // showing its available scheme name and the current choice
 // Proposed name: ShowControlMethodMenu
+
+// Location needed here for matching:
+char* D_hd_code_802FDB18[3] = {
+  "SPEED ON 3D STICK?",
+  "360 DEGREE MODE?",
+  "AIRBORNE 360' MODE?"
+};
+u32 D_hd_code_802FDB24[3] = {
+  0x0000EDBA, 0x00010005, 0x00000200
+};
+
 void func_hd_code_8028B240(void) {
   char* sp24[3] = D_hd_code_802FDB18;
   char* sp20 = "CONTROL METHOD:";

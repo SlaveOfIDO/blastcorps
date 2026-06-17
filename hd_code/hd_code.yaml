@@ -63,6 +63,7 @@ segments:
     - [0x46F60, c, hd_code/46F60] # done
     - [0x479D0, c, hd_code/479D0] # done
     - [0x48D00, c, hd_code/48D00] # done
+    - [0x4B450, c, hd_code/4B450] # done
     - [0x4B5E0, c, hd_code/4B5E0] # done
     - [0x4DA80, c, hd_code/4DA80] # done
     - [0x4EBE0, c, hd_code/4EBE0] # done
@@ -258,7 +259,26 @@ segments:
     - [0xB5200, .data, hd_code/2B3F0] # done
     - [0xB5AB0, .data, hd_code/sched] # done
     - [0xB5AC0, .data, hd_code/2D810] # done
-    - [0xB60F0, data, hd_code/hd_code_data_rest2 ]
+    - [0xB60F0, .data, hd_code/30430] # done
+    - [0xB6180, .data, hd_code/30C70] # done
+    - [0xB6590, .data, hd_code/32E60] # done
+    - [0xB7710, .data, hd_code/34430] # done
+    - [0xB78C0, .data, hd_code/37530] # done
+    - [0xB7C30, .data, hd_code/39050] # done
+    - [0xB7DF0, .data, hd_code/3E4C0] # done
+    - [0xB92A0, .data, hd_code/405F0] # done
+    - [0xB9350, .data, hd_code/409D0] # done
+    - [0xB9370, .data, hd_code/46C20] # done
+    - [0xB9380, .data, hd_code/479D0] # done
+    - [0xB93B0, .data, hd_code/48D00] # done
+    - [0xB9410, .data, hd_code/4B450] # done
+    - [0xB9420, .data, hd_code/4B5E0] # done
+    - [0xB9C00, .data, hd_code/4DA80] # done
+    - [0xBA1C0, .data, hd_code/4EBE0] # done
+    - [0xBA910, .data, hd_code/50670] # done
+    - [0xBA9C0, .data, hd_code/53220] # done
+    - [0xBAE70, .data, hd_code/53820] # done
+    - [0xBAF70, data, hd_code/hd_code_data_rest2 ]
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, bin, hd_code/hd_code_data_rest3 ]
@@ -300,7 +320,7 @@ segments:
     - [0xC8530, .rodata, hd_code/4DA80] # done
     - [0xC8570, .rodata, hd_code/4EBE0] # done
     - [0xC85A0, .rodata, hd_code/50670] # done
-    - [0xC8620, rodata, hd_code/53220_rodata] # needs data to be matched for 53220 (const char field)
+    - [0xC8620, .rodata, hd_code/53220] # done
     - [0xC8DC0, .rodata, hd_code/54E30]
     - [0xC90B0, rodata, hd_code/hd_code_rodata_rest]
     - [0xC9230, .rodata, hd_code/gu/perspective ]

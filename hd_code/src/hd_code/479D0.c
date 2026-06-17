@@ -53,7 +53,13 @@ void func_hd_code_8028C41C(Vtx* arg0, u8 arg1, s16 x, s16 y, s16 z);
 
 extern struct S_8039AF00 D_8039AF00[];
 extern s32 D_8039B068;
-extern struct S_802FDB40 D_hd_code_802FDB40[];
+
+// <data>
+struct S_802FDB40 D_hd_code_802FDB40[2] = {
+  { 0xFFF6, 0x000A, 0x0000, 0x0014, 0xFFF6, 0x000A, 0x0995, 0x0995, 0x0280, 0x0064, 0x0A  },
+  { 0xFFF6, 0x000A, 0x0000, 0x0014, 0xFFF6, 0x000A, 0x0997, 0x0997, 0x0280, 0x0064, 0x01 }
+};
+// </data>
 
 // Build the live crate list from the level's crate placements [arg0, arg1):
 // copy position and type, load the two textures for that type, allocate and

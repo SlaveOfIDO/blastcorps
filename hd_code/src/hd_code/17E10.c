@@ -197,7 +197,7 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
 // and the work buffer from the level allocator
 // Proposed name: InitTitleBuffers
 void func_hd_code_8025CE74(void) {
-  D_hd_code_80366BA0 = (struct S_802FA8B0*)D_hd_code_80358070;
+  D_hd_code_80366BA0 = (Vtx**)D_hd_code_80358070;
   D_hd_code_80358070 += 0x40;
   D_hd_code_80366BA0->v[0].v.ob[0] = 0;
   D_hd_code_80366BA0->v[0].v.ob[1] = 0;
@@ -623,7 +623,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                         sp50 = (u32) (((sp60 - D_hd_code_80366BB8) - 0xB4) * 2.8333333333333335);
                         for(sp5C = 0; sp5C < 4U; sp5C++) {
                             for(sp58 = 0; sp58 < 4U; sp58++) {
-                                *(&D_hd_code_802FA8BC + ((arg2 << 6) + (sp5C * 0x10) + sp58)) = sp50;
+                              D_hd_code_802FA8B0[arg2].v[sp5C].v.cn[sp58] = sp50;
                             }
                         }
                     } else if ((u32) ((sp60 - D_hd_code_80366BB8) - 0x10E) >= 0x2EU) {
@@ -639,7 +639,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                     } else {
                         for(sp5C = 0; sp5C < 4U; sp5C++) {
                             for(sp58 = 0; sp58 < 4U; sp58++) {
-                                *(&D_hd_code_802FA8BC + ((arg2 << 6) + (sp5C * 0x10) + sp58)) = 0xFF;
+                              D_hd_code_802FA8B0[arg2].v[sp5C].v.cn[sp58] = 0xFF;
                             }
                         }
                     }
