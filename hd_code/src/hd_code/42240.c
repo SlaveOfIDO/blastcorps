@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "macros.h"
+#include "hd.h"
 
 s32 func_hd_code_802A0CC8(s16, s32);
 
@@ -21,15 +22,12 @@ extern Vtx* D_8036EC04;
 extern Mtx* D_8036EC08;
 extern Mtx* D_8036EC0C;
 extern s16 D_8036EC10;
-extern u8 D_hd_code_80364A68;
 extern u8* D_8036EC14;
 extern Vtx* D_8036EC18;
 extern s16 D_8036EC1C;
-extern u8 D_hd_code_80364A6A;
 extern u8* D_8036EC20;
 extern Vtx* D_8036EC24;
 extern s16 D_8036EC28;
-extern u8 D_hd_code_80364A6C;
 
 // Init the vehicle-3 dial gauge: load its 40x40 face texture (0x760),
 // allocate matrices, and set up the face quad plus the small needle quad

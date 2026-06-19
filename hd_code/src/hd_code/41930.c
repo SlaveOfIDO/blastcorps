@@ -4,6 +4,7 @@
 #include "variables.h"
 #include "yoshi.h"
 #include "macros.h"
+#include "hd.h"
 
 struct S_8020D7E4 {
   char* unk0;
@@ -30,7 +31,6 @@ extern u8 D_hd_code_802FDA70[];
 extern struct S_8020D7E4 D_8020D7E4[];
 extern u8 D_8036EBA0[];
 extern u8 D_hd_code_802FDA60[];
-extern u8 D_hd_code_803643D5;
 extern u8 frontEndPresent;
 extern struct S_80367C04 D_hd_code_802E8F94[];
 extern s32 D_hd_code_802FA26C;

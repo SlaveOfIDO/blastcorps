@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "hd.h"
 
 extern s32 D_80207090;
 extern s32 D_80210690;
@@ -9,7 +10,6 @@ extern void* D_8036E660[];
 extern void* D_8036E678[];
 extern s32 D_hd_code_802E53F0;
 extern s32 D_hd_code_8030E390;
-extern struct Model1 D_hd_code_803156F8[];
 extern OSScTask D_8036E698[][2];
 extern u64 D_hd_code_80367750;
 extern u64 D_hd_code_8036AFB0;

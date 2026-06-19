@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "macros.h"
+#include "hd.h"
 
 // Proposed file name: fade.c (the original name - the assert in
 // func_hd_code_80275270 references "fade.c")
@@ -17,10 +18,6 @@ u64 D_8036C778; // game state to enter once the fade-out completes (0 = not fadi
 extern s32 D_8036C780; // frame the fade started; proposed name: fadeStartFrame
 extern u8 D_8036C784; // current fade overlay alpha; proposed name: fadeAlpha
 extern u32 D_hd_code_803156C4;
-extern u8 D_hd_code_8035805C;
-extern u32 D_hd_code_80358060;
-extern u64 D_hd_code_80364A90;
-extern u64 D_hd_code_80364A98;
 extern s32 levelno;
 
 // <data>

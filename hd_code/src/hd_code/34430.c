@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "macros.h"
+#include "hd.h"
 
 extern s32 D_8036CC68;
 extern s32 D_8036CC6C;
@@ -19,7 +20,6 @@ extern Gfx D_8036D188[];
 extern Mtx D_8036D2C8;
 extern Mtx D_8036D388;
 extern Vp D_hd_code_802FBED0;
-extern u32 D_hd_code_80358058;
 extern Mtx D_8036CC70[][10];
 extern s8 D_hd_code_8030C64C;
 

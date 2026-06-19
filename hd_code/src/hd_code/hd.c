@@ -2,6 +2,7 @@
 #include <ultra64.h>
 
 #include "common.h"
+#include "hd.h"
 #include "functions.h"
 #include "game_states.h"
 #include "macros.h"
@@ -25,6 +26,22 @@
 // ...DA (success request) are latched at the end of each frame into ...D6
 // (mission failed) / ...D7 (mission complete). Vehicles ("diggers" in the
 // debug prints) are identified by id; 0 = on foot.
+
+// size: 0x4
+struct UnknownStruct8030F668 {
+  /* 0x01 */ u8 flag1;
+  /* 0x02 */ u8 flag2;
+  /* 0x03 */ u8 flag3;
+};
+
+typedef struct {
+  s32 unk0;
+  s16 unk4;
+  s16 unk6;
+  u8 unk8;
+  u8 unk9;
+  s16 pad;
+} UnknownStruct_80364A00;
 
 // <data>
 u8 D_hd_code_802E8BD0 = 0;
@@ -149,7 +166,7 @@ f32 D_hd_code_80364444; // smoothed camera pitch; proposed name: cameraPitchSmoo
 f32 D_hd_code_80364448; // smoothed camera heading; proposed name: cameraHeadingSmoothed
 s16 D_hd_code_8036444C;
 s16 D_hd_code_8036444E;
-s16 D_hd_code_80364450;
+s16 D_hd_code_80364450; // Used in LoadLevelTodo40 and func_hd_code_802A56C4
 s16 D_hd_code_80364452; // camera yaw, 0..4095 (passed to sky/HUD); proposed name: cameraYaw
 s16 D_hd_code_80364454; // camera pitch, 0..4095; proposed name: cameraPitch
 u8 D_hd_code_80364456; // current vehicle id (0 = on foot); proposed name: currentVehicle
@@ -165,6 +182,7 @@ s32 D_hd_code_803649E8; // player is inside a vehicle flag; proposed name: inVeh
 u8 D_hd_code_803649EC;
 u8 D_hd_code_803649ED; // vehicle id requested to enter (0xFF = none); proposed name: requestedVehicle
 s8 D_hd_code_803649EE;
+// TODO: fix the type of these vars
 struct UnknownData8024C414* D_hd_code_803649F0; // money counter target value; proposed name: moneyTarget
 struct UnknownData8024C414* D_hd_code_803649F4; // money counter displayed value (animates toward target); proposed name: moneyDisplayed
 f32 D_hd_code_803649F8;
@@ -1477,7 +1495,7 @@ block_275:
         }
     }
     LoadLevelTodo40(D_hd_code_80358074);
-    if ((0 != 0) || (D_hd_code_80364A90 & 0x1801)) {
+    if (D_hd_code_80364A90 & 0x1801) {
         func_hd_code_802A45D4(2);
     }
     if ((D_hd_code_8036BB18 == 0x58) && (D_hd_code_8036BB1C != 8) && (D_hd_code_80364410 == 0)) {
@@ -2586,7 +2604,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     func_hd_code_8027F1F8(&entry, D_hd_code_8035805C, 0);
 
 
-    gSPSegment(entry++, 0x08, D_hd_code_80364458 & 0x1FFFFFFF);
+    gSPSegment(entry++, 0x08, VIRTUAL_TO_PHYSICAL(D_hd_code_80364458));
     gSPClearGeometryMode(entry++, 0xFFFFFFFF);
 
     gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_80358030[D_hd_code_8035805C]));

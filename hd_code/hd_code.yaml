@@ -27,7 +27,7 @@ segments:
   vram:  0x802447C0
   bss_size: 0x5D110 # bss_size is 0xF09A0
   subsegments:
-    - [0x00000, c, hd_code/00000] # done
+    - [0x00000, c, hd_code/hd] # done
     - [0x12D80, c, hd_code/12D80] # done
     - [0x13A70, c, hd_code/13A70] # done
     - [0x14B30, c, hd_code/14B30] # done
@@ -247,7 +247,7 @@ segments:
     - [0xA0C30, data, hd_code/rsp/f3d]
     - [0xA2060, data, hd_code/rsp/rspboot]
     - [0xA2130, data, hd_code/rsp/aspmain]
-    - [0xA4410, .data, hd_code/00000] # done
+    - [0xA4410, .data, hd_code/hd] # done
     - [0xA44A0, .data, hd_code/13A70] # done
     - [0xA44B0, .data, hd_code/14B30] # done
     - [0xA44F0, .data, hd_code/17210] # done
@@ -289,7 +289,7 @@ segments:
     - [0xC2610, data, hd_code/os/vi ]
     - [0xC2680, data, hd_code/io/aisetnextbuf ]
     - [0xC2690, data, hd_code/hd_code_data_rest3 ]
-    - [0xC33D0, .rodata, hd_code/00000] # done
+    - [0xC33D0, .rodata, hd_code/hd] # done
     - [0xC4520, .rodata, hd_code/12D80] # done
     - [0xC4520, .rodata, hd_code/13A70] # done
     - [0xC4520, .rodata, hd_code/14B30] # done
@@ -344,7 +344,7 @@ segments:
     - [0xC95E0, rodata, hd_code/audio/synthesizer ]
     - [0xC95F0, rodata, hd_code/libc/llcvt ]
     - [0xC9600, rodata, hd_code_rodata_rest3 ]
-    - { start: 0xCAEA0, type: .bss, name: hd_code/00000, vram: 0x8030F660 } # done
+    - { start: 0xCAEA0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
     - [0xCAEA0, .bss, hd_code/12D80] # done
     - [0xCAEA0, .bss, hd_code/13A70] # done
     - [0xCAEA0, .bss, hd_code/14B30] # done

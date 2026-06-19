@@ -4,6 +4,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "hd.h"
 
 struct S_8039B070 {
   s32 unk0;
@@ -74,7 +75,6 @@ extern s32 D_803A73F0;
 extern s32 D_803A73F4;
 extern s32 D_803A73F8;
 extern s16 D_hd_code_802FDB70[];
-extern u8 D_hd_code_803643D9;
 extern struct S_8039B070 D_8039B070[];
 extern s32 D_8039B610;
 extern s32 D_8039B614;

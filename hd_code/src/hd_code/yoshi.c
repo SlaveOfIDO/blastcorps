@@ -41,8 +41,6 @@ extern u8 D_hd_code_802F4878[];
 extern s32 D_hd_code_8030BE64;
 extern s32 D_hd_code_8030BE90;
 extern s32 D_hd_code_8030BE94;
-extern u64 D_hd_code_80364A98;
-extern u32 D_hd_code_80364AA8;
 
 char D_hd_code_8036B980[0x28];
 char D_hd_code_8036B9A8[0x20];
@@ -685,7 +683,6 @@ struct S_802F9934 D_hd_code_802F9934[7] = {
 extern Gfx D_hd_code_802F98B0[];
 extern s32 D_hd_code_802F9930;
 extern u32 D_hd_code_803156C4;
-extern u8 D_hd_code_8035805C;
 extern u8 D_8036BAA2[];
 extern u8 D_hd_code_802F499A[];
 

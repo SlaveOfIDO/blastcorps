@@ -7,17 +7,12 @@
 #include "snd.h"
 #include "inflate.h"
 #include <PR/os.h>
-#include <PR/sched.h>
+#include "hd.h"
 
 extern u8 D_hd_code_8039CAF0[0x50 * 0x200];
 extern Gfx D_1000010[];
 extern Gfx D_1000038[];
 extern Gfx D_hd_code_803650B0[];
-extern Gfx* D_hd_code_80358030[2];
-extern Gfx* D_hd_code_80358038[2];
-extern Gfx* D_hd_code_80358040[2];
-extern Gfx* D_hd_code_80358048[2];
-extern Gfx* D_hd_code_80358074;
 extern Gfx* D_hd_code_8036E694;
 extern Mtx D_hd_code_803651F0;
 extern Mtx D_hd_code_80365230;
@@ -26,42 +21,16 @@ extern Mtx D_hd_code_803652B0;
 extern Mtx D_hd_code_803652F0;
 
 
-extern OSMesg D_hd_code_803150B8[0x32];
-extern OSMesgQueue D_hd_code_80315180;
 extern s32 D_hd_code_80315188; // Potentially a message queue for textures?
-extern OSMesgQueue D_hd_code_803153D8;
-extern u8 D_hd_code_803153F0;
-extern OSMesg D_hd_code_803153F8[0x10];
-extern u8 D_hd_code_80315438;
-extern OSSched sc; // 0x80315440
-extern void* D_hd_code_803156D8;
-extern s32 D_hd_code_803156E8;
-extern s32 D_hd_code_803156EC;
-extern s32 D_hd_code_803156F0;
-extern u8 D_hd_code_803156F4;
-extern u8 D_hd_code_803156F5;
 extern struct Model1 D_hd_code_803156F8[];
 
 
 extern OSMesg D_hd_code_8039C4B4;
 extern OSMesgQueue D_80219EF8;
 extern OSMesgQueue D_80219F50;
-extern UnknownData8024C414 players[];
 extern UnknownData8024C414* D_hd_code_8036EA70;
-extern UnknownStruct_80364A00 D_hd_code_80364A00[]; // Is an array of structs of size 0xC
-extern f32 D_hd_code_80364418; // safe f32
-extern f32 D_hd_code_80364438;
-extern f32 D_hd_code_80364AB4;
-extern f32 D_hd_code_80364AB8;
-extern f32 D_hd_code_80364ABC;
-extern f32 D_hd_code_80365078;
-extern f32 D_hd_code_8036507C;
-extern f32 D_hd_code_80365080;
-extern f32 D_hd_code_80365084;
-extern f32 D_hd_code_80365088;
-extern f32 D_hd_code_8036508C;
+
 extern f32 D_hd_code_8036BB34; // safe type
-extern f32 D_hd_code_802E8BE0;
 extern f32 D_hd_code_802E8C84[2];
 extern f32 D_hd_code_802E8C84[2];
 extern f32 D_hd_code_802E8C84[2];
@@ -92,10 +61,7 @@ extern f32 D_hd_code_80308990;
 extern f32 D_hd_code_80308994;
 extern f32 D_hd_code_80308998;
 extern f32 D_hd_code_8030899C;
-extern f32 D_hd_code_80364414; // safe f32
-extern f32 D_hd_code_80364444;
-extern f32 D_hd_code_80364448;
-extern f32 D_hd_code_803649F8;
+
 extern f64 D_hd_code_80308508;
 extern f64 D_hd_code_80308510;
 extern f64 D_hd_code_80308518;
@@ -153,14 +119,6 @@ extern f64 D_hd_code_80308B68;
 extern f64 D_hd_code_80308B70;
 extern f64 D_hd_code_80308B78;
 extern f64 D_hd_code_80308B80;
-extern s16 D_hd_code_80364440;
-extern s16 D_hd_code_803649E0;
-extern s16 D_hd_code_803649E2;
-extern s16 D_hd_code_803649E4;
-extern s16 D_hd_code_80364A4A;
-extern s16 D_hd_code_80364A4C;
-extern s16 D_hd_code_8036509E;
-extern s16 D_hd_code_803650A0;
 extern s16 D_hd_code_80366A04;
 extern s16 D_hd_code_80367BD6;
 extern s16 D_hd_code_8036BB1A;
@@ -182,40 +140,16 @@ extern s16 D_hd_code_803F7680;
 extern s16 D_hd_code_803FCD68;
 extern s16 D_hd_code_802E8C8C[2];
 extern s16 D_hd_code_802E8C90[2];
-extern s16 D_hd_code_8036443C;
-extern s16 D_hd_code_8036443E;
-extern s16 D_hd_code_8036444C;
-extern s16 D_hd_code_8036444E;
-extern s16 D_hd_code_80364452;
-extern s16 D_hd_code_80364454;
-extern s16 D_hd_code_80364A72;
-extern s16 D_hd_code_80364A74;
 extern struct vec3s* D_hd_code_8036C794;
 extern s32 D_6A9F10; // attract.raw
-extern s32 D_6A9F10; // attract.raw
-extern s32 D_6AD3F0; // 6AD3F0.bin
 extern s32 D_6AD3F0; // 6AD3F0.bin
 extern OSThread D_80218D30;
 extern s32 D_80218EE0;
 extern s32 D_80219F58;
 
-extern u32 D_hd_code_80358058;
-extern s32 D_hd_code_80358064;
 extern s32 D_hd_code_80358068;
-extern s32 D_hd_code_80358078;
 extern u8 D_hd_code_8035808[]; // Texdata?
-extern s32 D_hd_code_80364458;
-extern s32 D_hd_code_803649E8;
-extern s32 D_hd_code_80364A40;
-extern s32 D_hd_code_80364A44;
-extern s32 D_hd_code_80364A54;
-extern s32 D_hd_code_80364A58;
-extern s32 D_hd_code_80364A5C;
-extern s32 D_hd_code_80364A64;
-extern s32 D_hd_code_80364A80;
-extern s32 D_hd_code_80364AC4;
 extern s32 D_80364B3A;
-extern s32 D_hd_code_8036506C; // This is a vertex index
 extern s32 D_hd_code_80365330;
 extern s32 D_hd_code_80366990;
 extern s32 D_hd_code_80366994;
@@ -277,9 +211,6 @@ extern s32 D_hd_code_803F7688;
 extern s32 D_hd_code_803FCD48;
 extern s32 D_hd_code_803FCD4C;
 extern s32 D_hd_code_803FCD50;
-extern s32 D_hd_code_802E8BE8;
-extern s32 D_hd_code_802E8BEC;
-extern s32 D_hd_code_802E8BF4;
 extern s32 D_hd_code_802E8C70;
 extern s32 D_hd_code_802E8C78;
 extern s32 D_hd_code_802E8C78;
@@ -298,33 +229,12 @@ extern s32 D_hd_code_80308384;
 extern s32 D_hd_code_80308390;
 extern s32 D_hd_code_803083C4;
 extern s32 D_hd_code_803083E4;
-extern s32 D_hd_code_803643E0;
-extern s32 D_hd_code_803643E4;
-extern s32 D_hd_code_803643E8;
-extern s32 D_hd_code_803643EC;
-extern s32 D_hd_code_803643F0;
-extern s32 D_hd_code_803643F4;
-extern s32 D_hd_code_803643F8;
-extern s32 D_hd_code_803643FC;
-extern s32 D_hd_code_80364400;
-extern s32 D_hd_code_80364404;
-extern s32 D_hd_code_80364408;
-extern s32 D_hd_code_8036440C;
-extern s32 D_hd_code_80364430;
-extern s32 D_hd_code_80364A78;
 extern s32 characterIndex;
-extern s32 characterIndex;
-extern s32 levelno;
 extern s32 maxCharacters;
-extern s32 nextdma;
-extern s32 no_palette_dmas;
 
 extern s32* D_hd_code_803F7820;
 extern s32* D_hd_code_803F7824;
 extern u64 D_hd_code_8036BF38;
-extern s8 D_hd_code_803649EE;
-extern s8 D_hd_code_80364A50;
-extern s8 D_hd_code_80364A71;
 extern s8 D_hd_code_803669A6;
 extern s8 D_hd_code_803669A7;
 extern s8 D_hd_code_80367BFF;
@@ -363,15 +273,6 @@ extern struct S_80366BC4 D_hd_code_80366BC4;
 extern struct S_803F4030 D_hd_code_803F4030[];
 extern struct S_803F4030* D_hd_code_803F7654;
 extern struct Struct8036BED8 *D_hd_code_8036BED8;
-extern struct Textures D_hd_code_803643C8;
-extern struct UnknownData8024C414* D_hd_code_803649F0;
-extern struct UnknownData8024C414* D_hd_code_803649F4;
-extern struct UnknownData8024C414* D_hd_code_803649F4;
-extern struct UnknownStruct_803644BC D_hd_code_80364460[12];
-extern struct UnknownStruct_803644BC *D_hd_code_803649D0;
-extern struct vec3 D_hd_code_80365090; // some 3d vec
-extern u16 D_hd_code_8035807C;
-extern u16 D_hd_code_8036509C;
 extern s16 D_803F8B72;
 extern s16 D_803EDC00;
 extern u16 D_hd_code_803653B0[];
@@ -395,62 +296,12 @@ extern u16 D_hd_code_80370C2A;
 extern u16 D_hd_code_80370C30;
 extern u16 D_hd_code_80370C30;
 extern u16 D_hd_code_802E8C94[2];
-extern u16 D_hd_code_8036442C;
-extern u16 *D_hd_code_80358050[]; // Framebuffers
-extern u32 D_hd_code_80364AA8;
-extern u32 D_hd_code_80364AC8;
-extern u32 D_hd_code_80364ACC;
 extern u32 D_hd_code_80366BB8;
 extern u32 D_hd_code_803047A0[5]; // 5*4 = 20 bytes
 extern u32 D_hd_code_803047B4[6]; // 6 * 4 = 24 bytes
 extern u32 D_hd_code_803047CC[4]; // 4 * 4 = 16 bytes
 extern u32 D_hd_code_803047DC[12]; // 12 * 4 = 48 bytes
-extern u32 D_hd_code_80358060;
-extern u32 D_hd_code_80358060;
-extern u32 D_hd_code_80358060;
-extern u32 D_hd_code_80358060;
-extern u32 D_hd_code_80364420;
-extern u32 D_hd_code_80364420;
-extern u32 D_hd_code_80364428;
 extern u64 D_8021A830;
-extern u64 D_hd_code_80364A98;
-extern u64 D_hd_code_80364A90;
-extern u64 D_hd_code_80364A90;
-extern u64 D_hd_code_80364A90;
-extern u8 D_hd_code_8035805C; // Texture index?
-extern u8 D_hd_code_803643D5;
-extern u8 D_hd_code_803643D8;
-extern u8 D_hd_code_803643D9;
-extern u8 D_hd_code_803643DA;
-extern u8 D_hd_code_803643DC;
-extern u8 D_hd_code_8036441C;
-extern u8 D_hd_code_8036441D;
-extern u8 D_hd_code_803649ED;
-extern u8 D_hd_code_80364A3C;
-extern u8 D_hd_code_80364A3C;
-extern u8 D_hd_code_80364A3D;
-extern u8 D_hd_code_80364A48;
-extern u8 D_hd_code_80364A4E;
-extern u8 D_hd_code_80364A60;
-extern u8 D_hd_code_80364A68;
-extern u8 D_hd_code_80364A69;
-extern u8 D_hd_code_80364A6A;
-extern u8 D_hd_code_80364A6B;
-extern u8 D_hd_code_80364A6C;
-extern u8 D_hd_code_80364A6D;
-extern u8 D_hd_code_80364A6F;
-extern u8 D_hd_code_80364A70;
-extern u8 D_hd_code_80364A7C;
-extern u8 D_hd_code_80364A84;
-extern u8 D_hd_code_80364A86;
-extern u8 D_hd_code_80364A87;
-extern u8 D_hd_code_80364AC0;
-extern u8 D_hd_code_80364AC1;
-extern u8 D_hd_code_80364AE9; // nextPlayerNumber?
-extern u8 D_hd_code_80364AEA;
-extern u8 D_hd_code_80365060[];
-extern u8 D_hd_code_80365065;
-extern u8 D_hd_code_80365066;
 extern u8 D_hd_code_80365360[];
 extern u8 D_hd_code_80365458[];
 extern u8 D_hd_code_80365580;
@@ -505,56 +356,18 @@ extern u8 D_hd_code_803BE739;
 extern u8 D_hd_code_803ED3F5;
 extern u8 D_hd_code_803ED40D;
 extern u8 D_hd_code_803EF6FF;
-extern u8 D_hd_code_802E8BD0;
-extern u8 D_hd_code_802E8BD4;
-extern u8 D_hd_code_802E8BD8;
-extern u8 D_hd_code_802E8BE4;
-extern u8 D_hd_code_802E8BF0;
-extern u8 D_hd_code_802E8BF8;
 extern u8 D_hd_code_802F4868[8];
 extern u8 D_hd_code_802F4870[];
 extern u8 D_hd_code_802FDBD0;
 extern u8 D_hd_code_802FDBD4;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D6;
-extern u8 D_hd_code_803643D7;
-extern u8 D_hd_code_803643D7;
-extern u8 D_hd_code_803643D7;
-extern u8 D_hd_code_803643D7;
-extern u8 D_hd_code_803643DB;
-extern u8 D_hd_code_803643DB;
-extern u8 D_hd_code_803643DB;
-extern u8 D_hd_code_803643DB;
-extern u8 D_hd_code_803643DB;
-extern u8 D_hd_code_80364410;
-extern u8 D_hd_code_80364411;
-extern u8 D_hd_code_80364412;
-extern u8 D_hd_code_80364424;
-extern u8 D_hd_code_80364434;
-extern u8 D_hd_code_80364456;
-extern u8 D_hd_code_80364456;
-extern u8 D_hd_code_80364456;
-extern u8 D_hd_code_803649EC; // u8 is safe
-extern u8 D_hd_code_80364A85;
 extern u8 pakBuffer[];
-extern u8 playerNumber;
 extern u8 saveIt[];
 extern u8 saveLevel;
-extern u8* D_hd_code_80358070;
 extern u8* D_hd_code_803669B0;
 extern u8* D_hd_code_803669C0;
 extern void* D_787F40;
 extern void* D_788000;
 extern u16 D_80000400[][320 * 240]; // framebuffers
-extern void* D_hd_code_8035806C;
 extern void* D_hd_code_803FF600;
 extern void* func_init_8021ED00;
 extern s8 D_hd_code_80366A10;
@@ -651,7 +464,6 @@ extern u16 D_hd_code_802FBE18[]; // wild guess
 extern u16 D_hd_code_802FBE44[]; // wild guess
 extern u16 D_hd_code_802FBE80[]; // wild guess
 extern s16 D_8036CB2A;
-extern u16 D_hd_code_8035807C;
 extern struct vec3s* D_8036C7A0[10];
 extern u8 D_hd_code_8036C7CC;
 extern struct vec3s* D_8036C790;
@@ -702,6 +514,6 @@ extern u8 D_8036E4CA;
 extern s32 D_hd_code_803156C0;
 extern struct S_802E8F38 D_hd_code_802E8F38[6];
 extern u8 D_8039CAB6;
-extern u8 D_hd_code_803643D4;
+
 
 #endif

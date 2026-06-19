@@ -4,6 +4,7 @@
 #include "variables.h"
 #include "macros.h"
 #include "yoshi.h"
+#include "hd.h"
 
 #define LEVEL_SAVE_SIZE 0x40
 
@@ -12,12 +13,9 @@ u32 create_status(u8*, u8);
 s32 func_hd_code_8026AD30(s16);
 u32 func_hd_code_802852EC();                          /* extern */
 
-extern u8 D_hd_code_802E8C44[];
 extern u16 D_hd_code_80364EF0[][0x10];
 extern s32 D_hd_code_80364A9C;
 extern u8 D_hd_code_8036B9A8[];
-extern u8 D_hd_code_80364A87;
-extern u8 D_hd_code_80364AEA;
 extern s32 D_hd_code_80358064;
 extern u8 D_8036EB94[4];
 extern u8 D_8036EB9C[4];

@@ -2,6 +2,7 @@
 #include "variables.h"
 #include "functions.h"
 #include "structs.h"
+#include "hd.h"
 
 // Proposed file name: missions.c
 //
@@ -48,7 +49,6 @@ extern s32 D_hd_code_803EFEBC;
 extern s8 D_hd_code_803EFEC8;
 
 
-extern u32 D_hd_code_80364AA8;
 extern struct S_80367C04 *D_hd_code_80367C04;
 
 extern u8 D_hd_code_80367C10;

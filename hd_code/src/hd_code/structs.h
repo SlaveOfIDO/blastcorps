@@ -4,29 +4,6 @@
 #include <PR/gbi.h>
 
 
-
-// Perhaps some kind of Scene struct?
-typedef struct UnknownData8024C414_s {
-  /* 0x00 */ struct UnknownData8024C414_s* unk0; // parent?
-  /* 0x04 */ u32 pad1;
-  /* 0x08 */ u8 levelno;
-  /* 0x09 */ u8 unk9;
-  /* 0x0A */ u16 unkA;
-  /* 0x0C */ u8 unkC;
-  /* 0x0D */ u8 padD;
-  /* 0x0E */ s16 padE;
-  /* 0x10 */ s32 unk10;
-  /* 0x14 */ s32 unk14;
-  /* 0x18 */ u8 unk18[0x54 - 0x18]; // flags? often check >0 and <6
-  /* 0x54 */ u8 unk54[0x88 - 0x54];
-  /* 0x88 */ u8 unk88[0x90 - 0x88];
-  /* 0x90 */ u8 unk90;
-  /* 0x91 */ u8 unk91;
-  /* 0x92 */ u8 unk92[0xF0 - 0x92]; // indexed by level
-  /* 0xF0 */ s32 unkF0;
-  /* 0xF4 */ u8 padF4[0xFF - 0xF4];
-} UnknownData8024C414;
-
 #define TOPLEVEL_DL_SIZE (0xB5E)
 
 
@@ -120,41 +97,7 @@ struct Textures {
 
 
 
-struct UnknownStruct_803644BC {
-  // size: 0x74
-  /* 0x00 */ s32 unk0;
-  /* 0x04 */ s32 unk4; // D_80364464
-  /* 0x08 */ s32 unk8; // D_80364468
-  /* 0x0C */ s32 unkC; // D_8036446C
-  /* 0x10 */ s32 unk10; // D_80364470
-  /* 0x14 */ s32 unk14; // D_80364474
-  /* 0x18 */ s32 unused18; // D_80364478
-  /* 0x1C */ s32 unused1C; // D_8036447C
-  /* 0x20 */ s32 unused20; // D_80364480
-  /* 0x24 */ s32 unused24; // D_80364484
-  /* 0x28 */ s32 unused28; // D_80364488
-  /* 0x2C */ s32 unused2C; // D_8036448C
-  /* 0x30 */ s32 unk30; // D_80364490
-  /* 0x34 */ s32 unk34; // D_80364494
-  /* 0x38 */ s32 unk38; // D_80364498
-  /* 0x3C */ s32 unused3C; // D_8036449C
-  /* 0x40 */ u8 pad40[0x54 - 0x40];
-  /* 0x54 */ s32 unk54;
-  /* 0x58 */ s32 pad58;
-  /* 0x5C */ s32 unk5C; // Texture Index?
-  /* 0x60 */ s32 unk60; // Some kind of env color?
-  /* 0x64 */ s32 unk64;
-  /* 0x68 */ s32 unk68;
-  /* 0x6C */ s32 unk6C;
-  /* 0x70 */ s32 unk70;
-}; // Size: 0x74
 
-// size: 0x4
-struct UnknownStruct8030F668 {
-  /* 0x01 */ u8 flag1;
-  /* 0x02 */ u8 flag2;
-  /* 0x03 */ u8 flag3;
-};
 
 struct vec3 {
   f32 x;
@@ -214,14 +157,7 @@ struct S_803F4030 {
   /* 0xEC */ u8 padEC[0xFC - 0xEC];
 };
 
-typedef struct {
-  s32 unk0;
-  s16 unk4;
-  s16 unk6;
-  u8 unk8;
-  u8 unk9;
-  s16 pad;
-} UnknownStruct_80364A00;
+
 
 
 struct S_802F8BE4 {

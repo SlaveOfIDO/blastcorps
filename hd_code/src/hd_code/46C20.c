@@ -3,13 +3,13 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "hd.h"
 
 void func_801F57B0();
 void func_hd_code_802C4070(void**, void**, u32, u8);
 extern void** D_hd_code_802FDB30;
 extern void** D_hd_code_802FDB34;
 extern OSIoMesg D_80370C58;
-extern OSMesgQueue D_hd_code_803150A0;
 
 // Proposed file name: dma.c
 //

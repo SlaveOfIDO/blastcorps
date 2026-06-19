@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "hd.h"
 
 struct S_802AC4C4 {
   s32 unk0;
@@ -129,7 +130,6 @@ extern s32 D_8036E4C4;
 extern struct S_802FC520 D_hd_code_802FC520[1];
 extern Vtx D_hd_code_802FC528[4];
 extern struct S_802FC3F0 D_hd_code_802FC3F0[3];
-extern s32 D_hd_code_803649E8;
 extern s32 D_hd_code_802FC51C;
 extern u8* D_8036E4CC;
 extern s16 D_8036E4D0;
