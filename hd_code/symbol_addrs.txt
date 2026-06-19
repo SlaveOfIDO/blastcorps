@@ -457,3 +457,5 @@ inflate_fixed = 0x80298C18;
 inflate_dynamic = 0x80298DC0;
 inflate_block = 0x802993AC;
 inflate = 0x802994F8;
+__osRcpImTable = 0x8030DAD0;
+vi = 0x80306DD0; // size:0x60

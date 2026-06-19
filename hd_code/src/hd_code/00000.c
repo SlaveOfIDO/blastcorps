@@ -26,6 +26,36 @@
 // (mission failed) / ...D7 (mission complete). Vehicles ("diggers" in the
 // debug prints) are identified by id; 0 = on foot.
 
+// <data>
+u8 D_hd_code_802E8BD0 = 0;
+u8 D_hd_code_802E8BD4 = 0;
+u8 D_hd_code_802E8BD8 = 0;
+s32 levelno = 0;
+f32 D_hd_code_802E8BE0 = 1.3f;
+u8 D_hd_code_802E8BE4 = 0;
+s32 D_hd_code_802E8BE8 = 0;
+s32 D_hd_code_802E8BEC = -1;
+u8 D_hd_code_802E8BF0 = 0;
+s32 D_hd_code_802E8BF4 = 0x0A1D0000;
+u8 D_hd_code_802E8BF8 = 0;
+s32 D_hd_code_802E8BFC[18] = {
+  0x000007D0, 0x0000092E, 0x00000578,
+  0x000006A4, 0x00000640, 0x00000406, 0x00000406,
+  0x000007D0, 0x00000640, 0x00000672, 0x00000064,
+  0x00000000, 0x000007D0, 0x0000073A, 0x000005AA,
+  0x000003E8, 0x00000064, 0x00000064
+};
+u8 D_hd_code_802E8C44[28] = {
+  0x00, 0x01, 0x02, 0x03,
+  0x04, 0x05, 0x0E, 0x07,
+  0x08, 0x09, 0x0A, 0x0B,
+  0x0F, 0x0D, 0x06, 0x0C,
+  0x0A, 0x1B, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
+};
+// </data>
+
 // BSS begin
 u8 D_hd_code_8030F660;
 s32 D_hd_code_8030F664;
@@ -2038,7 +2068,7 @@ void func_hd_code_8024B188(void) {
     sp26 = 0;
     sp27 = func_hd_code_8024B4B8();
     if (sp27 == 1) {
-        sp26 = func_hd_code_802AE888(*(s32*)(&D_hd_code_802E8BF8 + D_hd_code_80364456 * 4));
+        sp26 = func_hd_code_802AE888(D_hd_code_802E8BFC[D_hd_code_80364456 - 1]);
     }
     if (sp26 != 0) {
         D_hd_code_803649E8 = 0;
