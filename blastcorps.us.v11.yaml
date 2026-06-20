@@ -821,6 +821,5 @@ segments:
   - [0x7F63A1, bin] # hd_front_end_data.us.v11 will be extracted and decompressed by Makefile ts:855919891
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end
-  - [0x800000, bin, hd_code.us.v11]
-  - [0x8CAEA0, bin, hd_front_end.us.v11]
+  - [0x800000, bin, decompressed.us.v11]
   - [0x8F4D30]

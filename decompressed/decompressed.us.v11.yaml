@@ -1,0 +1,421 @@
+options:
+  basename: decompressed.us.v11
+  target_path: decompressed.us.v11.bin
+  elf_path: build/decompressed.us.v11.elf
+  base_path: .
+  platform: n64
+  compiler: IDO
+  ld_script_path: decompressed.us.v11.ld
+  find_file_boundaries: True
+  header_encoding: ASCII
+  symbol_addrs_path: symbol_addrs.us.v11.txt
+  undefined_funcs_auto_path: undefined_funcs_auto.txt
+  undefined_syms_auto_path: undefined_syms_auto.txt
+  ld_legacy_generation: True # change this when ready to False
+  symbol_name_format: $SEG_$VRAM
+  migrate_rodata_to_functions: True
+  gfx_ucode: f3db
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+  make_full_disasm_for_code: yes
+segments:
+- name:  hd_code
+  type: code
+  start: 0x00000
+  vram:  0x802447C0
+  bss_size: 0xF09A0
+  subsegments:
+    - [0x00000, c, hd_code/hd] # done
+    - [0x12D80, c, hd_code/12D80] # done
+    - [0x13A70, c, hd_code/13A70] # done
+    - [0x14B30, c, hd_code/14B30] # done
+    - [0x168B0, c, hd_code/168B0] # done
+    - [0x17210, c, hd_code/17210] # done
+    - [0x17A70, c, hd_code/17A70] # done
+    - [0x17E10, c, hd_code/17E10] # done
+    - [0x1A630, c, hd_code/1A630] # done
+    - [0x1C460, c, hd_code/1C460] # done
+    - [0x1D990, c, hd_code/1D990] # done
+    - [0x20460, c, hd_code/20460] # done
+    - [0x22EE0, c, hd_code/22EE0] # done: audi.c
+    - [0x23C20, c, hd_code/23C20] # done
+    - [0x26570, c, hd_code/yoshi] # done
+    - [0x2B3F0, c, hd_code/2B3F0] # done
+    - [0x2C560, c, hd_code/sched] # done
+    - [0x2D810, c, hd_code/2D810] # done
+    - [0x2E490, c, hd_code/2E490] # done
+    - [0x30430, c, hd_code/30430] # done: fade.c
+    - [0x30C70, c, hd_code/30C70] # done
+    - [0x32E60, c, hd_code/32E60] # done
+    - [0x34430, c, hd_code/34430] # done: mb.c
+    - [0x37530, c, hd_code/37530] # done
+    - [0x39050, c, hd_code/39050] # done
+    - [0x3E4C0, c, hd_code/3E4C0] # done
+    - [0x405F0, c, hd_code/405F0] # done, uses data from 00000
+    - [0x409D0, c, hd_code/409D0] # done: stats_perm.c
+    - [0x41930, c, hd_code/41930] # done: academy.c
+    - [0x42240, c, hd_code/42240] # done
+    - [0x43A60, c, hd_code/43A60] # done
+    - [0x45BB0, c, hd_code/45BB0] # controller.c
+    - [0x46C20, c, hd_code/46C20] # done
+    - [0x46F60, c, hd_code/46F60] # done
+    - [0x479D0, c, hd_code/479D0] # done
+    - [0x48D00, c, hd_code/48D00] # done
+    - [0x4B450, c, hd_code/4B450] # done
+    - [0x4B5E0, c, hd_code/4B5E0] # done
+    - [0x4DA80, c, hd_code/4DA80] # done
+    - [0x4EBE0, c, hd_code/4EBE0] # done
+    - [0x50670, c, hd_code/50670] # done
+    - [0x51690, c, hd_code/51690] # done
+    - [0x52D70, c, hd_code/52D70] # done
+    - [0x53220, c, hd_code/53220] # done
+    - [0x53820, c, hd_code/53820] # inflate.c
+    - [0x54E30, c, hd_code/54E30] # done
+    - [0x55970, c, hd_code/55970] # done
+    - [0x55D40, c, hd_code/55D40] # done
+    - [0x56010, c, hd_code/56010] # done
+    - [0x56040, asm, hd_code/56040] # Handwritten ASM
+    - [0x5BF40, asm, hd_code/5BF40] # Handwritten ASM
+    - [0x5CB60, asm, hd_code/5CB60] # Handwritten ASM
+    - [0x5FD50, bin, hd_code/5FD50] # TODO: misuses $gp
+    - [0x60D50, asm, hd_code/60D50]
+    - [0x60F60, asm, hd_code/60F60]
+    - [0x62740, asm, hd_code/62740]
+    - [0x679E0, asm, hd_code/679E0]
+    - [0x68810, bin, hd_code/68810]
+    - [0x69BB0, bin, hd_code/69BB0] # TODO: misuses $gp
+    - [0x6B4A0, bin, hd_code/6B4A0] # TODO: misuses $gp
+    - [0x6C5E0, bin, hd_code/6C5E0] # TODO: misuses $gp
+    - [0x6E200, bin, hd_code/6E200] # TODO: misuses $gp
+    - [0x71140, bin, hd_code/71140] # TODO: misuses $gp
+    - [0x72B80, bin, hd_code/72B80] # TODO: misuses $gp
+    - [0x75490, bin, hd_code/75490] # TODO: misuses $gp
+    - [0x772A0, bin, hd_code/772A0] # TODO: misuses $gp
+    - [0x77E20, bin, hd_code/77E20] # TODO: misuses $gp
+    - [0x7D9D0, bin, hd_code/7D9D0_data] # ?? handwritten or a mix of .text+.data?
+    - [0x80280, bin, hd_code/7FB50] # TODO: misuses $gp
+    - [0x83910, bin, hd_code/83910] # TODO: misuses $gp
+    - [0x853D0, bin, hd_code/853D0] # TODO: misuses $gp
+    - [0x86ED0, asm, hd_code/86ED0]
+    - [0x86F60, bin, hd_code/86F60] # TODO: misuses $gp
+    - [0x88160, bin, hd_code/88160] # TODO: misuses $gp
+    - [0x89250, bin, hd_code/89250] # TODO: misuses $gp
+    - [0x8A080, asm, hd_code/8A080]
+    - [0x8A2E0, asm, hd_code/8A2E0]
+    - [0x8AEE0, bin, hd_code/8AEE0] # TODO: misuses $gp
+    - [0x8DDB0, bin, hd_code/8DDB0] # TODO: misuses $gp
+    - [0x8E910, asm, hd_code/8E910] # TODO: levelno based data
+    - [0x8F860, c, hd_code/os/initialize]
+    - [0x8FA90, c, hd_code/io/pirawread]
+    - [0x8FAF0, c, hd_code/os/createthread]
+    - [0x8FC40, c, hd_code/os/startthread]
+    - [0x8FD90, c, hd_code/io/dpsetstat]
+    - [0x8FDA0, c, hd_code/io/pimgr]
+    - [0x8FF20, c, hd_code/os/setthreadpri]
+    - [0x90000, c, hd_code/os/sendmesg]
+    - [0x90150, c, hd_code/os/recvmesg]
+    - [0x90290, c, hd_code/io/viblack]
+    - [0x90300, c, hd_code/os/gettime]
+    - [0x90390, c, hd_code/libc/ll]
+    - [0x90650, c, hd_code/90650]
+    - [0x90660, c, hd_code/os/virtualtophysical]
+    - [0x906E0, asm, hd_code/os/writebackdcache]
+    - [0x90760, c, hd_code/gu/translate]
+    - [0x90800, c, hd_code/gu/ortho]
+    - [0x909C0, c, hd_code/gu/perspective]
+    - [0x90C50, asm, hd_code/gu/align] # TODO: needs .bss
+    - [0x90E40, c, hd_code/gu/mtxcatf]
+    - [0x91050, c, hd_code/gu/mtxutil]
+    - [0x912C0, c, hd_code/gu/scale]
+    - [0x91360, c, hd_code/gu/lookatref]
+    - [0x91820, asm, hd_code/gu/sqrtf]
+    - [0x91830, c, hd_code/gu/lookat]
+    - [0x91B60, asm, hd_code/91B60] # probably sinf, needs .data migration
+    - [0x91D20, asm, hd_code/os/createmesgqueue] # needs os/thread.data
+    - [0x91D90, c, hd_code/io/visetspecial]
+    - [0x91F50, asm, hd_code/os/writebackdcacheall] # handwritten asm
+    - [0x91F80, asm, hd_code/os/invaldcache] # handwritten asm
+    - [0x92030, asm, hd_code/os/destroythread] # TODO
+    - [0x92130, asm, hd_code/92130] # probably cosf, needs .data migration
+    - [0x922A0, asm, hd_code/libc/sprintf] # TODO
+    - [0x92350, c, hd_code/audio/heapalloc]
+    - [0x923B0, c, hd_code/audio/event]
+    - [0x926F0, asm, hd_code/audio/sl] # TODO
+    - [0x927B0, c, hd_code/audio/synaddplayer]
+    - [0x92800, c, hd_code/audio/synallocvoice]
+    - [0x92A30, c, hd_code/audio/synsetvol]
+    - [0x92AD0, c, hd_code/audio/synstartvoice]
+    - [0x92B60, c, hd_code/audio/synsetpan]
+    - [0x92BF0, c, hd_code/audio/synsetpitch]
+    - [0x92C80, c, hd_code/audio/synsetfxmix]
+    - [0x92D20, c, hd_code/audio/synstopvoice]
+    - [0x92DA0, c, hd_code/audio/synfreevoice]
+    - [0x92E50, c, hd_code/audio/cents2ratio]
+    - [0x92EA0, asm, hd_code/os/setintmask] # TODO handwritten asm
+    - [0x92F00, c, hd_code/audio/cspstop]
+    - [0x92F30, asm, hd_code/audio/cseq]  # TODO
+    - [0x939F0, asm, hd_code/audio/cspsetseq] # TODO
+    - [0x93A30, asm, hd_code/audio/cspplay] # TODO
+    - [0x93A60, c, hd_code/audio/cspsetvol]
+    - [0x93AA0, c, hd_code/audio/cspgettempo]
+    - [0x93AE0, c, hd_code/audio/cspsettempo]
+    - [0x93B50, c, hd_code/audio/cspgetvol]
+    - [0x93B60, c, hd_code/audio/heapinit]
+    - [0x93BA0, c, hd_code/audio/bnkf]
+    - [0x93DF0, asm, hd_code/audio/csplayer] # TODO: not sure. probably
+    - [0x95020, c, hd_code/audio/cspsetbank]
+    - [0x95060, asm, hd_code/os/getcount] # TODO: handwritten asm
+    - [0x95070, asm, hd_code/gu/sins] # TODO: needs data
+    - [0x950E0, c, hd_code/gu/coss]
+    - [0x95110, asm, hd_code/os/vi] # TODO
+    - [0x95240, asm, hd_code/io/aisetfreq] # TODO
+    - [0x953A0, asm, hd_code/io/aisetnextbuf] # TODO
+    - [0x95450, c, hd_code/io/aigetlen]
+    - [0x95460, asm, hd_code/audio/synthesizer]
+    - [0x95C40, asm, hd_code/libc/llcvt] # TODO needs rodata
+    - [0x95E50, asm, hd_code/io/vimgr] # TODO needs data and bss
+    - [0x961B0, c, hd_code/io/visetmode]
+    - [0x96220, asm, hd_code/os/seteventmesg] # TODO: needs bss
+    - [0x96290, c, hd_code/os/visetevent]
+    - [0x96300, c, hd_code/io/dpgetstat]
+    - [0x96310, c, hd_code/io/vigetcurrframebuf]
+    - [0x96350, c, hd_code/io/vigetnextframebuf]
+    - [0x96390, c, hd_code/io/viswapbuf]
+    - [0x963E0, c, hd_code/os/settimer]
+    - [0x964C0, asm, hd_code/io/sptask] # TODO
+    - [0x96800, c, hd_code/io/sptaskyield]
+    - [0x96820, c, hd_code/gu/mtxcatl]
+    - [0x968E0, asm, hd_code/io/controller] # TODO needs rodata
+    - [0x96CA0, c, hd_code/io/contsetch]
+    - [0x96D10, c, hd_code/io/contreaddata]
+    - [0x96F70, asm, hd_code/os/invalicache] # TODO handwritten asm
+    - [0x96FF0, asm, hd_code/libc/bzero] # TODO handwritten asm
+    - [0x97090, c, hd_code/io/contquery]
+    - [0x97140, c, hd_code/gu/normalize]
+    - [0x971D0, asm, hd_code/os/setsr] # TODO handwritten asm
+    - [0x971E0, asm, hd_code/os/getsr] # TODO handwritten asm
+    - [0x971F0, asm, hd_code/os/setfpccsr] # TODO handwritten asm
+    - [0x97200, c, hd_code/io/sirawread]
+    - [0x97250, c, hd_code/io/sirawwrite]
+    - [0x972A0, asm, hd_code/os/exceptasm] # TODO handwritten asm
+    - [0x97B10, asm, hd_code/os/maptlbrdb] # TODO handwritten asm
+    - [0x97B70, asm, hd_code/os/interrupt] # TODO handwritten asm
+    - [0x97BB0, asm, hd_code/os/thread] # TODO requires bss
+    - [0x97BF0, asm, hd_code/io/piacs] # TODO requires data
+    - [0x97CB0, c, hd_code/os/getthreadpri]
+    - [0x97CD0, c, hd_code/io/pirawdma]
+    - [0x97DB0, c, hd_code/io/devmgr]
+    - [0x97F30, asm, hd_code/os/timerintr] # TODO requires bss
+    - [0x98330, asm, hd_code/os/probetlb] # TODO handwritten asm
+    - [0x983F0, asm, hd_code/libc/xprintf] # TODO needs data
+    - [0x99580, asm, hd_code/libc/string] # TODO
+    - [0x99620, c, hd_code/audio/copy]
+    - [0x996A0, c, hd_code/audio/syndelete]
+    - [0x996B0, asm, hd_code/audio/seqplayer] # TODO needs rodata and matching
+    - [0x9AFF0, c, hd_code/audio/synstartvoiceparam]
+    - [0x9B0E0, c, hd_code/io/viswapcontext]
+    - [0x9B440, c, hd_code/io/ai]
+    - [0x9B470, asm, hd_code/audio/drvrNew] # TODO needs rodata and matching
+    - [0x9BBF0, c, hd_code/audio/synallocfx]
+    - [0x9BC90, c, hd_code/audio/mainbus]
+    - [0x9BDE0, asm, hd_code/audio/load] # TODO needs matching
+    - [0x9C930, asm, hd_code/audio/resample] # TODO needs rodata and matching
+    - [0x9CC30, asm, hd_code/9CC30]
+    - [0x9D810, asm, hd_code/9D810]
+    - [0x9D920, asm, hd_code/9D920]
+    - [0x9DB60, c, hd_code/io/vigetcurrcontext]
+    - [0x9DB70, c, hd_code/io/spgetstat]
+    - [0x9DB80, asm, hd_code/libc/bcopy] # TODO handwritten asm
+    - [0x9DE90, c, hd_code/io/spsetstat]
+    - [0x9DEA0, c, hd_code/io/spsetpc]
+    - [0x9DEE0, c, hd_code/io/sprawdma]
+    - [0x9DF70, c, hd_code/io/sp]
+    - [0x9DFA0, c, hd_code/io/sirawdma]
+    - [0x9E050, asm, hd_code/io/siacs] # TODO needs bss
+    - [0x9E110, c, hd_code/io/si]
+    - [0x9E140, asm, hd_code/9E140]
+    - [0x9E5C0, asm, hd_code/os/syncputchars] # TODO needs matching
+    - [0x9E6F0, asm, hd_code/os/setcompare] # TODO handwritten asm
+    - [0x9E700, asm, hd_code/9E700]
+    - [0x9FE00, c, hd_code/audio/filter]
+    - [0x9FE20, asm, hd_code/audio/reverb] # TODO needs matching
+    - [0xA0A30, asm, hd_code/A0A30]
+    - [0xA0A40, asm, hd_code/A0A40]
+    - [0xA0AA0, asm, hd_code/A0AA0]
+    - [0xA0C30, data, hd_code/rsp/f3d]
+    - [0xA2060, data, hd_code/rsp/rspboot]
+    - [0xA2130, data, hd_code/rsp/aspmain]
+    - [0xA4410, .data, hd_code/hd] # done
+    - [0xA44A0, .data, hd_code/13A70] # done
+    - [0xA44B0, .data, hd_code/14B30] # done
+    - [0xA44F0, .data, hd_code/17210] # done
+    - [0xA4510, .data, hd_code/17E10] # done
+    - [0xA4520, .data, hd_code/1A630] # done
+    - [0xA4540, .data, hd_code/1C460] # done
+    - [0xA4770, .data, hd_code/1D990] # done
+    - [0xA57F0, .data, hd_code/20460] # done
+    - [0xAF330, .data, hd_code/22EE0] # done
+    - [0xAF450, .data, hd_code/23C20] # done
+    - [0xAFF00, .data, hd_code/yoshi] # done
+    - [0xB5200, .data, hd_code/2B3F0] # done
+    - [0xB5AB0, .data, hd_code/sched] # done
+    - [0xB5AC0, .data, hd_code/2D810] # done
+    - [0xB60F0, .data, hd_code/30430] # done
+    - [0xB6180, .data, hd_code/30C70] # done
+    - [0xB6590, .data, hd_code/32E60] # done
+    - [0xB7710, .data, hd_code/34430] # done
+    - [0xB78C0, .data, hd_code/37530] # done
+    - [0xB7C30, .data, hd_code/39050] # done
+    - [0xB7DF0, .data, hd_code/3E4C0] # done
+    - [0xB92A0, .data, hd_code/405F0] # done
+    - [0xB9350, .data, hd_code/409D0] # done
+    - [0xB9370, .data, hd_code/46C20] # done
+    - [0xB9380, .data, hd_code/479D0] # done
+    - [0xB93B0, .data, hd_code/48D00] # done
+    - [0xB9410, .data, hd_code/4B450] # done
+    - [0xB9420, .data, hd_code/4B5E0] # done
+    - [0xB9C00, .data, hd_code/4DA80] # done
+    - [0xBA1C0, .data, hd_code/4EBE0] # done
+    - [0xBA910, .data, hd_code/50670] # done
+    - [0xBA9C0, .data, hd_code/53220] # done
+    - [0xBAE70, .data, hd_code/53820] # done
+    - [0xBAF70, data, hd_code/hd_code_data_rest2 ]
+    - [0xC1DD0, .data, hd_code/os/initialize ]
+    - [0xC1DE0, .data, hd_code/io/pimgr ]
+    - [0xC1E00, data, hd_code/audio/sl ]
+    - [0xC1E10, data, hd_code/sintable ]
+    - [0xC2610, data, hd_code/os/vi ]
+    - [0xC2680, data, hd_code/io/aisetnextbuf ]
+    - [0xC2690, data, hd_code/hd_code_data_rest3 ]
+    - [0xC33D0, .rodata, hd_code/hd] # done
+    - [0xC4520, .rodata, hd_code/12D80] # done
+    - [0xC4520, .rodata, hd_code/13A70] # done
+    - [0xC4520, .rodata, hd_code/14B30] # done
+    - [0xC4720, .rodata, hd_code/168B0] # done
+    - [0xC47D0, .rodata, hd_code/17210] # done
+    - [0xC4870, .rodata, hd_code/17A70] # done
+    - [0xC48B0, .rodata, hd_code/17E10] # done
+    - [0xC48E0, .rodata, hd_code/1A630] # done
+    - [0xC4A30, .rodata, hd_code/1C460] # done
+    - [0xC4AF0, .rodata, hd_code/1D990] # done
+    - [0xC4E80, .rodata, hd_code/20460] # done
+    - [0xC4F40, .rodata, hd_code/22EE0] # done: audi.c
+    - [0xC5070, .rodata, hd_code/23C20] # done
+    - [0xC5210, .rodata, hd_code/yoshi] # done
+    - [0xC7800, .rodata, hd_code/2B3F0] # done
+    - [0xC7860, .rodata, hd_code/sched] # done: sched.c
+    - [0xC7D10, .rodata, hd_code/2D810] # done
+    - [0xC7D30, .rodata, hd_code/30430] # done: fade.c
+    - [0xC7D80, .rodata, hd_code/30C70] # done
+    - [0xC7DB0, .rodata, hd_code/32E60] # done
+    - [0xC7E50, .rodata, hd_code/34430] # done: mb.c
+    - [0xC7F10, .rodata, hd_code/37530] # done
+    - [0xC7F20, .rodata, hd_code/39050] # done
+    - [0xC8030, .rodata, hd_code/3E4C0] # done
+    - [0xC80D0, .rodata, hd_code/405F0] # done
+    - [0xC80F0, .rodata, hd_code/409D0] # done
+    - [0xC8210, .rodata, hd_code/41930] # done: academy.c
+    - [0xC83E0, .rodata, hd_code/42240] # done
+    - [0xC83F0, .rodata, hd_code/43A60] # done
+    - [0xC8410, .rodata, hd_code/45BB0] # controller.c
+    - [0xC84E0, .rodata, hd_code/46C20] # done
+    - [0xC84F0, .rodata, hd_code/46F60] # done
+    - [0xC84F0, .rodata, hd_code/479D0] # done
+    - [0xC8520, .rodata, hd_code/48D00] # done
+    - [0xC8530, .rodata, hd_code/4DA80] # done
+    - [0xC8570, .rodata, hd_code/4EBE0] # done
+    - [0xC85A0, .rodata, hd_code/50670] # done
+    - [0xC8620, .rodata, hd_code/53220] # done
+    - [0xC8DC0, .rodata, hd_code/54E30] # done
+    - [0xC90B0, rodata, hd_code/56040]
+    - [0xC90C0, rodata, hd_code/5CB60]
+    - [0xC90D0, rodata, hd_code/62740]
+    - [0xC9230, .rodata, hd_code/gu/perspective ]
+    - [0xC9240, rodata, hd_code/gu/align]
+    - [0xC9250, .rodata, hd_code/gu/lookatref]
+    - [0xC9260, rodata, hd_code/91B60]
+    - [0xC92B0, rodata, hd_code/92130]
+    - [0xC9300, .rodata, hd_code/audio/cents2ratio ]
+    - [0xC9310, rodata, hd_code/os/setintmask ]
+    - [0xC9390, rodata, hd_code/audio/cseq ]
+    - [0xC93A0, rodata, hd_code/audio/csplayer ]
+    - [0xC95E0, rodata, hd_code/audio/synthesizer ]
+    - [0xC95F0, rodata, hd_code/libc/llcvt ]
+    - [0xC9600, rodata, hd_code_rodata_rest3 ]
+    - { start: 0xCAEA0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
+    - [0xCAEA0, .bss, hd_code/12D80] # done
+    - [0xCAEA0, .bss, hd_code/13A70] # done
+    - [0xCAEA0, .bss, hd_code/14B30] # done
+    - [0xCAEA0, .bss, hd_code/168B0] # done
+    - [0xCAEA0, .bss, hd_code/17210] # done
+    - [0xCAEA0, .bss, hd_code/17A70] # done
+    - [0xCAEA0, .bss, hd_code/17E10] # done
+    - [0xCAEA0, .bss, hd_code/1A630] # done
+    - [0xCAEA0, .bss, hd_code/1C460] # done
+    - [0xCAEA0, .bss, hd_code/1D990] # done
+    - [0xCAEA0, .bss, hd_code/20460] # done
+    - [0xCAEA0, .bss, hd_code/22EE0] # done
+    - [0xCAEA0, .bss, hd_code/23C20] # done
+    - [0xCAEA0, .bss, hd_code/yoshi] # done
+    - [0xCAEA0, .bss, hd_code/2B3F0] # done
+    - [0xCAEA0, .bss, hd_code/sched] # done
+    - [0xCAEA0, .bss, hd_code/2D810] # done
+    - [0xCAEA0, .bss, hd_code/2E490] # done
+    - [0xCAEA0, .bss, hd_code/30430] # done
+    - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest, vram: 0x8036C790 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/54E30, vram: 0x803A6AF0 }
+    - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest2, vram: 0x803A6B10 }
+  #- { start: 0xCAEA0, type: bss, vram: 0x8030F660 }
+- name:  hd_front_end
+  type: code
+  start: 0xCAEA0
+  vram:  0x801E7000
+  bss_size: 0xDE70
+  subsegments:
+    - [ 0xCAEA0, c, hd_front_end/CAEA0 ]
+    - [ 0xCCAE0, asm, hd_front_end/CCAE0 ]
+    - [ 0xD1630, asm, hd_front_end/D1630 ]
+    - [ 0xD2230, asm, hd_front_end/D2230 ]
+    - [ 0xD26A0, asm, hd_front_end/D26A0 ]
+    - [ 0xD4410, asm, hd_front_end/D4410 ]
+    - [ 0xD8D10, asm, hd_front_end/D8D10 ]
+    - [ 0xD9650, asm, hd_front_end/D9650 ]
+    - [ 0xDC3D0, asm, hd_front_end/DC3D0 ]
+    - [ 0xE2830, asm, hd_front_end/E2830 ]
+    - [ 0xE4590, asm, hd_front_end/E4590 ]
+    - [ 0xE50E0, asm, hd_front_end/E50E0 ]
+    - [ 0xE5D20, asm, hd_front_end/E5D20 ]
+    - [ 0xE65D0, asm, hd_front_end/E65D0 ]
+    - [ 0xE6720, asm, hd_front_end/E6720 ]
+    - [ 0xE6790, asm, hd_front_end/E6790 ]
+    - [ 0xE7B60, asm, hd_front_end/E7B60 ]
+    - [ 0xE8170, asm, hd_front_end/E8170 ]
+    - [ 0xE82B0, asm, hd_front_end/E82B0 ]
+    - [ 0xE83F0, asm, hd_front_end/E83F0 ]
+    - [ 0xE85B0, asm, hd_front_end/E85B0 ]
+    - [ 0xE8AB0, asm, hd_front_end/E8AB0 ]
+    - [ 0xE9290, asm, hd_front_end/E9290 ]
+    - [ 0xEA460, asm, hd_front_end/EA460 ]
+    - [ 0xEA810, asm, hd_front_end/EA810 ]
+    - [ 0xEABC0, asm, hd_front_end/EABC0 ]
+    - [ 0xEAF30, asm, hd_front_end/EAF30 ]
+    - [ 0xEBEE0, .data, hd_front_end/CAEA0 ]
+    - [ 0xEC060, data, hd_front_end/hd_front_end_data ]
+    - [ 0xF22E0, .rodata, hd_front_end/CAEA0 ]
+    - [ 0xF2370, rodata, hd_front_end/CCAE0 ]
+    - [ 0xF2BE0, rodata, hd_front_end/D1630 ]
+    - [ 0xF2C50, rodata, hd_front_end/D26A0 ]
+    - [ 0xF2E50, rodata, hd_front_end/D26A0_b ] # TODO needs split in .text
+    - [ 0xF2E60, rodata, hd_front_end/D4410 ]
+    - [ 0xF2F30, rodata, hd_front_end/D4410_b ] # TODO needs split in .text
+    - [ 0xF2F50, rodata, hd_front_end/D9650 ]
+    - [ 0xF3320, rodata, hd_front_end/0E7B0_and_11530 ] # TODO
+    - [ 0xF43F0, rodata, hd_front_end/17990_and_196F0 ] # TODO
+    - [ 0xF4510, rodata, hd_front_end/E5D20 ]
+    - { start: 0xF4D30, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
+    - { start: 0xF4D30, type: bss, name: hd_front_end/CCAE0, vram: 0x80215440 }
+    - { start: 0xF4D30, type: bss, name: hd_front_end/D1630, vram: 0x80215960 }
+    - { start: 0xF4D30, type: bss, name: hd_front_end/hd_code_bss_rest, vram: 0x802159C0 }
+- [0xF4D30]

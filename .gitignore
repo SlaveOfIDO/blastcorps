@@ -31,4 +31,4 @@ permuter-bench
 other/
 
 # build artifacts
-hd_code/hd_code.map
+decompressed/decompressed.map

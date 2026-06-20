@@ -106,8 +106,7 @@ verify: $(TARGET).z64
 
 extract: check decompressed.$(VERSION).z64
 	splat split blastcorps.$(VERSION).yaml
-	cp assets/hd_code.$(VERSION).bin hd_code/hd_code.bin
-	cp assets/hd_front_end.$(VERSION).bin hd_front_end/hd_front_end.bin
+	cp assets/decompressed.$(VERSION).bin decompressed/decompressed.$(VERSION).bin
 
 decompressed.$(VERSION).z64: baserom.$(VERSION).z64
 	$(PYTHON) $(TOOLS_DIR)/decompress_rom.py baserom.$(VERSION).z64
@@ -144,18 +143,11 @@ $(BUILD_DIR)/%.s.o: %.s
 $(BUILD_DIR)/%.bin.o: %.bin
 	$(LD) -r -b binary -o $@ $<
 
-#  assets/hd_code.us.v11.bin -> assets/hd_code.us.v11.bin.o
-$(BUILD_DIR)/assets/hd_code.$(VERSION).bin.o: assets/hd_code.$(VERSION).bin
-	echo "Copying hd_code binary"
-	cp hd_code/hd_code.bin assets/hd_code.$(VERSION).bin
+#  assets/decompressed.us.v11.bin -> assets/decompressed.us.v11.bin.o
+$(BUILD_DIR)/assets/decompressed.$(VERSION).bin.o: decompressed/build/decompressed.bin
+	echo "Copying decompressed binary"
+	cp decompressed/build/decompressed.bin assets/decompressed.$(VERSION).bin
 	$(LD) -r -b binary -o $@ $<
-
-#  assets/hd_front_end.us.v11.bin -> assets/hd_front_end.us.v11.bin.o
-$(BUILD_DIR)/assets/hd_front_end.$(VERSION).bin.o: assets/hd_front_end.$(VERSION).bin
-	echo "Copying hd_front_end binary"
-	cp hd_front_end/hd_front_end.bin assets/hd_front_end.$(VERSION).bin
-	$(LD) -r -b binary -o $@ $<
-
 
 # *.o -> *.elf
 $(TARGET).elf: $(O_FILES)

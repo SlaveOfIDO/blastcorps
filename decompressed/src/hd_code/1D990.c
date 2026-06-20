@@ -1,0 +1,1321 @@
+#include "common.h"
+#include "functions.h"
+#include "hd.h"
+#include "structs.h"
+#include "variables.h"
+
+// Proposed file name: missions.c
+//
+// This file is the mission/objective system: per-level mission configuration,
+// the mission-start countdown and objective banner, win/lose condition
+// checking per game mode, the race lap tracker, the mission timer HUD and the
+// turbo-start traffic light. D_hd_code_80364AA8 holds the current game mode as
+// a bitmask (0x1 = normal demolition, 0x2 = race, 0x4 = destroy N buildings,
+// 0x8 = cause $N damage, 0x10/0x40 = find N RDUs, 0x20 = destroy named
+// targets, 0x80 = clear the carrier/shuttle path); the same values appear as
+// the first field of the mission config table D_hd_code_802E8F94. World
+// positions in the tables are stored >> 5 and shifted back << 5 on load.
+
+void func_hd_code_80262840();                          /* extern */
+void func_hd_code_80262FD0();                          /* extern */
+void func_hd_code_8026303C();                          /* extern */
+void func_hd_code_80263140();                          /* extern */
+void func_hd_code_80263358();                          /* extern */
+void func_hd_code_802633E0();                          /* extern */
+void sndDeactivateAllSfxByFlag_11();                   /* extern */
+void sndDeactivateAllSfxByFlag_3();                    /* extern */
+Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1);
+s32 func_hd_code_80272ED8(s32, s32, u8, s32, s32, s32, f32); /* extern */
+s32 func_hd_code_80274868(s32);                     /* extern */
+s32 func_hd_code_80274AA4(s32);                     /* extern */
+extern u8 D_hd_code_80367BB0[];
+extern struct S_80367BCC* D_hd_code_80367BCC;
+extern u16 D_hd_code_80367BF4;
+extern u16 D_hd_code_80367D08;
+extern s32 D_hd_code_803EF2F0;
+
+
+
+u8 func_hd_code_8026FA38(char**, s32*);                /* extern */
+extern s32 D_6A32B0;
+extern s32 D_6A8DA0;
+extern s32 D_hd_code_80367C0C;
+extern s32 D_hd_code_803F7C10;
+extern s32 D_hd_code_803F7C14;
+extern s32 D_hd_code_803EFEB0;
+extern s32 D_hd_code_803EFEB4;
+extern s32 D_hd_code_803EFEB8;
+extern s32 D_hd_code_803EFEBC;
+extern s8 D_hd_code_803EFEC8;
+
+
+extern struct S_80367C04 *D_hd_code_80367C04;
+
+extern u8 D_hd_code_80367C10;
+
+// BSS
+u8 D_hd_code_80367750[0x400];
+s32 D_hd_code_80367B50; // replay frame at which the turbo start was recorded (see func_hd_code_8026420C); proposed name: replayTurboFrame
+u8 D_hd_code_80367B54; // race lap counter (0 = start line not yet crossed, else current lap number); proposed name: currentLap
+u16 D_hd_code_80367B58[4]; // per-lap times in tenths of seconds; proposed name: lapTimes
+
+u8 D_hd_code_80367B60[4][0x14]; // HUD strings: lap times in race mode, objective progress in [0] otherwise; proposed name: hudProgressStrings
+u8 D_hd_code_80367BB0[0xC]; // remaining-time string, "MM:SS.T" format; proposed name: timerString
+s32 D_hd_code_80367BBC; // frame when the start/finish line was first crossed; proposed name: raceStartFrame
+u32 D_hd_code_80367BC0; // mission start frame counter; proposed name: missionStartFrame
+u32 D_hd_code_80367BC4; // last countdown second processed (so each second triggers once); proposed name: lastCountdownSecond
+u16 D_hd_code_80367BC8; // traffic light state machine (0 = off, 1..5 = drop in/count down/wait/grade turbo/slide out); proposed name: trafficLightState
+struct S_80367BCC* D_hd_code_80367BCC; // HUD objective icon info (NULL = no icon); proposed name: objectiveIconInfo
+struct S_80367BD0 D_hd_code_80367BD0; // HUD state: unk6 = text alpha, unk8 = y offset, unkC = traffic light texture pointers; proposed name: hudState
+u16 D_hd_code_80367BF4; // remaining time in whole seconds; proposed name: timeLeftSeconds
+u16 D_hd_code_80367BF6; // remaining time in tenths of seconds; proposed name: timeLeftTenths
+u8 D_hd_code_80367BF8; // index into the checkpoint-box crossing order (lap valid once it reaches 4); proposed name: checkpointIdx
+u8 D_hd_code_80367BF9; // quadrant box the player was in last frame; proposed name: prevQuadrant
+u8 D_hd_code_80367BFA; // quadrant box the player is in now; proposed name: currentQuadrant
+u8 D_hd_code_80367BFB; // best lap number (1-based); proposed name: bestLapNum
+u16 D_hd_code_80367BFC; // best lap time in tenths of seconds; proposed name: bestLapTime
+u8 D_hd_code_80367BFE; // turbo start earned flag; proposed name: turboStartEarned
+s8 D_hd_code_80367BFF; // turbo start active flag; proposed name: turboStartActive
+u8 D_hd_code_80367C00;
+u8 D_hd_code_80367C01; // accelerator pressed too early during the light sequence (disqualifies turbo); proposed name: turboDisqualified
+struct S_80367C04 *D_hd_code_80367C04; // current level's mission config (points into D_hd_code_802E8F94); proposed name: missionConfig
+char* D_hd_code_80367C08; // objective target name string (e.g. "BUILDINGS"); proposed name: targetName
+s32 D_hd_code_80367C0C; // objective target icon data pointer; proposed name: targetIconData
+u8 D_hd_code_80367C10; // set if the current level is one of the specials in D_hd_code_802E8F30; proposed name: isSpecialLevel
+s32 pad_80367C14;
+char D_hd_code_80367C18[0x28]; // objective banner line 1 (e.g. "FINISH %d LAPS IN"); proposed name: bannerLine1
+char D_hd_code_80367C40[0x28]; // objective banner line 2 ("%d MINUTES %d SECONDS"); proposed name: bannerLine2
+s16 D_hd_code_80367C68[0x28]; // banner line 1 text effect buffer; proposed name: bannerLine1Fx
+s16 D_hd_code_80367CB8[0x28]; // banner line 2 text effect buffer; proposed name: bannerLine2Fx
+u16 D_hd_code_80367D08; // last second beeped during the final-10-seconds countdown; proposed name: lastBeepSecond
+s32 pad_80367D0C;
+char D_hd_code_80367D10[0x18]; // "%d LAPS LEFT!" text; proposed name: lapsLeftText
+char D_hd_code_80367D28[0x28]; // "%d LAPS LEFT!" text effect buffer; proposed name: lapsLeftFx
+s16 D_hd_code_80367D50; // traffic light vertical slide offset; proposed name: trafficLightSlide
+struct S_80367D52 D_hd_code_80367D52; // traffic light lamp image index (unk0 = current, unk1 = previous); proposed name: trafficLightLamp
+// BSS End
+
+// Data
+// Special level numbers (40, 43, 44, 45, 46): these get an extended draw
+// distance (80 vs 45) and map through func_hd_code_80264BA4
+// Proposed name: specialLevels
+u8 D_hd_code_802E8F30[5] = { 0x28, 0x2B, 0x2C, 0x2D, 0x2E };
+// 6 records of {level, pad, x, y, z}: positions for levels 10, 17, 33, 14, 13, 4 (not referenced in this file)
+// Proposed name: levelPoints
+struct S_802E8F38 D_hd_code_802E8F38[6] = {
+  { 0x0A, 0x00, 0x0F84,  0x002C, 0x09AE },
+  { 0x11, 0x00, 0x0FDF,  0x0064, 0x057A },
+  { 0x21, 0x00, 0x043D,  0x00A3, 0x0977 },
+  { 0x0E, 0x00, 0x0B9E,  0x00B7, 0x160A },
+  { 0x0D, 0x00, 0x09EC,  0x00A0, 0x1755 },
+  { 0x04, 0x00, 0x0C8D,  0x019F, 0x1170 }
+};
+
+// {level, rect x1, y1, x2, y2}: special region bounds, only level 13 (see func_hd_code_80262238)
+// Proposed name: levelRegions
+struct S_802E8F68 D_hd_code_802E8F68[1] = {
+  {0x0D, 0x00, 0x18D3, 0x054F, 0x11B5, 0x1FCD }
+};
+
+// {level, pad, x, y, z}: special positions for levels 39, 24, 51, 41, loaded << 16 (see func_hd_code_80262320)
+// Proposed name: levelSpecialPositions
+struct S_802E8F74 D_hd_code_802E8F74[4] = {
+  {0x27, 0x00, 0x080D, 0x00B4, 0x1016},
+  {0x18, 0x00, 0x0697, 0x00C8, 0x027F},
+  {0x33, 0x00, 0x0701, 0x00F5, 0x08D5},
+  {0x29, 0x00, 0x08CA, 0x00C8, 0x06A4}
+};
+
+
+// Per-level mission config table, indexed by levelno. Known fields:
+// unk0 = game mode bitmask (see file header), unk2..unk10 = start/finish-line
+// and track rectangles (race mode), unk12[4] = checkpoint-box crossing order,
+// unk18 = goal count (laps / $ damage / RDU count), unk1C..unk2A = positions,
+// unk36 = time limit in tenths of seconds, the 10-byte array is likely medal
+// time thresholds. 1C460.c reads unk0 when choosing music.
+// Proposed name: missionConfigs
+struct S_80367C04 D_hd_code_802E8F94[] = {
+  {0x01, 0x01, 0x0000, 0x0190, 0x03E8,
+    0x07D0,  0x015F, 0x05DB, 0x01E9, 0x060E,
+    {0x02, 0x03, 0x01, 0x00}, { 0x00, 0x00 }, 6,
+    0x008C, 0x01F4,0x00000000, 0x8000, 0x0564,
+    0x00DA, 0x139A,
+    { 0x00, 0x00, 0x01, 0x90, 0x00, 0x8C, 0x00, 0xFA, 0x01, 0x2C},
+    0x0190, 0x00, 0x00, 0x00, 0x00,
+    0x00000000, 0x0000, 0x0000
+  },
+{
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03A9, 0x0196, 0x0AFC,
+    { 0x00, 0x00, 0x00, 0x20, 0x03, 0xB6, 0x06, 0xA4, 0x07, 0x08 }, 0x076C, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x0C27, 0x02BC, 0x1CA7,
+    { 0x00, 0x00, 0x00, 0x20, 0x02, 0x58, 0x04, 0x1A, 0x04, 0x4C }, 0x047E, 0x01,
+    0x00, 0x00, 0x00, 0x00000271, 0x015E, 0x00C8
+  },
+  {
+    0x01, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x005D0177, 0x8000, 0x05B6, 0x0264, 0x1020,
+    { 0x00, 0x01, 0x00, 0x10, 0x00, 0xE6, 0x01, 0x90, 0x01, 0xF4 }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0140, 0x0320,
+    0x00000000, 0x8000, 0x07A4, 0x0258, 0x0D58,
+    { 0x00, 0x00, 0x00, 0x20, 0x01, 0x90, 0x02, 0xBC, 0x03, 0x20 }, 0x0384, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x08F1, 0x01E0, 0x13D4,
+    { 0x00, 0x00, 0x00, 0x08, 0x01, 0xB8, 0x03, 0x52, 0x03, 0x84 }, 0x044C, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x08, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x000F4240, 0x0000, 0x0000,
+    0x003C00C8, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x04, 0x30, 0x01, 0x72, 0x01, 0xF4, 0x02, 0x58 }, 0x05DC, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x08, 0x00, 0x28, 0x00, 0x64, 0x00, 0xC8 }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x10, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000055, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x01, 0x22, 0x01, 0x5E, 0x01, 0x90 }, 0x0320, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x0E07, 0x0258, 0x15C7,
+    { 0x00, 0x00, 0x40, 0x98, 0x02, 0x3A, 0x04, 0xE2, 0x05, 0x78 }, 0x05DC, 0x01,
+    0x00, 0x00, 0x00, 0x000001A9, 0x015E, 0x00C8
+  },
+  {
+    0x01, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0258,
+    0x00000000, 0x8000, 0x0539, 0x01FA, 0x10D8,
+    { 0x00, 0x00, 0x26, 0xA0, 0x01, 0x18, 0x01, 0xF4, 0x02, 0x58 }, 0x0320, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x32C8, 0x2968, 0x1A6C, 0x10EE, 0x1AE4, 0x1102,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x03, 0xB6, 0x04, 0xB0, 0x05, 0x78 }, 0x0708, 0x01,
+    0x00, 0x00, 0x00, 0x00000113, 0x015E, 0x0064
+  },
+  {
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x023002F8, 0x8000, 0x0D16, 0x03E8, 0x212A,
+    { 0x00, 0x00, 0x00, 0x20, 0x06, 0x0E, 0x08, 0x98, 0x08, 0xFC }, 0x0960, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x03E8,
+    0x00000000, 0x8000, 0x0BB8, 0x05DC, 0x2D82,
+    { 0x00, 0x00, 0x02, 0x90, 0x02, 0xD0, 0x04, 0x1A, 0x04, 0x7E }, 0x04B0, 0x01,
+    0x00, 0x00, 0x00, 0x00000271, 0x015E, 0x00C8
+  },
+  {
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x1388, 0x01C2, 0x1964,
+    { 0x00, 0x00, 0x04, 0x50, 0x06, 0xD6, 0x0E, 0x10, 0x10, 0x68 }, 0x12C0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x08E8, 0x01F4, 0x1993,
+    { 0x00, 0x00, 0x04, 0x06, 0x01, 0x68, 0x02, 0xBC, 0x03, 0x20 }, 0x044C, 0x01,
+    0x00, 0x00, 0x00, 0x00000271, 0x015E, 0x00C8
+  },
+  {
+    0x01, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x00B4, 0x0320,
+    0x00000000, 0x8000, 0x18A7, 0x0320, 0x1D87,
+    { 0x00, 0x00, 0x86, 0x08, 0x01, 0x18, 0x02, 0xBC, 0x03, 0x84 }, 0x044C, 0x01,
+    0x00, 0x00, 0x00, 0x00000271, 0x015E, 0x00C8
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x0708, 0x0320, 0x16A8,
+    { 0x00, 0x00, 0x00, 0xD6, 0x02, 0x1C, 0x03, 0x84, 0x04, 0xB0 }, 0x0640, 0x01,
+    0x00, 0x00, 0x00, 0x000000FA, 0x015E, 0x00C8
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x02EF, 0x00FA, 0x1194,
+    { 0x00, 0x00, 0x20, 0xD0, 0x02, 0xEE, 0x03, 0xB6, 0x04, 0xB0 }, 0x0640, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000007, 0x00B4, 0x0320,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x01, 0x2C, 0x03, 0x20, 0x04, 0xB0 }, 0x0BB8, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x1F40, 0x1F40, 0x10D2, 0x0E10, 0x1136, 0x0E24,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x02, 0xDA, 0x04, 0x4C, 0x05, 0x14 }, 0x0834, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x0FA0, 0x0FA0, 0x05C8, 0x0640, 0x0654, 0x065E,
+    { 0x00, 0x02, 0x03, 0x01 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x01, 0x68, 0x01, 0x90, 0x01, 0xF4 }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x0FA0, 0x0FA0, 0x0659, 0x06E4, 0x06D1, 0x070C,
+    { 0x00, 0x01, 0x03, 0x02 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x00, 0xFA, 0x01, 0x5E, 0x01, 0xF4 }, 0x02D0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x40, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000190, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x02, 0xEE, 0x04, 0xB0, 0x06, 0xA4 }, 0x0708, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x40, 0x04, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x000000E0, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x01, 0xC2, 0x02, 0xBC, 0x04, 0x4C }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x0FA0, 0x0FA0, 0x0555, 0x0715, 0x05F4, 0x0728,
+    { 0x00, 0x02, 0x03, 0x01 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x01, 0x90, 0x01, 0xF4, 0x02, 0x58 }, 0x02EE, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03A9, 0x0196, 0x0AFC,
+    { 0x00, 0x01, 0x00, 0x00, 0x02, 0x26, 0x04, 0x1A, 0x04, 0x7E }, 0x0578, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x1770, 0x1770, 0x0C1C, 0x0B2C, 0x0FDC, 0x0B40,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE1, 0x38, 0x01, 0xCC, 0x02, 0x26, 0x02, 0xBC }, 0x03E8, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x01, 0x0000, 0x0000, 0x1F40, 0x2710, 0x1194, 0x15CF, 0x1590, 0x15E3,
+    { 0x00, 0x01, 0x02, 0x03 }, { 0x00, 0x00 }, 0x00000006, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x02, 0x00, 0x78, 0x01, 0x90, 0x01, 0xF4 }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0334,
+    0x00C8026C, 0x8000, 0x15C3, 0x0190, 0x2543,
+    { 0x00, 0x00, 0x83, 0x80, 0x01, 0xC2, 0x06, 0xD6, 0x07, 0x08 }, 0x07D0, 0x01,
+    0x00, 0x00, 0x00, 0x00000271, 0x015E, 0x00C8
+  },
+  {
+    0x20, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000006, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x04, 0x00, 0x00, 0x78, 0x00, 0xC8, 0x01, 0x2C }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x20, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000006, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x00, 0xD2, 0x01, 0x2C, 0x01, 0x90 }, 0x02BC, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000011, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x01, 0x5E, 0x02, 0xBC, 0x03, 0x52 }, 0x044C, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x076C, 0x015E, 0x0E38,
+    { 0x00, 0x00, 0x04, 0x00, 0x01, 0x0E, 0x02, 0x08, 0x02, 0x26 }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000006, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x10, 0x01, 0x2C, 0x02, 0x58, 0x03, 0x84 }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x3EE4, 0x1EDC, 0x1B58, 0x0CE4, 0x1B6C, 0x0DFC,
+    { 0x00, 0x02, 0x03, 0x01 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE1, 0x38, 0x03, 0xA2, 0x04, 0x1A, 0x05, 0x14 }, 0x0834, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x20, 0x04, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000008, 0x0000, 0x04B0,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x01, 0xF4, 0x04, 0xB0, 0x07, 0x08 }, 0x0960, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x20, 0x04, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000000A, 0x0226, 0x05DC,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x00, 0xC8, 0x01, 0x90, 0x01, 0xF4 }, 0x0384, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x07, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000006, 0x0000, 0x01F4,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0xD2, 0x01, 0x90, 0x01, 0xF4 }, 0x0258, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000011, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x04, 0x00, 0x01, 0x2C, 0x01, 0xF4, 0x03, 0x20 }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x07, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000001E, 0x0028, 0x015E,
+    0x0032015E, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x05, 0x78, 0x09, 0x60, 0x0C, 0x80 }, 0x0E10, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x0FA0, 0x0FA0, 0x0690, 0x0769, 0x0708, 0x079B,
+    { 0x00, 0x02, 0x03, 0x01 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE5, 0x38, 0x01, 0x68, 0x01, 0x90, 0x01, 0xF4 }, 0x0320, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x0FA0, 0x0FA0, 0x0519, 0x071B, 0x05E1, 0x0743,
+    { 0x00, 0x02, 0x03, 0x01 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE1, 0x38, 0x02, 0x62, 0x02, 0xBC, 0x05, 0xDC }, 0x0640, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x09, 0x0000, 0x0000, 0x2710, 0x2710, 0x0E45, 0x15EA, 0x1165, 0x163A,
+    { 0x02, 0x03, 0x01, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x38, 0x02, 0xBC, 0x03, 0x20, 0x05, 0xDC }, 0x0640, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x09, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000001C, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x05, 0x46, 0x07, 0xD0, 0x09, 0x60 }, 0x0AF0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x20, 0x09, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000009, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x04, 0x4C, 0x0B, 0xB8, 0x0E, 0x10 }, 0x12C0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x09, 0x0000, 0x0000, 0x2710, 0x1F40, 0x143C, 0x080C, 0x148C, 0x0A8C,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x03, 0x70, 0x03, 0xE8, 0x04, 0x4C }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x0E, 0x0000, 0x0000, 0x2710, 0x1F40, 0x143C, 0x080C, 0x148C, 0x0A8C,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x61, 0x38, 0x00, 0xD2, 0x03, 0x84, 0x04, 0x1A }, 0x0960, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x20, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000019, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x04, 0x01, 0x2C, 0x02, 0x58, 0x03, 0xE8 }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x0E, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x61, 0x38, 0x00, 0xD2, 0x02, 0xEE, 0x03, 0xE8 }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x06, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000001F, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x02, 0x1C, 0x02, 0xBC, 0x03, 0x20 }, 0x0384, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x02, 0x0000, 0x0000, 0x1770, 0x1770, 0x0C1C, 0x0B2C, 0x0FDC, 0x0B40,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x0000000B, 0x0000, 0x0000,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x04, 0x00, 0x01, 0xB8, 0x03, 0x84, 0x04, 0xB0 }, 0x05DC, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x04, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000000E, 0x0000, 0x0BB8,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x02, 0x58, 0x04, 0xB0, 0x07, 0x08 }, 0x0BB8, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000000B, 0x0000, 0x0140,
+    0x0064015E, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x04, 0x00, 0x96, 0x01, 0x2C, 0x04, 0xB0 }, 0x0708, 0x01,
+    0x00, 0x00, 0x00, 0x00000271, 0x015E, 0x00C8
+  },
+  {
+    0x20, 0x04, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000000F, 0x012C, 0x026C,
+    0x00000000, 0x0104, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x01, 0xC2, 0x03, 0xE8, 0x07, 0x08 }, 0x0E10, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x01, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000003, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x00, 0x20, 0x00, 0x6E, 0x00, 0xDC, 0x01, 0x5E }, 0x0E10, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x02, 0x02, 0x0000, 0x0000, 0x1518, 0x1518, 0x0D67, 0x0A7C, 0x0FC9, 0x0AB8,
+    { 0x01, 0x03, 0x02, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0xE1, 0x38, 0x02, 0x9E, 0x03, 0x20, 0x03, 0x84 }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x03, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x0623, 0x00DA, 0x1301,
+    { 0x00, 0x01, 0x04, 0x00, 0x01, 0x90, 0x03, 0x84, 0x04, 0x1A }, 0x04B0, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x01, 0x02, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x00000004, 0x0000, 0x0140,
+    0x00000000, 0x8000, 0x1194, 0x02BC, 0x1CC0,
+    { 0x00, 0x00, 0x00, 0x04, 0x00, 0xDC, 0x01, 0x68, 0x01, 0xC2 }, 0x01F4, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+  {
+    0x04, 0x04, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    { 0x00, 0x00, 0x00, 0x00 }, { 0x00, 0x00 }, 0x0000000F, 0x0000, 0x07D0,
+    0x00000000, 0x8000, 0x03E8, 0x01F4, 0x03E8,
+    { 0x00, 0x00, 0x02, 0x00, 0x03, 0x84, 0x05, 0xDC, 0x07, 0x08 }, 0x0960, 0x00,
+    0x00, 0x00, 0x00, 0x00000000, 0x0000, 0x0000
+  },
+};
+
+u8 __alignmentIssue[12] = {0};
+char D_hd_code_802E9F90[] = "BUILDINGS"; // proposed name: buildingsText
+void* D_hd_code_802E9F9C = (void*)0x8030480C; // TODO: D_hd_code_8030480C; proposed name: buildingsIconData
+u8 D_hd_code_802E9FA0[2] = { 0x20, 0x53 }; // { ' ', 'S' }: plural suffix for "%d MINUTE%c"; proposed name: pluralSuffix
+
+
+// Set the camera field of view for a level: 80.0 (and a flag) if it is one
+// of the five special levels in D_hd_code_802E8F30, else the default 45.0
+// (D_hd_code_80364438 is the FOV passed to guPerspective in 00000.c)
+// Proposed name: SetLevelFov
+void func_hd_code_80262150(u8 arg0) {
+  s32 sp4;
+
+  D_hd_code_80364438 = 45.0f;
+  sp4 = 0;
+  D_hd_code_80367C10 = 0;
+  while(sp4 < 5 && !D_hd_code_80367C10) {
+    if (D_hd_code_802E8F30[sp4] == arg0) {
+      D_hd_code_80364438 = 80.0f;
+      D_hd_code_80367C10 = 1;
+    } else {
+      sp4 += 1;
+    }
+  }
+}
+
+// Load an (x, y, z) position for the level from the mission config table into
+// D_hd_code_803EF2EC/F0/F4 (likely a start position)
+// Proposed name: LoadLevelStartPosition
+void func_hd_code_802621DC(u8 arg0) {
+  struct S_80367C04* sp4;
+
+  sp4 = &D_hd_code_802E8F94[arg0];
+  D_hd_code_803EF2EC = sp4->unk26 << 5;
+  D_hd_code_803EF2F0 = sp4->unk28 << 5;
+  D_hd_code_803EF2F4 = sp4->unk2A << 5;
+}
+
+// If the level is in D_hd_code_802E8F68 (only level 13), enable a flag and
+// load its rectangle bounds into D_hd_code_803EFEB0..BC
+// Proposed name: LoadLevelRegion
+void func_hd_code_80262238(u8 arg0) {
+  s32 sp4;
+  u8 sp3;
+
+  sp4 = 0;
+  sp3 = 0;
+  D_hd_code_803EFEC8 = 0;
+  while((sp3 == 0) && (sp4 <= 0)) {
+    if (D_hd_code_802E8F68[sp4].unk0 == (arg0)) {
+      sp3 = 1;
+    } else {
+      sp4 += 1;
+    }
+  }
+  if (sp3 != 0) {
+    D_hd_code_803EFEC8 = 1;
+    D_hd_code_803EFEB0 = D_hd_code_802E8F68[sp4].unk2 << 5;
+    D_hd_code_803EFEB4 = D_hd_code_802E8F68[sp4].unk4 << 5;
+    D_hd_code_803EFEB8 = D_hd_code_802E8F68[sp4].unk6 << 5;
+    D_hd_code_803EFEBC = D_hd_code_802E8F68[sp4].unk8 << 5;
+  }
+}
+
+// Mission init for a level: load the optional special position from
+// D_hd_code_802E8F74, point D_hd_code_80367C04 at the level's mission config
+// and load its timer/position fields, record the mission start frame, pick
+// the HUD objective icon and target-name string per game mode, DMA the
+// traffic-light textures when starting from the countdown state, set up the
+// HUD icon sprite and reset the lap counter.
+// Proposed name: InitMission
+void func_hd_code_80262320(u8 arg0) {
+    s32 sp34;
+    u8 sp33;
+    s8 sp32;
+    u8 sp31;
+    s32 sp2C;
+
+    sp34 = 0;
+    sp33 = 0;
+    sp32 = 0;
+    sp31 = 0;
+    while((sp31 == 0) && (sp34 < 4)) {
+        if (D_hd_code_802E8F74[sp34].unk0 == arg0) {
+            sp31 = 1;
+        } else {
+            sp34 += 1;
+        }
+    }
+    if (sp31 != 0) {
+        D_hd_code_80364410 = 1;
+        D_hd_code_80364404 = D_hd_code_802E8F74[sp34].unk2 << 0x10;
+        D_hd_code_80364408 = D_hd_code_802E8F74[sp34].unk4 << 0x10;
+        D_hd_code_8036440C = D_hd_code_802E8F74[sp34].unk6 << 0x10;
+    } else {
+        D_hd_code_80364410 = 0;
+    }
+    D_hd_code_80367C04 = &D_hd_code_802E8F94[arg0];
+    D_hd_code_803F7C10 = D_hd_code_802E8F94[arg0].unk1C << 5;
+    D_hd_code_803F7C14 = D_hd_code_802E8F94[arg0].unk1E << 5;
+    D_hd_code_80364424 = D_hd_code_802E8F94[arg0].unk38;
+    D_hd_code_80364428 = D_hd_code_802E8F94[arg0].unk3C << 5;
+    D_hd_code_8036442C = D_hd_code_802E8F94[arg0].unk40;
+    D_hd_code_80364430 = D_hd_code_802E8F94[arg0].unk42 << 5;
+    D_hd_code_80367BC0 = sc.unk803156C4;
+    D_hd_code_80367BC4 = -1;
+    D_hd_code_80367BD0.unk8 = 0;
+    switch (D_hd_code_80364AA8) {
+    case 0x4:
+    case 0x80:
+        sp33 = 6;
+        break;
+    case 0x20:
+        sp33 = func_hd_code_8026FA38(&D_hd_code_80367C08, &D_hd_code_80367C0C);
+        D_hd_code_80367BD0.unk8 = 2;
+        break;
+    case 0x40:
+    case 0x10:
+        sp33 = 9;
+        D_hd_code_80367BD0.unk8 = -2;
+        break;
+    case 0x1:
+    case 0x2:
+        break;
+    }
+    if (sp33 == 6) {
+        D_hd_code_80367BD0.unk8 = 6;
+        D_hd_code_80367C08 = D_hd_code_802E9F90;
+        D_hd_code_80367C0C = D_hd_code_802E9F9C;
+        sp32 = 0;
+    }
+    if (D_hd_code_80364AA8 != 1) {
+        sp2C = (s32)&D_6A8DA0 - (s32)&D_6A32B0;
+        if ((D_hd_code_80364AA8 != 0x80) && (D_hd_code_80364A98 == 0x2000)) {
+            InitiateDma(&D_6A32B0, D_hd_code_80358070, &sp2C, 0xAU, 0, 1);
+            for(sp34 = 0; sp34 < 5; sp34++) {
+                D_hd_code_80367BD0.unkC[sp34 + 1] = (sp34 << 0xF) + D_hd_code_80358070;
+            }
+            D_hd_code_80358070 = &D_hd_code_80358070[sp2C];
+        }
+        if ((D_hd_code_80364A98 == 0x40)) {
+            D_hd_code_80367BC8 = 0;
+        } else {
+            D_hd_code_80367BC8 = 1;
+        }
+    } else {
+        D_hd_code_80367BC8 = 0;
+    }
+    D_hd_code_80367C01 = 0;
+    D_hd_code_80367C00 = 0;
+    if ((D_hd_code_80364A98 == 0x40)) {
+        D_hd_code_80367BFF = 0;
+    } else {
+        D_hd_code_80367BFF = 0;
+        D_hd_code_80367BFE = 0;
+    }
+    D_hd_code_80367BCC = &D_hd_code_802F49F4[sp33];
+    if (D_hd_code_802E8F94[(u8) arg0].unk0 == 0x20) {
+        D_hd_code_80367BD0.unk0 = NULL;
+        D_hd_code_80367BD0.unk4 = func_hd_code_80272C5C(D_hd_code_80367BCC->unk6, 0, (s32) D_hd_code_80367BCC->unk4, (s32) D_hd_code_80367BCC->unk2C, (s32) D_hd_code_80367BCC->unk2D, (f32) ((f64) D_hd_code_80367BCC->unk28 * 0.5));
+    } else {
+        D_hd_code_80367BD0.unk0 = NULL;
+        if (sp33 != 0) {
+            D_hd_code_80367BD0.unk4 = func_hd_code_80272C5C(D_hd_code_80367BCC->unk6, 0, (s32) D_hd_code_80367BCC->unk4, (s32) D_hd_code_80367BCC->unk2C, (s32) D_hd_code_80367BCC->unk2D, 1.0f);
+        } else {
+            D_hd_code_80367BCC = NULL;
+        }
+    }
+    if ((D_hd_code_80364A98 & 0x440)) {
+        func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367C04->unk36 - D_hd_code_80367BF6, 0);
+        return;
+    }
+    D_hd_code_80367B54 = 0;
+}
+
+// Mission-start countdown, driven by whole seconds since mission init.
+// Second 0: build and show the objective banner ("FINISH %d LAPS IN",
+// "DESTROY %s IN", "CLEAR CARRIER/SHUTTLE PATH", "CAUSE $%d DAMAGE",
+// "FIND %d RDUS IN" + "%d MINUTES %d SECONDS") and play a random announcer
+// clip. Seconds 1-3: countdown beep. Second 4: "go" sound and switch the
+// game state to 4 (mission running).
+// Proposed name: UpdateMissionCountdown
+void func_hd_code_80262840(void) {
+    s32 sp34;
+    u16 sp32;
+    u16 sp30;
+
+    sp34 = (sc.unk803156C4 - D_hd_code_80367BC0) / 60U;
+    if (sp34 != D_hd_code_80367BC4) {
+        switch (sp34) {                             /* switch 1 */
+        case 0:                                     /* switch 1 */
+            D_hd_code_80367C68[0] = 0xFFF;
+            D_hd_code_80367CB8[0] = 0xFFF;
+            switch ((u32) D_hd_code_80364AA8) {             /* switch 2; irregular */
+            case 0x2:                               /* switch 2 */
+                proutSprintf(D_hd_code_80367C18, "FINISH %d LAPS IN", D_hd_code_80367C04->unk18);
+                break;
+            case 0x4:                               /* switch 2 */
+            case 0x20:                              /* switch 2 */
+                if (levelno == 0x34) {
+                    proutSprintf(D_hd_code_80367C18, "DESTROY TARGETS IN");
+                } else {
+                    proutSprintf(D_hd_code_80367C18, "DESTROY %s IN", D_hd_code_80367C08);
+                }
+                break;
+            case 0x80:                              /* switch 2 */
+                if (levelno == 0x32) {
+                    proutSprintf(D_hd_code_80367C18, "CLEAR SHUTTLE PATH");
+                } else {
+                    proutSprintf(D_hd_code_80367C18, "CLEAR CARRIER PATH");
+                }
+                break;
+            case 0x8:                               /* switch 2 */
+                proutSprintf(D_hd_code_80367C18, "CAUSE $%d DAMAGE", D_hd_code_80367C04->unk18);
+                break;
+            case 0x10:                              /* switch 2 */
+            case 0x40:                              /* switch 2 */
+                proutSprintf(D_hd_code_80367C18, "FIND %d RDUS IN", D_hd_code_80367C04->unk18);
+                break;
+            }
+            sp32 = D_hd_code_80367C04->unk36 / 600;
+            sp30 = ((s32) D_hd_code_80367C04->unk36 / 10) % 60;
+            proutSprintf(D_hd_code_80367C40, "%d MINUTE%c %d SECONDS", sp32, D_hd_code_802E9FA0[sp32 != 1], sp30);
+            D_hd_code_802F5804[0x24].unkC = D_hd_code_80367C18;
+            D_hd_code_802F5804[0x25].unkC = D_hd_code_80367C40;
+            D_hd_code_802F5804[0x24].unk10 = &D_hd_code_80367C68;
+            D_hd_code_802F5804[0x25].unk10 = &D_hd_code_80367CB8;
+            func_hd_code_8026AF6C(0x8009U);
+            sndPlaySfx(D_hd_code_80367738, func_hd_code_8026205C(0), 0);
+            break;
+        case 1:                                     /* switch 1 */
+            sndPlaySfx(D_hd_code_80367738, 0x96, 0);
+            break;
+        case 2:                                     /* switch 1 */
+            sndPlaySfx(D_hd_code_80367738, 0x96, 0);
+            break;
+        case 3:                                     /* switch 1 */
+            sndPlaySfx(D_hd_code_80367738, 0x96, 0);
+            break;
+        case 4:                                     /* switch 1 */
+            sndPlaySfx(D_hd_code_80367738, 0x99, 0);
+            break;
+        }
+    }
+    D_hd_code_80367BC4 = sp34;
+    if ((sp34 == 4) && (D_hd_code_8035805C == D_hd_code_803156F4)) {
+        D_hd_code_80364A98 = 4;
+    }
+}
+
+// Per-frame mission update: compute the remaining time and format the HUD
+// timer. In the countdown state run func_hd_code_80262840; in the
+// mission-over state wait for the fade then transition based on the player's
+// result for the level. While running: time reaching 0 sets the failure flag
+// D_hd_code_803643D9, the last 10 seconds play a rising beep each second,
+// success/failure flags switch to the mission-over state, otherwise dispatch
+// to the mode-specific objective checker.
+// Proposed name: UpdateMission
+void func_hd_code_80262BF4(void) {
+    if ((D_hd_code_803643D7 == 0) && (D_hd_code_803643D6 == 0)) {
+        D_hd_code_80367BF6 = D_hd_code_80367C04->unk36 - MIN(D_hd_code_80367C04->unk36, func_hd_code_8028604C(sc.unk803156C0 - D_hd_code_80364A58));
+    }
+    func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367BF6, 1);
+    switch(D_hd_code_80364A90) {
+        case 0x2000:
+            func_hd_code_80262840();
+            break;
+        case 0x04000000:
+            if ((D_hd_code_803643D6 != 0) && (areWeFading() == 0) && (D_hd_code_8036BB1C == 1)) {
+                if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
+                    func_hd_code_80275270(0x08000000, 0.25f);
+                    break;
+                }
+                func_hd_code_80275270(0x40, 0.25f);
+            }
+            break;
+        default:
+            if (D_hd_code_80367BF6 == 0) {
+                D_hd_code_803643D9 = 1;
+            } else {
+                D_hd_code_80367BF4 = (u16) D_hd_code_80367BF6 / 10;
+                if (((D_hd_code_80367BF4) < 0xA) && ((D_hd_code_80367BF4) != D_hd_code_80367D08)) {
+                    sndPlaySfx(D_hd_code_80367738, 0xA3 - (D_hd_code_80367BF4), 0);
+                }
+                D_hd_code_80367D08 = D_hd_code_80367BF4;
+            }
+            if ((D_hd_code_803BE738 != 0) && (D_hd_code_80364AA8 == 0x40)) {
+                sndPlaySfx(D_hd_code_80367738, 0x3C, 0);
+            }
+            if (D_hd_code_803BE738 != 0) {
+                D_hd_code_803643D9 = 1;
+            }
+            if (D_hd_code_803643D6 != 0) {
+                sndDeactivateAllSfxByFlag_3();
+                sndDeactivateAllSfxByFlag_11();
+                func_hd_code_8026AF6C(0xA00EU);
+                D_hd_code_8036BB1A = -1;
+                D_hd_code_80364A98 = 0x04000000;
+                break;
+            }
+            if (D_hd_code_803643D7 != 0) {
+                D_hd_code_80364A98 = 0x04000000;
+                break;
+            }
+            switch ((u32) D_hd_code_80364AA8) {             /* irregular */
+            case 0x2:
+                func_hd_code_802633E0();
+                break;
+            case 0x4:
+                func_hd_code_8026303C();
+                break;
+            case 0x20:
+            case 0x80:
+                func_hd_code_80263140();
+                break;
+            case 0x8:
+                func_hd_code_80263358();
+                break;
+            case 0x10:
+            case 0x40:
+                func_hd_code_80262FD0();
+                break;
+            }
+            break;
+    }
+}
+
+// RDU mode (0x10/0x40) objective check: success flag D_hd_code_803643DA once
+// found count >= goal; HUD shows "found/goal"
+// Proposed name: CheckRduObjective
+void func_hd_code_80262FD0(void) {
+  if ((u16) D_hd_code_8036EA7C >= (u32) D_hd_code_80367C04->unk18) {
+    D_hd_code_803643DA = 1;
+  }
+  proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA7C, D_hd_code_80367C04->unk18);
+}
+
+// Destroy-buildings mode (0x4) objective check: success once destroyed count
+// >= goal; failure when the carrier's progress along its path exceeds the
+// threshold. HUD shows "destroyed/total".
+// Proposed name: CheckBuildingsObjective
+void func_hd_code_8026303C(void) {
+  s16 sp1E;
+
+  func_hd_code_802C1DD0(0);
+  if (D_hd_code_8036EA78 >= D_hd_code_80367C04->unk18) {
+    D_hd_code_803643DA = 1;
+  }
+  if (D_hd_code_8036DCD4 != 0) {
+    func_hd_code_8027EED8(D_hd_code_803643E0 >> 5, D_hd_code_803643E8 >> 5, &sp1E);
+    if (sp1E > (D_hd_code_803643E4 >> 5)) {
+      D_hd_code_803643D9 = 1;
+    }
+  } else if (D_hd_code_80367C04->unk24 > (D_hd_code_803643E4 >> 5)) {
+    D_hd_code_803643D9 = 1;
+  }
+  proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+}
+
+// Target/path modes (0x20/0x80) objective check: mode 0x20 succeeds when all
+// targets are destroyed; mode 0x80 when the carrier reaches the end
+// (D_hd_code_803F7806) or, on the shuttle level (0x32), when everything is
+// cleared. Same carrier-progress failure check as func_hd_code_8026303C.
+// Proposed name: CheckPathObjective
+void func_hd_code_80263140(void) {
+  s16 sp2E;
+
+  func_hd_code_802C1DD0(1);
+  switch (D_hd_code_80364AA8) {                           /* switch 1; irregular */
+    case 0x20:                                      /* switch 1 */
+      if (D_hd_code_8036EA78 >= D_hd_code_8036EB92) {
+        D_hd_code_803643DA = 1;
+      }
+      break;
+    case 0x80:                                      /* switch 1 */
+      if ((D_hd_code_803F7806 != 0) || (levelno == 0x32 && D_hd_code_8036EA78 >= D_hd_code_8036EB92)) {
+        D_hd_code_803643DA = 1;
+      }
+      break;
+  }
+  if (D_hd_code_8036DCD4 != 0) {
+    func_hd_code_8027EED8(D_hd_code_803643E0 >> 5, D_hd_code_803643E8 >> 5, &sp2E);
+    if (sp2E > D_hd_code_803643E4 >> 5) {
+      D_hd_code_803643D9 = 1;
+    }
+  } else if (D_hd_code_80367C04->unk24 > D_hd_code_803643E4 >> 5) {
+    D_hd_code_803643D9 = 1;
+  }
+  switch (D_hd_code_80364AA8) {                           /* switch 2; irregular */
+    case 0x20:                                      /* switch 2 */
+      proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+      return;
+    case 0x80:                                      /* switch 2 */
+      if (levelno == 0x32) {
+        proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+        return;
+      }
+      proutSprintf(D_hd_code_80367B60[0], "%d/%d", func_hd_code_802C1B1C() , D_hd_code_8036EB92);
+      return;
+  }
+}
+
+// Damage mode (0x8) objective check: success once damage dollars >= goal;
+// HUD shows "$%d LEFT"
+// Proposed name: CheckDamageObjective
+void func_hd_code_80263358(void) {
+  s32 sp1C;
+  s32 temp_t3;
+
+  func_hd_code_802C1DD0(0);
+  if ((u32) D_hd_code_8036EA70 >= (u32) D_hd_code_80367C04->unk18) {
+    D_hd_code_803643DA = 1;
+  }
+  sp1C = (s32)D_hd_code_80367C04->unk18 - (s32)D_hd_code_8036EA70;
+  if (sp1C < 0) {
+    sp1C = 0;
+  }
+  proutSprintf(D_hd_code_80367B60[0], "$%d LEFT", sp1C);
+}
+
+// Race mode (0x2) lap tracker. Waits for the player to first enter the
+// start/finish rectangle, then divides the track into 4 quadrant "boxes" from
+// the player's position and requires crossing them in the configured order
+// (unk12[4]) before a finish-line hit counts as a lap (prevents counting a
+// lap by re-crossing the line). Records per-lap times, tracks the best lap,
+// shows "%d LAPS LEFT!" and multiplies the music tempo value by 0.95 each lap
+// (tempo is us per beat, so the music gets ~5% faster). Success once laps >=
+// goal.
+// Proposed name: UpdateRaceLaps
+void func_hd_code_802633E0(void) {
+    s32 sp34;
+    u8 sp33;
+
+    if (D_hd_code_80367B54 == 0) {
+        if (func_hd_code_8026394C((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, D_hd_code_80367C04->unkA, D_hd_code_80367C04->unkC, (s32) D_hd_code_80367C04->unkE, (s32) D_hd_code_80367C04->unk10) != 0) {
+            D_hd_code_80367B54 = 1;
+            D_hd_code_80367BF8 = 0U;
+            D_hd_code_80367BF9 = D_hd_code_80367C04->unk12[0];
+            D_hd_code_80367BBC = sc.unk803156C0;
+            D_hd_code_80367BFB = 1;
+            D_hd_code_80367BFC = 0xFFFF;
+        }
+    } else {
+        D_hd_code_80367BFA = ((D_hd_code_803643E8 >> 5) - D_hd_code_80367C04->unk4) / ((D_hd_code_80367C04->unk8 - D_hd_code_80367C04->unk4) >> 1);
+        D_hd_code_80367BFA *= 2;
+        D_hd_code_80367BFA = D_hd_code_80367BFA + ((s32) (((s32) D_hd_code_803643E0 >> 5) - D_hd_code_80367C04->unk2) / (s32) ((s32) (D_hd_code_80367C04->unk6 - D_hd_code_80367C04->unk2) >> 1));
+        D_hd_code_80367B58[D_hd_code_80367B54 - 1] = func_hd_code_8028604C(sc.unk803156C0 - D_hd_code_80364A58);
+        for(sp34 = D_hd_code_80367B54 - 2; sp34 >= 0; sp34--) {
+                D_hd_code_80367B58[D_hd_code_80367B54 - 1] = D_hd_code_80367B58[D_hd_code_80367B54 - 1] - D_hd_code_80367B58[sp34];
+
+        }
+        if (D_hd_code_80370C28 & 0x2000) {
+            rmonPrintf("box number=%d\n", D_hd_code_80367BFA);
+        }
+        if (D_hd_code_80367BF8 == 4) {
+            if (func_hd_code_8026394C((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, D_hd_code_80367C04->unkA, D_hd_code_80367C04->unkC, (s32) D_hd_code_80367C04->unkE, (s32) D_hd_code_80367C04->unk10) != 0) {
+                if ((s32) D_hd_code_80367B58[D_hd_code_80367B54 - 1] < (s32) D_hd_code_80367BFC) {
+                    rmonPrintf("new best lap %d %d\n", D_hd_code_80367BFC, D_hd_code_80367B58[D_hd_code_80367B54 - 1]);
+                    D_hd_code_80367BFB = D_hd_code_80367B54;
+                    D_hd_code_80367BFC = D_hd_code_80367B58[D_hd_code_80367B54 - 1];
+                }
+                if ((u32) (D_hd_code_80367C04->unk18 - 1) < (u8) D_hd_code_80367B54) {
+                    D_hd_code_803643DA = 1;
+                } else {
+                    sp33 = D_hd_code_80367C04->unk18 - D_hd_code_80367B54;
+                    if (D_hd_code_802E8BD0 == 0) {
+                        func_hd_code_8026AF6C(0x8008U);
+                    }
+                    if (sp33 == 1) {
+                        proutSprintf(D_hd_code_80367D10, "1 LAP LEFT!");
+                    } else {
+                        proutSprintf(D_hd_code_80367D10, "%d LAPS LEFT!", sp33);
+                    }
+                    D_hd_code_802F5804[0x23].unkC  = D_hd_code_80367D10;
+                    D_hd_code_802F5804[0x23].unk10 = D_hd_code_80367D28;
+                    alCSPSetTempo(D_hd_code_80367734, (s32) ((f64) alCSPGetTempo(D_hd_code_80367734) * 0.95));
+                }
+                D_hd_code_80367B54 += 1;
+                D_hd_code_80367BF8 = 0U;
+            }
+        } else if (D_hd_code_80367C04->unk12[D_hd_code_80367BF8] == D_hd_code_80367BF9 && D_hd_code_80367C04->unk12[(D_hd_code_80367BF8 + 1) % 4] == D_hd_code_80367BFA) {
+            rmonPrintf("box cross: %d to %d\n", D_hd_code_80367BF9, D_hd_code_80367BFA);
+            D_hd_code_80367BF8 = (u8) (D_hd_code_80367BF8 + 1);
+        }
+        D_hd_code_80367BF9 = (u8) D_hd_code_80367BFA;
+    }
+    for(sp34 = 0; sp34 < D_hd_code_80367B54 && sp34 < D_hd_code_80367C04->unk18; sp34++) {
+        func_hd_code_80264A34(D_hd_code_80367B60[sp34], D_hd_code_80367B58[sp34], D_hd_code_80367B54 == (sp34 + 1));
+    }
+}
+
+// Point-in-rectangle test
+// Proposed name: PointInRect
+s32 func_hd_code_8026394C(s16 x, s16 y, s16 x1, s16 y1, s16 x2, s16 y2) {
+  if (x >= x1 && y >= y1 && x < x2 && y < y2) {
+    return 1;
+  }
+  return 0;
+}
+
+// Build the mission HUD display list: in race mode the list of lap times
+// (best lap tinted, current lap white, others gray), in other modes the
+// progress counter; the remaining-time clock, blinking (16 of every 20
+// frames) and turning red in the last 10 seconds; the countdown traffic
+// light; and the animated objective icon sprites.
+// Proposed name: DrawMissionHud
+Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
+    Gfx* entry; // sp64
+    u32 sp60;
+    u8 sp5F;
+    u8 sp5E;
+    u8 sp5D;
+    u8 sp5C;
+    s16 sp5A;
+    s16 pad58;
+    s32 pad54;
+    s32 sp50;
+
+
+    entry = arg0;
+    if (((D_hd_code_80364A90 & 0x04000200)) && (D_hd_code_8036BB18 != 0x1E)) {
+        sp5A = 0xFF;
+    } else {
+        sp5A = D_hd_code_80367BD0.unk6;
+    }
+    switch ((u32) D_hd_code_80364AA8) {                     /* irregular */
+    case 0x2:
+        for(sp50 = 0; (sp50 < (D_hd_code_80367B54 - ((D_hd_code_80364A90 & 0x440)?1:0))) && ((u32) sp50 < (u32) D_hd_code_80367C04->unk18); sp50++) {
+            if ((sp50 + 1 == D_hd_code_80367BFB) && (sp50 + 1 != D_hd_code_80367B54)) {
+                func_hd_code_80259CCC(arg1, D_hd_code_80367B60[sp50], NULL, 1U, 0, 0x18, (sp50 * 0x12) + 0x12, 0x14, 0x14, 1, 0xFF, 0, 0, (s32) D_hd_code_80367BD0.unk6);
+            } else if ((sp50 + 1) == D_hd_code_80367B54) {
+                func_hd_code_80259CCC(arg1, D_hd_code_80367B60[sp50], NULL, 1U, 0, 0x18, (sp50 * 0x12) + 0x12, 0x14, 0x14, 1, 0xFF, 0xFF, 0xFF, (s32) D_hd_code_80367BD0.unk6);
+            } else {
+                func_hd_code_80259CCC(arg1, D_hd_code_80367B60[sp50], NULL, 1U, 0, 0x18, (sp50 * 0x12) + 0x12, 0x14, 0x14, 1, 0xA0, 0xA0, 0xA0, (s32) D_hd_code_80367BD0.unk6);
+            }
+        }
+        break;
+    case 0x4:
+    case 0x20:
+    case 0x80:
+        func_hd_code_80259CCC(arg1, D_hd_code_80367B60[0], NULL, 1U, 0, 0x38, 0x14, 0x14, 0x14, 1, 0xFF, 0xFF, 0xFF, (s32) sp5A);
+        break;
+    case 0x8:
+        func_hd_code_80259CCC(arg1, D_hd_code_80367B60[0], NULL, 1U, 0, 0x1C, 0x12, 0x14, 0x14, 1, 0xFF, 0xFF, 0xFF, (s32) sp5A);
+        break;
+    case 0x10:
+    case 0x40:
+        func_hd_code_80259CCC(arg1, D_hd_code_80367B60[0], NULL, 1U, 0, 0x38, 0x12, 0x14, 0x14, 1, 0xFF, 0xFF, 0xFF, (s32) sp5A);
+        break;
+    }
+    sp5E = 0xFF;
+    sp5F = 0;
+    if ((D_hd_code_80364A90 & 0x04000104)) {
+        sp5D = (s32) D_hd_code_80367BF4 < 0xA;
+        if (!sp5D) {
+            sp5F = 0xFF;
+        }
+    } else {
+        sp5D = 0;
+        sp5F = 0xFF;
+        sp5E = 0;
+    }
+    if (D_hd_code_80367BF4 == 0) {
+        sp5D = 0;
+    }
+    if ((sp5D == 0) || ((u32) ((u32) sc.unk803156C4 % 20U) < 0x10U)) {
+        if (D_hd_code_80364AA8 == 2) {
+            func_hd_code_80259CCC(arg1, D_hd_code_80367BB0, NULL, 1U, 0, 0x18, (sp50 * 0x12) + 0x14, 0x10, 0x10, 1, (s32) sp5E, (s32) sp5F, 0, (s32) D_hd_code_80367BD0.unk6);
+        } else {
+            func_hd_code_80259CCC(arg1, D_hd_code_80367BB0, NULL, 1U, 0, 0x1C, D_hd_code_80367BD0.unk8 + 0x2A, 0x10, 0x10, 1, (s32) sp5E, (s32) sp5F, 0, (s32) sp5A);
+        }
+    }
+    if ((D_hd_code_803643D7 != 0) && (D_hd_code_80364A90 == 0x04000000)) {
+        func_hd_code_8025E2CC(&entry, arg1, D_hd_code_8035805C);
+    }
+    if (D_hd_code_80367BC8 != 0) {
+        entry = func_hd_code_80264264(arg1, entry);
+    }
+    entry = func_hd_code_80274868(entry);
+    if (D_hd_code_80367BCC != NULL) {
+        entry = func_hd_code_80272ED8(entry, D_hd_code_80367BCC->unk1B[(sc.unk803156C4 / D_hd_code_80367BCC->unk26) % D_hd_code_80367BCC->unk1A] + D_hd_code_80367BD0.unk4 - 1, 0x18, D_hd_code_80367BD0.unk8 + 0xC, (s32) sp5A, 1, 1.0f);
+    }
+    if (D_hd_code_80367BD0.unk0 != NULL) {
+        entry = func_hd_code_80272ED8(entry, D_hd_code_80367BD0.unk0->unk1B[(sc.unk803156C4 / D_hd_code_80367BD0.unk0->unk26) % D_hd_code_80367BD0.unk0->unk1A] + D_hd_code_80367BD0.unk5 - 1, 0x18, D_hd_code_80367BD0.unk8 + 0xC, (s32) sp5A, 1, 1.0f);
+    }
+    entry = func_hd_code_80274AA4(entry);
+    arg2 += entry - arg0;
+    return entry;
+}
+
+// Replay turbo: re-apply the recorded turbo start at the right frame during
+// replay playback
+// Proposed name: ApplyReplayTurbo
+void func_hd_code_8026420C(void) {
+  if ((D_hd_code_80367BFE != 0) && (D_hd_code_80358064 == D_hd_code_80367B50)) {
+    rmonPrintf("Replay turbo ....\n");
+    D_hd_code_80367BFF = 1;
+  }
+}
+
+// Start traffic light: state machine (D_hd_code_80367BC8) that drops the
+// light in (1-2), steps the lamp image down as the countdown runs, watches
+// the accelerator during the light sequence (3-4) - timing it right earns a
+// turbo start (D_hd_code_80367BFE), pressing too early disqualifies it - then
+// slides the light off screen (5). The bottom half renders the light texture
+// in 32-pixel strips with texture rectangles. Not drawn in carrier mode
+// (0x80).
+// Proposed name: DrawTrafficLight
+Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
+    Gfx* entry;
+    s32 sp78;
+    s32 sp74;
+
+    entry = arg1;
+    switch (D_hd_code_80367BC8) {
+    case 1:
+        D_hd_code_80367D52.unk0 = 3U;
+        D_hd_code_80367BC8 = 2;
+        break;
+    case 2:
+        D_hd_code_80367D50 = ((u32) ((sc.unk803156C4 - D_hd_code_80367BC0) * 0x3C) / 60U) - 0x40;
+        D_hd_code_80367D52.unk0 = (u8) (3 - MAX(0, (s32) (D_hd_code_80367D50 * 2) / 10));
+        if (D_hd_code_80367D50 >= 0xA) {
+            D_hd_code_80367D52.unk0 = 1U;
+            D_hd_code_80367D50 = 0xA;
+            D_hd_code_80367BC8 = 3;
+        }
+        break;
+    case 3:
+        if (D_hd_code_802E8BD0 == 0) {
+            D_hd_code_80367BC8 = 4;
+        }
+        if (D_hd_code_80370C1C != 0) {
+            D_hd_code_80367C01 = 1;
+        }
+        break;
+    case 4:
+        D_hd_code_80367D52.unk1 = (u8) D_hd_code_80367D52.unk0;
+        if ((u32) (sc.unk803156C0 - D_hd_code_80364A58) >= 7U) {
+            D_hd_code_80367D52.unk0 = 5U;
+        } else {
+            D_hd_code_80367D52.unk0 = 4U;
+        }
+        if ((u32) (sc.unk803156C0 - D_hd_code_80364A58) >= 0x15U) {
+            D_hd_code_80367BC8 = 5;
+            D_hd_code_80367BFF = (s8) D_hd_code_80367BFE;
+            D_hd_code_80367B50 = D_hd_code_80358064;
+        }
+        if ((D_hd_code_80367D52.unk1 == 1) && (D_hd_code_80370C1C == 0)) {
+            D_hd_code_80367BFE = !D_hd_code_80367C01;
+        }
+        if ((D_hd_code_80367D52.unk1 == 4) && (D_hd_code_80367D52.unk0 == 5) && (D_hd_code_80370C1C == 0)) {
+            D_hd_code_80367BFE = 0;
+        }
+        break;
+    case 5:
+        D_hd_code_80367D50 = 0xA - ((u32) ((((sc.unk803156C0 - D_hd_code_80364A58) << 1) * 0x3C ) - 0x960) / 60U);
+        if (D_hd_code_80367D50 < -0x3F) {
+            D_hd_code_80367BC8 = 0,
+            rmonPrintf("turbo %d\n", D_hd_code_80367BFE);
+        }
+        break;
+    }
+    if (D_hd_code_80364AA8 != 0x80) {
+        gDPPipeSync(entry++);
+        gSPTexture(entry++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
+        gDPSetTexturePersp(entry++, G_TP_NONE);
+        gDPSetCycleType(entry++, G_CYC_1CYCLE);
+        gDPSetRenderMode(entry++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
+        gDPSetCombineLERP(entry++, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetPrimColor(entry++, 0, 0, 0x00, 0x00, 0x00, 0xFF);
+
+        sp74 = 0x20;
+        for(sp78 = 0; sp78 < 0x100; sp78+=0x20) {
+            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 256, D_hd_code_80367BD0.unkC[D_hd_code_80367D52.unk0]);
+            gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, (((sp78 - sp78) * 2) + 0x47) >> 3, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
+            gDPLoadSync(entry++);
+            gDPLoadTile(entry++, G_TX_LOADTILE, sp78 * 4, 0, ((sp78 + 0x1F) << 2), qu102(63)); // qu102(63) = 0xFC?
+            gDPPipeSync(entry++);
+            gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, (((sp78 - sp78) * 2) + 0x47) >> 3, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
+            gDPSetTileSize(entry++, G_TX_RENDERTILE, sp78 * 4, 0, (sp78 + 0x1F) << 2, qu102(63));
+
+            gSPTextureRectangle(entry++, MAX((sp78 + sp74) << 2, 0), 0, MAX((sp78 + sp74 + 0x20) << 2, 0), MAX((D_hd_code_80367D50 + 0x3F) << 2, 0), 0, ((sp78 << 5) - MIN((((sp78 + sp74) * 4) << 10) >> 7, 0)), -(D_hd_code_80367D50 << 5), qs510(1), qs510(1))
+        }
+        gDPPipeSync(entry++);
+        gDPSetTexturePersp(entry++, G_TP_PERSP);
+    }
+    return entry;
+}
+
+// Format a time given in tenths of seconds as "MM:SS.T" into arg0
+// (arg2 is unused)
+// Proposed name: FormatTime
+void func_hd_code_80264A34(char* arg0, u16 arg1, u16 arg2) {
+  arg0[0] = '0' + (arg1 / 6000);
+
+  arg1 %= 6000;
+  arg0[1] = '0' + (arg1 / 600);
+  arg0[2] = ':';
+
+  arg1 %= 600;
+  arg0[3] = '0' + arg1 / 100;
+
+  arg1 %= 100;
+  arg0[4] = '0' + arg1 / 10;
+
+  arg1 %= 10;
+  arg0[5] = '.';
+  arg0[6] = '0' + arg1;
+  arg0[7] = 0;
+}
+
+// Race-mode timer correction: remaining time = limit - sum of completed lap
+// times, clamping underflow to 0
+// Proposed name: RecalcRaceTimeLeft
+void func_hd_code_80264AEC(void) {
+  s32 sp4;
+  u16 sp2;
+
+  sp2 = 0;
+  if ((D_hd_code_80364AA8 == 2) && ((s32) D_hd_code_80367B54 >= 2)) {
+    for(sp4 = 0; sp4 < D_hd_code_80367B54 - 1; sp4++) {
+      sp2 += D_hd_code_80367B58[sp4];
+    }
+    D_hd_code_80367BF6 = D_hd_code_80367C04->unk36 - sp2;
+  }
+  if ((s32) D_hd_code_80367BF6 >= 0xEA60) {
+    D_hd_code_80367BF6 = 0;
+  }
+}
+
+// Map the special levels {40, 43, 44, 45, 46} to indices {0, 5, 4, 2, 1},
+// anything else to 3. Called from the music chooser in 1C460.c
+// (func_hd_code_80261A44) to pick between tunes for certain levels.
+// Proposed name: GetSpecialLevelIndex
+u8 func_hd_code_80264BA4(u8 arg0) {
+  u8 sp7;
+
+  switch (arg0) {
+    case 40:
+      sp7 = 0;
+      break;
+    case 43:
+      sp7 = 5;
+      break;
+    case 44:
+      sp7 = 4;
+      break;
+    case 45:
+      sp7 = 2;
+      break;
+    case 46:
+      sp7 = 1;
+      break;
+    default:
+      sp7 = 3;
+      break;
+  }
+  return sp7;
+}
