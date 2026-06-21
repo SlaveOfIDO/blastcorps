@@ -222,7 +222,8 @@ struct S_80367C04
   s16 unk26;
   s16 unk28;
   s16 unk2A;
-  u8 pad2C[0x36 - 0x2C];
+  s32 unk2C;
+  u8 pad30[0x36 - 0x30];
   u16 unk36;
   u8 unk38;
   u8 pad39;

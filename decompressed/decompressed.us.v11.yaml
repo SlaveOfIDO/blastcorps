@@ -400,7 +400,7 @@ segments:
     - [ 0xEA460, asm, hd_front_end/EA460 ]
     - [ 0xEA810, asm, hd_front_end/EA810 ]
     - [ 0xEABC0, asm, hd_front_end/EABC0 ]
-    - [ 0xEAF30, asm, hd_front_end/EAF30 ]
+    - [ 0xEAF30, asm, hd_front_end/EAF30 ] # Handwritten ASM
     - [ 0xEBEE0, .data, hd_front_end/CAEA0 ]
     - [ 0xEC060, data, hd_front_end/hd_front_end_data ]
     - [ 0xF22E0, .rodata, hd_front_end/CAEA0 ]

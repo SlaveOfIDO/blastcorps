@@ -1,11 +1,13 @@
 #include "common.h"
 #include "../hd_code/macros.h"
+#include "../hd_code/structs.h"
 #include "../hd_code/hd.h"
+#include "../hd_code/functions.h"
 
 // <data>
 char *D_hd_front_end_80208040 = "SELECT VEHICLE!";
-u32 D_hd_front_end_80208044[2] = {
-  0x80304954, 0xFFFF0000
+s16 D_hd_front_end_80208044[4] = {
+  0x8030, 0x4954, 0xFFFF, 0x0000
 };
 u8 D_hd_front_end_8020804C[20] = {
   0x00, 0x01, 0x00, 0x00,
@@ -78,56 +80,24 @@ u8 D_hd_front_end_80208194[19] = {
   0x00, 0xCE, 0x7B, 0xCE,
   0x50, 0x72, 0x72
 };
-u16 D_hd_front_end_802081A8[2] = {
-  0x1DD0, 0x0000
-};
+u16 D_hd_front_end_802081A8 = 0x1DD0;
 s32 D_hd_front_end_802081AC = 1;
 s16 D_hd_front_end_802081B0 = 0;
 s8 D_hd_front_end_802081B4 = 1;
 // </data>
 
 void func_hd_code_8029DEA0();                                  /* extern */
-void func_hd_front_end_801E74E8(s32);                  /* extern */
+void func_hd_front_end_801E74E8(u8);                  /* extern */
 void func_hd_front_end_80202100(s32, void*, void*, void*); /* extern */
 void func_hd_front_end_80202270(s32, void*, void*);    /* extern */
 void func_hd_front_end_802022EC(void*, u8, u8, u8, f32, s32, s32); /* extern */
 void func_hd_front_end_80202380(s32);                  /* extern */
 
 extern u8 D_hd_code_802E8C44[28];
-
-struct S_80367C04
-{
-  u8 unk0;
-  u8 unk1;
-  u16 unk2;
-  u16 unk4;
-  u16 unk6;
-  u16 unk8;
-  u16 unkA;
-  u16 unkC;
-  u16 unkE;
-  u16 unk10;
-  u8 unk12[4];
-  u8 pad16[2];
-  u32 unk18;
-  s16 unk1C;
-  s16 unk1E;
-  u32 pad20;
-  s16 unk24;
-  s16 unk26;
-  s16 unk28;
-  s16 unk2A;
-  s32 unk2C;
-  u8 pad30[0x36 - 0x30];
-  u16 unk36;
-  u8 unk38;
-  u8 pad39;
-  u8 pad3A;
-  u8 pad3B;
-  u32 unk3C;
-  u16 unk40;
-  u16 unk42;
-};
+extern ALBank* D_hd_code_80367738;
+extern s16 D_hd_front_end_80211A68;
+extern f32 D_hd_front_end_802153D4;
+extern f32 D_hd_front_end_802153DC;
 extern struct S_80367C04 D_hd_code_802E8F94[];
 
 extern f32 D_hd_code_802FDAC0[20];
@@ -227,6 +197,14 @@ s32 func_hd_front_end_801E7000(void) {
 }
 
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/CAEA0/func_hd_front_end_801E74E8.s")
+void func_hd_front_end_801E74E8(u8 arg0) {
+
+  D_hd_front_end_80211A68 = arg0;
+  D_hd_code_803643D4 = D_hd_front_end_802153C0[arg0];
+  sndDeactivateAllSfxByFlag_3();
+  sndPlaySfx(D_hd_code_80367738, D_hd_front_end_80208194[D_hd_front_end_802153C0[arg0]], NULL);
+  D_hd_front_end_802153D4 = D_hd_front_end_80211A70[D_hd_front_end_802153C0[arg0]];
+  D_hd_front_end_802153DC = D_hd_front_end_80208120[D_hd_front_end_802153C0[arg0]];
+}
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/CAEA0/func_hd_front_end_801E7598.s")
