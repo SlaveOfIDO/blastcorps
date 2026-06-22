@@ -6,6 +6,8 @@
 
 #include "structs.h"
 
+extern u8 D_hd_code_802F47B0[0x100/8][8];
+
 void func_hd_code_8026AF6C(u16 yd);
 s32 func_hd_code_8026AD30(s16);
 u16 func_hd_code_8026B10C();

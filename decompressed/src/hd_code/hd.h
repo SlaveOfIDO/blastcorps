@@ -123,5 +123,8 @@ extern u32 D_hd_code_80364AA8;
 extern u8 playerNumber;
 extern u8 D_hd_code_80364AEA;
 extern UnknownData8024C414 players[];
-
+extern s32 nextdma; // 0x80358080
+extern s32 no_palette_dmas; // 0x80358084
+extern u64 D_hd_code_80364A88; // previous game state; proposed name: prevGameState
+extern u16 *D_hd_code_80358050[2]; // Framebuffers; proposed name: framebuffers
 #endif

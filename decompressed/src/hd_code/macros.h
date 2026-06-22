@@ -70,4 +70,7 @@ adapted gSPScisTextureRectangle version for this match.
 
 #define ASPECT_RATIO 1.33333333f
 #define ASSERT_MESSAGE "\n\a --- ASSERTION FAULT - %s - %s, line %d\n\n"
+
+#define	ABS(d)		((d) > 0) ? (d) : -(d)
+
 #endif

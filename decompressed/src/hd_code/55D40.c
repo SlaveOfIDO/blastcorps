@@ -16,7 +16,6 @@ extern struct S_80304A90 D_hd_code_80304A90[];
 extern s16 D_hd_code_8036BB1C;
 extern s32 D_hd_code_803A6B20;
 extern s32 D_hd_code_803A6B24;
-extern u8 D_hd_code_802F47B0[0x100/8][8];
 
 void func_hd_code_8029A500(void) {
   D_hd_code_803A6B20 = -0xEF;
