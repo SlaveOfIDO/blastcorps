@@ -379,7 +379,7 @@ segments:
     - [ 0xD1630, c, hd_front_end/D1630 ] # done
     - [ 0xD2230, c, hd_front_end/D2230 ] # done
     - [ 0xD26A0, c, hd_front_end/D26A0 ] # done
-    - [ 0xD3220, asm, hd_front_end/D3220 ]
+    - [ 0xD3220, c, hd_front_end/D3220 ] # done
     - [ 0xD4410, asm, hd_front_end/D4410 ]
     - [ 0xD8D10, asm, hd_front_end/D8D10 ]
     - [ 0xD9650, asm, hd_front_end/D9650 ]
@@ -409,7 +409,7 @@ segments:
     - [ 0xF2370, .rodata, hd_front_end/CCAE0 ] # done
     - [ 0xF2BE0, .rodata, hd_front_end/D1630 ] # done
     - [ 0xF2C50, .rodata, hd_front_end/D26A0 ] # done
-    - [ 0xF2E50, rodata, hd_front_end/D3220 ]
+    - [ 0xF2E50, .rodata, hd_front_end/D3220 ] # done
     - [ 0xF2E60, rodata, hd_front_end/D4410 ]
     - [ 0xF2F30, rodata, hd_front_end/D4410_b ] # TODO needs split in .text
     - [ 0xF2F50, rodata, hd_front_end/D9650 ]
