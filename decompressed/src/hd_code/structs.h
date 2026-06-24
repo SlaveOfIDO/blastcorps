@@ -22,7 +22,8 @@ struct Model1 {
   /* 0x00200 */ Mtx unk200;
   /* 0x00240 */ Mtx unk240;
   /* 0x00280 */ Mtx unk280;
-  /* 0x002C0 */ Mtx unk2C0[(0x600 - 0x2C0) / 0x40]; // length could be smaller
+  /* 0x002C0 */ Mtx unk2C0[(0x5C0 - 0x2C0) / 0x40]; // length could be smaller
+  /* 0x002C0 */ Mtx unk5C0;
   /* 0x00600 */ Mtx unk600[(0xB00 - 0x600) / 0x40]; // length could be smaller
   /* 0x00B00 */ Mtx unkB00[(0xD00 - 0xB00) / 0x40]; // length could be smaller
   /* 0x00B00 */ Mtx unkD00[(0xE00 - 0xD00) / 0x40]; // length could be smaller

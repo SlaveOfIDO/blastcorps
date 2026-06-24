@@ -32,3 +32,5 @@ D_hd_code_8036B9C8 = 0x8036B9C8;
 D_hd_code_8036B9E8 = 0x8036B9E8;
 D_hd_code_8036BA08 = 0x8036BA08;
 D_hd_code_8036BA28 = 0x8036BA28;
+
+D_hd_front_end_8020ED00 = 0x8020ED00;

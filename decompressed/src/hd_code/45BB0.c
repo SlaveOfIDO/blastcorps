@@ -34,7 +34,6 @@ extern u8 D_hd_code_80370C20;
 extern s8 D_hd_code_80370C23;
 extern u8 D_hd_code_80370C25;
 extern u8 D_hd_code_80370C26;
-extern s8 D_hd_code_80370C2C;
 extern s8 D_hd_code_80370C2E;
 extern s8 D_hd_code_80370C2F;
 extern s8 D_hd_code_80370C34;

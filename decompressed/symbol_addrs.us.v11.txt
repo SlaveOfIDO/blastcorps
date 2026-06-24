@@ -464,3 +464,4 @@ D_hd_code_8036BB1A = 0x8036BB1A;
 D_hd_code_8036BB18 = 0x8036BB18;
 g_Thread3 = 0x80310BD0;
 D_hd_code_80364A88 = 0x80364A88; // type:u64
+D_hd_front_end_80208380 = 0x80208380; // size:0x80

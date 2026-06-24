@@ -335,7 +335,6 @@ extern u8 D_hd_code_80370C24;
 extern u8 D_hd_code_80370C27;
 extern u8 frontEndPresent;
 extern u8 D_hd_code_8039C4B0;
-extern u8 D_hd_code_8039C4F8[];
 extern u8 D_hd_code_8039C541;
 extern u8 D_hd_code_8039CA60;
 extern u8 D_hd_code_8039CA62;
@@ -506,6 +505,11 @@ extern u8 D_hd_code_8036E4CA;
 extern s32 D_hd_code_803156C0;
 extern struct S_802E8F38 D_hd_code_802E8F38[6];
 extern u8 D_hd_code_8039CAB6;
-
+extern s8 D_hd_code_80370C2C;
+typedef struct {
+  u8 data[0x40];
+  u8 unk40;
+} PakData;
+extern PakData D_hd_code_8039C4F8;
 
 #endif

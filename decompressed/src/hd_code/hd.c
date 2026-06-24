@@ -779,7 +779,7 @@ void Thread3(void* arg0) {
                 {
                   for (sp64 = 0; sp64 < 0x40; sp64++)
                   {
-                    D_hd_code_8039C4F8[sp64] = pakBuffer[sp64];
+                    D_hd_code_8039C4F8.data[sp64] = pakBuffer[sp64];
                   }
                 }
                 func_hd_code_802CF5B0();

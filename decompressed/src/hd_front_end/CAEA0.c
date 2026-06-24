@@ -118,7 +118,6 @@ extern s32 D_hd_front_end_802153EC;
 extern u32 D_hd_front_end_802153F0[0x50/0x4]; // Size: 0x50
 extern u32 D_hd_front_end_80210EE0[19][2];
 
-
 // The four observed fields are u32 byte-offsets from the blob's own base.
 typedef struct ModelFile {
   /* 0x00 */ u8  unk00[0x14];   // header, not yet observed
