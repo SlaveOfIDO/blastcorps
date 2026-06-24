@@ -1,7 +1,7 @@
-#include <os.h>
-#include <os_internal.h>
-#include <R4300.h>
-#include <rcp.h>
+#include <PR/os.h>
+#include <PR/os_internal.h>
+#include <PR/R4300.h>
+#include <PR/rcp.h>
 
 typedef struct
 {
@@ -13,10 +13,10 @@ typedef struct
 extern __osExceptionVector __osExceptionPreamble;
 
 OSTime osClockRate = OS_CLOCK_RATE;
-// Not here? s32 osViClock = VI_NTSC_CLOCK;
 u32 __osShutdown = 0;
-// Not here? u32 __OSGlobalIntMask = OS_IM_ALL;
-extern u32 __osFinalrom; // TODO: bss
+
+u32 __osFinalrom;
+
 void osInitialize()
 {
    u32 pifdata;

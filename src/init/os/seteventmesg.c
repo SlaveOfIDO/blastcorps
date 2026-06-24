@@ -1,6 +1,8 @@
-#include <os_internal.h>
+#include <PR/os_internal.h>
 #include "osint.h"
-extern __OSEventState __osEventStateTab[OS_NUM_EVENTS];
+
+__OSEventState __osEventStateTab[OS_NUM_EVENTS];
+
 void osSetEventMesg(OSEvent event, OSMesgQueue *mq, OSMesg msg)
 {
 	register u32 saveMask = __osDisableInt();

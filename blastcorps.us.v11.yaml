@@ -71,13 +71,20 @@ segments:
     - [0x4BD0, .rodata, init/rarezip]
     - [0x4C10, .rodata, init/os/exceptasm]
     - [0x4C60, .rodata, init/os/setintmask]
-    - { start: 0x4CE0, type: bss, vram: 0x802229E0 }
+    - [0x4CE0, .bss, init/inflate]
+    - [0x4CE0, .bss, init/rarezip]
+    - [0x4CE0, .bss, init/libc/syncprintf]
+    - [0x4CE0, .bss, init/1A30]
+    - [0x4CE0, .bss, init/os/initialize]
+    - [0x4CE0, .bss, init/debug/kdebugserver]
+    - [0x4CE0, .bss, init/os/seteventmesg]
+  - [0x4CE0, bin, blast_offsets]
+  - [0xCCE0, bin, blast_textures]
+#  - [0x487050, rzip, titlelogo_usa, rgba16, 280, 64 ]
   - name: assets
     type: bin
-    start: 0x4CE0
+    start: 0x489E70
     subsegments:
-    - [0x4CE0, bin, blast_offsets]
-    - [0xCCE0, bin, blast_textures]
     # TODO: extract each of these
     - [0x487050, bin, titlelogo_usa.raw.855417225]
     - [0x489E70, bin, titlepicture_usa.raw.855417226]

@@ -25,14 +25,16 @@ s32 D_80222834 = 9;
 // dbits
 s32 D_80222838 = 6;
 
-extern struct huft* D_init_802229E0; // bss?
-extern u32 D_init_802229EC; // bss?
-extern u32 D_init_802229E4; // bss?
-extern u32 D_init_802229E8; // bss?
-extern u8 *D_init_802229F0; // bss?
-extern u8 *D_init_802229F4; // bss?
-extern s32 D_init_80222A1C; // bss?
-extern u32 D_init_80222A20; // bss?
+// <bss>
+struct huft* D_init_802229E0;
+u32 D_init_802229E4;
+u32 D_init_802229E8;
+u32 D_init_802229EC;
+// </bss>
+extern u8 *D_init_802229F0;
+extern u8 *D_init_802229F4;
+extern s32 D_init_80222A1C;
+extern u32 D_init_80222A20;
 
 int huft_build(b, n, s, d, e, t, m)
 unsigned *b;            /* code lengths in bits (all assumed <= BMAX) */

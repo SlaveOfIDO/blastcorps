@@ -14,10 +14,10 @@ THRESHOLDS = {
     40: "orange",
     60: "yellow",
     80: "green",
-    90: "brightgreen"
+    90: "lightgreen"
 }
 
-DEFAULT_COLOR = "lightgrey"
+DEFAULT_COLOR = "lightgray"
 
 
 # ----------------------------

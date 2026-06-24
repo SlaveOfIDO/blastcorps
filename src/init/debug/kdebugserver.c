@@ -10,19 +10,19 @@ static s32 debugState = 0;
 static s32 numChars = 0;
 static s32 numCharsToReceive = 0;
 
-// .bss
-extern u8 debugBuffer[0x100];
+// <bss>
+u8 debugBuffer[0x100];
+OSThread __osThreadSave;
+// </bss>
 
-extern OSThread __osThreadSave;
-
-void func_80221E10(u32 arg0, u8* arg1) {
+void func_init_80221E10(u32 arg0, u8* arg1) {
     arg1[0] = ((arg0 >> 24) & 0xFF);
     arg1[1] = ((arg0 >> 16) & 0xFF);
     arg1[2] = ((arg0 >> 8) & 0xFF);
     arg1[3] = (arg0 & 0xFF);
 }
 
-u32 func_80221E40(u8 *arg0) {
+u32 func_init_80221E40(u8 *arg0) {
     u32 sp4;
 
     sp4 = ((arg0[0] & 0xFF) << 24);
@@ -33,7 +33,7 @@ u32 func_80221E40(u8 *arg0) {
     return sp4;
 }
 
-void func_80221E98(u8 buf[], s32 length) {
+void func_init_80221E98(u8 buf[], s32 length) {
     rdbPacket packet;
     int i;
 
@@ -48,7 +48,7 @@ void func_80221E98(u8 buf[], s32 length) {
     *(u32* )RDB_READ_INTR_REG = 0;
 }
 
-void func_80221F58(u8 buf[], s32 length) {
+void func_init_80221F58(u8 buf[], s32 length) {
     s32 i;
     s32 sp20;
     s32 sp1C;
@@ -62,24 +62,24 @@ void func_80221F58(u8 buf[], s32 length) {
     sp1C = length % 3;
     sp20 = length - sp1C;
     for(i = 0; i < sp20; i += 3) {
-        func_80221E98(&buf[i], 3);
+        func_init_80221E98(&buf[i], 3);
     }
     if (sp1C > 0) {
-        func_80221E98(&buf[sp20], sp1C);
+        func_init_80221E98(&buf[sp20], sp1C);
     }
 }
     
-void func_80222030(void) {
+void func_init_80222030(void) {
     u32 data;
     s32 length;
 
-    data = func_80221E40(&debugBuffer[1]);
-    length = func_80221E40(&debugBuffer[5]);
-    func_80221F58(data, length);
+    data = func_init_80221E40(&debugBuffer[1]);
+    length = func_init_80221E40(&debugBuffer[5]);
+    func_init_80221F58(data, length);
 }
 
-void func_8022207C(void) {
-    func_80221F58((u8*)(&__osThreadSave.context), 0x190);
+void func_init_8022207C(void) {
+    func_init_80221F58((u8*)(&__osThreadSave.context), 0x190);
 }
 
 void kdebugserver(u32 packet) {
@@ -100,7 +100,7 @@ void kdebugserver(u32 packet) {
             numCharsToReceive = 9 - (sp28.length);
             return;
         case 2:                                     /* switch 1 */
-            func_8022207C();
+            func_init_8022207C();
             debugState = 0;
             numChars = 0;
             numCharsToReceive = 0;
@@ -115,7 +115,7 @@ void kdebugserver(u32 packet) {
     case 1:
         if (numCharsToReceive <= 0) {
             if (debugBuffer[0] == 1) {
-                func_80222030();
+                func_init_80222030();
                 debugState = 0;
                 numChars = 0;
                 numCharsToReceive = 0;

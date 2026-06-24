@@ -7,15 +7,25 @@ void func_init_802206D0(void);
 s32 D_80222840 = 8;
 s32 D_80222844 = 0;
 const char D_802228D0[] = "kiunzip: unknown method %d -- get newer version of gzip\n";
+
+// <bss>
+u8 *D_init_802229F0;
+u8 *D_init_802229F4;
+s32 pad_802229F8;
+s32 D_init_802229FC;
+s32 pad_80222A00;
+s32 pad_80222A04;
+s32 D_init_80222A08;
+s32 D_init_80222A0C;
+s32 pad_80222A10;
+s32 pad_80222A14;
+s32 D_init_80222A18;
+s32 D_init_80222A1C;
+u32 D_init_80222A20;
+// </bss>
+
 extern struct huft *D_init_802229E0; // bss?
-extern u8 *D_init_802229F0; // bss?
-extern u8 *D_init_802229F4; // bss?
-extern s32 D_init_802229FC;
-extern s32 D_init_80222A08;
-extern s32 D_init_80222A0C;
-extern s32 D_init_80222A18;
-extern s32 D_init_80222A1C; // bss?
-extern u32 D_init_80222A20; // bss?
+
 
 void func_init_80220360(u8** arg0, u8** arg1, struct huft* arg2) {
     D_init_802229F0 = *arg0;
