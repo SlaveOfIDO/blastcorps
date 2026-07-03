@@ -5,6 +5,7 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "structs.h"
 
 u8 func_hd_front_end_801EEDB4(u8, u8, u8);         /* extern */
 
@@ -39,14 +40,7 @@ extern u8  D_hd_code_8036EA9B;
 extern u16 D_hd_code_8036EA9C;
 extern char D_hd_code_8036B9A8[0x20];
 
-struct LevelData {
-  /* 0x00 */ s32 unk0;
-  /* 0x04 */ char *name;
-  /* 0x08 */ u8 pad8[0x18 - 0x8];
-  /* 0x18 */ s8 unk18[0x30 - 0x18];
-};  /* Size: 0x30 */
 
-extern struct LevelData D_hd_front_end_8020D810[];
 extern u16 D_hd_code_80364EF0[][16];
 extern u8  D_hd_code_802E8C44[];
 extern struct S_80367C04 D_hd_code_802E8F94[];

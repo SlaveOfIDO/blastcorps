@@ -39,7 +39,8 @@ struct Model1 {
   /* 0x014C0 */ Mtx unk14C0; // another modelview
   /* 0x01500 */ Mtx unk1500; // another modelview
   /* 0x01540 */ Mtx unk1540; // another modelview
-  /* 0x01580 */ Vtx unk1580[(0x18C0 - 0x1580)/0x10]; // length could be smaller, possibly only 0x4?
+  /* 0x01580 */ Vtx unk1580[4];
+  /* 0x015C0 */ Vtx unk15C0[(0x18C0 - 0x15C0)/0x10]; // length could be smaller, possibly only 0x4?
   /* 0x018C0 */ Vtx unk18C0[4];
   /* 0x01900 */ Vtx unk1900[(0x1D80 - 0x1900)/0x10];
   /* 0x01D80 */ Vtx unk1D80[8];
