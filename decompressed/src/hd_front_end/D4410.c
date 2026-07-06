@@ -9,16 +9,6 @@
 
 #pragma intrinsic(sqrtf)
 
-typedef struct {
-  u8 pad0[0x20];
-  /* 0x20 */ f32 unk20;
-  /* 0x24 */ f32 unk24;
-  /* 0x28 */ f32 unk28;
-  /* 0x2C */ f32 unk2C;
-  /* 0x30 */ f32 unk30;
-  /* 0x34 */ f32 unk34;
-  s32 pad38;
-} S_8020BD30;  /* stride 0x3C */
 
 typedef struct {
   /* 0x0 */ s32 unk0;
@@ -52,7 +42,6 @@ extern s32 D_hd_front_end_8021728C;
 extern void *D_hd_front_end_8020BC88;
 extern s32 D_hd_front_end_8020BD08[9];
 extern u16 D_hd_front_end_80217288;
-extern S_8020BD30 D_hd_front_end_8020BD30[];
 extern s32 D_hd_front_end_8020BE98;
 extern u8   D_hd_front_end_80217A10[];
 extern s32  D_hd_front_end_80217B50;
@@ -575,8 +564,8 @@ Gfx *func_hd_front_end_801F2E20(void) {
 
 Gfx *func_hd_front_end_801F3450(Gfx *gfx, struct Model1 *arg1) {
     Gfx *entry = gfx;
-    S_8020BD30 *sp48 = D_hd_front_end_8020BD30;
-    S_8020BD30 *sp44 = &D_hd_front_end_8020BD30[(((s32)D_hd_front_end_80217B6C * 0x3C + (s32)sp48) - (s32)sp48)  / 0x3C];
+    struct S_8020BD30 *sp48 = D_hd_front_end_8020BD30;
+    struct S_8020BD30 *sp44 = &D_hd_front_end_8020BD30[(((s32)D_hd_front_end_80217B6C * 0x3C + (s32)sp48) - (s32)sp48)  / 0x3C];
     u8 sp43;
     s32 sp3C;
 
