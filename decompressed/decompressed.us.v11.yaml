@@ -382,26 +382,31 @@ segments:
     - [ 0xD3220, c, hd_front_end/D3220 ] # done
     - [ 0xD4410, c, hd_front_end/D4410 ] # done
     - [ 0xD7550, c, hd_front_end/D7550 ] # done
-    - [ 0xD8D10, asm, hd_front_end/D8D10 ]
-    - [ 0xD9650, asm, hd_front_end/D9650 ]
+    - [ 0xD8D10, c, hd_front_end/D8D10 ] # done
+    - [ 0xD9650, c, hd_front_end/D9650 ]
     - [ 0xDC3D0, asm, hd_front_end/DC3D0 ]
     - [ 0xE2830, asm, hd_front_end/E2830 ]
     - [ 0xE4590, asm, hd_front_end/E4590 ]
     - [ 0xE50E0, asm, hd_front_end/E50E0 ]
     - [ 0xE5D20, asm, hd_front_end/E5D20 ]
-    - [ 0xE65D0, asm, hd_front_end/E65D0 ]
-    - [ 0xE6720, asm, hd_front_end/E6720 ]
-    - [ 0xE6790, asm, hd_front_end/E6790 ]
-    - [ 0xE7B60, asm, hd_front_end/E7B60 ]
-    - [ 0xE8170, asm, hd_front_end/E8170 ]
-    - [ 0xE82B0, asm, hd_front_end/E82B0 ]
-    - [ 0xE83F0, asm, hd_front_end/E83F0 ]
-    - [ 0xE85B0, asm, hd_front_end/E85B0 ]
-    - [ 0xE8AB0, asm, hd_front_end/E8AB0 ]
-    - [ 0xE9290, asm, hd_front_end/E9290 ]
-    - [ 0xEA460, asm, hd_front_end/EA460 ]
-    - [ 0xEA810, asm, hd_front_end/EA810 ]
-    - [ 0xEABC0, asm, hd_front_end/EABC0 ]
+    - [ 0xE65D0, c, hd_front_end/io/pfsfreeblocks ]
+    - [ 0xE6720, c, hd_front_end/io/conteepprobe ]
+    - [ 0xE6790, c, hd_front_end/io/pfschecker ]
+    - [ 0xE71F0, c, hd_front_end/io/pfsinit ]
+    - [ 0xE73B0, c, hd_front_end/io/pfsallocatefile ]
+    - [ 0xE7B60, c, hd_front_end/io/pfsdeletefile ]
+    - [ 0xE8170, c, hd_front_end/io/conteeplongwrite ]
+    - [ 0xE82B0, c, hd_front_end/io/conteeplongread ]
+    - [ 0xE83F0, c, hd_front_end/io/pfssearchfile ]
+    - [ 0xE85B0, c, hd_front_end/io/pfsreadwritefile ]
+    - [ 0xE8AB0, c, hd_front_end/io/conteepwrite ]
+    - [ 0xE8F90, c, hd_front_end/io/conteepread ]
+    - [ 0xE9290, c, hd_front_end/io/pfsfilestate ]
+    - [ 0xE9580, c, hd_front_end/io/crc ]
+    - [ 0xE9700, c, hd_front_end/io/contpfs ]
+    - [ 0xEA460, c, hd_front_end/io/contramread ]
+    - [ 0xEA810, c, hd_front_end/io/contramwrite ]
+    - [ 0xEABC0, c, hd_front_end/io/pfsisplug ]
     - [ 0xEAF30, asm, hd_front_end/EAF30 ] # Handwritten ASM
     - [ 0xEBEE0, .data, hd_front_end/CAEA0 ] # done
     - [ 0xEC060, .data, hd_front_end/CCAE0 ] # done
@@ -413,9 +418,9 @@ segments:
     - [ 0xF2E50, .rodata, hd_front_end/D3220 ] # done
     - [ 0xF2E60, .rodata, hd_front_end/D4410 ] # done
     - [ 0xF2F30, .rodata, hd_front_end/D7550 ] # done
-    - [ 0xF2F50, rodata, hd_front_end/D9650 ]
-    - [ 0xF3320, rodata, hd_front_end/0E7B0_and_11530 ] # TODO
-    - [ 0xF43F0, rodata, hd_front_end/17990_and_196F0 ] # TODO
+    - [ 0xF2F50, .rodata, hd_front_end/D9650 ]
+    - [ 0xF3320, rodata, hd_front_end/D9650_and_DC3D0 ] # TODO
+    - [ 0xF43F0, rodata, hd_front_end/E2830_and_E4590 ] # TODO
     - [ 0xF4510, rodata, hd_front_end/E5D20 ]
     - { start: 0xF4D30, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
     - { start: 0xF4D30, type: bss, name: hd_front_end/CCAE0, vram: 0x80215440 }

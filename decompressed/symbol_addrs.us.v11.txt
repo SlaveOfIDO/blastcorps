@@ -465,3 +465,64 @@ D_hd_code_8036BB18 = 0x8036BB18;
 g_Thread3 = 0x80310BD0;
 D_hd_code_80364A88 = 0x80364A88; // type:u64
 D_hd_front_end_80208380 = 0x80208380; // size:0x80
+
+// PFS (Controller Pak) libultra library, statically linked into hd_front_end.
+// Identified by compiling other/libreultra/src/io/*.c with the project's own
+// IDO cc (-O1 -mips2) and comparing normalized instruction streams against
+// the not-yet-decompiled hd_front_end asm blobs. "confirmed" = exact
+// instruction-for-instruction match modulo relocation fields; "strong" =
+// near-total match, only register-numbering/immediate drift.
+osPfsFreeBlocks = 0x80202730; // pfsfreeblocks.c, confirmed
+osPfsChecker = 0x802028F0; // pfschecker.c, confirmed
+corrupted_init = 0x80202FB4; // pfschecker.c static helper, confirmed
+corrupted = 0x80203168; // pfschecker.c static helper, confirmed
+osPfsInit = 0x80203350; // pfsinit.c, strong
+osPfsAllocateFile = 0x80203510; // pfsallocatefile.c, confirmed
+__osPfsDeclearPage = 0x80203994; // pfsallocatefile.c static helper, confirmed, splat mis-split this into two funcs (was also detecting a boundary at 0x80203BF8), size merges them
+__osClearPage = 0x80203BF8;
+osPfsDeleteFile = 0x80203CC0; // pfsdeletefile.c, confirmed
+__osPfsReleasePages = 0x80203FA0; // pfsdeletefile.c static helper, strong
+__osBlockSum = 0x802041D8; // pfsdeletefile.c static helper, strong
+osPfsFindFile = 0x80204550; // pfssearchfile.c, strong
+osPfsReadWriteFile = 0x8020480C; // pfsreadwritefile.c, strong
+osPfsFileState = 0x802053F0; // pfsfilestate.c, confirmed
+__osContAddressCrc = 0x802056E0; // crc.c, confirmed
+__osContDataCrc = 0x80205790; // crc.c, confirmed
+__osSumcalc = 0x80205860; // contpfs.c, confirmed
+__osIdCheckSum = 0x802058BC; // contpfs.c, strong
+__osRepairPackId = 0x80205924; // contpfs.c, confirmed
+__osCheckPackId = 0x80205D3C; // contpfs.c, confirmed
+__osGetId = 0x80205ED4; // contpfs.c, confirmed by source-order position, near-identical twin osPfsRepairId (pfsrepairid.c) ruled out since the whole E9290 block matches contpfs.c+crc.c+pfsfilestate.c in exact source order
+__osCheckId = 0x80206130; // contpfs.c, confirmed
+__osPfsRWInode = 0x8020622C; // contpfs.c, confirmed
+__osPfsSelectBank = 0x8020654C; // contpfs.c, strong
+osPfsIsPlug = 0x80206D20; // pfsiplug.c, confirmed
+__osPfsRequestData = 0x80206EC0; // pfsisplug.c, strong, near-identical twin __osPackRequestData (controller.c) ruled out by same source-order-contiguity reasoning as __osGetId above
+__osPfsGetInitData = 0x80206FBC; // pfsisplug.c, confirmed, near-identical twin __osContGetInitData (controller.c) ruled out likewise
+__osContRamRead = 0x802065C0;
+__osPfsGetNextPage = 0x80204710;
+__osContRamWrite = 0x80206970;
+__osPackRamReadData = 0x80206804;
+__osPfsPifRam = 0x8021ABF0;
+__osPfsGetStatus = 0x80203404;
+__osPackRamWriteData = 0x80206BA0;
+
+// EEPROM (cont/eeprom io library), same hd_front_end block, found by checking
+// the calls/literal command bytes against other/libreultra/src/io/conteep*.c.
+// This SDK revision's osEepromWrite/osEepromRead lack the later "duplicated
+// status check + CONT_EEPROM/CONT_EEP16K switch" logic seen in the generic
+// libreultra source, consistent with the same pre-2.0D-ish simplification
+// already found in __osContRamRead/__osContRamWrite.
+osEepromLongWrite = 0x802042D0; // conteeplongwrite.c, confirmed by osSetTimer/osClockRate delay-after-block pattern matching source exactly
+osEepromLongRead = 0x80204410; // conteeplongread.c, strong, twin of osEepromLongWrite above (this SDK rev adds the same per-block osSetTimer delay, absent from the generic source)
+osEepromWrite = 0x80204C10; // conteepwrite.c, strong, simplified variant (no duplicate __osEepStatus call, no address-bounds switch)
+__osPackEepWriteData = 0x80204DC0; // conteepwrite.c static helper, confirmed by literal txsize=0xA rxsize=0x1 cmd=0x5 (CONT_CMD_WRITE_EEPROM_TX/RX/CMD) matching field-for-field
+__osEepStatus = 0x80204ECC; // conteepwrite.c/conteepread.c shared helper, confirmed, 137 vs 136 compiled instructions, request-format fields match field-for-field
+osEepromRead = 0x802050F0; // conteepread.c, strong, symmetric with osEepromWrite above, calls __osEepStatus and __osPackEepReadData below
+__osPackEepReadData = 0x802052E0; // conteepread.c static helper, confirmed by literal txsize=0x2 rxsize=0x8 cmd=0x4 (CONT_CMD_READ_EEPROM_TX/RX/CMD) matching field-for-field
+__osEepromTimerQ = 0x803FF2A8;
+__osEepromTimer = 0x803FF288;
+__osEepromTimerMsg = 0x803FF2C0;
+__osEepPifRam = 0x8021ABB0;
+osEepromProbe = 0x80202880;
+D_hd_code_8039B630 = 0x8039B630; // size:0x68
