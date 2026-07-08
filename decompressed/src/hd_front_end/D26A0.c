@@ -47,6 +47,21 @@ extern struct S_80367C04 D_hd_code_802E8F94[];
 u32 func_hd_code_802852EC();                          /* extern */
 void func_hd_front_end_801E8DCC(u8 arg0);
 
+s32 func_hd_code_80286038(s32);                     /* extern */
+void func_hd_code_80295A20(s32);                    /* extern */
+u8 func_hd_front_end_801EF2BC(u16 arg0, u8 arg1, u8 arg2);         /* extern */
+
+extern u16 D_hd_code_80364EF0[][16];
+extern u8  D_hd_code_802E8C44[];
+extern struct S_80367C04 D_hd_code_802E8F94[];
+extern struct S_80367BCC D_hd_code_802F49F4[];
+extern struct S_8020C070 D_hd_front_end_8020C070[];
+
+extern u16 D_hd_code_80303B3C;
+extern u16 D_hd_code_80303B48;
+extern u16 D_hd_code_80303B58;
+extern u16 D_hd_code_80303B68;
+
 u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
     UnknownData8024C414 *sp3C;
     struct S_80367C04 *sp38;
@@ -120,25 +135,22 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
     return sp33;
 }
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/D26A0/D_hd_front_end_8020EF48.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/D26A0/D_hd_front_end_8020EF58.s")
+// <data>
+char* D_hd_front_end_802084D0[4] = {
+  "YOUR NEW BEST!",
+  "BEST TO DATE",
+  "YOUR BEST STAYS",
+  "GUEST BEST IS"
+};
+u16* D_hd_front_end_802084E0[] = {
+  &D_hd_code_80303B3C,
+  &D_hd_code_80303B48,
+  &D_hd_code_80303B58,
+  &D_hd_code_80303B68
+};
+// </data>
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/D26A0/D_hd_front_end_8020EF68.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/D26A0/D_hd_front_end_8020EF78.s")
-
-s32 func_hd_code_80286038(s32);                     /* extern */
-void func_hd_code_80295A20(s32);                    /* extern */
-u8 func_hd_front_end_801EF2BC(u16 arg0, u8 arg1, u8 arg2);         /* extern */
-
-extern char* D_hd_front_end_802084D0[];
-extern s32 D_hd_front_end_802084E0[];
-extern u16 D_hd_code_80364EF0[][16];
-extern u8  D_hd_code_802E8C44[];
-extern struct S_80367C04 D_hd_code_802E8F94[];
-extern struct S_80367BCC D_hd_code_802F49F4[];
-extern struct S_8020C070 D_hd_front_end_8020C070[];
 
 u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
     s32 sp6C;
@@ -224,6 +236,7 @@ s8 func_hd_front_end_801EF1E0(void) {
   }
   return sp4;
 }
+
 u8 func_hd_front_end_801EF2BC(u16 arg0, u8 arg1, u8 arg2) {
   u8 sp7;
   struct S_80367C04 *sp0;

@@ -34,11 +34,6 @@ s32 func_hd_front_end_801F4FBC(struct Model1 *, s32);  /* extern */
 
 extern UnknownData802081C0 D_hd_front_end_802081C0[];
 extern u8   D_hd_front_end_802082B8[];
-extern s8  *D_hd_front_end_802084B0;
-extern s8  *D_hd_front_end_802084B4;
-extern u16 *D_hd_front_end_802084B8;
-extern u16 *D_hd_front_end_802084BC;
-extern s8   D_hd_front_end_802084C0;
 extern s32  D_hd_front_end_80215960;
 extern s32  D_hd_front_end_80215964;
 extern f32  D_hd_front_end_80215968;
@@ -51,6 +46,17 @@ extern u8   D_hd_front_end_80215980[];
 extern u8   D_hd_front_end_80215998[];
 extern s16  D_hd_front_end_802159B0;
 extern Mtx  D_hd_front_end_802182D0[];
+
+extern u16 D_hd_code_80303B78;
+extern u16 D_hd_code_80303B88;
+
+// <data>
+s8  *D_hd_front_end_802084B0 = "CONGRATULATIONS";
+s8  *D_hd_front_end_802084B4 = "ON YOUR PROMOTION!";
+u16 *D_hd_front_end_802084B8 = &D_hd_code_80303B78;
+u16 *D_hd_front_end_802084BC = &D_hd_code_80303B88;
+s8   D_hd_front_end_802084C0 = 1;
+// </data>
 
 s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3) {
     s32 sp74;
@@ -186,7 +192,3 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
     *arg3 += (sp74 - arg0) >> 3;
     return sp74;
 }
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/D1630/D_hd_front_end_8020ED40.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_front_end/D1630/D_hd_front_end_8020ED50.s")

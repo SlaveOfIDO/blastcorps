@@ -383,7 +383,8 @@ segments:
     - [ 0xD4410, c, hd_front_end/D4410 ] # done
     - [ 0xD7550, c, hd_front_end/D7550 ] # done
     - [ 0xD8D10, c, hd_front_end/D8D10 ] # done
-    - [ 0xD9650, c, hd_front_end/D9650 ]
+    - [ 0xD9650, c, hd_front_end/D9650 ] # done
+    - [ 0xDB6F0, asm, hd_front_end/DB6F0 ]
     - [ 0xDC3D0, asm, hd_front_end/DC3D0 ]
     - [ 0xE2830, asm, hd_front_end/E2830 ]
     - [ 0xE4590, asm, hd_front_end/E4590 ]
@@ -410,7 +411,9 @@ segments:
     - [ 0xEAF30, asm, hd_front_end/EAF30 ] # Handwritten ASM
     - [ 0xEBEE0, .data, hd_front_end/CAEA0 ] # done
     - [ 0xEC060, .data, hd_front_end/CCAE0 ] # done
-    - [ 0xEC350, data, hd_front_end/hd_front_end_data ]
+    - [ 0xEC350, .data, hd_front_end/D1630 ] # done
+    - [ 0xEC370, .data, hd_front_end/D26A0 ] # done
+    - [ 0xEC390, data, hd_front_end/hd_front_end_data ]
     - [ 0xF22E0, .rodata, hd_front_end/CAEA0 ] # done
     - [ 0xF2370, .rodata, hd_front_end/CCAE0 ] # done
     - [ 0xF2BE0, .rodata, hd_front_end/D1630 ] # done
@@ -418,8 +421,9 @@ segments:
     - [ 0xF2E50, .rodata, hd_front_end/D3220 ] # done
     - [ 0xF2E60, .rodata, hd_front_end/D4410 ] # done
     - [ 0xF2F30, .rodata, hd_front_end/D7550 ] # done
-    - [ 0xF2F50, .rodata, hd_front_end/D9650 ]
-    - [ 0xF3320, rodata, hd_front_end/D9650_and_DC3D0 ] # TODO
+    - [ 0xF2F50, .rodata, hd_front_end/D9650 ] # done
+    - [ 0xF3320, .rodata, hd_front_end/DB6F0 ]
+    - [ 0xF3E20, rodata, hd_front_end/DC3D0 ]
     - [ 0xF43F0, rodata, hd_front_end/E2830_and_E4590 ] # TODO
     - [ 0xF4510, rodata, hd_front_end/E5D20 ]
     - { start: 0xF4D30, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
