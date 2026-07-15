@@ -526,3 +526,5 @@ __osEepromTimerMsg = 0x803FF2C0;
 __osEepPifRam = 0x8021ABB0;
 osEepromProbe = 0x80202880;
 D_hd_code_8039B630 = 0x8039B630; // size:0x68
+D_hd_front_end_8020C070 = 0x8020C070; // size:0x1784
+D_hd_front_end_8020D810 = 0x8020D810; // size:0xb40

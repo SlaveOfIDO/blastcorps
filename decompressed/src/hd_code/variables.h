@@ -511,5 +511,6 @@ typedef struct {
   u8 unk40;
 } PakData;
 extern PakData D_hd_code_8039C4F8;
+extern struct S_8020C070* D_hd_code_8036BB24; // 21 elements
 
 #endif

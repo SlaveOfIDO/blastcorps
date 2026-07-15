@@ -45,9 +45,8 @@ typedef struct UnknownData8024C414_s {
   /* 0x0E */ s16 padE;
   /* 0x10 */ s32 unk10;
   /* 0x14 */ s32 unk14;
-  /* 0x18 */ u8 unk18[0x54 - 0x18]; // flags? often check >0 and <6
-  /* 0x54 */ u8 unk54[0x88 - 0x54];
-  /* 0x88 */ u8 unk88[0x90 - 0x88];
+  /* 0x18 */ u8 unk18[0x3C]; // flags? often check >0 and <6
+  /* 0x54 */ u8 unk54[0x3C];
   /* 0x90 */ u8 unk90;
   /* 0x91 */ u8 unk91;
   /* 0x92 */ u8 unk92[0xF0 - 0x92]; // indexed by level

@@ -33,7 +33,7 @@ s32 func_hd_front_end_801F75A4(u8*, s32); /* extern */
 void func_hd_front_end_801F7410(u8*);
 
 extern u8 D_hd_code_80365060[];
-extern struct S_8036BB24* D_hd_code_8036BB24; // 21 elements
+extern struct S_8020C070* D_hd_code_8036BB24; // 21 elements
 extern u8 D_hd_front_end_8020C01C[];
 extern u8 D_80301080;
 extern u8 D_hd_front_end_8020C488[];
@@ -631,7 +631,7 @@ s32 func_hd_front_end_801F6F18(void) {
             if (sp34 < 9) {
                 proutSprintf(D_hd_front_end_80218740[sp44], "%s ", D_hd_front_end_80218740[sp44]);
             }
-            *(u8**) &D_hd_front_end_8020C488[D_hd_front_end_80218D28 * 0x1C] = D_hd_front_end_80218740[sp44];
+            D_hd_front_end_8020C070[37 + D_hd_front_end_80218D28].unkC = D_hd_front_end_80218740[sp44];
             D_hd_front_end_80218D28 += 1;
         }
     }

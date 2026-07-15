@@ -10,7 +10,6 @@
 u8 func_hd_front_end_801EEDB4(u8, u8, u8);         /* extern */
 
 extern s32 D_hd_code_803649F0;
-extern u8  D_hd_code_8036B980[];
 extern s32 D_hd_code_8036EA60;
 extern s32 D_hd_code_8036EA64;
 extern u8  D_hd_code_8036EA68;

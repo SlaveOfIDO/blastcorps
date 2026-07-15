@@ -6,9 +6,15 @@
 struct LevelData {
   /* 0x00 */ s32 unk0;
   /* 0x04 */ char *name;
-  /* 0x08 */ u8 pad8[0x18 - 0x8];
+  /* 0x08 */ s32 unk8;
+  /* 0x0C */ s32 padC;
+  /* 0x10 */ f32 unk10;
+  /* 0x14 */ f32 unk14;
   /* 0x18 */ s8 unk18[0x1C - 0x18];
-  /* 0x1C */ s8 unk1C[0x30 - 0x1C];
+  /* 0x1C */ s8 unk1C[0x24 - 0x1C];
+  /* 0x24 */ f32 unk24;
+  /* 0x28 */ f32 unk28;
+  /* 0x2C */ f32 unk2C;
 };  /* Size: 0x30 */
 
 extern struct LevelData D_hd_front_end_8020D810[];

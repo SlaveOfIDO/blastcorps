@@ -495,7 +495,7 @@ s32 func_hd_code_802768A8(void) {
 // 1.0). Returns (0x4000, 0x4000) for points behind the camera; results are
 // clamped to +-16384.
 // Proposed name: WorldToScreen
-void func_hd_code_8027690C(struct Model1* arg0, f32 arg1, f32 arg2, f32 arg3, s16* arg4, s16* arg5, s32 arg6, s32 arg7, s32 arg8, f32 arg9) {
+void func_hd_code_8027690C(struct Model1* arg0, f32 arg1, f32 arg2, f32 arg3, s16* arg4, s16* arg5, Mtx* arg6, Mtx* arg7, Mtx* arg8, f32 arg9) {
   f32 sp4C = 1.0f;
   if (arg8 != 0) {
     func_hd_code_80276D1C(arg8, arg1, arg2, arg3, sp4C, &arg1, &arg2, &arg3, &sp4C);

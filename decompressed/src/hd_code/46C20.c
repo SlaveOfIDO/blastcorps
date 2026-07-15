@@ -7,6 +7,7 @@
 
 void func_801F57B0();
 void func_hd_code_802C4070(void**, void**, u32, u8);
+void func_hd_code_8025C230(s32* arg0, s32* arg1, s32 arg2);
 extern void** D_hd_code_802FDB30;
 extern void** D_hd_code_802FDB34;
 extern OSIoMesg D_hd_code_80370C58;

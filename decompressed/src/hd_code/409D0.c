@@ -15,7 +15,6 @@ u32 func_hd_code_802852EC();                          /* extern */
 
 extern u16 D_hd_code_80364EF0[][0x10];
 extern s32 D_hd_code_80364A9C;
-extern u8 D_hd_code_8036B9A8[];
 extern s32 D_hd_code_80358064;
 extern u8 D_hd_code_8036EB94[4];
 extern u8 D_hd_code_8036EB9C[4];

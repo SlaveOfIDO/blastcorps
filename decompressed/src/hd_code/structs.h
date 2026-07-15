@@ -404,7 +404,7 @@ struct S_8020C070 {
   /* 0x06 */ u16 unk6;
   /* 0x08 */ u16 unk8;
   /* 0x0A */ u16 padA;
-  /* 0x0C */ char* unkC; // e.g. "QUIT GAME!"
+  /* 0x0C */ u8* unkC; // e.g. "QUIT GAME!"
   /* 0x10 */ void* unk10; // Safe type
   /* 0x14 */ u8 unk14;
   /* 0x15 */ u8 pad15;
@@ -482,5 +482,21 @@ struct S_802E8F38 {
   s16 unk4;
   s16 unk6;
 };
+
+struct S_8036BB24 {
+  u16 unk0;
+  s16 unk2;
+  s16 unk4;
+  s16 unk6;
+  s16 unk8;
+  u8* unkC;
+  char* unk10;
+  u8 unk14;
+  u8 pad15;
+  s16 unk16;
+  u8 unk18;
+  u8 unk19;
+  u8 unk1A;
+}; // Size: 0x1C
 
 #endif

@@ -5,11 +5,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
-
-struct S_8020D7E4 {
-  char* unk0;
-  u8 pad4[0x30-0x4];
-};
+#include "../hd_front_end/structs.h"
 
 // Proposed file name: academy.c (the original name - the asserts in
 // func_hd_code_80286330 reference "academy.c")
@@ -28,12 +24,12 @@ void func_801ECF5C();                                  /* extern */
 void func_801ED4B8();                                  /* extern */
 
 extern u8 D_hd_code_802FDA70[];
-extern struct S_8020D7E4 D_hd_front_end_8020D7E4[];
 extern u8 D_hd_code_8036EBA0[];
 extern u8 D_hd_code_802FDA60[];
 extern u8 frontEndPresent;
 extern struct S_80367C04 D_hd_code_802E8F94[];
 extern s32 D_hd_code_802FA26C;
+extern struct LevelData D_hd_front_end_8020D810[];
 
 
 // Show the cutscene / congratulations message for the player's current
@@ -64,7 +60,7 @@ void func_hd_code_802860F0(void) {
             }
           }
         }
-        proutSprintf(D_hd_code_8036EBA0, "IN %s.", D_hd_front_end_8020D7E4[sp30].unk0);
+        proutSprintf(D_hd_code_8036EBA0, "IN %s.", D_hd_front_end_8020D810[sp30 - 1].name);
         D_hd_front_end_8020C070[0x52].unkC = &D_hd_code_8036EBA0;
         break;
       case 6:

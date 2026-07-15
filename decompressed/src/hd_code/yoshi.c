@@ -706,11 +706,11 @@ s32 func_hd_code_8026AD30(s16 arg0) {
     if (sp2C->unk0 == levelno) {
       for(sp20 = 0; sp20 < 16 && (sp2B == 0) && (sp2C->unk2[sp20] != -1); sp20++) {
         if (sp2C->unk2[sp20] == arg0) {
-          sp1C = players[playerNumber].unk88[arg0] < (s32) D_hd_code_802F499A[arg0];
+          sp1C = players[playerNumber].unk54[0x34 + arg0] < (s32) D_hd_code_802F499A[arg0];
           sp18 = levelno == 0;
           if (!D_hd_code_8036BAA0[arg0+2] && ((sp18 != 0) || (sp1C != 0))) {
             if ((sp1C != 0) && (sp18 == 0)) {
-              players[playerNumber].unk88[arg0] += 1;
+              players[playerNumber].unk54[0x34 + arg0] += 1;
             }
             D_hd_code_8036BAA0[arg0+2] = 1;
             func_hd_code_8026AF6C((s16) arg0 | 0x8000 | 0x2000);

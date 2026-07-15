@@ -18,8 +18,8 @@ typedef struct {
 float sqrtf(float);
 void func_hd_front_end_801F0570(void);
 u8 func_hd_code_80264BA4(u8);
-s32 func_hd_front_end_801FE760(s32);
-void func_hd_front_end_801FCE74(u8 *, s32, f32, f32, s32, s32, f32, s32);
+s32 func_hd_front_end_801FE760(u8);
+void func_hd_front_end_801FCE74(Vtx arg0[4], u8 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, f32 arg6, u8 arg7);
 s32 func_hd_front_end_801F1DA8(s32);
 void func_hd_front_end_801FDCA4(Vtx *, s32, s32);
 void func_hd_code_802595E0(S_80218270 *, s32, s32, void *);

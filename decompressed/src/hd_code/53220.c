@@ -10,22 +10,6 @@ extern u8 D_hd_code_8039CAD0;
 extern u8 D_hd_code_802FF180[6];
 extern char* D_hd_code_802FF188[][20][2];
 extern u8 D_hd_code_802FF5E8[];
-struct S_8036BB24 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8* unkC;
-    char* unk10;
-    u8 unk14;
-    u8 pad15;
-    s16 unk16;
-    u8 unk18;
-    u8 unk19;
-    u8 unk1A;
-}; // Size: 0x1C
-extern struct S_8036BB24* D_hd_code_8036BB24; // 21 elements
 
 // Later data for text
 extern u16 D_hd_code_80303B9C[];
@@ -287,7 +271,7 @@ u8 D_hd_code_802FF5E8[72] = {
 
 void func_hd_code_802979E0(u8 arg0) {
     struct S_802F8BDC* sp4C;
-    struct S_8036BB24* sp48;
+    struct S_8020C070* sp48;
     struct S_80367BCC* sp44;
     u8 sp43;
     u8 sp42;
@@ -318,7 +302,7 @@ void func_hd_code_802979E0(u8 arg0) {
         }
         D_hd_code_8039CAD0 = (u8) (sp3C % 6);
     }
-    D_hd_code_8036BB24 = (struct S_8036BB24*)D_hd_code_80358070;
+    D_hd_code_8036BB24 = (struct S_8020C070*)D_hd_code_80358070;
     D_hd_code_80358070 += 0x24C;
 
 
