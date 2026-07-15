@@ -387,8 +387,8 @@ segments:
     - [ 0xDB6F0, c, hd_front_end/DB6F0_texts ] # done
     - [ 0xDB6F0, c, hd_front_end/DB6F0 ] # done
     - [ 0xDC3D0, c, hd_front_end/DC3D0 ] # done
-    - [ 0xE2830, asm, hd_front_end/E2830 ]
-    - [ 0xE4590, asm, hd_front_end/E4590 ]
+    - [ 0xE2830, c, hd_front_end/E2830 ] # done
+    - [ 0xE4590, c, hd_front_end/E4590 ]
     - [ 0xE50E0, asm, hd_front_end/E50E0 ]
     - [ 0xE5D20, asm, hd_front_end/E5D20 ]
     - [ 0xE65D0, c, hd_front_end/io/pfsfreeblocks ]
@@ -429,7 +429,8 @@ segments:
     - [ 0xF3320, .rodata, hd_front_end/DB6F0_texts ] # done
     - [ 0xF3DC0, .rodata, hd_front_end/DB6F0 ] # done
     - [ 0xF3E20, .rodata, hd_front_end/DC3D0 ] # done
-    - [ 0xF43F0, rodata, hd_front_end/E2830_and_E4590 ] # TODO
+    - [ 0xF43F0, .rodata, hd_front_end/E2830 ] # done
+    - [ 0xF44C0, .rodata, hd_front_end/E4590 ]
     - [ 0xF4510, rodata, hd_front_end/E5D20 ]
     - { start: 0xF4D30, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
     - { start: 0xF4D30, type: bss, name: hd_front_end/CCAE0, vram: 0x80215440 }
