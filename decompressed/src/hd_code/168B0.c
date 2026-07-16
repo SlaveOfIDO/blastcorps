@@ -186,7 +186,7 @@ u16* func_hd_code_8025B5D4(u16 *arg0, u16 *arg1, u16* arg2, s32 arg3) {
         }
         break;
       case 0x1004:
-        proutSprintf(sp34, "%d", arg3);
+        sprintf(sp34, "%d", arg3);
         for(sp28 = 0; sp34[sp28] != 0; sp28++, sp2C++) {
           arg0[sp2C] = sp34[sp28] - 0x20;
         }

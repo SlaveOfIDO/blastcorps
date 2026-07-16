@@ -754,34 +754,34 @@ void func_hd_code_80262840(void) {
             D_hd_code_80367CB8[0] = 0xFFF;
             switch ((u32) D_hd_code_80364AA8) {             /* switch 2; irregular */
             case 0x2:                               /* switch 2 */
-                proutSprintf(D_hd_code_80367C18, "FINISH %d LAPS IN", D_hd_code_80367C04->unk18);
+                sprintf(D_hd_code_80367C18, "FINISH %d LAPS IN", D_hd_code_80367C04->unk18);
                 break;
             case 0x4:                               /* switch 2 */
             case 0x20:                              /* switch 2 */
                 if (levelno == 0x34) {
-                    proutSprintf(D_hd_code_80367C18, "DESTROY TARGETS IN");
+                    sprintf(D_hd_code_80367C18, "DESTROY TARGETS IN");
                 } else {
-                    proutSprintf(D_hd_code_80367C18, "DESTROY %s IN", D_hd_code_80367C08);
+                    sprintf(D_hd_code_80367C18, "DESTROY %s IN", D_hd_code_80367C08);
                 }
                 break;
             case 0x80:                              /* switch 2 */
                 if (levelno == 0x32) {
-                    proutSprintf(D_hd_code_80367C18, "CLEAR SHUTTLE PATH");
+                    sprintf(D_hd_code_80367C18, "CLEAR SHUTTLE PATH");
                 } else {
-                    proutSprintf(D_hd_code_80367C18, "CLEAR CARRIER PATH");
+                    sprintf(D_hd_code_80367C18, "CLEAR CARRIER PATH");
                 }
                 break;
             case 0x8:                               /* switch 2 */
-                proutSprintf(D_hd_code_80367C18, "CAUSE $%d DAMAGE", D_hd_code_80367C04->unk18);
+                sprintf(D_hd_code_80367C18, "CAUSE $%d DAMAGE", D_hd_code_80367C04->unk18);
                 break;
             case 0x10:                              /* switch 2 */
             case 0x40:                              /* switch 2 */
-                proutSprintf(D_hd_code_80367C18, "FIND %d RDUS IN", D_hd_code_80367C04->unk18);
+                sprintf(D_hd_code_80367C18, "FIND %d RDUS IN", D_hd_code_80367C04->unk18);
                 break;
             }
             sp32 = D_hd_code_80367C04->unk36 / 600;
             sp30 = ((s32) D_hd_code_80367C04->unk36 / 10) % 60;
-            proutSprintf(D_hd_code_80367C40, "%d MINUTE%c %d SECONDS", sp32, D_hd_code_802E9FA0[sp32 != 1], sp30);
+            sprintf(D_hd_code_80367C40, "%d MINUTE%c %d SECONDS", sp32, D_hd_code_802E9FA0[sp32 != 1], sp30);
             D_hd_code_802F5804[0x24].unkC = D_hd_code_80367C18;
             D_hd_code_802F5804[0x25].unkC = D_hd_code_80367C40;
             D_hd_code_802F5804[0x24].unk10 = &D_hd_code_80367C68;
@@ -893,7 +893,7 @@ void func_hd_code_80262FD0(void) {
   if ((u16) D_hd_code_8036EA7C >= (u32) D_hd_code_80367C04->unk18) {
     D_hd_code_803643DA = 1;
   }
-  proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA7C, D_hd_code_80367C04->unk18);
+  sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA7C, D_hd_code_80367C04->unk18);
 }
 
 // Destroy-buildings mode (0x4) objective check: success once destroyed count
@@ -915,7 +915,7 @@ void func_hd_code_8026303C(void) {
   } else if (D_hd_code_80367C04->unk24 > (D_hd_code_803643E4 >> 5)) {
     D_hd_code_803643D9 = 1;
   }
-  proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+  sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
 }
 
 // Target/path modes (0x20/0x80) objective check: mode 0x20 succeeds when all
@@ -949,14 +949,14 @@ void func_hd_code_80263140(void) {
   }
   switch (D_hd_code_80364AA8) {                           /* switch 2; irregular */
     case 0x20:                                      /* switch 2 */
-      proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+      sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
       return;
     case 0x80:                                      /* switch 2 */
       if (levelno == 0x32) {
-        proutSprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+        sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
         return;
       }
-      proutSprintf(D_hd_code_80367B60[0], "%d/%d", func_hd_code_802C1B1C() , D_hd_code_8036EB92);
+      sprintf(D_hd_code_80367B60[0], "%d/%d", func_hd_code_802C1B1C() , D_hd_code_8036EB92);
       return;
   }
 }
@@ -976,7 +976,7 @@ void func_hd_code_80263358(void) {
   if (sp1C < 0) {
     sp1C = 0;
   }
-  proutSprintf(D_hd_code_80367B60[0], "$%d LEFT", sp1C);
+  sprintf(D_hd_code_80367B60[0], "$%d LEFT", sp1C);
 }
 
 // Race mode (0x2) lap tracker. Waits for the player to first enter the
@@ -1028,9 +1028,9 @@ void func_hd_code_802633E0(void) {
                         func_hd_code_8026AF6C(0x8008U);
                     }
                     if (sp33 == 1) {
-                        proutSprintf(D_hd_code_80367D10, "1 LAP LEFT!");
+                        sprintf(D_hd_code_80367D10, "1 LAP LEFT!");
                     } else {
-                        proutSprintf(D_hd_code_80367D10, "%d LAPS LEFT!", sp33);
+                        sprintf(D_hd_code_80367D10, "%d LAPS LEFT!", sp33);
                     }
                     D_hd_code_802F5804[0x23].unkC  = D_hd_code_80367D10;
                     D_hd_code_802F5804[0x23].unk10 = D_hd_code_80367D28;

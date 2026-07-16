@@ -238,7 +238,7 @@ struct AudioManager_s {
 
 };
 
-extern s32 D_hd_code_80306E3C;
+extern s32 osViClock;
 extern s32 D_hd_code_803156A4;
 extern s32 D_hd_code_8036772C;
 
@@ -277,7 +277,7 @@ void amCreateAudioManager(ALSynConfig* alconf, s32 arg1) {
 
     alconf->dmaproc = amDmaNew;
     if (osTvType != 1) {
-        D_hd_code_80306E3C = 0x02E6025C; // VI_MPAL_CLOCK ?
+        osViClock = 0x02E6025C; // VI_MPAL_CLOCK ?
     }
     alconf->outputRate = osAiSetFrequency(OUTPUT_RATE);
     sp130_fsize = (f32) ((alconf->outputRate * 2.0f) / (f32)MAYBE_FRAME_RATE);

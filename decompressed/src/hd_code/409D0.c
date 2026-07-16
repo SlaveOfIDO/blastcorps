@@ -85,12 +85,12 @@ u32 func_hd_code_802852EC(void) {
     } else {
         sp54 = 0x64;
     }
-    proutSprintf(D_hd_code_8036B9A8, "***%2d (%d%c)*", D_hd_code_8036EA78, sp5C, 0x25);
-    proutSprintf(D_hd_code_8036B9A8 + 0x20, "***$%d*", D_hd_code_8036EA70);
-    proutSprintf(D_hd_code_8036B9A8 + 0x40, "***%2d (%d%c)*", D_hd_code_8036EA79, sp58, 0x25);
-    proutSprintf(D_hd_code_8036B9A8 + 0x60, "***%2d (%d%c)*", D_hd_code_8036EA7C, sp54, 0x25);
+    sprintf(D_hd_code_8036B9A8, "***%2d (%d%c)*", D_hd_code_8036EA78, sp5C, 0x25);
+    sprintf(D_hd_code_8036B9A8 + 0x20, "***$%d*", D_hd_code_8036EA70);
+    sprintf(D_hd_code_8036B9A8 + 0x40, "***%2d (%d%c)*", D_hd_code_8036EA79, sp58, 0x25);
+    sprintf(D_hd_code_8036B9A8 + 0x60, "***%2d (%d%c)*", D_hd_code_8036EA7C, sp54, 0x25);
     func_hd_code_80264A34(sp24, D_hd_code_8036EA74, 0);
-    proutSprintf(D_hd_code_8036B9A8 + 0x80, "***%s*", &sp24);
+    sprintf(D_hd_code_8036B9A8 + 0x80, "***%s*", &sp24);
     for(sp50 = 0x12; sp50 < 0x17;sp50++) {
         D_hd_code_802F5804[sp50].unk0 = 0x400;
     }

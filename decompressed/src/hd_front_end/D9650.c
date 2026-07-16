@@ -619,17 +619,17 @@ s32 func_hd_front_end_801F6F18(void) {
 
             func_hd_front_end_801F7410(D_hd_front_end_802189C0[D_hd_front_end_80218D28]);
             func_hd_front_end_801F7410(D_hd_front_end_80218AD0[D_hd_front_end_80218D28]);
-            proutSprintf(D_hd_front_end_80218740[sp44], "%16s%c%-4s (%d)",
+            sprintf(D_hd_front_end_80218740[sp44], "%16s%c%-4s (%d)",
                 D_hd_front_end_802189C0[D_hd_front_end_80218D28],
                 (sp30 != 0 ? '.' : ' '),
                 D_hd_front_end_80218AD0[D_hd_front_end_80218D28],
                 sp34);
             rmonPrintf("%s\n", D_hd_front_end_80218740[sp44]);
             if (sp34 < 0x63) {
-                proutSprintf(D_hd_front_end_80218740[sp44], "%s ", D_hd_front_end_80218740[sp44]);
+                sprintf(D_hd_front_end_80218740[sp44], "%s ", D_hd_front_end_80218740[sp44]);
             }
             if (sp34 < 9) {
-                proutSprintf(D_hd_front_end_80218740[sp44], "%s ", D_hd_front_end_80218740[sp44]);
+                sprintf(D_hd_front_end_80218740[sp44], "%s ", D_hd_front_end_80218740[sp44]);
             }
             D_hd_front_end_8020C070[37 + D_hd_front_end_80218D28].unkC = D_hd_front_end_80218740[sp44];
             D_hd_front_end_80218D28 += 1;
@@ -637,7 +637,7 @@ s32 func_hd_front_end_801F6F18(void) {
     }
 
     if (D_hd_front_end_80218D28 == 0) {
-        proutSprintf(D_hd_front_end_80218740[0], "%s", "PAK EMPTY!");
+        sprintf(D_hd_front_end_80218740[0], "%s", "PAK EMPTY!");
         D_hd_front_end_8020C070[37].unkC = D_hd_front_end_80218740[0];
         sp2C = 1;
     } else {
@@ -648,9 +648,9 @@ s32 func_hd_front_end_801F6F18(void) {
     D_hd_code_802F8BDC[0x12].unk10 = D_hd_front_end_80218D28 + sp2C + 4;
     osSendMesg(&D_hd_front_end_80219EF8, (void*) 0x0100000E, 1);
     osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
-    proutSprintf(D_hd_front_end_80219F90, "%d PAGES FREE", (D_hd_front_end_80218EF0 / 32) / 8);
+    sprintf(D_hd_front_end_80219F90, "%d PAGES FREE", (D_hd_front_end_80218EF0 / 32) / 8);
     D_hd_front_end_8020C070[35].unkC = D_hd_front_end_80219F90;
-    proutSprintf(D_hd_front_end_80219FB0, "%d NEEDED PER PLAYER", 0xE);
+    sprintf(D_hd_front_end_80219FB0, "%d NEEDED PER PLAYER", 0xE);
     D_hd_front_end_8020C070[36].unkC = D_hd_front_end_80219FB0;
     D_hd_front_end_8020C070[10].unkC = "DELETE THIS FILE?";
     D_hd_front_end_8020C070[10].unk10 = &D_80301080;

@@ -729,7 +729,7 @@ void func_hd_code_80261588(void) {
     sp7C = 0;
     sp80 = 0;
     D_hd_code_80367734 = alHeapAlloc(&D_hd_code_80367718, 1, 0x7C);
-    func_hd_code_802D9670(D_hd_code_80367734, &sp68);
+    alCSPNew(D_hd_code_80367734, &sp68);
     alCSPSetBank(D_hd_code_80367734, D_hd_code_8036773C);
     sp84.maxEvents = 0x40;
     sp84.maybeSndStateCount = 0x20;

@@ -60,7 +60,7 @@ void func_hd_code_802860F0(void) {
             }
           }
         }
-        proutSprintf(D_hd_code_8036EBA0, "IN %s.", D_hd_front_end_8020D810[sp30 - 1].name);
+        sprintf(D_hd_code_8036EBA0, "IN %s.", D_hd_front_end_8020D810[sp30 - 1].name);
         D_hd_front_end_8020C070[0x52].unkC = &D_hd_code_8036EBA0;
         break;
       case 6:

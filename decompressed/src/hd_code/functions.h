@@ -438,11 +438,8 @@ s32 func_hd_code_8026205C(s32 arg0);                       /* extern */
 u8 func_hd_code_802C1B1C();                        /* extern */
 s32 func_hd_code_8026394C(s16 x, s16 y, s16 x1, s16 y1, s16 x2, s16 y2);
 void func_hd_code_80264A34(char*, u16, u16);           /* extern */
-s32 alCSPGetTempo(ALCSPlayer*);            /* extern */
-void alCSPSetTempo(ALCSPlayer*, s32);         /* extern */
 void amCreateAudioManager(ALSynConfig*, s32);                   /* extern */
 void amStartAudioThread();                          /* extern */
-void func_hd_code_802D9670(ALCSPlayer*, s32*);  /* extern */
 void sndNewPlayerInit(ALSeqpSfxConfig *sfxSeqpConfig);
 void func_hd_code_80260A30(s32);                         /* extern */
 u8 func_hd_code_80264BA4(u8);

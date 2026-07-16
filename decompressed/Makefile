@@ -25,7 +25,7 @@ OBJCOPYFLAGS = -O binary
 ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
 LDFLAGS = -T $(LD_SCRIPT) -Map decompressed.map -T undefined_syms_auto.txt -T undefined_funcs_auto.txt -T undefined_syms.txt --no-check-sections
 INCLUDE_CFLAGS := -I . -I ../include -I ../include/2.0D
-CFLAGS := -c -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DTARGET_N64 -DF3D_OLD -woff 649,838 $(INCLUDE_CFLAGS)
+CFLAGS := -c -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DTARGET_N64 -DNDEBUG -DF3D_OLD -woff 649,838 $(INCLUDE_CFLAGS)
 GCC_ASFLAGS    := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -O2 -fno-align-labels -fno-align-functions -fno-align-loops -fno-align-jumps -fno-common -fno-zero-initialized-in-bss -mfp32 -c -x assembler-with-cpp -mabi=32 -ffreestanding -mtune=vr4300 -march=vr4300 -mfix4300 -G 0 -O -mno-shared -fno-PIC -mno-abicalls
 
 

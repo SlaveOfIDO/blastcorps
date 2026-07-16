@@ -101,7 +101,7 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
     } else {
         sp33 = func_hd_front_end_801EEDB4(levelno, arg1, arg2);
     }
-    proutSprintf(D_hd_code_8036B980, "%s", D_hd_front_end_8020D810[levelno].name);
+    sprintf(D_hd_code_8036B980, "%s", D_hd_front_end_8020D810[levelno].name);
     *arg0 = 0;
     if ((arg1 != 0) && (arg2 != 0)) {
         if ((levelno == 0x31) || (levelno == 0x2F) || (levelno == 0x26)) {
@@ -194,7 +194,7 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
         sp6C = 0x480;
     }
     func_hd_code_80264A34(sp34, D_hd_code_8036EA74, 0);
-    proutSprintf(D_hd_code_8036B9A8 + 0x80, "****%s*", &sp34);
+    sprintf(D_hd_code_8036B9A8 + 0x80, "****%s*", &sp34);
     if (arg1 != 0) {
         sp54 = &D_hd_front_end_8020C070[0x19];
         D_hd_front_end_8020C070[0x19].unk0 = sp6C;

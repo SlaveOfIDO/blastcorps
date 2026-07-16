@@ -80,7 +80,7 @@ void func_hd_front_end_801F7850(void) {
                     (D_hd_code_80364EF0[sp6C][D_hd_code_802E8C44[sp70]] > 0) &&
                     ((D_hd_code_802E8F94[levelno].unk0 != 0x80) || (sp7C->unk91 >= 0xB))) {
                     func_hd_code_80264A34(sp48, D_hd_code_80364EF0[sp6C][D_hd_code_802E8C44[sp70]], 0);
-                    proutSprintf(D_hd_front_end_80219FD0[(sp68 * 4) + sp6C], "%-7.7s %s", sp7C, sp48);
+                    sprintf(D_hd_front_end_80219FD0[(sp68 * 4) + sp6C], "%-7.7s %s", sp7C, sp48);
                     sp74->unkC = D_hd_front_end_80219FD0[(sp68 * 4) + sp6C];
                     sp74->unk10 = NULL;
                     sp74->unk14 = (func_hd_front_end_801EF2BC(
@@ -110,7 +110,7 @@ void func_hd_front_end_801F7850(void) {
                 }
                 if (sp74->unkC != NULL) {
                     bcopy(sp74->unkC, sp28, func_hd_code_8025B300(sp74->unkC) + 1);
-                    proutSprintf(sp74->unkC, "%s %s", D_hd_front_end_8020D800[sp6C], sp28);
+                    sprintf(sp74->unkC, "%s %s", D_hd_front_end_8020D800[sp6C], sp28);
                 }
             }
             sp68 += 1;

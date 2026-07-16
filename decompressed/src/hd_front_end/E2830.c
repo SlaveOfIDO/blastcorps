@@ -290,7 +290,7 @@ void func_hd_front_end_801FE990(void) {
 
         sp74 = 0x118,
         sp70 = 0x8C;
-        proutSprintf(D_hd_front_end_8021AB72, "%d", D_hd_code_80364A71);
+        sprintf(D_hd_front_end_8021AB72, "%d", D_hd_code_80364A71);
         func_hd_code_80259CCC(&D_hd_code_803156F8[D_hd_code_8035805C], D_hd_front_end_8021AB72, NULL, 1, 0, sp74, sp70, 0x1A, 0x16, 1, 0, 0, 0, (s32) D_hd_code_8036BB20);
         func_hd_code_80259DC8(&D_hd_code_803156F8[D_hd_code_8035805C], D_hd_front_end_8021AB72, 0, 1, 0, sp74 + 2, sp70 + 2, 0x12, 0x12, 1, 0xFF, 0xFF, 0, (s32) D_hd_code_8036BB20, 0xFF, 0, 0, (s32) D_hd_code_8036BB20);
     }
