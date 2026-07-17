@@ -176,51 +176,52 @@ segments:
     - [0x953A0, c, hd_code/io/aisetnextbuf]
     - [0x95450, c, hd_code/io/aigetlen]
     - [0x95460, c, hd_code/audio/synthesizer]
-    - [0x95B30, asm, hd_code/os/pidma]
-    - [0x95C40, asm, hd_code/libc/llcvt] # TODO needs rodata
-    - [0x95E50, asm, hd_code/io/vimgr] # TODO needs data and bss
+    - [0x95B30, c, hd_code/io/pidma]
+    - [0x95C40, c, hd_code/libc/llcvt]
+    - [0x95E50, c, hd_code/io/vimgr]
     - [0x961B0, c, hd_code/io/visetmode]
-    - [0x96220, asm, hd_code/os/seteventmesg] # TODO: needs bss
+    - [0x96220, c, hd_code/os/seteventmesg]
     - [0x96290, c, hd_code/os/visetevent]
     - [0x96300, c, hd_code/io/dpgetstat]
     - [0x96310, c, hd_code/io/vigetcurrframebuf]
     - [0x96350, c, hd_code/io/vigetnextframebuf]
     - [0x96390, c, hd_code/io/viswapbuf]
     - [0x963E0, c, hd_code/os/settimer]
-    - [0x964C0, asm, hd_code/io/sptask] # TODO
+    - [0x964C0, c, hd_code/io/sptaskyielded]
+    - [0x96540, c, hd_code/io/sptask]
     - [0x96800, c, hd_code/io/sptaskyield]
     - [0x96820, c, hd_code/gu/mtxcatl]
-    - [0x968E0, asm, hd_code/io/controller] # TODO needs rodata
+    - [0x968E0, c, hd_code/io/controller]
     - [0x96CA0, c, hd_code/io/contsetch]
     - [0x96D10, c, hd_code/io/contreaddata]
-    - [0x96F70, asm, hd_code/os/invalicache] # TODO handwritten asm
-    - [0x96FF0, asm, hd_code/libc/bzero] # TODO handwritten asm
+    - [0x96F70, hasm, hd_code/os/invalicache]
+    - [0x96FF0, hasm, hd_code/libc/bzero]
     - [0x97090, c, hd_code/io/contquery]
     - [0x97140, c, hd_code/gu/normalize]
-    - [0x971D0, asm, hd_code/os/setsr] # TODO handwritten asm
-    - [0x971E0, asm, hd_code/os/getsr] # TODO handwritten asm
-    - [0x971F0, asm, hd_code/os/setfpccsr] # TODO handwritten asm
+    - [0x971D0, hasm, hd_code/os/setsr]
+    - [0x971E0, hasm, hd_code/os/getsr]
+    - [0x971F0, hasm, hd_code/os/setfpccsr]
     - [0x97200, c, hd_code/io/sirawread]
     - [0x97250, c, hd_code/io/sirawwrite]
-    - [0x972A0, asm, hd_code/os/exceptasm] # TODO handwritten asm
-    - [0x97B10, asm, hd_code/os/maptlbrdb] # TODO handwritten asm
-    - [0x97B70, asm, hd_code/os/interrupt] # TODO handwritten asm
-    - [0x97BB0, asm, hd_code/os/thread] # TODO requires bss
-    - [0x97BF0, asm, hd_code/io/piacs] # TODO requires data
+    - [0x972A0, asm, hd_code/os/exceptasm] # TODO
+    - [0x97B10, hasm, hd_code/os/maptlbrdb]
+    - [0x97B70, hasm, hd_code/os/interrupt]
+    - [0x97BB0, c, hd_code/os/thread]
+    - [0x97BF0, c, hd_code/io/piacs]
     - [0x97CB0, c, hd_code/os/getthreadpri]
     - [0x97CD0, c, hd_code/io/pirawdma]
     - [0x97DB0, c, hd_code/io/devmgr]
-    - [0x97F30, asm, hd_code/os/timerintr] # TODO requires bss
-    - [0x98330, asm, hd_code/os/probetlb] # TODO handwritten asm
-    - [0x983F0, asm, hd_code/libc/xprintf] # TODO needs data
-    - [0x99580, asm, hd_code/libc/string] # TODO
+    - [0x97F30, c, hd_code/os/timerintr]
+    - [0x98330, hasm, hd_code/os/probetlb]
+    - [0x983F0, c, hd_code/libc/xprintf]
+    - [0x99580, c, hd_code/libc/string]
     - [0x99620, c, hd_code/audio/copy]
     - [0x996A0, c, hd_code/audio/syndelete]
-    - [0x996B0, asm, hd_code/audio/seqplayer] # TODO needs rodata and matching
+    - [0x996B0, c, hd_code/audio/seqplayer]
     - [0x9AFF0, c, hd_code/audio/synstartvoiceparam]
     - [0x9B0E0, c, hd_code/io/viswapcontext]
     - [0x9B440, c, hd_code/io/ai]
-    - [0x9B470, asm, hd_code/audio/drvrNew] # TODO needs rodata and matching
+    - [0x9B470, c, hd_code/audio/drvrNew]
     - [0x9BBF0, c, hd_code/audio/synallocfx]
     - [0x9BC90, c, hd_code/audio/mainbus]
     - [0x9BDE0, asm, hd_code/audio/load] # TODO needs matching
@@ -291,7 +292,17 @@ segments:
     - [0xC1E10, .data, hd_code/gu/sins ]
     - [0xC2610, .data, hd_code/io/vi ]
     - [0xC2680, .data, hd_code/io/aisetnextbuf ]
-    - [0xC2690, data, hd_code/hd_code_data_rest3 ]
+    - [0xC2690, .data, hd_code/io/vimgr ]
+    - [0xC26B0, data, hd_code/io/vitbl_data ]
+    - [0xC2F70, .data, hd_code/io/controller ]
+    - [0xC2F80, data, hd_code/os/exceptasm ]
+    - [0xC2FA0, .data, hd_code/os/thread ]
+    - [0xC2FC0, .data, hd_code/io/piacs ]
+    - [0xC2FD0, .data, hd_code/os/timerintr ]
+    - [0xC2FE0, .data, hd_code/libc/xprintf ]
+    - [0xC3030, data, hd_code/hd_code_data_rest3 ]
+    - [0xC30D0, .data, hd_code/audio/drvrNew ]
+    - [0xC3260, data, hd_code/hd_code_data_rest4 ]
     - [0xC33D0, .rodata, hd_code/hd] # done
     - [0xC4520, .rodata, hd_code/12D80] # done
     - [0xC4520, .rodata, hd_code/13A70] # done
@@ -345,10 +356,13 @@ segments:
     - [0xC9390, .rodata, hd_code/audio/cseq ]
     - [0xC93A0, .rodata, hd_code/audio/csplayer ]
     - [0xC95E0, .rodata, hd_code/audio/synthesizer ]
-    - [0xC95F0, rodata, hd_code/libc/llcvt ]
+    - [0xC95F0, .rodata, hd_code/libc/llcvt ]
     - [0xC9600, rodata, hd_code_rodata_rest3 ]
     - [0xC9650, rodata, hd_code/libm_qnan ]
-    - [0xC9660, rodata, hd_code_rodata_rest4 ]
+    - [0xC9660, .rodata, hd_code/libc/xprintf ]
+    - [0xC9760, .rodata, hd_code/audio/seqplayer ]
+    - [0xC99A0, .rodata, hd_code/audio/drvrNew ]
+    - [0xC99D0, rodata, hd_code_rodata_rest4 ]
     - { start: 0xCAEA0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/13A70, vram: 0x803650B0 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/14B30, vram: 0x80365340 } # done
@@ -372,7 +386,13 @@ segments:
     - { start: 0xCAEA0, type: .bss, name: hd_code/54E30, vram: 0x803A6AF0 }
     - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest2, vram: 0x803A6B10 }
     - { start: 0xCAEA0, type: .bss, name: hd_code/gu/align, vram: 0x803FDF60 }
-    - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest3, vram: 0x803FDF70 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/io/vimgr, vram: 0x803FDF70 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/os/seteventmesg, vram: 0x803FF180 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/io/sptask, vram: 0x803FF200 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/io/controller, vram: 0x803FF240 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/io/piacs, vram: 0x803FF2D0 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/os/timerintr, vram: 0x803FF2F0 }
+    - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest3, vram: 0x803FF330 }
   #- { start: 0xCAEA0, type: bss, vram: 0x8030F660 }
 - name:  hd_front_end
   type: code

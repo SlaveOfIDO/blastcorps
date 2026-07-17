@@ -24,7 +24,6 @@ void func_hd_code_80271C24(OSSched*, OSScTask*);           /* extern */
 void func_hd_code_80271CE4(OSSched*, s32);               /* extern */
 s32 func_hd_code_80271F48(OSMesgQueue* arg0, OSMesg arg1, s32 arg2);               /* extern */
 s32 func_hd_code_80271A84(OSSched*, OSScTask*);     /* extern */
-s32 func_hd_code_802DAC80(OSTask*);                 /* extern */
 
 extern OSViMode D_hd_code_80306E70[];
 extern s8 D_hd_code_8030C0C0;
@@ -265,7 +264,7 @@ void func_hd_code_802715DC(OSSched* arg0) {
         if (D_hd_code_8036BF00 > D_hd_code_8036BEF8) {
             D_hd_code_8036BEF8 = D_hd_code_8036BF00;
         }
-        if (func_hd_code_802DAC80(&sp2C->list) == 0) {
+        if (osSpTaskYielded(&sp2C->list) == 0) {
             sp2C->state = 2;
             sp2C->flags |= 4;
             func_hd_code_80271A84(arg0, sp2C);

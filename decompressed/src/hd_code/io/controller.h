@@ -205,3 +205,13 @@ extern u8 __osMaxControllers;
     __osSiRelAccess();                      \
     if (ret != 0)                           \
         return ret;
+
+#define ARRAY_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
+
+#define CONT_PIFRAM_SET(addr, cmdram, cmdstatus)       \
+    for (i = 0; i < ARRAY_COUNT(addr.ramarray)+1; i++) { \
+        addr.ramarray[i] = cmdram;                     \
+    }                                                  \
+    addr.pifstatus = cmdstatus;
+
+#define REQFORMAT(ptr) ((__OSContRequesFormat*)(ptr))

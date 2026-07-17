@@ -90,7 +90,7 @@ osCreateMesgQueue = 0x802D64E0;
 osSetEventMesg = 0x802DA9E0;
 osViSetEvent = 0x802DAA50;
 osRecvMesg = 0x802D4910;
-osSpTaskDunno = 0x802DAD00;
+_VirtualToPhysicalTask = 0x802DAD00;
 osSpTaskLoad = 0x802DAE1C;
 osSpTaskStartGo = 0x802DAF7C;
 osSpTaskYield = 0x802DAFC0;
@@ -546,3 +546,33 @@ alLoadParam = 0x802E05A0;
 alEnvmixerParam = 0x802E1504;
 alSaveParam = 0x802E20E0;
 alResampleParam = 0x802E10F0;
+
+
+// NEW
+osPiGetCmdQueue = 0x802E22F0;
+__osViIntrCount = 0x803FF31C;
+__osEventStateTab = 0x803FF180;
+
+viThread = 0x803FDF70;
+viMgrStack = 0x803FE120;
+viEventQueue = 0x803FF120;
+viMgrMesgBuff = 0x803FF138;
+viRetraceMsg = 0x803FF150; // size:0x14
+viCounterMsg = 0x803FF168; // size:0x14
+_osContInitialized = 0x80307730;
+__osThreadTail = 0x80307760;
+__osFaultedThread = 0x80307774;
+piAccessBuf = 0x803FF2D0;
+_Litob = 0x802E2EC0;
+_Ldtob = 0x802E31C0;
+alSynSetPriority = 0x802E45B0;
+__alSeqNextDelta = 0x802E4400;
+alSeqGetTicks = 0x802E3FC8;
+alSeqSetLoc = 0x802E3FAC;
+alSeqNextEvent = 0x802E4024;
+alSavePull = 0x802E2114;
+alResamplePull = 0x802E11DC;
+alAdpcmPull = 0x802E0C4C;
+alEnvmixerPull = 0x802E194C;
+alFxPull = 0x802E4EA8;
+alFxParamHdl = 0x802E4C78;

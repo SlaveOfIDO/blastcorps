@@ -1,4 +1,4 @@
-VERSION  := us.v11
+VERSION  ?= us.v11
 
 ### VARS
 
@@ -25,7 +25,7 @@ OBJCOPYFLAGS = -O binary
 ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
 LDFLAGS = -T $(LD_SCRIPT) -Map decompressed.map -T undefined_syms_auto.txt -T undefined_funcs_auto.txt -T undefined_syms.txt --no-check-sections
 INCLUDE_CFLAGS := -I . -I ../include -I ../include/2.0D
-CFLAGS := -c -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DTARGET_N64 -DNDEBUG -DF3D_OLD -woff 649,838 $(INCLUDE_CFLAGS)
+CFLAGS := -c -G 0 -Xfullwarn -Xcpluscomm -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DTARGET_N64 -DNDEBUG -DF3D_OLD -woff 649,838 $(INCLUDE_CFLAGS)
 GCC_ASFLAGS    := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -O2 -fno-align-labels -fno-align-functions -fno-align-loops -fno-align-jumps -fno-common -fno-zero-initialized-in-bss -mfp32 -c -x assembler-with-cpp -mabi=32 -ffreestanding -mtune=vr4300 -march=vr4300 -mfix4300 -G 0 -O -mno-shared -fno-PIC -mno-abicalls
 
 
@@ -54,7 +54,8 @@ BIN_DIRS  = assets assets/hd_code assets/hd_code/os assets/hd_code/io
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 BIN_O_FILES := $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(file).o)
 
-MIPS3_C_O_FILES = $(BUILD_DIR)/src/hd_code/libc/ll.c.o
+MIPS3_C_O_FILES = $(BUILD_DIR)/src/hd_code/libc/ll.c.o \
+                  $(BUILD_DIR)/src/hd_code/libc/llcvt.c.o
 
 DECOMPRESSED_O_FILES := $(UNMATCHED_DECOMPRESSED_S_O_FILES) \
 		   $(DECOMPRESSED_C_O_FILES) \
@@ -85,6 +86,9 @@ extract:
 ## OVERRIDES
 
 build/src/hd_code/libc/ll.c.o: MIPSISET := -mips3 -o32
+build/src/hd_code/libc/llcvt.c.o: MIPSISET := -mips3 -o32
+build/src/hd_code/libc/string.c.o: OPT_FLAGS = -O2
+
 build/src/hd_code/gu/%.c.o: OPT_FLAGS = -O3
 build/src/hd_code/audio/%.c.o: OPT_FLAGS = -O3
 

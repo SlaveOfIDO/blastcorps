@@ -19,6 +19,10 @@
 #define VI_CTRL_ANTIALIAS_MODE_3 0x00300 /* Bit [9:8] anti-alias mode */
 #define VI_CTRL_ANTIALIAS_MODE_2 0x00200 /* Bit [9:8] anti-alias mode */
 #define VI_CTRL_ANTIALIAS_MODE_1 0x00100 /* Bit [9:8] anti-alias mode */
+#define VI_CTRL_PIXEL_ADV_1         0x01000 /* Bit [15:12] pixel advance mode? */
+#define VI_CTRL_PIXEL_ADV_2         0x02000 /* Bit [15:12] pixel advance mode? */
+#define VI_CTRL_PIXEL_ADV_3         0x03000 /* Bit [15:12] pixel advance mode? */
+#define VI_CTRL_DITHER_FILTER_ON    0x10000 /* 16: dither-filter mode */
 
 #define VI_SCALE_MASK 0xfff //see rcp scale_x/scale_y
 #define VI_2_10_FPART_MASK 0x3ff

@@ -1,4 +1,4 @@
-VERSION  := us.v11
+VERSION  ?= us.v11
 
 ASM_DIR   = asm
 ASM_DIRS  = $(shell find $(ASM_DIR)/init -type d) $(shell find $(ASM_DIR)/hd_code -type d) $(shell find $(ASM_DIR)/data -type d) # only include init and data here
