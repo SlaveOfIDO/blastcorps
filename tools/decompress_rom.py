@@ -5,38 +5,10 @@ import gzip
 import io
 import shutil
 
-next_available_free_space = 0x800000
-source_file = 'baserom.us.v11.z64'
-destination_file = 'baserom.us.v11.decompressed.z64'
+from rzip_config import loadOverlays, NEXT_AVAILABLE_FREE_SPACE
 
-overlays = [
-    {
-        "name": "hd_code",
-        "codeName": "hd_code_text.raw",
-        "codeROMAddress": 0x787FD0,
 
-        "dataName": "hd_code_data.raw",
-        "dataROMAddress": 0x7D73B4,
-        "dataCompressedSize": 0xC713, # - 8 for length without gzip footer
-        # Note: These byte arrays should not contain the gzip footer
-        # codeCompressedData: [], // Will be written to ROM
-        # dataCompressedData: [], // Will be written to ROM directly after .code, regardless of the original .data address
-    },
-    {
-        "name": "hd_front_end",
-        "codeName": "hd_front_end_text.raw",
-        "codeROMAddress": 0x7E3AD0,
-
-        "dataName": "hd_front_end_data.raw",
-        "dataROMAddress": 0x7F63A1,
-        "dataCompressedSize": 0x383C, # - 8 for length without gzip footer
-        # Note: These byte arrays should not contain the gzip footer
-        # codeCompressedData: [], // Will be written to ROM
-        # dataCompressedData: [], // Will be written to ROM directly after .code, regardless of the original .data address
-    }
-]
-
-def readAndDecompressOverlays(fr : BinaryIO):
+def readAndDecompressOverlays(fr : BinaryIO, overlays):
     for x in overlays:
         x["codeCompressedSize"] = x["dataROMAddress"] - x["codeROMAddress"]
         fr.seek(x["codeROMAddress"], io.SEEK_SET)
@@ -62,8 +34,8 @@ def alignHex10(fr: BinaryIO):
 
     return fr.tell()
 
-def writeDecompressedOverlaysToROM(fr : BinaryIO):
-    fr.seek(next_available_free_space, io.SEEK_SET)
+def writeDecompressedOverlaysToROM(fr : BinaryIO, overlays):
+    fr.seek(NEXT_AVAILABLE_FREE_SPACE, io.SEEK_SET)
     for x in overlays:
         decompressedCodeStart = alignHex10(fr)
         fr.write(x["codeDecompressedData"])
@@ -72,6 +44,12 @@ def writeDecompressedOverlaysToROM(fr : BinaryIO):
         fr.write(x["dataDecompressedData"])
         print(f"    - Wrote {x['name']}.data to {hex(decompressedDataStart)}")
 
+
+version, overlays = loadOverlays()
+source_file = f"baserom.{version}.z64"
+destination_file = f"baserom.{version}.decompressed.z64"
+print(f"Decompressing ROM for version '{version}'")
+
 # Make a copy of the baseROM to be used as the decompressed baseROM
 shutil.copyfile(source_file, destination_file)
 
@@ -79,9 +57,9 @@ shutil.copyfile(source_file, destination_file)
 with open(destination_file, "r+b") as fh:
     # Decompress all code and data segments
     print("[1 / 2] Decompressing overlays...")
-    readAndDecompressOverlays(fh)
+    readAndDecompressOverlays(fh, overlays)
 
     # Concatenate the decompressed segments onto the end of the ROM file, align by 0x10 bytes
     print("[2 / 2] Writing decompressed overlays...")
-    writeDecompressedOverlaysToROM(fh)
+    writeDecompressedOverlaysToROM(fh, overlays)
     print("Decompressed ROM created.")

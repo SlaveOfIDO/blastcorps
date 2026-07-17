@@ -1,10 +1,19 @@
 options:
+  platform: n64
   base_path: .
-  basename: blastcorps.us.v10
+  basename: blastcorps.us.v10.decompressed
   compiler: IDO
-  create_detected_syms: yes
+  #create_detected_syms: yes
   find_file_boundaries: yes
-  target_path: baserom.us.v10.z64
+  target_path: baserom.us.v10.decompressed.z64
+  symbol_addrs_path: symbol_addrs.init.us.v10.txt
+  undefined_funcs_auto_path: undefined_funcs_auto.init.us.v10.txt
+  undefined_syms_auto_path: undefined_syms_auto.init.us.v10.txt
+  ld_legacy_generation: True # change this when ready to False
+  extensions_path: tools/splat_ext
+  symbol_name_format: $SEG_$VRAM
+  make_full_disasm_for_code: yes
+  hasm_in_src_path: yes
 segments:
   - name:  header
     type:  header
@@ -12,7 +21,10 @@ segments:
   - name:  boot
     type:  bin
     start: 0x00000040
-  - [0x1000, bin, init.us.v10]
+  - name:  init
+    type: code
+    start: 0x001000
+    vram:  0x8021ED00
   - [0x4CE0, bin]                           # offsets table (0x8000 long)
   - [0xCCE0, bin]                           # tbd
   # TODO: extract these

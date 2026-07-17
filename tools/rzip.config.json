@@ -1,0 +1,106 @@
+{
+    "us.v11": [
+        {
+            "name": "hd_code",
+            "codeName": "hd_code_text.raw",
+            "codeROMAddress": "0x787FD0",
+            "codeTimestamp": 855919890,
+            "codeDecompressedSize": "0xA4410",
+            "dataName": "hd_code_data.raw",
+            "dataROMAddress": "0x7D73B4",
+            "dataCompressedSize": "0xC713",
+            "dataTimestamp": 855919891,
+            "dataDecompressedSize": "0x26A90"
+        },
+        {
+            "name": "hd_front_end",
+            "codeName": "hd_front_end_text.raw",
+            "codeROMAddress": "0x7E3AD0",
+            "codeTimestamp": 855919891,
+            "codeDecompressedSize": "0x21040",
+            "dataName": "hd_front_end_data.raw",
+            "dataROMAddress": "0x7F63A1",
+            "dataCompressedSize": "0x383C",
+            "dataTimestamp": 855919891,
+            "dataDecompressedSize": "0x8E50"
+        }
+    ],
+    "us.v10": [
+        {
+            "name": "hd_code",
+            "codeName": "hd_code_text.raw",
+            "codeROMAddress": "0x787FD0",
+            "codeTimestamp": 855502464,
+            "codeDecompressedSize": "0xA4360",
+            "dataName": "hd_code_data.raw",
+            "dataROMAddress": "0x7D74D7",
+            "dataCompressedSize": "0xC713",
+            "dataTimestamp": 855502465,
+            "dataDecompressedSize": "0x26A90"
+        },
+        {
+            "name": "hd_front_end",
+            "codeName": "hd_front_end_text.raw",
+            "codeROMAddress": "0x7E3BF0",
+            "codeTimestamp": 855502466,
+            "codeDecompressedSize": "0x21010",
+            "dataName": "hd_front_end_data.raw",
+            "dataROMAddress": "0x7F64A0",
+            "dataCompressedSize": "0x37D5",
+            "dataTimestamp": 855502466,
+            "dataDecompressedSize": "0x8E50"
+        }
+    ],
+    "eu": [
+        {
+            "name": "hd_code",
+            "codeName": "hd_code_text.raw",
+            "codeROMAddress": "0x788120",
+            "codeTimestamp": 862230153,
+            "codeDecompressedSize": "0xA6210",
+            "dataName": "hd_code_data.raw",
+            "dataROMAddress": "0x7D845C",
+            "dataCompressedSize": "0xC4E0",
+            "dataTimestamp": 862230153,
+            "dataDecompressedSize": "0x270C0"
+        },
+        {
+            "name": "hd_front_end",
+            "codeName": "hd_front_end_text.raw",
+            "codeROMAddress": "0x7E4940",
+            "codeTimestamp": 862230154,
+            "codeDecompressedSize": "0x21990",
+            "dataName": "hd_front_end_data.raw",
+            "dataROMAddress": "0x7F75A4",
+            "dataCompressedSize": "0x421C",
+            "dataTimestamp": 862230154,
+            "dataDecompressedSize": "0xB120"
+        }
+    ],
+    "jp": [
+        {
+            "name": "hd_code",
+            "codeName": "hd_code_text.raw",
+            "codeROMAddress": "0x786490",
+            "codeTimestamp": 855921039,
+            "codeDecompressedSize": "0xA47E0",
+            "dataName": "hd_code_data.raw",
+            "dataROMAddress": "0x7D5A54",
+            "dataCompressedSize": "0xC5F8",
+            "dataTimestamp": 855921040,
+            "dataDecompressedSize": "0x26780"
+        },
+        {
+            "name": "hd_front_end",
+            "codeName": "hd_front_end_text.raw",
+            "codeROMAddress": "0x7E2050",
+            "codeTimestamp": 855921040,
+            "codeDecompressedSize": "0x20F90",
+            "dataName": "hd_front_end_data.raw",
+            "dataROMAddress": "0x7F4894",
+            "dataCompressedSize": "0x3743",
+            "dataTimestamp": 855921040,
+            "dataDecompressedSize": "0x8B70"
+        }
+    ]
+}

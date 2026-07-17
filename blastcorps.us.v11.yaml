@@ -17,10 +17,10 @@ options:
 segments:
   - name:  header
     type:  header
-    start: 0x000000
+    start: 0x00000000
   - name:  boot
     type:  bin
-    start: 0x000040
+    start: 0x00000040
   - name:  init
     type: code
     start: 0x001000

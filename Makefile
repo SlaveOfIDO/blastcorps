@@ -109,7 +109,7 @@ extract: check decompressed.$(VERSION).z64
 	cp assets/decompressed.$(VERSION).bin decompressed/decompressed.$(VERSION).bin
 
 decompressed.$(VERSION).z64: baserom.$(VERSION).z64
-	$(PYTHON) $(TOOLS_DIR)/decompress_rom.py baserom.$(VERSION).z64
+	VERSION=$(VERSION) $(PYTHON) $(TOOLS_DIR)/decompress_rom.py
 
 #################
 ## COMPILATION ##
@@ -159,7 +159,7 @@ $(TARGET).bin: $(TARGET).elf
 
 # *.bin -> *.z64
 $(TARGET).z64: $(TARGET).bin
-	$(PYTHON) $(TOOLS_DIR)/compress_rom.py $(TARGET).bin
+	VERSION=$(VERSION) $(PYTHON) $(TOOLS_DIR)/compress_rom.py
 
 # SHA1 check
 .baserom.$(VERSION).ok: baserom.$(VERSION).z64
