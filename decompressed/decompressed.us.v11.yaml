@@ -224,9 +224,9 @@ segments:
     - [0x9B470, c, hd_code/audio/drvrNew]
     - [0x9BBF0, c, hd_code/audio/synallocfx]
     - [0x9BC90, c, hd_code/audio/mainbus]
-    - [0x9BDE0, asm, hd_code/audio/load] # TODO needs matching
-    - [0x9C930, asm, hd_code/audio/resample] # TODO needs rodata and matching
-    - [0x9CC30, asm, hd_code/9CC30]
+    - [0x9BDE0, c, hd_code/audio/load]
+    - [0x9C930, c, hd_code/audio/resample]
+    - [0x9CC30, c, hd_code/audio/env]
     - [0x9D810, asm, hd_code/9D810]
     - [0x9D920, asm, hd_code/9D920]
     - [0x9DB60, c, hd_code/io/vigetcurrcontext]
@@ -302,7 +302,8 @@ segments:
     - [0xC2FE0, .data, hd_code/libc/xprintf ]
     - [0xC3030, data, hd_code/hd_code_data_rest3 ]
     - [0xC30D0, .data, hd_code/audio/drvrNew ]
-    - [0xC3260, data, hd_code/hd_code_data_rest4 ]
+    - [0xC3260, .data, hd_code/audio/env ]
+    - [0xC3360, data, hd_code/hd_code_data_rest4 ]
     - [0xC33D0, .rodata, hd_code/hd] # done
     - [0xC4520, .rodata, hd_code/12D80] # done
     - [0xC4520, .rodata, hd_code/13A70] # done
@@ -362,7 +363,9 @@ segments:
     - [0xC9660, .rodata, hd_code/libc/xprintf ]
     - [0xC9760, .rodata, hd_code/audio/seqplayer ]
     - [0xC99A0, .rodata, hd_code/audio/drvrNew ]
-    - [0xC99D0, rodata, hd_code_rodata_rest4 ]
+    - [0xC99D0, .rodata, hd_code/audio/resample ]
+    - [0xC9A10, .rodata, hd_code/audio/env ]
+    - [0xC9B30, rodata, hd_code_rodata_rest4 ]
     - { start: 0xCAEA0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/13A70, vram: 0x803650B0 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/14B30, vram: 0x80365340 } # done

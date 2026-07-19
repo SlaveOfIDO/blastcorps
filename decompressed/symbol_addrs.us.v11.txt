@@ -576,3 +576,4 @@ alAdpcmPull = 0x802E0C4C;
 alEnvmixerPull = 0x802E194C;
 alFxPull = 0x802E4EA8;
 alFxParamHdl = 0x802E4C78;
+_pullSubFrame = 0x802E16A4;
