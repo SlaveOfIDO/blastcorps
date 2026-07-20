@@ -9,7 +9,7 @@
     </mask>
     <g mask="url(#anybadge_1)">
         <path fill="#555" d="M0 0h134v20H0z"/>
-        <path fill="#4C1" d="M134 0h53v20H134z"/>
+        <path fill="#90EE90" d="M134 0h53v20H134z"/>
         <path fill="url(#b)" d="M0 0h187v20H0z"/>
     </g>
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
@@ -17,7 +17,7 @@
         <text x="67.0" y="14">Blast Corps (us.v11)</text>
     </g>
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-        <text x="161.5" y="15" fill="#010101" fill-opacity=".3">79.71%</text>
-        <text x="160.5" y="14">79.71%</text>
+        <text x="161.5" y="15" fill="#010101" fill-opacity=".3">82.06%</text>
+        <text x="160.5" y="14">82.06%</text>
     </g>
 </svg>

@@ -88,6 +88,7 @@ extract:
 build/src/hd_code/libc/ll.c.o: MIPSISET := -mips3 -o32
 build/src/hd_code/libc/llcvt.c.o: MIPSISET := -mips3 -o32
 build/src/hd_code/libc/string.c.o: OPT_FLAGS = -O2
+build/src/hd_code/libc/ldiv.c.o: OPT_FLAGS = -O2
 
 build/src/hd_code/gu/%.c.o: OPT_FLAGS = -O3
 build/src/hd_code/audio/%.c.o: OPT_FLAGS = -O3

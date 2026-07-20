@@ -121,7 +121,7 @@ segments:
     - [0x90290, c, hd_code/io/viblack]
     - [0x90300, c, hd_code/os/gettime]
     - [0x90390, c, hd_code/libc/ll]
-    - [0x90650, c, hd_code/90650]
+    - [0x90650, c, hd_code/audio/cspgetstate]
     - [0x90660, c, hd_code/os/virtualtophysical]
     - [0x906E0, hasm, hd_code/os/writebackdcache]
     - [0x90760, c, hd_code/gu/translate]
@@ -135,7 +135,8 @@ segments:
     - [0x91820, hasm, hd_code/gu/sqrtf]
     - [0x91830, c, hd_code/gu/lookat]
     - [0x91B60, c, hd_code/gu/sinf]
-    - [0x91D20, asm, hd_code/os/createmesgqueue] # needs os/thread.data
+    - [0x91D20, c, hd_code/os/createmesgqueue] # needs os/thread.data
+    - [0x91D50, bin] # nops
     - [0x91D90, c, hd_code/io/visetspecial]
     - [0x91F50, hasm, hd_code/os/writebackdcacheall]
     - [0x91F80, hasm, hd_code/os/invaldcache]
@@ -227,8 +228,10 @@ segments:
     - [0x9BDE0, c, hd_code/audio/load]
     - [0x9C930, c, hd_code/audio/resample]
     - [0x9CC30, c, hd_code/audio/env]
-    - [0x9D810, asm, hd_code/9D810]
-    - [0x9D920, asm, hd_code/9D920]
+    - [0x9D810, c, hd_code/audio/auxbus]
+    - [0x9D920, c, hd_code/audio/save]
+    - [0x9D9E0, c, hd_code/os/jammesg]
+    - [0x9DB30, c, hd_code/io/pigetcmdq]
     - [0x9DB60, c, hd_code/io/vigetcurrcontext]
     - [0x9DB70, c, hd_code/io/spgetstat]
     - [0x9DB80, asm, hd_code/libc/bcopy] # TODO handwritten asm
@@ -237,17 +240,20 @@ segments:
     - [0x9DEE0, c, hd_code/io/sprawdma]
     - [0x9DF70, c, hd_code/io/sp]
     - [0x9DFA0, c, hd_code/io/sirawdma]
-    - [0x9E050, asm, hd_code/io/siacs] # TODO needs bss
+    - [0x9E050, c, hd_code/io/siacs]
     - [0x9E110, c, hd_code/io/si]
-    - [0x9E140, asm, hd_code/9E140]
-    - [0x9E5C0, asm, hd_code/os/syncputchars] # TODO needs matching
-    - [0x9E6F0, asm, hd_code/os/setcompare] # TODO handwritten asm
-    - [0x9E700, asm, hd_code/9E700]
+    - [0x9E140, c, hd_code/debug/kdebugserver]
+    - [0x9E5C0, c, hd_code/os/syncputchars]
+    - [0x9E6F0, hasm, hd_code/os/setcompare]
+    - [0x9E700, c, hd_code/libc/xlitob]
+    - [0x9EA00, c, hd_code/libc/xldtob]
+    - [0x9F7D0, c, hd_code/audio/seq]
+    - [0x9FDF0, c, hd_code/audio/synsetpriority]
     - [0x9FE00, c, hd_code/audio/filter]
-    - [0x9FE20, asm, hd_code/audio/reverb] # TODO needs matching
-    - [0xA0A30, asm, hd_code/A0A30]
-    - [0xA0A40, asm, hd_code/A0A40]
-    - [0xA0AA0, asm, hd_code/A0AA0]
+    - [0x9FE20, c, hd_code/audio/reverb]
+    - [0xA0A30, hasm, hd_code/os/getcause]
+    - [0xA0A40, c, hd_code/os/atomic]
+    - [0xA0AA0, c, hd_code/libc/ldiv]
     - [0xA0C30, data, hd_code/rsp/f3d]
     - [0xA2060, data, hd_code/rsp/rspboot]
     - [0xA2130, data, hd_code/rsp/aspmain]
@@ -300,10 +306,15 @@ segments:
     - [0xC2FC0, .data, hd_code/io/piacs ]
     - [0xC2FD0, .data, hd_code/os/timerintr ]
     - [0xC2FE0, .data, hd_code/libc/xprintf ]
-    - [0xC3030, data, hd_code/hd_code_data_rest3 ]
+    - [0xC3030, .data, hd_code/io/vimodentsclan1 ]
+    - [0xC3080, .data, hd_code/io/vimodepallan1 ]
     - [0xC30D0, .data, hd_code/audio/drvrNew ]
     - [0xC3260, .data, hd_code/audio/env ]
-    - [0xC3360, data, hd_code/hd_code_data_rest4 ]
+    - [0xC3360, .data, hd_code/io/siacs ]
+    - [0xC3370, .data, hd_code/debug/kdebugserver ]
+    - [0xC3380, .data, hd_code/os/syncputchars ]
+    - [0xC3390, .data, hd_code/libc/xlitob ]
+    - [0xC33C0, data, hd_code/hd_code_data_rest4 ]
     - [0xC33D0, .rodata, hd_code/hd] # done
     - [0xC4520, .rodata, hd_code/12D80] # done
     - [0xC4520, .rodata, hd_code/13A70] # done
@@ -365,7 +376,10 @@ segments:
     - [0xC99A0, .rodata, hd_code/audio/drvrNew ]
     - [0xC99D0, .rodata, hd_code/audio/resample ]
     - [0xC9A10, .rodata, hd_code/audio/env ]
-    - [0xC9B30, rodata, hd_code_rodata_rest4 ]
+    - [0xC9B30, .rodata, hd_code/libc/xldtob ]
+    - [0xC9B90, .rodata, hd_code/audio/seq ]
+    - [0xC9BA0, .rodata, hd_code/audio/reverb ]
+    - [0xC9BD0, rodata, hd_code_rodata_rest4 ]
     - { start: 0xCAEA0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/13A70, vram: 0x803650B0 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/14B30, vram: 0x80365340 } # done
@@ -395,7 +409,9 @@ segments:
     - { start: 0xCAEA0, type: .bss, name: hd_code/io/controller, vram: 0x803FF240 }
     - { start: 0xCAEA0, type: .bss, name: hd_code/io/piacs, vram: 0x803FF2D0 }
     - { start: 0xCAEA0, type: .bss, name: hd_code/os/timerintr, vram: 0x803FF2F0 }
-    - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest3, vram: 0x803FF330 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/io/siacs, vram: 0x803FF330 }
+    - { start: 0xCAEA0, type: .bss, name: hd_code/debug/kdebugserver, vram: 0x803FF350 }
+    - { start: 0xCAEA0, type: bss, name: hd_code/hd_code_bss_rest3, vram: 0x803FF600 }
   #- { start: 0xCAEA0, type: bss, vram: 0x8030F660 }
 - name:  hd_front_end
   type: code
