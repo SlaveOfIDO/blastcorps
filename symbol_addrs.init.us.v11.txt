@@ -25,7 +25,7 @@ __osExceptionPreamble = 0x80221030;
 osResetType = 0x8000030C;
 osAppNMIBuffer = 0x8000031C;
 osClockRate = 0x80222860; // type:u64 size:0x8
-__osShutdown = 0x80222868;
+__osShutdown = 0x80222868; // type:u32 size:0x4
 __osFinalrom = 0x80224A40;
 osRomBase = 0x80000308;
 __osProbeTLB = 0x802225D0;
@@ -80,3 +80,8 @@ __ull_divremi = 0x80221bf8;
 __ll_mod = 0x80221c58;
 __ll_rshift = 0x80221cf4;
 osSetEventMesg = 0x80222400;
+
+D_80000000 = 0x80000000; // ignore:true size:0x10
+D_A0000000 = 0xA0000000; // ignore:true
+D_A4800000 = 0xA4800000; // ignore:true size:0x20
+D_A4600000 = 0xA4600000; // ignore:true size:0x20

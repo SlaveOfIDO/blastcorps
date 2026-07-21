@@ -64,12 +64,12 @@ segments:
     - [0x4B40, .data, init/rarezip]
     - [0x4B50, .data, init/1A30]
     - [0x4B60, .data, init/os/initialize]
-    - [0x4B70, .data, init/os/exceptasm]
+    - [0x4B70, data, init/os/exceptasm]
     - [0x4B90, .data, init/debug/kdebugserver]
     - [0x4BA0, .data, init/os/thread]
     - [0x4BC0, .data, init/os/syncputchars]
     - [0x4BD0, .rodata, init/rarezip]
-    - [0x4C10, .rodata, init/os/exceptasm]
+    - [0x4C10, rodata, init/os/exceptasm]
     - [0x4C60, .rodata, init/os/setintmask]
     - [0x4CE0, .bss, init/inflate]
     - [0x4CE0, .bss, init/rarezip]
@@ -80,19 +80,38 @@ segments:
     - [0x4CE0, .bss, init/os/seteventmesg]
   - [0x4CE0, bin, blast_offsets]
   - [0xCCE0, bin, blast_textures]
-#  - [0x487050, rzip, titlelogo_usa, rgba16, 280, 64 ]
+  # Music data, DMA'd from these fixed ROM addresses in
+  # func_hd_code_80261588 (audio system init): two ALBankFile instrument
+  # banks, then the ALSeqFile holding every compressed MIDI-style sequence.
+  # Not yet reverse-engineered into a structured format, so these are left
+  # as opaque bin blobs for now.
+  - [0x350950, bin, snd_bank0]
+  - [0x3539A0, bin] # unknown/unclaimed
+  - [0x3A1920, bin, snd_bank1]
+  - [0x3A48C0, bin] # unknown/unclaimed
+  - [0x44F5C0, bin, snd_seqfile]
   - name: assets
-    type: bin
-    start: 0x489E70
+    type: group
+    start: 0x487050
+    # These subsegments are raw ROM data of arbitrary size with no padding
+    # between them; splat's default subalign of 16 would insert real 0x00
+    # padding bytes after any subsegment whose size isn't a multiple of 16
+    # (most of them), corrupting the reconstructed ROM.
+    subalign: 1
     subsegments:
-    # TODO: extract each of these
-    - [0x487050, bin, titlelogo_usa.raw.855417225]
-    - [0x489E70, bin, titlepicture_usa.raw.855417226]
-    - [0x48F5A0, bin, nink.raw.855417226]
-    - [0x48F970, bin, 64k.raw.855417226]
-    - [0x48FA70, bin, copyrightLogo.raw.855417226]
-    - [0x48FE90, bin, scientist.raw.855417173]
-    - [0x490191, bin, scientist_dl.raw.855417181]
+    - [0x487050, rzip, titlelogo_usa.raw.855417225]
+    - [0x489E70, rzip, titlepicture_usa.raw.855417226]
+    - [0x48F5A0, rzip, nink.raw.855417226]
+    - [0x48F970, rzip, 64k.raw.855417226]
+    - [0x48FA70, rzip, copyrightLogo.raw.855417226]
+    # scientist.raw + scientist_dl.raw are two gzip members back-to-back in the
+    # ROM; the game DMAs+inflates them together as one combined buffer (see
+    # func_hd_code_802A396C), and gzip decompresses concatenated members
+    # transparently in one pass, so this is a single rzip segment covering both
+    # - no separate scientist_dl.raw entry (confirmed: decompressing this whole
+    # range in one shot is byte-identical to decompressing each half and
+    # concatenating).
+    - [0x48FE90, rzip, scientist.raw.855417173]
     - [0x4903C0, bin, commpoint.raw.855417173]
     - [0x49084A, bin, commpoint_dl.raw.855417181]
     - [0x490AC0, bin, buggy.raw.855417171]
@@ -135,8 +154,8 @@ segments:
     - [0x4A4F6D, bin, shuttle_dl.raw.855417182]
     - [0x4A5660, bin, lagp.raw.855417165]
     - [0x4ABF91, bin, lagp_dl.raw.855417176]
-    - [0x4ACC10, bin, chimp.raw.855918150]
-    - [0x4B71AB, bin, chimp_dl.raw.855918161]
+    - [0x4ACC10, rzip, chimp.raw.855918150]
+    - [0x4B71AB, rzip, chimp_dl.raw.855918161]
     - [0x4B8960, bin, valley.raw.855417165]
     - [0x4BEDE5, bin, valley_dl.raw.855417177]
     - [0x4BFD60, bin, fact.raw.855417166]
@@ -253,10 +272,10 @@ segments:
     - [0x66550A, bin, level58_dl.raw.850841517]
     - [0x665F80, bin, level59.raw.850841501]
     - [0x66BB49, bin, level59_dl.raw.850841517]
-    - [0x66C900, bin, worldtextures.raw.855417250]
-    - [0x68B550, bin, ambertextures.raw.855417184]
-    - [0x6A32B0, bin, traffictextures.raw.855417184]
-    - [0x6A8DA0, bin, controllertextures.raw.855417205]
+    - [0x66C900, rzip, worldtextures.raw.855417250]
+    - [0x68B550, rzip, ambertextures.raw.855417184]
+    - [0x6A32B0, rzip, traffictextures.raw.855417184]
+    - [0x6A8DA0, rzip, controllertextures.raw.855417205]
     - [0x6A9F10, bin, attract.raw.855417155]
     - [0x6E8980, bin, usa_star.raw.855417170]
     - [0x6EA1FE, bin, usa_star_dl.raw.855417178]
@@ -822,10 +841,10 @@ segments:
     - [0x787D6F, bin, endsid5_dl.raw.853757069]
   #
   - [0x787FD0, bin] # hd_code_text.us.v11 will be extracted and decompressed by Makefile
-  - [0x7D73B4, bin] # hd_code_data.us.v11 will be extracted and decompressed by Makefile ts:855919891
+  - [0x7D73B4, rzip, hd_code_data.raw.855919891]
   - [0x7E3AC7, bin]                            # zero padding
   - [0x7E3AD0, bin] # hd_front_end_text.us.v11 will be extracted and decompressed by Makefile
-  - [0x7F63A1, bin] # hd_front_end_data.us.v11 will be extracted and decompressed by Makefile ts:855919891
+  - [0x7F63A1, rzip, hd_front_end_data.raw.855919891]
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end
   - [0x800000, bin, decompressed.us.v11]
