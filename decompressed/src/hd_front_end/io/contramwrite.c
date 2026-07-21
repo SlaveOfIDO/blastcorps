@@ -3,7 +3,8 @@
 #include "../../hd_code/io/controller.h"
 #include "../../hd_code/io/siint.h"
 
-static void __osPackRamWriteData(int channel, u16 address, u8 *buffer);
+void __osPackRamWriteData(int channel, u16 address, u8 *buffer);
+
 s32 __osContRamWrite(OSMesgQueue *mq, int channel, u16 address, u8 *buffer, int force)
 {
     s32 ret;
@@ -71,7 +72,7 @@ s32 __osContRamWrite(OSMesgQueue *mq, int channel, u16 address, u8 *buffer, int 
     return ret;
 }
 
-static void __osPackRamWriteData(int channel, u16 address, u8 *buffer)
+void __osPackRamWriteData(int channel, u16 address, u8 *buffer)
 {
     u8 *ptr;
     __OSContRamReadFormat ramreadformat;

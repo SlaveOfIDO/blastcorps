@@ -16,7 +16,7 @@ for category, directory in directories:
     for root, dirs, files in os.walk(src_path):
         for file in files:
             asm_path = os.path.join(root, file) # hd_code/asm/hd_code/00000.s
-            if file.endswith(".s") and "nonmatchings" not in asm_path:
+            if file.endswith(".s") and not file.endswith("rsp.s") and "nonmatchings" not in asm_path:
 
                 source_path = asm_path.replace('asm', 'src').replace('.s', '.c') # hd_code/src/hd_code/00000.c
                 if not os.path.exists(source_path):

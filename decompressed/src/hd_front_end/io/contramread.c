@@ -3,7 +3,7 @@
 #include "../../hd_code/io/controller.h"
 #include "../../hd_code/io/siint.h"
 
-static void __osPackRamReadData(int channel, u16 address);
+void __osPackRamReadData(int channel, u16 address);
 
 s32 __osContRamRead(OSMesgQueue *mq, int channel, u16 address, u8 *buffer)
 {
@@ -75,7 +75,7 @@ s32 __osContRamRead(OSMesgQueue *mq, int channel, u16 address, u8 *buffer)
   return ret;
 }
 
-static void __osPackRamReadData(int channel, u16 address)
+void __osPackRamReadData(int channel, u16 address)
 {
     u8 *ptr;
     __OSContRamReadFormat ramreadformat;

@@ -3,7 +3,7 @@
 #include "../../hd_code/io/siint.h"
 #include <ultra64.h>
 
-static void __osPackEepWriteData(u8 address, u8 *buffer);
+void __osPackEepWriteData(u8 address, u8 *buffer);
 
 s32 osEepromWrite(OSMesgQueue *mq, u8 address, u8 *buffer)
 {
@@ -66,7 +66,7 @@ s32 osEepromWrite(OSMesgQueue *mq, u8 address, u8 *buffer)
     return ret;
 }
 
-static void __osPackEepWriteData(u8 address, u8 *buffer)
+void __osPackEepWriteData(u8 address, u8 *buffer)
 {
     u8 *ptr;
     __OSContEepromFormat eepromformat;

@@ -13,8 +13,8 @@ extern s32 D_hd_code_8030E390;
 extern OSScTask D_hd_code_8036E698[][2];
 extern u64 D_hd_code_80367750;
 extern u64 D_hd_code_8036AFB0;
-extern s32 D_hd_front_end_80210690;
-extern s32 func_hd_front_end_80207090; // TODO
+extern s32 __hd_front_end_menu_rsp_databin;
+extern s32 __hd_front_end_menu_rsp_textbin;
 
 // Proposed file name: rsp_task.c
 //
@@ -62,8 +62,8 @@ f32 D_hd_code_802FDAC0[20] = {
 // shared in-game microcode
 // Proposed name: InitMicrocodeTable
 void func_hd_code_80284DB0(void) {
-  D_hd_code_8036E660[0] = &func_hd_front_end_80207090;
-  D_hd_code_8036E678[0] = &D_hd_front_end_80210690; // some rodata in hd_front_end
+  D_hd_code_8036E660[0] = &__hd_front_end_menu_rsp_textbin;
+  D_hd_code_8036E678[0] = &__hd_front_end_menu_rsp_databin;
   D_hd_code_8036E660[1] = &D_hd_code_802E53F0;
   D_hd_code_8036E678[1] = &D_hd_code_8030E390;
   D_hd_code_8036E660[2] = &D_hd_code_802E53F0;

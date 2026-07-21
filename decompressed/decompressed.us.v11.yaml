@@ -436,7 +436,7 @@ segments:
     - [ 0xE4590, c, hd_front_end/E4590 ] # done
     - [ 0xE50E0, c, hd_front_end/E50E0 ] # done
     - [ 0xE5D20, c, hd_front_end/E5D20 ] # done
-    - [ 0xE5FA0, asm, hd_front_end/E5FA0 ] # Handwritten asm
+    - [ 0xE5FA0, hasm, hd_front_end/E5FA0 ] # done
     - [ 0xE65D0, c, hd_front_end/io/pfsfreeblocks ]
     - [ 0xE6720, c, hd_front_end/io/conteepprobe ]
     - [ 0xE6790, c, hd_front_end/io/pfschecker ]
@@ -455,7 +455,7 @@ segments:
     - [ 0xEA460, c, hd_front_end/io/contramread ]
     - [ 0xEA810, c, hd_front_end/io/contramwrite ]
     - [ 0xEABC0, c, hd_front_end/io/pfsisplug ]
-    - [ 0xEAF30, asm, hd_front_end/EAF30 ] # Handwritten ASM
+    - [ 0xEAF30, textbin, hd_front_end/menu_rsp ]
     - [ 0xEBEE0, .data, hd_front_end/CAEA0 ] # done
     - [ 0xEC060, .data, hd_front_end/CCAE0 ] # done
     - [ 0xEC350, .data, hd_front_end/D1630 ] # done
@@ -478,7 +478,7 @@ segments:
     - [ 0xF43F0, .rodata, hd_front_end/E2830 ] # done
     - [ 0xF44C0, .rodata, hd_front_end/E4590 ] # done
     - [ 0xF4510, .rodata, hd_front_end/E5D20 ] # done
-    - [ 0xF4530, rodata, hd_front_end/hd_front_end_rodata ]
+    - [ 0xF4530, databin, hd_front_end/menu_rsp ]
     - { start: 0xF4D30, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
     - { start: 0xF4D30, type: bss, name: hd_front_end/CCAE0, vram: 0x80215440 }
     - { start: 0xF4D30, type: bss, name: hd_front_end/D1630, vram: 0x80215960 }

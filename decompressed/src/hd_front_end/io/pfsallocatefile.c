@@ -1,7 +1,7 @@
 #include <PR/os_internal.h>
 #include "../../hd_code/io/controller.h"
 
-static s32 __osClearPage(OSPfs *pfs, int page_no, u8 *data, u8 bank);
+s32 __osClearPage(OSPfs *pfs, int page_no, u8 *data, u8 bank);
 s32 osPfsAllocateFile(OSPfs *pfs, u16 company_code, u32 game_code, u8 *game_name, u8 *ext_name, int file_size_in_bytes, s32 *file_no)
 {
     int start_page;
@@ -162,7 +162,7 @@ s32 __osPfsDeclearPage(OSPfs *pfs, __OSInode *inode, int file_size_in_pages, int
     return ret;
 }
 
-static s32 __osClearPage(OSPfs *pfs, int page_no, u8 *data, u8 bank)
+s32 __osClearPage(OSPfs *pfs, int page_no, u8 *data, u8 bank)
 {
     int i;
     s32 ret;

@@ -1,7 +1,7 @@
 #include <PR/os_internal.h>
 #include "../../hd_code/io/controller.h"
 
-static s32 __osPfsGetNextPage(OSPfs *pfs, u8 *bank, __OSInode *inode, __OSInodeUnit *page)
+s32 __osPfsGetNextPage(OSPfs *pfs, u8 *bank, __OSInode *inode, __OSInodeUnit *page)
 {
     s32 ret;
     if (*bank != page->inode_t.bank)
