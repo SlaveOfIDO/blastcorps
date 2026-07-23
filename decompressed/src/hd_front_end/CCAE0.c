@@ -5,6 +5,7 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "../levels.h"
 
 void func_hd_code_80259BD4(Gfx**, struct Model1*);     /* extern */
 Gfx* func_hd_code_80274AA4(Gfx*);                     /* extern */
@@ -434,7 +435,7 @@ void func_hd_front_end_801E93DC(u8 arg0) {
   for (spC = 0; spC < 6; spC++) {
     D_hd_front_end_80215930[spC] = 0;
   }
-  for (spC = 0; spC < 0x3C; spC++) {
+  for (spC = 0; spC < LEVEL_MAX; spC++) {
     if ((sp8->unk18[spC] > 0) && (sp8->unk18[spC] < 5)) {
       D_hd_front_end_80215930[sp8->unk18[spC]] += 1;
     }
@@ -1146,7 +1147,7 @@ void func_hd_front_end_801ECC8C(void) {
 void func_hd_front_end_801ECE9C(void) {
   s32 sp4;
 
-  for (sp4 = 0; sp4 < 0x3C; sp4++) {
+  for (sp4 = 0; sp4 < LEVEL_MAX; sp4++) {
     if (D_hd_code_802E8F94[sp4].unk0 & 0x81) {
       if ((players[playerNumber].unk91 >= 0xB) && (D_hd_code_80364A98 == 0x4000)) {
         D_hd_code_802E8F94[sp4].unk0 = 0x80;
@@ -1175,7 +1176,7 @@ void func_hd_front_end_801ECF5C(void) {
     if (saveIt[playerNumber] == 0) {
         rmonPrintf(ASSERT_MESSAGE, "saveIt[playerNumber]", "player.c", 0x568);
     }
-    for (sp30 = 0; sp30 < 0x3C; sp30++) {
+    for (sp30 = 0; sp30 < LEVEL_MAX; sp30++) {
         if (((players[playerNumber].unk18[sp30] > 0) && (players[playerNumber].unk18[sp30] < 6)?1:0) != 0) {
             if ((D_hd_code_802E8F94[sp30].unk0 == 1) && (sp30 != 0x31) && (sp30 != 0x2F) && (sp30 != 0x26)) {
                 sp48 = &D_hd_code_802E8F94[sp30];
@@ -1242,7 +1243,7 @@ void func_hd_front_end_801ED4B8(void) {
   if (saveIt[playerNumber] == 0) {
     rmonPrintf(ASSERT_MESSAGE, "saveIt[playerNumber]", "player.c", 0x5C0);
   }
-  for (sp26 = 0; sp26 < 0x3C; sp26++) {
+  for (sp26 = 0; sp26 < LEVEL_MAX; sp26++) {
     if ((((players[playerNumber].unk18[sp26] > 0) && (players[playerNumber].unk18[sp26] < 6)?1:0) != 0) && (sp26 != 0x31) && (sp26 != 0x2F) && (sp26 != 0x26)) {
       sp30 = &D_hd_code_802E8F94[sp26];
       if (saveIt[playerNumber] != (sp26 + 1)) {

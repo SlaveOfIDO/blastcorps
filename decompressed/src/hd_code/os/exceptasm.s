@@ -187,8 +187,8 @@ glabel __osException
 .Linit_802211D8:
    mfc0       $t0, $13
    sw         $t0, 0x120($k0)
-   lui        $t1, %hi(D_A430000C)
-   lw         $t1, %lo(D_A430000C)($t1)
+   lui        $t1, %hi(0xA430000C) /* MI_INTR_MASK_REG */
+   lw         $t1, %lo(0xA430000C)($t1)
    sw         $t1, 0x128($k0)
    addiu      $t1, $zero, 0x2
    sh         $t1, 0x10($k0)
@@ -199,7 +199,7 @@ glabel __osException
    lui        $t2, (0xC0000008 >> 16)
    sw         $zero, (0xC0000008 & 0xFFFF)($t2)
    lui        $a0, (0xC0000000 >> 16)
-   addiu      $t2, $t2, %lo(D_C0000008)
+   addiu      $t2, $t2, %lo(0xC0000008) /* RDB_WRITE_INTR_REG */
    jal        kdebugserver
    lw        $a0, (0xC0000000 & 0xFFFF)($a0)
    b        .Linit_80221778
@@ -213,7 +213,7 @@ glabel __osException
    sw         $zero, (0xC000000C & 0xFFFF)($t2)
    lui        $t1, %hi(__osRdbSendMessage)
    lw         $t1, %lo(__osRdbSendMessage)($t1)
-   addiu      $t2, $t2, %lo(D_C000000C)
+   addiu      $t2, $t2, %lo(0xC000000C) /* RDB_READ_INTR_REG */
    beqz       $t1, .Linit_80221258
    nop
    jal        send_mesg
@@ -278,20 +278,20 @@ cart:
    b        .Linit_8022129C
    and       $s0, $s0, $at
 rcp:
-   lui        $s1, %hi(D_A4300008)
-   lw         $s1, %lo(D_A4300008)($s1)
+   lui        $s1, %hi(0xA4300008) /* MI_INTR_REG */
+   lw         $s1, %lo(0xA4300008)($s1)
    andi       $s1, $s1, 0x3F
    andi       $t1, $s1, 0x1
    beqz       $t1, .Linit_80221388
    nop
-   lui        $t4, %hi(D_A4040010)
-   lw         $t4, %lo(D_A4040010)($t4)
+   lui        $t4, %hi(0xA4040010) /* SP_STATUS_REG */
+   lw         $t4, %lo(0xA4040010)($t4)
    addiu      $t1, $zero, 0x8
-   lui        $at, %hi(D_A4040010)
+   lui        $at, %hi(0xA4040010) /* SP_STATUS_REG */
    andi       $t4, $t4, 0x300
    andi       $s1, $s1, 0x3E
    beqz       $t4, .Linit_80221378
-   sw        $t1, %lo(D_A4040010)($at)
+   sw        $t1, %lo(0xA4040010)($at)
    jal        send_mesg
    addiu     $a0, $zero, 0x20
    beqz       $s1, .Linit_8022144C
@@ -306,9 +306,9 @@ rcp:
 .Linit_80221388:
    andi       $t1, $s1, 0x8
    beqz       $t1, .Linit_802213AC
-   lui       $at, %hi(D_A4400010)
+   lui       $at, %hi(0xA4400010) /* VI_CURRENT_REG */
    andi       $s1, $s1, 0x37
-   sw         $zero, %lo(D_A4400010)($at)
+   sw         $zero, %lo(0xA4400010)($at)
    jal        send_mesg
    addiu     $a0, $zero, 0x38
    beqz       $s1, .Linit_8022144C
@@ -318,9 +318,9 @@ rcp:
    beqz       $t1, .Linit_802213D8
    nop
    addiu      $t1, $zero, 0x1
-   lui        $at, %hi(D_A450000C)
+   lui        $at, %hi(0xA450000C) /* AI_STATUS_REG */
    andi       $s1, $s1, 0x3B
-   sw         $t1, %lo(D_A450000C)($at)
+   sw         $t1, %lo(0xA450000C)($at)
    jal        send_mesg
    addiu     $a0, $zero, 0x30
    beqz       $s1, .Linit_8022144C
@@ -328,9 +328,9 @@ rcp:
 .Linit_802213D8:
    andi       $t1, $s1, 0x2
    beqz       $t1, .Linit_802213FC
-   lui       $at, %hi(D_A4800018)
+   lui       $at, %hi(0xA4800018) /* SI_STATUS_REG */
    andi       $s1, $s1, 0x3D
-   sw         $zero, %lo(D_A4800018)($at)
+   sw         $zero, %lo(0xA4800018)($at)
    jal        send_mesg
    addiu     $a0, $zero, 0x28
    beqz       $s1, .Linit_8022144C
@@ -340,9 +340,9 @@ rcp:
    beqz       $t1, .Linit_80221428
    nop
    addiu      $t1, $zero, 0x2
-   lui        $at, %hi(D_A4600010)
+   lui        $at, %hi(0xA4600010) /* PI_STATUS_REG */
    andi       $s1, $s1, 0x2F
-   sw         $t1, %lo(D_A4600010)($at)
+   sw         $t1, %lo(0xA4600010)($at)
    jal        send_mesg
    addiu     $a0, $zero, 0x40
    beqz       $s1, .Linit_8022144C
@@ -352,9 +352,9 @@ rcp:
    beqz       $t1, .Linit_8022144C
    nop
    addiu      $t1, $zero, 0x800
-   lui        $at, %hi(D_A4300000)
+   lui        $at, %hi(0xA4300000) /* MI_MODE_REG */
    andi       $s1, $s1, 0x1F
-   sw         $t1, %lo(D_A4300000)($at)
+   sw         $t1, %lo(0xA4300000)($at)
    jal        send_mesg
    addiu     $a0, $zero, 0x48
 .Linit_8022144C:
@@ -510,6 +510,10 @@ glabel send_mesg
    sw         $t1, 0x18($k0)
    b        .Linit_80221540
    sw        $k1, 0x118($k0)
+
+.globl __osEnqueueAndYield
+.type __osEnqueueAndYield, @function
+__osEnqueueAndYield:
    lui        $a1, %hi(__osRunningThread)
    lw         $a1, %lo(__osRunningThread)($a1)
    mfc0       $t0, $12
@@ -539,8 +543,8 @@ glabel send_mesg
    sdc1       $f30, 0x1A8($a1)
    sw         $k1, 0x12C($a1)
 .Linit_802216E0:
-   lui        $k1, %hi(D_A430000C)
-   lw         $k1, %lo(D_A430000C)($k1)
+   lui        $k1, %hi(0xA430000C) /* MI_INTR_MASK_REG */
+   lw         $k1, %lo(0xA430000C)($k1)
    beqz       $a0, .Linit_802216F8
    sw        $k1, 0x128($a1)
    jal        __osEnqueueThread
@@ -655,16 +659,14 @@ glabel __osDispatchThread
    addiu      $k0, $k0, %lo(__osRcpImTable)
    addu       $k1, $k1, $k0
    lhu        $k1, 0x0($k1)
-   lui        $k0, %hi(D_A430000C)
-   addiu      $k0, $k0, %lo(D_A430000C)
+   lui        $k0, %hi(0xA430000C) /* MI_INTR_MASK_REG */
+   addiu      $k0, $k0, %lo(0xA430000C)
    sw         $k1, 0x0($k0)
    nop
    nop
    nop
    nop
    eret
-   jal        osDestroyThread
-   or        $a0, $zero, $zero
 endlabel __osDispatchThread
 
 glabel __osCleanupThread

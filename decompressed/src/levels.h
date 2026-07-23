@@ -1,0 +1,66 @@
+#ifndef LEVELS_H
+#define LEVELS_H
+
+#define LEVEL_SIMIAN_ACRES      0
+#define LEVEL_ANGEL_CITY        1
+#define LEVEL_OUTLAND_FARM      2
+#define LEVEL_BLACKRIDGE_WORKS  3
+#define LEVEL_GLORY_CROSSING    4
+#define LEVEL_SHUTTLE_GULLY     5
+#define LEVEL_SALVAGE_WHARF     6
+#define LEVEL_SKYFALL           7
+#define LEVEL_TWILIGHT_FOUNDRY  8
+#define LEVEL_CRYSTAL_RIFT      9
+#define LEVEL_ARGENT_TOWERS     10
+#define LEVEL_SKERRIES          11
+#define LEVEL_DIAMOND_SANDS     12
+#define LEVEL_EBONY_COAST       13
+#define LEVEL_OYSTER_HARBOR     14
+#define LEVEL_CARRICK_POINT     15
+#define LEVEL_HAVOC_DISTRICT    16
+#define LEVEL_IRONSTONE_MINE    17
+#define LEVEL_BEETON_TRACKS     18
+#define LEVEL_J_BOMB            19
+#define LEVEL_JADE_PLATEAU      20
+#define LEVEL_MARINE_QUARTER    21
+#define LEVEL_COOTER_CREEK      22
+#define LEVEL_GIBBONS_GATE      23
+#define LEVEL_BABOON_CATACOMB   24
+#define LEVEL_SLEEK_STREETS     25
+#define LEVEL_OBSIDIAN_MILE     26
+#define LEVEL_CORVINE_BLUFF     27
+#define LEVEL_SIDESWIPE         28
+#define LEVEL_ECHO_MARCHES      29
+#define LEVEL_KIPLING_PLANT     30
+#define LEVEL_FALCHION_FIELD    31
+#define LEVEL_MORGAN_HALL       32
+#define LEVEL_TEMPEST_CITY      33
+#define LEVEL_ORION_PLAZA       34
+#define LEVEL_GLANDERS_RANCH    35
+#define LEVEL_DAGGER_PASS       36
+#define LEVEL_GEODE_SQUARE      37
+#define LEVEL_SHUTTLE_ISLAND    38
+#define LEVEL_MICA_PARK         39
+#define LEVEL_MOON              40
+#define LEVEL_COBALT_QUARRY     41
+#define LEVEL_MORAINE_CHASE     42
+#define LEVEL_MERCURY           43
+#define LEVEL_VENUS             44
+#define LEVEL_MARS              45
+#define LEVEL_NEPTUNE           46
+#define LEVEL_CMO_INTRO         47
+#define LEVEL_SILVER_JUNCTION   48
+#define LEVEL_END_SEQUENCE      49
+#define LEVEL_SHUTTLE_CLEAR     50
+#define LEVEL_DARK_HEARTLAND    51
+#define LEVEL_MAGMA_PEAK        52
+#define LEVEL_THUNDERFIST       53
+#define LEVEL_SALINE_WATCH      54
+#define LEVEL_BACKLASH          55
+#define LEVEL_BISON_RIDGE       56
+#define LEVEL_EMBER_HAMLET      57
+#define LEVEL_CROMLECH_COURT    58
+#define LEVEL_LIZARD_ISLAND     59
+#define LEVEL_MAX               60
+
+#endif

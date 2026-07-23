@@ -279,7 +279,7 @@ void _freePVoice(ALSynth *drvr, PVoice *pvoice)
   the truncation error produced by casting
   a float to an int.
 */
-s32 _timeToSamplesNoRound(ALSynth *synth, s32 micros)
+static s32 _timeToSamplesNoRound(ALSynth *synth, s32 micros)
 {
     f32 tmp = ((f32)micros) * synth->outputRate / 1000000.0 + 0.5;
 
@@ -291,7 +291,7 @@ s32 _timeToSamples(ALSynth *synth, s32 micros)
     return _timeToSamplesNoRound(synth, micros) & ~0xf;
 }
 
-static s32 __nextSampleTime(ALSynth *drvr, ALPlayer **client) 
+static s32 __nextSampleTime(ALSynth *drvr, ALPlayer **client)
 {
     ALMicroTime delta = 0x7fffffff;     /* max delta for s32 */
     ALPlayer *cl;

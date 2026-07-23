@@ -8,19 +8,32 @@
 #include "../hd_code/io/controller.h"
 #include "structs.h"
 
-extern u8 D_hd_front_end_8020E3E8[];
-extern u8* D_hd_front_end_8020E430[];
 extern u8* D_hd_front_end_8021AB90[4];
 extern s8 D_hd_front_end_8021ABA0;
 s32 func_hd_front_end_801E96F8(void);               /* extern */
 extern u32 D_hd_code_802FAD50[];
-extern s16 D_hd_front_end_8020E3E0[];
 extern s32 D_hd_front_end_8021ABA4;
 extern ALSoundState D_hd_front_end_8021ABA8;
 extern u8 D_hd_front_end_8021ABA1;
 extern u8 D_hd_front_end_8021ABA2;
 extern s32 D_6A32B0;
 extern u8 D_68B550[];
+
+// <data>
+s16 D_hd_front_end_8020E3E0[] = { 0x53, 0x81, 0x61, 0xB4 };
+char D_hd_front_end_8020E3E8[4][0x12] = {
+  "AMBER",
+  "CLARK",
+  "SPIKE",
+  "WESLEY"
+};
+extern u8* D_hd_front_end_8020E430[] = {
+  (u8*)0x803048CC,
+  (u8*)0x803048D8,
+  (u8*)0x803048E4,
+  (u8*)0x803048F0
+};
+// </data>
 
 void func_hd_front_end_80201240(s32 arg0) {
   s32 sp24;
@@ -35,7 +48,7 @@ void func_hd_front_end_80201240(s32 arg0) {
   D_hd_front_end_8021ABA0 = arg0;
   D_hd_front_end_8021ABA2 = 0;
   D_hd_front_end_8021ABA1 = 0;
-  D_hd_front_end_8020C070[0xAF].unkC = &D_hd_front_end_8020E3E8[arg0 * 0x12];
+  D_hd_front_end_8020C070[0xAF].unkC = D_hd_front_end_8020E3E8[arg0];
   D_hd_front_end_8020C070[0xAF].unk10 = D_hd_front_end_8020E430[arg0];
 }
 

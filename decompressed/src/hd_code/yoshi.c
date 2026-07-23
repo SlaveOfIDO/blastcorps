@@ -89,7 +89,7 @@ extern s8 D_hd_code_80370C14;
 extern s32 D_hd_code_803F7684;
 
 // Data begin
-Gfx D_hd_code_802F46C0[] = {
+Gfx D_hd_code_802F46C0[30] = {
     gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_OPA_SURF2),
     gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_XLU_SURF2),
     gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_TEX_EDGE2),

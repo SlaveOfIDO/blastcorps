@@ -227,7 +227,7 @@ u64 D_hd_code_80364A98; // requested next game state (0 = no transition pending)
 u64 D_hd_code_80364AA0; // queued follow-up game state set inside the master switch; proposed name: queuedGameState
 u32 D_hd_code_80364AA8; // current game mode from the mission config table (1 = demolition, 2 = race, ...); proposed name: gameMode
 u32 pad_80364AAC;
-u32 pad_80364AB0;
+u32 D_hd_code_80364AB0;
 f32 D_hd_code_80364AB4; // failure spin effect: current rotation angle; proposed name: failSpinAngle
 f32 D_hd_code_80364AB8; // failure spin effect: rotation speed (accelerates 3 deg/frame^2); proposed name: failSpinSpeed
 f32 D_hd_code_80364ABC; // failure spin effect: vehicle scale (shrinks to 0, then explosion); proposed name: failSpinScale

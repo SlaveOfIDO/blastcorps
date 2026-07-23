@@ -6,6 +6,7 @@
 #include "variables.h"
 #include "yoshi.h"
 #include "../hd_front_end/structs.h"
+#include "../levels.h"
 
 // Proposed file name: academy.c (the original name - the asserts in
 // func_hd_code_80286330 reference "academy.c")
@@ -50,7 +51,7 @@ void func_hd_code_802860F0(void) {
     func_80200714(D_hd_code_802FDA60[players[playerNumber].unk91]);
     switch (players[playerNumber].unk91) {                          /* irregular */
       case 4:
-        for(sp37 = 0, sp30 = 0; (sp30 < 0x3C) && (sp37 == 0); sp30++) {
+        for(sp37 = 0, sp30 = 0; (sp30 < LEVEL_MAX) && (sp37 == 0); sp30++) {
           for(sp2C = 0, sp28 = 0; (sp2C < 6) && (sp28 == 0); sp2C++) {
             if (D_hd_code_802E8F38[sp2C].unk0 == sp30) {
               sp28 = 1;
@@ -100,7 +101,7 @@ void func_hd_code_80286330(void) {
       if (levelno != 0x32) {
         rmonPrintf(ASSERT_MESSAGE, "levelno==50", "academy.c", 0x8C);
       }
-      if (players[playerNumber].levelno != 0x32) {
+      if (players[playerNumber].levelno != LEVEL_SHUTTLE_CLEAR) {
         rmonPrintf(ASSERT_MESSAGE, "players[playerNumber].levelno==50", "academy.c", 0x8D);
       }
       if (!frontEndPresent) {
@@ -162,7 +163,7 @@ s32 func_hd_code_8028653C(void) {
         case 1:
         case 2:
         case 3:
-            for(sp34 = 0; sp34 < 0x3C && sp2F != 0; sp34++) {
+            for(sp34 = 0; sp34 < LEVEL_MAX && sp2F != 0; sp34++) {
                 if (D_hd_code_802E8F94[sp34].unk1 == players[playerNumber].unk91) {
                     if ((((players[playerNumber].unk18[sp34] > 0) && (players[playerNumber].unk18[sp34] < 6)?1:0) == 0) && (D_hd_code_802E8F94[sp34].unk0 == 1)) {
                         sp2F = 0;
