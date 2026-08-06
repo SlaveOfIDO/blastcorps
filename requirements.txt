@@ -1,5 +1,6 @@
 # splat
 splat64[mips]==0.41.0
+spimdisasm[mips]==1.42.4
 
 
 # asm-differ
