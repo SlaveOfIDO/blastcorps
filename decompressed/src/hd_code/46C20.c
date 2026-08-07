@@ -4,6 +4,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "../vram.h"
 
 void func_801F57B0();
 void func_hd_code_802C4070(void**, void**, u32, u8);
@@ -20,11 +21,11 @@ extern OSIoMesg D_hd_code_80370C58;
 // time it is needed.
 
 // <data>
-void** D_hd_code_802FDB30 = (void**)0x803FFFF8;
-void** D_hd_code_802FDB34 = (void**)0x803FFFFC;
+void** D_hd_code_802FDB30 = (void**)VRAM_FRONT_END_START_ADDR;
+void** D_hd_code_802FDB34 = (void**)VRAM_FRONT_END_END_ADDR;
 // </data>
 
-// Load the front-end menu overlay into its fixed RAM region (0x801E7000) on
+// Load the front-end menu overlay into its fixed RAM region on
 // first use: blank the screen, invalidate the caches, DMA the overlay from
 // ROM, zero the remaining space, and run its init (func_801F57B0)
 // Proposed name: LoadFrontEndOverlay
@@ -34,10 +35,10 @@ void func_hd_code_8028B3E0(void) {
   sp24 = (s32)*D_hd_code_802FDB34 - (s32)*D_hd_code_802FDB30;
   osViBlack(1U);
   if (frontEndPresent == 0) {
-    osInvalDCache((void* )0x801E7000, 0x37D00);
-    osInvalICache((void* )0x801E7000, 0x37D00);
-    InitiateDma(*D_hd_code_802FDB30, (void* )0x801E7000, &sp24, 0xDU, 0xA, 1);
-    bzero(sp24 + 0x801E7000, 0x37D00 - sp24);
+    osInvalDCache((void* )VRAM_FRONT_END, 0x37D00);
+    osInvalICache((void* )VRAM_FRONT_END, 0x37D00);
+    InitiateDma(*D_hd_code_802FDB30, (void* )VRAM_FRONT_END, &sp24, 0xDU, 0xA, 1);
+    bzero(sp24 + VRAM_FRONT_END, 0x37D00 - sp24);
     frontEndPresent = 1;
     func_801F57B0();
     rmonPrintf("got front end\n");
