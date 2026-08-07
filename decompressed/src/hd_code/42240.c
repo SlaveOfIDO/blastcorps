@@ -124,8 +124,8 @@ void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
     gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
     gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC10, D_hd_code_80367BD6));
     gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPLoadTextureBlock(entry++, (u32)D_hd_code_8036EC00 + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 40, 40, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    gSPVertex(entry++, (u32)D_hd_code_8036EC04 + 0x80000000, 4, 0);
+    gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC00), G_IM_FMT_RGBA, G_IM_SIZ_16b, 40, 40, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC04), 4, 0);
     gSP1Triangle(entry++, 0, 1, 2, 0);
     gSP1Triangle(entry++, 0, 2, 3, 0);
     gDPPipeSync(entry++);
@@ -134,10 +134,10 @@ void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
     gDPSetCombineMode(entry++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
 
     guTranslate(&D_hd_code_8036EC0C[arg2], 56.0f, 151.0f, 0.0f);
-    gSPMatrix(entry++, (u32) (&D_hd_code_8036EC0C[arg2]) + 0x80000000, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC0C[arg2]), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     guAlign(&D_hd_code_8036EC08[arg2], ((D_hd_code_803EE3B1 / 100.0f) * 180.0) + 270.0, 0.0f, 0.0f, 1.0f);
-    gSPMatrix(entry++, (u32) (&D_hd_code_8036EC08[arg2]) + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(entry++, (u32) (&D_hd_code_8036EC04[4]) + 0x80000000, 4, 0);
+    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC08[arg2]), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC04[4]), 4, 0);
     gSP1Triangle(entry++, 0, 1, 2, 0);
     gSP1Triangle(entry++, 1, 2, 3, 0);
     gSPPopMatrix(entry++, G_MTX_MODELVIEW);
@@ -217,8 +217,8 @@ void func_hd_code_80287530(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
   gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC1C, D_hd_code_80367BD6));
 
   gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-  gDPLoadTextureBlock(entry++, (u32) (D_hd_code_8036EC14) + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-  gSPVertex(entry++, (u32) (D_hd_code_8036EC18) + 0x80000000, 4, 0);
+  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC14), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+  gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC18), 4, 0);
   gSP1Triangle(entry++, 0, 1, 2, 0);
   gSP1Triangle(entry++, 0, 2, 3, 0);
   gDPPipeSync(entry++);
@@ -302,8 +302,8 @@ void func_hd_code_80287C68(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
   gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC28, D_hd_code_80367BD6));
 
   gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-  gDPLoadTextureBlock(entry++, (u32) (D_hd_code_8036EC20) + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-  gSPVertex(entry++, (u32) (D_hd_code_8036EC24) + 0x80000000, 4, 0);
+  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC20), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+  gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC24), 4, 0);
   gSP1Triangle(entry++, 0, 1, 2, 0);
   gSP1Triangle(entry++, 0, 2, 3, 0);
   gDPPipeSync(entry++);

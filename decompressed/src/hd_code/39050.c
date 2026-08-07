@@ -637,7 +637,7 @@ void func_hd_code_8027F1F8(Gfx** gfx, u8 arg1, s32 arg2) {
         gSPTexture(entry++, 1984, 1984, 0, G_TX_RENDERTILE, G_ON);
         gDPSetCombineLERP(entry++, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE);
         gDPSetPrimColor(entry++, 0, 0, 0x00, 0x00, 0x00, 0xAA);
-        gDPLoadTextureBlock(entry++, (u32) (*D_hd_code_8036DCB8) + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(*D_hd_code_8036DCB8), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
         gDPSetCycleType(entry++, G_CYC_2CYCLE);
         gDPSetRenderMode(entry++, D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk28, D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2C);
@@ -656,11 +656,11 @@ void func_hd_code_8027F1F8(Gfx** gfx, u8 arg1, s32 arg2) {
         } else {
             sp10B = D_hd_code_8036DCD0 + 1;
         }
-        gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (u32) (D_hd_code_8036DCB8[D_hd_code_8036DCD0]) + 0x80000000);
+        gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8036DCB8[D_hd_code_8036DCD0]));
         gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
         gDPLoadSync(entry++);
         gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 1023, 256);
-        gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (u32) (D_hd_code_8036DCB8[sp10B]) + 0x80000000);
+        gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8036DCB8[sp10B]));
         gDPTileSync(entry++);
         gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0100, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
         gDPLoadSync(entry++);
@@ -971,7 +971,7 @@ void func_hd_code_80280F34(Gfx** gfx, u8 arg1) {
         gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
         gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, D_hd_code_802FC494[D_hd_code_8036E370].unk20);
-        gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, (u32) (D_hd_code_8036E378) + 0x80000000);
+        gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8036E378));
         gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
         gDPLoadSync(entry++);
 
@@ -1021,7 +1021,7 @@ void func_hd_code_80280F34(Gfx** gfx, u8 arg1) {
             D_hd_code_8036DD70[arg1][sp88][3].v.ob[0] = D_hd_code_8036DCE0[sp88][1] - D_hd_code_8036DCE0[sp88][3];
             D_hd_code_8036DD70[arg1][sp88][3].v.ob[2] = D_hd_code_8036DCE0[sp88][2] + D_hd_code_8036DCE0[sp88][4];
 
-            gSPVertex(entry++, (u32) (D_hd_code_8036DD70[arg1][sp88]) + 0x80000000, 4, 0);
+            gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036DD70[arg1][sp88]), 4, 0);
             gSP1Triangle(entry++, 0, 1, 2, 0);
             gSP1Triangle(entry++, 0, 2, 3, 0);
 
@@ -1174,8 +1174,8 @@ void func_hd_code_80282224(Gfx** gfx, u8 arg1) {
         gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036E4D0, D_hd_code_80367BD6));
 
-        gDPLoadTextureBlock(entry++, D_hd_code_8036E4CC + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        gSPVertex(entry++, (u32) D_hd_code_802FC568 + 0x80000000, 4, 0);
+        gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036E4CC), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_802FC568), 4, 0);
         gSP1Triangle(entry++, 0, 1, 2, 0);
         gSP1Triangle(entry++, 0, 2, 3, 0);
         gDPPipeSync(entry++);

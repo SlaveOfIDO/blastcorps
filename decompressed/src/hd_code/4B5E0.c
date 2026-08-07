@@ -559,7 +559,7 @@ void func_hd_code_802917B0(Gfx** gfx, struct Model1* arg1) {
     guTranslate(&arg1->unkB00[sp80], (f32) D_hd_code_8039C550[sp80].unk0 / 32.0f, (f32) D_hd_code_8039C550[sp80].unk4 / 32.0f, (f32) D_hd_code_8039C550[sp80].unk8 / 32.0f);
     gSPMatrix(entry++, (u32) &D_2000000.unkB00[sp80], G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    gDPLoadTextureBlock(entry++, (s32)D_hd_code_8039C550[sp80].unk30 + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_hd_code_802FDC08[D_hd_code_8039C550[sp80].unk10].unk282, D_hd_code_802FDC08[D_hd_code_8039C550[sp80].unk10].unk283, /* pal = */0,  G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8039C550[sp80].unk30), G_IM_FMT_RGBA, G_IM_SIZ_16b, D_hd_code_802FDC08[D_hd_code_8039C550[sp80].unk10].unk282, D_hd_code_802FDC08[D_hd_code_8039C550[sp80].unk10].unk283, /* pal = */0,  G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_802FDC08[D_hd_code_8039C550[sp80].unk10].unk0));
     gSPPopMatrix(entry++, G_MTX_MODELVIEW);
   }

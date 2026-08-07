@@ -157,7 +157,7 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
                 gDPSetCombineMode(entry++, G_CC_SHADE, G_CC_SHADE);
                 gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
                 gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_OFF);
-                gSPVertex(entry++, (u32)&D_hd_code_802FA8B0[arg2] + 0x80000000, 4, 0);
+                gSPVertex(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_802FA8B0[arg2]), 4, 0);
                 gSP1Triangle(entry++, 0, 1, 2, 0);
                 gSP1Triangle(entry++, 0, 2, 3, 0);
 
@@ -613,7 +613,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 gDPSetCombineMode(entry++, G_CC_SHADE, G_CC_SHADE);
                 gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
                 gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_OFF);
-                gSPVertex(entry++, (s32)&D_hd_code_802FA8B0[arg2] + 0x80000000, 4, 0);
+                gSPVertex(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_802FA8B0[arg2]), 4, 0);
                 gSP1Triangle(entry++, 0, 1, 2, 0);
                 gSP1Triangle(entry++, 0, 2, 3, 0);
                 gDPPipeSync(entry++);

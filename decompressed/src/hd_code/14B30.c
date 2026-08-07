@@ -156,9 +156,9 @@ void func_hd_code_80259824(Gfx** arg0, struct Model1* arg1) {
     if (D_hd_code_80365340.unk0[sp4C].unk8 != sp54) {
       sp54 = D_hd_code_80365340.unk0[sp4C].unk8;
       if (sp4C == D_hd_code_802E8C70) {
-        gDPLoadTextureBlock_4b(entry++, sp54 + 0x80000000, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(entry++, OS_PHYSICAL_TO_K0(sp54), G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
       } else {
-        gDPSetTextureImage(entry++, G_IM_FMT_I, G_IM_SIZ_16b, 1, sp54 + 0x80000000);
+        gDPSetTextureImage(entry++, G_IM_FMT_I, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(sp54));
         gDPLoadSync(entry++);
         gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 255, 1024);
       }

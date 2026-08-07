@@ -273,7 +273,7 @@ void func_hd_code_80258B78(Gfx** arg0, struct Model1* arg1) {
                     sp6C++;
 
                     if (sp60 == 0) {
-                        gDPLoadTextureBlock(entry++, D_hd_code_80365330 + 0x80000000, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                        gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_80365330), G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                         sp60 = 1;
                     }
 

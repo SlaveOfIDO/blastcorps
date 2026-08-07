@@ -438,11 +438,11 @@ void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1) {
 
             gSPVertex(entry++, osVirtualToPhysical(D_hd_code_8039B070[sp1A0].unk3C), 8, 0);
             gDPPipeSync(entry++);
-            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, D_hd_code_8039B070[sp1A0].unk2C + 0x80000000);
+            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8039B070[sp1A0].unk2C));
             gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
             gDPLoadSync(entry++);
             gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 1023, 256);
-            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, D_hd_code_8039B070[sp1A0].unk30 + 0x80000000);
+            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8039B070[sp1A0].unk30));
             gDPTileSync(entry++);
             gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0100, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
             gDPLoadSync(entry++);
@@ -473,11 +473,11 @@ void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1) {
 
             gSP1Triangle(entry++, 7, 5, 4, 0);
             gSP1Triangle(entry++, 7, 6, 5, 0);
-            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, D_hd_code_8039B070[sp1A0].unk34 + 0x80000000);
+            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8039B070[sp1A0].unk34));
             gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
             gDPLoadSync(entry++);
             gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 1023, 256);
-            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, D_hd_code_8039B070[sp1A0].unk38 + 0x80000000);
+            gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(D_hd_code_8039B070[sp1A0].unk38));
             gDPTileSync(entry++);
             gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0100, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
             gDPLoadSync(entry++);

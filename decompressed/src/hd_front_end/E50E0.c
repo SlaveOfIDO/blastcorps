@@ -162,7 +162,7 @@ Gfx* func_hd_front_end_80201364(s32 arg0, Gfx* gfx) {
     gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetPrimColor(entry++, 0, 0, 200, 200, 200, 255);
     gDPSetCombineLERP(entry++, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, 0, TEXEL0, 0, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, 0, TEXEL0, 0);
-    gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, (u32)D_hd_code_802FAD50 + 0x80000000);
+    gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, OS_PHYSICAL_TO_K0(D_hd_code_802FAD50));
     gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, 7, 0, 1, 5, 0, 3, 0, 0);
     gDPLoadSync(entry++);
     gDPLoadBlock(entry++, 7, 0, 0, 1023, 128);

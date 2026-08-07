@@ -306,7 +306,7 @@ void func_hd_code_80282C80(Gfx** gfx, struct Model1* arg1, s32 arg2, s32 arg3, s
 
         gDPSetPrimColor(entry++, 0, 0, sp12B, sp12A, 0, D_hd_code_80367BD6);
         gSPTexture(entry++, qu016(0.03028), qu016(0.03028), 0, G_TX_RENDERTILE, G_ON);
-        gDPLoadTextureBlock(entry++, (u32) (&D_hd_code_802FCEB0) + 0x80000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_802FCEB0), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPVertex(entry++, osVirtualToPhysical(D_hd_code_802FD9B8), 10, 0);
         gSP1Triangle(entry++, 0, 1, 2, 0);
         gSP1Triangle(entry++, 0, 2, 3, 0);
@@ -400,23 +400,18 @@ void func_hd_code_8028376C(Gfx** gfx, struct Model1* arg1, u8 arg2, s32 arg3, s3
     gDPPipeSync(entry++);
     gDPSetTextureLOD(entry++, G_TL_TILE);
     gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
-    gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, (u32) (&D_hd_code_802FC5B0) + 0x80000000);
+    gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(&D_hd_code_802FC5B0));
     gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
     gDPLoadSync(entry++);
     gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 127, 1024);
-    gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, (u32) (&D_hd_code_802FC6B0) + 0x80000000);
+    gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, OS_PHYSICAL_TO_K0(&D_hd_code_802FC6B0));
     gDPTileSync(entry++);
     gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0100, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
     gDPLoadSync(entry++);
     gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 1023, 512);
     gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_MIRROR | G_TX_WRAP, 4, G_TX_NOLOD, G_TX_MIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
     gDPSetTileSize(entry++, G_TX_RENDERTILE, qu102(0.5), qu102(0.5), qu102(15.5), qu102(15.5));
-
-
     gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_4b, 4, 0x0100, 1, 0, G_TX_MIRROR | G_TX_WRAP, 6, sp217, G_TX_MIRROR | G_TX_WRAP, 6, sp217);
-    //spEC->words.w0 = 0xF5600900;
-    //    spEC->words.w1 = ((sp217 & 0xF) << 0xA) | 0x01058000 | 0x100 | 0x60 | sp217 & 0xF;
-
     gDPSetTileSize(entry++, 1, qu102(0.5), qu102(0.5), qu102(63), qu102(63));
     gDPSetCycleType(entry++, G_CYC_2CYCLE);
     gDPSetRenderMode(entry++, G_RM_PASS, G_RM_CLD_SURF2);
@@ -470,7 +465,7 @@ void func_hd_code_8028376C(Gfx** gfx, struct Model1* arg1, u8 arg2, s32 arg3, s3
         gDPSetRenderMode(entry++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
         gDPSetCombineLERP(entry++, 0, 0, 0, SHADE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, SHADE, TEXEL0, 0, PRIMITIVE, 0);
         gDPSetPrimColor(entry++, 0, 0, 0, 0, 0, MIN(0x7F, D_hd_code_80367BD6));
-        gDPLoadTextureBlock(entry++, (u32) (&D_hd_code_802FD6B0) + 0x80000000, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_802FD6B0), G_IM_FMT_IA, G_IM_SIZ_8b, 8, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         guAlign(&arg1->unk2C0[0xC], D_hd_code_802FD9B0, 0.0f, 0.0f, 1.0f);
         guTranslate(&sp1C8, 58.0f, 195.0f, 0.0f);
