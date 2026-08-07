@@ -213,10 +213,10 @@ extern s32 D_hd_code_802E8CC4;
 extern s32 D_hd_code_802FA254;
 extern s32 D_hd_code_802FA268;
 extern u8 D_hd_code_802FA940[32*32];
-extern s32 D_hd_code_80304904;
-extern s32 D_hd_code_80304910;
-extern s32 D_hd_code_8030491C;
-extern s32 D_hd_code_80304938;
+extern u16 D_hd_code_80304904[];
+extern u16 D_hd_code_80304910[];
+extern u16 D_hd_code_8030491C[];
+extern u16 D_hd_code_80304938[];
 extern s32 D_hd_code_803082C4;
 extern s32 D_hd_code_80308384;
 extern s32 D_hd_code_80308390;
@@ -290,10 +290,10 @@ extern u16 D_hd_code_80370C30;
 extern u16 D_hd_code_80370C30;
 extern u16 D_hd_code_802E8C94[2];
 extern u32 D_hd_code_80366BB8;
-extern u32 D_hd_code_803047A0[5]; // 5*4 = 20 bytes
-extern u32 D_hd_code_803047B4[6]; // 6 * 4 = 24 bytes
-extern u32 D_hd_code_803047CC[4]; // 4 * 4 = 16 bytes
-extern u32 D_hd_code_803047DC[12]; // 12 * 4 = 48 bytes
+extern u16 D_hd_code_803047A0[];
+extern u16 D_hd_code_803047B4[];
+extern u16 D_hd_code_803047CC[];
+extern u16 D_hd_code_803047DC[];
 extern u64 D_hd_front_end_8021A830;
 extern u8 D_hd_code_80365360[];
 extern u8 D_hd_code_80365458[];

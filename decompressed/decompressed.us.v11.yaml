@@ -291,7 +291,10 @@ segments:
     - [0xBA910, .data, hd_code/50670] # done
     - [0xBA9C0, .data, hd_code/53220] # done
     - [0xBAE70, .data, hd_code/53820] # done
-    - [0xBAF70, data, hd_code/hd_code_data_rest ] # TODO: .data
+    - [0xBAF70, .data, hd_code/nuke] # done
+    - [0xBC880, .data, hd_code/symbol_data] # done
+    - [0xC02D0, .data, hd_code/55D40 ]
+    - [0xC1230, data, hd_code/hd_code_data_rest ] # TODO: assembly data
     - [0xC1DD0, .data, hd_code/os/initialize ]
     - [0xC1DE0, .data, hd_code/io/pimgr ]
     - [0xC1E00, .data, hd_code/audio/sl ]

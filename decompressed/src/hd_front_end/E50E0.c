@@ -1,6 +1,7 @@
 #include "common.h"
 #include "../hd_code/macros.h"
 #include "../hd_code/structs.h"
+#include "../hd_code/symbol_data.h"
 #include "../hd_code/hd.h"
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
@@ -28,10 +29,10 @@ char D_hd_front_end_8020E3E8[4][0x12] = {
   "WESLEY"
 };
 extern u8* D_hd_front_end_8020E430[] = {
-  (u8*)0x803048CC,
-  (u8*)0x803048D8,
-  (u8*)0x803048E4,
-  (u8*)0x803048F0
+  (u8*)D_hd_code_803048CC,
+  (u8*)D_hd_code_803048D8,
+  (u8*)D_hd_code_803048E4,
+  (u8*)D_hd_code_803048F0
 };
 // </data>
 

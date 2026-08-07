@@ -2,11 +2,12 @@
 #include "functions.h"
 #include "structs.h"
 #include "variables.h"
+#include "yoshi.h"
 
-extern s32 D_hd_code_80303AF4;
-extern s32 D_hd_code_80303B00;
-extern s32 D_hd_code_80303B10;
-extern s32 D_hd_code_80303B24;
+extern u16 D_hd_code_80303AF4[];
+extern u16 D_hd_code_80303B00[];
+extern u16 D_hd_code_80303B10[];
+extern u16 D_hd_code_80303B24[];
 
 // Proposed file name: utils2.c (the original name - the assert prints in
 // this file reference "utils2.c")
@@ -754,7 +755,7 @@ void func_hd_code_80269258(void) {
             return;
         case 5:                                     /* switch 3 */
             D_hd_code_802F5804[0x2A].unkC = "LANDING ABORTED!";
-            D_hd_code_802F5804[0x2A].unk10 = &D_hd_code_80303AF4;
+            D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303AF4;
             D_hd_code_802F8BDC[0x17].unk12 = 0xDA;
             if (D_hd_code_80364A90 & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
@@ -763,7 +764,7 @@ void func_hd_code_80269258(void) {
             break;
         case 6:                                     /* switch 3 */
             D_hd_code_802F5804[0x2A].unkC = "DITCHING IN SEA!";
-            D_hd_code_802F5804[0x2A].unk10 = &D_hd_code_80303B00;
+            D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B00;
             D_hd_code_802F8BDC[0x17].unk12 = 0x77;
             if (D_hd_code_80364A90 & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
@@ -772,7 +773,7 @@ void func_hd_code_80269258(void) {
             break;
         case 4:                                     /* switch 3 */
             D_hd_code_802F5804[0x2A].unkC = "ON FINAL APPROACH!";
-            D_hd_code_802F5804[0x2A].unk10 = &D_hd_code_80303B10;
+            D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B10;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD7;
             if (D_hd_code_80364A90 & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
@@ -781,7 +782,7 @@ void func_hd_code_80269258(void) {
             break;
         case 7:                                     /* switch 3 */
             D_hd_code_802F5804[0x2A].unkC = "SUCCESSFUL LANDING!";
-            D_hd_code_802F5804[0x2A].unk10 = &D_hd_code_80303B24;
+            D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B24;
             D_hd_code_802F8BDC[0x17].unk12 = 0x82;
             if (D_hd_code_80364A90 & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);

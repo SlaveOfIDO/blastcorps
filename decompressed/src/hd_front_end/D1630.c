@@ -47,14 +47,14 @@ extern u8   D_hd_front_end_80215998[];
 extern s16  D_hd_front_end_802159B0;
 extern Mtx  D_hd_front_end_802182D0[];
 
-extern u16 D_hd_code_80303B78;
-extern u16 D_hd_code_80303B88;
+extern u16 D_hd_code_80303B78[];
+extern u16 D_hd_code_80303B88[];
 
 // <data>
 s8  *D_hd_front_end_802084B0 = "CONGRATULATIONS";
 s8  *D_hd_front_end_802084B4 = "ON YOUR PROMOTION!";
-u16 *D_hd_front_end_802084B8 = &D_hd_code_80303B78;
-u16 *D_hd_front_end_802084BC = &D_hd_code_80303B88;
+u16 *D_hd_front_end_802084B8 = D_hd_code_80303B78;
+u16 *D_hd_front_end_802084BC = D_hd_code_80303B88;
 s8   D_hd_front_end_802084C0 = 1;
 // </data>
 

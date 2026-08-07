@@ -951,7 +951,7 @@ void Thread3(void* arg0) {
           {
             osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((playerNumber << 0x10) | 0x14 | 0x01000000), OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, NULL, OS_MESG_BLOCK);
-            func_801EA93C("ENTER NAME!", &D_hd_code_803047A0, 7, 0x1E, &players[playerNumber]);
+            func_801EA93C("ENTER NAME!", D_hd_code_803047A0, 7, 0x1E, &players[playerNumber]);
             func_hd_code_8026AF6C(0x800B);
             func_hd_code_8025D184();
             D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
@@ -962,7 +962,7 @@ void Thread3(void* arg0) {
             func_hd_code_80255DC8();
             func_80200714(1);
             D_hd_front_end_8020C070[0x09].unkC = "QUIT GAME!",
-            D_hd_front_end_8020C070[0x09].unk10 = &D_hd_code_803047CC,
+            D_hd_front_end_8020C070[0x09].unk10 = D_hd_code_803047CC,
             D_hd_front_end_8020C070[0x09].unk8 = 0x16U,
             D_hd_front_end_8020C070[0x09].unk6 = D_hd_front_end_8020C070[0x09].unk8;
             func_hd_code_8026AF6C(0x800C);
@@ -1000,7 +1000,7 @@ void Thread3(void* arg0) {
               func_hd_code_8025D184();
               func_80200714(1);
               D_hd_front_end_8020C070[0x09].unkC = "ERASE SAVED GAME!",
-              D_hd_front_end_8020C070[0x09].unk10 = &D_hd_code_803047B4,
+              D_hd_front_end_8020C070[0x09].unk10 = D_hd_code_803047B4,
               D_hd_front_end_8020C070[0x09].unk8 = 0x14U,
               D_hd_front_end_8020C070[0x09].unk6 = D_hd_front_end_8020C070[0x09].unk8;
               func_hd_code_8026AF6C(0x800C);
@@ -1014,7 +1014,7 @@ void Thread3(void* arg0) {
           case 0x0100000000000000:
           {
             D_hd_front_end_8020C070[0x09].unkC = "BECOME GUEST PLAYER:",
-            D_hd_front_end_8020C070[0x09].unk10 = &D_hd_code_803047DC,
+            D_hd_front_end_8020C070[0x09].unk10 = D_hd_code_803047DC,
             D_hd_front_end_8020C070[0x09].unk8 = 0x14U,
             D_hd_front_end_8020C070[0x09].unk6 = D_hd_front_end_8020C070[0x09].unk8;
             func_hd_code_8026AF6C(0x800C);
@@ -2761,15 +2761,15 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
         if ((u32) ((u32) (((u32) sc.unk803156C4 % 40U) * 60) / 60U) >= 16U) {
             if (D_hd_code_802E8BD0 != 0) {
                 if ((D_hd_code_80364A90 == 0x2000000000000000) && (D_hd_code_8036BB1C == 2)) {
-                    func_hd_code_80259CCC(arg0, "USE Z/R TO TURN PAGES", &D_hd_code_8030491C, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    func_hd_code_80259CCC(arg0, "USE Z/R TO TURN PAGES", D_hd_code_8030491C, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 } else if ((D_hd_code_80364A90 == 0x100) && (D_hd_code_8036BB18 == 0) && (D_hd_code_8036BB1C == 2) && (D_hd_code_803643DB != 0) && !(D_hd_code_80370C28 & 0x2010)) {
-                    func_hd_code_80259CCC(arg0, "USE Z/R TO MOVE MAP", &D_hd_code_80304938, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    func_hd_code_80259CCC(arg0, "USE Z/R TO MOVE MAP", D_hd_code_80304938, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 }
             } else if ((D_hd_code_80364A90 == 0x100)) {
                 if (D_hd_code_80364AC1 != 0) {
-                    func_hd_code_80259CCC(arg0, "SHUTTLE VIEW", &D_hd_code_80304904, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    func_hd_code_80259CCC(arg0, "SHUTTLE VIEW", D_hd_code_80304904, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 } else {
-                    func_hd_code_80259CCC(arg0, "MISSILE VIEW", &D_hd_code_80304910, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    func_hd_code_80259CCC(arg0, "MISSILE VIEW", D_hd_code_80304910, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 }
             }
         }

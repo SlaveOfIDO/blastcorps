@@ -56,10 +56,10 @@ extern struct S_80367C04 D_hd_code_802E8F94[];
 extern struct S_80367BCC D_hd_code_802F49F4[];
 extern struct S_8020C070 D_hd_front_end_8020C070[];
 
-extern u16 D_hd_code_80303B3C;
-extern u16 D_hd_code_80303B48;
-extern u16 D_hd_code_80303B58;
-extern u16 D_hd_code_80303B68;
+extern u16 D_hd_code_80303B3C[];
+extern u16 D_hd_code_80303B48[];
+extern u16 D_hd_code_80303B58[];
+extern u16 D_hd_code_80303B68[];
 
 u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
     UnknownData8024C414 *sp3C;
@@ -143,10 +143,10 @@ char* D_hd_front_end_802084D0[4] = {
   "GUEST BEST IS"
 };
 u16* D_hd_front_end_802084E0[] = {
-  &D_hd_code_80303B3C,
-  &D_hd_code_80303B48,
-  &D_hd_code_80303B58,
-  &D_hd_code_80303B68
+  D_hd_code_80303B3C,
+  D_hd_code_80303B48,
+  D_hd_code_80303B58,
+  D_hd_code_80303B68
 };
 // </data>
 

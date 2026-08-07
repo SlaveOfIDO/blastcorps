@@ -1,6 +1,7 @@
 #include "common.h"
 #include "../hd_code/macros.h"
 #include "../hd_code/structs.h"
+#include "../hd_code/symbol_data.h"
 #include "../hd_code/hd.h"
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
@@ -15,7 +16,7 @@ extern struct S_80208044 D_hd_front_end_80208044;
 // <data>
 char *D_hd_front_end_80208040 = "SELECT VEHICLE!";
 struct S_80208044 D_hd_front_end_80208044 = {
-  0x80304954, { 0xFFFF,  0x0000 }
+  (s32) D_hd_code_80304954, { 0xFFFF,  0x0000 }
 };
 u8 D_hd_front_end_8020804C[20] = {
   0x00, 0x01, 0x00, 0x00,

@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "hd.h"
 #include "structs.h"
+#include "symbol_data.h"
 #include "variables.h"
 
 // Proposed file name: missions.c
@@ -561,7 +562,7 @@ struct S_80367C04 D_hd_code_802E8F94[] = {
 
 u8 __alignmentIssue[12] = {0};
 char D_hd_code_802E9F90[] = "BUILDINGS"; // proposed name: buildingsText
-void* D_hd_code_802E9F9C = (void*)0x8030480C; // TODO: D_hd_code_8030480C; proposed name: buildingsIconData
+void* D_hd_code_802E9F9C = (void*)D_hd_code_8030480C; // proposed name: buildingsIconData
 u8 D_hd_code_802E9FA0[2] = { 0x20, 0x53 }; // { ' ', 'S' }: plural suffix for "%d MINUTE%c"; proposed name: pluralSuffix
 
 

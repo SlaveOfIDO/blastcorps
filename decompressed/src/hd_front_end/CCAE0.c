@@ -1,6 +1,7 @@
 #include "common.h"
 #include "../hd_code/macros.h"
 #include "../hd_code/structs.h"
+#include "../hd_code/symbol_data.h"
 #include "../hd_code/hd.h"
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
@@ -25,8 +26,8 @@ void func_hd_front_end_801EA108(u8, u8, u8);               /* extern */
 extern u8 D_hd_front_end_80215520[];
 extern u8 D_hd_code_80365060[];
 void func_hd_front_end_801EA278(void);  /* extern */
-extern u8 D_803046F8;
-extern u8 D_80304710;
+extern u16 D_803046F8[];
+extern u16 D_80304710[];
 extern struct S_8020C070 D_hd_front_end_8020C070[];
 extern u8 D_hd_front_end_80215520[];
 extern u8 D_hd_front_end_802154B0;
@@ -60,7 +61,7 @@ extern u16 D_hd_code_80364EF0[][16];
 extern u8  D_hd_code_802E8C44[];
 extern struct S_80367C04 D_hd_code_802E8F94[];
 void func_hd_front_end_801EA278(void);  /* extern */
-extern u8 D_80304730;
+extern u16 D_80304730[];
 extern struct S_8020C070 D_hd_front_end_8020C070[];
 extern u8 D_hd_front_end_80215520[];
 extern u8 D_hd_code_80365060[];
@@ -169,37 +170,37 @@ extern f32 D_hd_front_end_80215950;
 
 // <data>
 UnknownData802081C0 D_hd_front_end_802081C0[31] = {
-  { "ROOKIE WRECKER", 0x803041DC },
-  { "TRAINED CRUSHER", 0x803041EC },
-  { "EXPERIENCED RAVAGER", 0x803041FC },
-  { "DECORATED DAMAGER", 0x8030420C },
-  { "PROFESSIONAL RAZER", 0x8030421C },
-  { "EXPERT DESTROYER", 0x8030422C },
-  { "GIFTED RUINER", 0x8030423C },
-  { "ACCOMPLISHED CONQUEROR", 0x8030424C },
-  { "MASTER DESPOILER", 0x8030425C },
-  { "DEMOLITION FANATIC", 0x8030426C },
-  { "GRAND ERADICATOR", 0x8030427C },
-  { "HEAVY DUTY WASTER", 0x80304288 },
-  { "TOTAL PULVERISER", 0x8030429C },
-  { "CHAMPION RANSACKER", 0x803042AC },
-  { "MECHANICAL MAESTRO", 0x803042B8 },
-  { "CHIEF OBLITERATOR", 0x803042CC },
-  { "COMMANDING DESOLATOR", 0x803042E0 },
-  { "SUPREME DEVASTATOR", 0x803042F0 },
-  { "ULTIMATE ANNIHILATOR", 0x80304304 },
-  { "LEVELING LEGEND", 0x8030430C },
-  { "DESTRUCTIVE PSYCHOPATH", 0x80304318 },
-  { "MINDLESS DESECRATOR", 0x80304328 },
-  { "HYSTERICAL CLAUSTROPHOBE", 0x80304334 },
-  { "UNCONTROLLABLE MADMAN", 0x80304344 },
-  { "WORLD CLASS MEGALOMANIAC", 0x80304358 },
-  { "CAPTAIN OF CARNAGE", 0x80304364 },
-  { "SINGLE MINDED CHAOSMONGER", 0x80304370 },
-  { "GRAND HIGH SLAUGHTERMASTER", 0x8030437C },
-  { "LUNATIC LORD OF HAVOC", 0x80304388 },
-  { "ARMAGEDDON ADEPT", 0x80304394 },
-  { "YOU CAN STOP NOW.", 0x8030439C }
+  { "ROOKIE WRECKER", (s32) D_hd_code_803041DC },
+  { "TRAINED CRUSHER", (s32) D_hd_code_803041EC },
+  { "EXPERIENCED RAVAGER", (s32) D_hd_code_803041FC },
+  { "DECORATED DAMAGER", (s32) D_hd_code_8030420C },
+  { "PROFESSIONAL RAZER", (s32) D_hd_code_8030421C },
+  { "EXPERT DESTROYER", (s32) D_hd_code_8030422C },
+  { "GIFTED RUINER", (s32) D_hd_code_8030423C },
+  { "ACCOMPLISHED CONQUEROR", (s32) D_hd_code_8030424C },
+  { "MASTER DESPOILER", (s32) D_hd_code_8030425C },
+  { "DEMOLITION FANATIC", (s32) D_hd_code_8030426C },
+  { "GRAND ERADICATOR", (s32) D_hd_code_8030427C },
+  { "HEAVY DUTY WASTER", (s32) D_hd_code_80304288 },
+  { "TOTAL PULVERISER", (s32) D_hd_code_8030429C },
+  { "CHAMPION RANSACKER", (s32) D_hd_code_803042AC },
+  { "MECHANICAL MAESTRO", (s32) D_hd_code_803042B8 },
+  { "CHIEF OBLITERATOR", (s32) D_hd_code_803042CC },
+  { "COMMANDING DESOLATOR", (s32) D_hd_code_803042E0 },
+  { "SUPREME DEVASTATOR", (s32) D_hd_code_803042F0 },
+  { "ULTIMATE ANNIHILATOR", (s32) D_hd_code_80304304 },
+  { "LEVELING LEGEND", (s32) D_hd_code_8030430C },
+  { "DESTRUCTIVE PSYCHOPATH", (s32) D_hd_code_80304318 },
+  { "MINDLESS DESECRATOR", (s32) D_hd_code_80304328 },
+  { "HYSTERICAL CLAUSTROPHOBE", (s32) D_hd_code_80304334 },
+  { "UNCONTROLLABLE MADMAN", (s32) D_hd_code_80304344 },
+  { "WORLD CLASS MEGALOMANIAC", (s32) D_hd_code_80304358 },
+  { "CAPTAIN OF CARNAGE", (s32) D_hd_code_80304364 },
+  { "SINGLE MINDED CHAOSMONGER", (s32) D_hd_code_80304370 },
+  { "GRAND HIGH SLAUGHTERMASTER", (s32) D_hd_code_8030437C },
+  { "LUNATIC LORD OF HAVOC", (s32) D_hd_code_80304388 },
+  { "ARMAGEDDON ADEPT", (s32) D_hd_code_80304394 },
+  { "YOU CAN STOP NOW.", (s32) D_hd_code_8030439C }
 };
 u8 D_hd_front_end_802082B8[32] = {
   0x01, 0x01, 0x01, 0x01,
@@ -312,7 +313,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
       ".................... A FEARLESS ARMY DAREDEVIL UNTIL HIS DISABLING ACCIDENT. WESLEY'S REJECTION BY HIS SUPERIORS TRIGGERED THE REBELLION THAT LED TO THE RISE OF BLAST CORPS ..............."
     };
     s32 sp24[4] = {
-      0x803043B8, 0x80304474, 0x80304544, 0x80304614
+      (s32) D_hd_code_803043B8, (s32) D_hd_code_80304474, (s32) D_hd_code_80304544, (s32) D_hd_code_80304614
     };
 
     if (!(D_hd_code_80364A90 & 0x10E18000) && (arg0 != D_hd_code_80364AEA)) {
@@ -653,10 +654,10 @@ void func_hd_front_end_801EA4B8(void) {
   }
   if (D_hd_front_end_802154B0 != 4) {
     D_hd_front_end_8020C070[6].unkC = "ERASE GAME";
-    D_hd_front_end_8020C070[6].unk10 = &D_803046F8;
+    D_hd_front_end_8020C070[6].unk10 = D_803046F8;
   } else {
     D_hd_front_end_8020C070[6].unkC = "IGNORE PAK";
-    D_hd_front_end_8020C070[6].unk10 = &D_80304710;
+    D_hd_front_end_8020C070[6].unk10 = D_80304710;
   }
   D_hd_front_end_8020C070[6].unk19 = 2;
   D_hd_code_802F8BDC[0xA].unk8 &= ~0x400;
@@ -686,7 +687,7 @@ void func_hd_front_end_801EA6E8(void) {
     }
   }
   D_hd_front_end_8020C070[6].unkC = "GO BACK";
-  D_hd_front_end_8020C070[6].unk10 = &D_80304730;
+  D_hd_front_end_8020C070[6].unk10 = D_80304730;
   D_hd_front_end_8020C070[6].unk19 = 2;
   D_hd_code_802F8BDC[0xA].unk8 |= 0x400;
   D_hd_code_802F8BDC[0xA].unk18 = 6;

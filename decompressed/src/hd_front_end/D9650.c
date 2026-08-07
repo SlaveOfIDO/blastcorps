@@ -35,7 +35,7 @@ void func_hd_front_end_801F7410(u8*);
 extern u8 D_hd_code_80365060[];
 extern struct S_8020C070* D_hd_code_8036BB24; // 21 elements
 extern u8 D_hd_front_end_8020C01C[];
-extern u8 D_80301080;
+extern u16 D_80301080[];
 extern u8 D_hd_front_end_8020C488[];
 extern u8 D_hd_front_end_802189C0[][0x11];
 extern u8 D_hd_front_end_80218AD0[][0x5];
@@ -684,7 +684,7 @@ s32 func_hd_front_end_801F6F18(void) {
     sprintf(D_hd_front_end_80219FB0, "%d NEEDED PER PLAYER", 0xE);
     D_hd_front_end_8020C070[36].unkC = D_hd_front_end_80219FB0;
     D_hd_front_end_8020C070[10].unkC = "DELETE THIS FILE?";
-    D_hd_front_end_8020C070[10].unk10 = &D_80301080;
+    D_hd_front_end_8020C070[10].unk10 = D_80301080;
     return D_hd_front_end_80218D28 != 0;
 }
 
