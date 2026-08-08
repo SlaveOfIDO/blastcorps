@@ -77,7 +77,6 @@ all: verify
 
 extract:
 	splat split decompressed.$(VERSION).yaml
-	$(PYTHON) $(TOOLS_DIR)/fix_gp_rel.py
 
 
 #################
