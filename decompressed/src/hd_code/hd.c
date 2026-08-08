@@ -9,6 +9,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "../vram.h"
 
 // Proposed file name: hd.c (the original name - the assert strings in this
 // file reference "hd.c" and "./master_switch.c")
@@ -4945,7 +4946,7 @@ void func_hd_code_80256A34(s32* arg0) {
     if (D_hd_code_803669B4 != 0) {
         func_hd_code_8025BD98();
     }
-    rmonPrintf("Level %d: mem_pool=0x%x, code seg=0x%x, space=%d bytes\n", (s32* ) levelno, D_hd_code_80358070, 0x802447C0, 0x8021ED00 - (s32)D_hd_code_80358070);
+    rmonPrintf("Level %d: mem_pool=0x%x, code seg=0x%x, space=%d bytes\n", (s32* ) levelno, D_hd_code_80358070, VRAM_HD_CODE, 0x8021ED00 - (s32)D_hd_code_80358070);
     if (D_hd_code_8039CAB7 != 0) {
         func_hd_code_802979E0(levelno);
     }

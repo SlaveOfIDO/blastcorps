@@ -96,7 +96,10 @@ segments:
     - [0x75490, c, hd_code/75490]
     - [0x772A0, c, hd_code/772A0]
     - [0x77E20, c, hd_code/77E20]
-    - [0x7D9D0, hasm, hd_code/7D9D0_data] # ?? handwritten or a mix of .text+.data?
+    - [0x7D9D0, .data, hd_code/7D9D0]
+    - [0x7DC30, hasm, hd_code/7DC30_data] # TODO: what is this?
+    - [0x7F8B0, c, hd_code/7F8B0]
+    - [0x800E0, hasm, hd_code/800E0_data] # TODO: what is this?
     - [0x80280, c, hd_code/7FB50]
     - [0x83910, c, hd_code/83910]
     - [0x853D0, c, hd_code/853D0]
@@ -255,9 +258,10 @@ segments:
     - [0xA0A30, hasm, hd_code/os/getcause]
     - [0xA0A40, c, hd_code/os/atomic]
     - [0xA0AA0, c, hd_code/libc/ldiv]
-    - [0xA0C30, data, hd_code/rsp/f3d]
-    - [0xA2060, data, hd_code/rsp/rspboot]
-    - [0xA2130, data, hd_code/rsp/aspmain]
+    - [0xA0C30, textbin, hd_code/f3d]
+    - [0xA2060, textbin, hd_code/rspboot]
+    - [0xA2130, textbin, hd_code/asp]
+    - [0xA2FF0, data, hd_code/A2FF0_data]
     - [0xA4410, .data, hd_code/hd] # done
     - [0xA44A0, .data, hd_code/13A70] # done
     - [0xA44B0, .data, hd_code/14B30] # done
@@ -369,7 +373,7 @@ segments:
     - [0xC9120, .rodata, hd_code/71140] # done
     - [0xC9140, .rodata, hd_code/72B80] # done
     - [0xC9160, .rodata, hd_code/75490] # done
-    - [0xC9180, rodata, hd_code/7D9D0_rodata]
+    - [0xC9180, .rodata, hd_code/7F8B0] # done
     - [0xC9190, .rodata, hd_code/7FB50] # done
     - [0xC91C0, .rodata, hd_code/83910] # done
     - [0xC91D0, .rodata, hd_code/853D0] # done
@@ -398,7 +402,8 @@ segments:
     - [0xC9B30, .rodata, hd_code/libc/xldtob ]
     - [0xC9B90, .rodata, hd_code/audio/seq ]
     - [0xC9BA0, .rodata, hd_code/audio/reverb ]
-    - [0xC9BD0, rodata, hd_code_rodata_rest4 ] # TODO: .rodata
+    - [0xC9BD0, databin, hd_code/f3d]
+    - [0xCA3D0, databin, hd_code/asp]
     - { start: 0xCAEA0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/13A70, vram: 0x803650B0 } # done
     - { start: 0xCAEA0, type: .bss, name: hd_code/14B30, vram: 0x80365340 } # done
@@ -455,7 +460,7 @@ segments:
     - [ 0xE4590, c, hd_front_end/E4590 ] # done
     - [ 0xE50E0, c, hd_front_end/E50E0 ] # done
     - [ 0xE5D20, c, hd_front_end/E5D20 ] # done
-    - [ 0xE5FA0, hasm, hd_front_end/E5FA0 ] # done
+    - [ 0xE5FA0, c, hd_front_end/E5FA0 ] # done
     - [ 0xE65D0, c, hd_front_end/io/pfsfreeblocks ]
     - [ 0xE6720, c, hd_front_end/io/conteepprobe ]
     - [ 0xE6790, c, hd_front_end/io/pfschecker ]

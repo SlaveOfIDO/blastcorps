@@ -7,6 +7,7 @@
 #include "structs.h"
 
 extern u8 D_hd_code_802F47B0[23][8];
+extern u32 D_hd_code_802F4880[];
 extern char D_hd_code_8036B980[0x28];
 extern char D_hd_code_8036B9A8[0x20];
 extern char D_hd_code_8036B9C8[0x20];
