@@ -1,5 +1,11 @@
 VERSION  ?= us.v11
 
+# NON_MATCHING - whether to build a matching, identical copy of the ROM
+#   1 - enable some alternate, more portable code that does not produce a matching ROM
+#   0 - build a matching ROM
+NON_MATCHING ?= 0
+$(eval $(call validate-option,NON_MATCHING,0 1))
+
 ### VARS
 
 
@@ -69,7 +75,10 @@ DECOMPRESSED_O_FILES := $(UNMATCHED_DECOMPRESSED_S_O_FILES) \
 
 default: all
 
-all: verify
+all: build/decompressed.bin
+ifeq ($(NON_MATCHING),0)
+	@echo "$$(cat decompressed.$(VERSION).sha1) $<" | sha1sum --check
+endif
 
 ################
 ## EXTRACTION ##
@@ -122,9 +131,6 @@ $(BUILD_DIR)/%.bin.o: %.bin
 	@mkdir -p $(@D)
 	$(LD) -r -b binary -o $@ $<
 
-
-
-
 # *.o -> *.elf
 build/decompressed.elf: $(DECOMPRESSED_O_FILES)
 	$(LD) $(LDFLAGS) -o $@
@@ -132,9 +138,6 @@ build/decompressed.elf: $(DECOMPRESSED_O_FILES)
 # *.elf -> *.bin
 build/decompressed.bin: build/decompressed.elf
 	$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
-
-verify: build/decompressed.bin
-	@echo "$$(cat decompressed.$(VERSION).sha1) $<" | sha1sum --check
 
 
 ###########
