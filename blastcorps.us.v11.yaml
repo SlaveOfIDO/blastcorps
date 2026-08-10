@@ -31,7 +31,7 @@ segments:
     - [0x1050, c, init/inflate]
     - [0x2660, c, init/rarezip] 
     - [0x2A00, c, init/libc/syncprintf]
-    - [0x2A30, hasm, init/1A30] # TODO
+    - [0x2A30, c, init/1A30]
     - [0x2EA0, hasm, init/libc/bzero] # TODO: does not match libultra 2.0I bzero
     - [0x2F40, c, init/os/initialize]
     - [0x3170, c, init/io/pirawdma]

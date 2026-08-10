@@ -134,6 +134,7 @@ $(BUILD_DIR)/%.bin.o: %.bin
 # *.o -> *.elf
 build/decompressed.elf: $(DECOMPRESSED_O_FILES)
 	$(LD) $(LDFLAGS) -o $@
+	$(PYTHON) $(TOOLS_DIR)/gen_exported_symbols.py --map decompressed.map --out exported_symbols.auto.txt
 
 # *.elf -> *.bin
 build/decompressed.bin: build/decompressed.elf

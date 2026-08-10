@@ -1,4 +1,11 @@
 VERSION  ?= us.v11
+export VERSION
+
+# NON_MATCHING - whether to build a matching, identical copy of the ROM
+#   1 - enable some alternate, more portable code that does not produce a matching ROM
+#   0 - build a matching ROM
+NON_MATCHING ?= 0
+$(eval $(call validate-option,NON_MATCHING,0 1))
 
 ASM_DIR   = asm
 ASM_DIRS  = $(shell find $(ASM_DIR)/init -type d) $(shell find $(ASM_DIR)/hd_code -type d) $(shell find $(ASM_DIR)/data -type d) # only include init and data here
@@ -23,9 +30,10 @@ MIPSISET := -mips2 -o32
 LD_SCRIPT = blastcorps.$(VERSION).decompressed.ld
 OBJCOPYFLAGS = -O binary
 ASFLAGS = -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include
-LDFLAGS = -T $(LD_SCRIPT) -Map $(TARGET).map -T undefined_syms_auto.init.$(VERSION).txt -T undefined_funcs_auto.init.$(VERSION).txt -T undefined_syms.init.$(VERSION).txt --no-check-sections
+RZIP_RELOC_FILE = rzip_reloc_auto.init.$(VERSION).txt
+LDFLAGS = -T $(LD_SCRIPT) -Map $(TARGET).map -T undefined_syms_auto.init.$(VERSION).txt -T undefined_funcs_auto.init.$(VERSION).txt -T undefined_syms.init.$(VERSION).txt -T decompressed/exported_symbols.auto.txt -T $(RZIP_RELOC_FILE) --no-check-sections
 INCLUDE_CFLAGS := -I . -I include -I include/2.0D -I include/2.0D/PR
-CFLAGS := -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -woff 649,838 $(INCLUDE_CFLAGS)
+CFLAGS := -G 0 -Xfullwarn -Xcpluscomm -signed -nostdinc -non_shared -Wab,-r4300_mul -D_LANGUAGE_C -D_FINALROM -DNON_MATCHING=$(NON_MATCHING) -DDEBUG=0 -woff 649,838 $(INCLUDE_CFLAGS)
 GCC_ASFLAGS    := -EB -x assembler-with-cpp -march=vr4300 -mabi=32 -O2 -G 0 -w -nostdinc -c   -mfix4300 -mno-abicalls -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_MIPS_SIM=1 -D_MIPS_SZLONG=32
 
 ### Main
@@ -94,7 +102,11 @@ build/src/init/libc/ll.c.o: MIPSISET := -mips3 -o32
 
 default: all
 
+ifeq ($(NON_MATCHING),1)
+all: dirs $(TARGET).z64
+else
 all: dirs $(TARGET).z64 verify
+endif
 
 dirs:
 	$(foreach dir,$(INIT_SRC_DIRS) $(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))
@@ -106,6 +118,8 @@ verify: $(TARGET).z64
 
 extract: check decompressed.$(VERSION).z64
 	splat split blastcorps.$(VERSION).yaml
+	VERSION=$(VERSION) $(PYTHON) $(TOOLS_DIR)/pad_init_segment.py
+
 	cp assets/decompressed.$(VERSION).bin decompressed/decompressed.$(VERSION).bin
 
 decompressed.$(VERSION).z64: baserom.$(VERSION).z64
@@ -117,10 +131,15 @@ decompressed.$(VERSION).z64: baserom.$(VERSION).z64
 
 # *.c -> *.c.o (with GLOBAL_ASM macro)
 $(GLOBAL_ASM_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c
-	$(PYTHON) $(ASM_PROCESSOR_DIR)/asm_processor.py $(OPT_FLAGS) $< > $(BUILD_DIR)/$<
-	$(CC) -c -32 $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $(BUILD_DIR)/$<
-	$(PYTHON) $(ASM_PROCESSOR_DIR)/asm_processor.py $(OPT_FLAGS) $< --post-process $@ \
-		--assembler "$(AS) $(ASFLAGS)" --asm-prelude $(ASM_PROCESSOR_DIR)/prelude.s
+	@mkdir -p $(@D)
+	$(PYTHON) $(TOOLS_DIR)/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) -- -c $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
+
+# 1A30.c.o (without asm processor)
+ifeq ($(NON_MATCHING),1)
+$(BUILD_DIR)/src/init/1A30.c.o: src/init/1A30.c
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) $(OPT_FLAGS) $(MIPSISET) -o $@ $<
+endif
 
 # *.c -> *.c.o (without GLOBAL_ASM macro)
 $(MIPS3_INIT_C_O_FILES): $(BUILD_DIR)/%.c.o: %.c
@@ -149,8 +168,18 @@ $(BUILD_DIR)/assets/decompressed.$(VERSION).bin.o: decompressed/build/decompress
 	cp decompressed/build/decompressed.bin assets/decompressed.$(VERSION).bin
 	$(LD) -r -b binary -o $@ $<
 
+# computed ahead of linking (from the already-built decompressed overlay
+# content) so the linker sees this build's addresses, not a stale previous
+# build's. .PHONY (always reruns) rather than tracked via the file's mtime:
+# make has a sharp edge where a missing prerequisite of an *already-existing*
+# target is silently treated as "up to date" once that target exists on
+# disk, which would make the addresses go stale again after the first build.
+.PHONY: $(RZIP_RELOC_FILE)
+$(RZIP_RELOC_FILE): decompressed/build/decompressed.bin
+	VERSION=$(VERSION) $(PYTHON) $(TOOLS_DIR)/compute_rzip_reloc.py
+
 # *.o -> *.elf
-$(TARGET).elf: $(O_FILES)
+$(TARGET).elf: $(O_FILES) $(RZIP_RELOC_FILE)
 	$(LD) $(LDFLAGS) -o $@
 
 # *.elf -> *.bin
@@ -158,8 +187,11 @@ $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 
 # *.bin -> *.z64
-$(TARGET).z64: $(TARGET).bin
+$(TARGET).z64: $(TARGET).bin $(RZIP_RELOC_FILE)
 	VERSION=$(VERSION) $(PYTHON) $(TOOLS_DIR)/compress_rom.py
+ifeq ($(NON_MATCHING),1)
+	$(PYTHON) $(TOOLS_DIR)/fix_checksum.py $@
+endif
 
 # SHA1 check
 .baserom.$(VERSION).ok: baserom.$(VERSION).z64
@@ -186,8 +218,21 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
-	rm -f hd_code/hd_code.bin
-	rm -f hd_front_end/hd_front_end.bin
+	rm -f decompressed/decompressed.bin
+
+##########
+## FULL ##
+##########
+full-decompressed:
+	make -C decompressed clean
+	make -C decompressed extract
+	make -C decompressed
+full:
+	make clean
+	make extract
+	make full-decompressed
+	make
+
 
 ### Settings
 .SECONDARY:
