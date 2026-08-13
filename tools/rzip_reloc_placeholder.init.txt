@@ -1,0 +1,11 @@
+# Placeholder rzip reloc values, used only to link init once to learn its real compiled size
+rzip_HD_CODE_TEXT_START = 0x0;
+rzip_HD_CODE_TEXT_END = 0x0;
+rzip_HD_CODE_DATA_START = 0x0;
+rzip_HD_CODE_DATA_END = 0x0;
+rzip_HD_FRONT_END_TEXT_START = 0x0;
+rzip_HD_FRONT_END_TEXT_END = 0x0;
+rzip_HD_FRONT_END_DATA_START = 0x0;
+rzip_HD_FRONT_END_DATA_END = 0x0;
+rzip_LAYOUT_END = 0x0;
+hd_code_BSS_END = 0x0;

@@ -1,5 +1,9 @@
 #include "common.h"
 
+// <data>
+s32 D_hd_code_80305CE0 = 0x0405FF00;
+// </data>
+
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/6B4A0/func_hd_code_802AFC60.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/6B4A0/func_hd_code_802AFFD4.s")

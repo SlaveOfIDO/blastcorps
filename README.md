@@ -48,33 +48,23 @@ pip install -r requirements.txt
 
 ```
 make extract
-make -C hd_code extract
 ```
 
 ## Build ROM
 
 ```
-make -C hd_code
 make
 ```
 
-## C tools
+By default this builds `blastcorps.us.v11.z64` and verifies it matches the
+original ROM byte-for-byte. Two variables control the build:
 
-C tools from queueRAM's `blast_corps_docs`, `sm64tools` and other places.
-They can be found in the `tools/src` subdirectory of this repo.
-
-### Build the tools
-
-```
-meson build-tools
-ninja -C build-tools
-```
-
-### Run the tools
+* `VERSION` - which ROM to target (currently only `us.v11` is supported).
+* `NON_MATCHING` - set to `1` to allow some more portable code that does not
+  produce a matching ROM (default `0`, matching build). *EXPERIMENTAL*
 
 ```
-./build-tools/tools/src/blast_textures
-./build-tools/tools/src/gen_level_table
+make VERSION=us.v11 NON_MATCHING=1
 ```
 
 # Related

@@ -1,0 +1,75 @@
+options:
+  platform: n64
+  base_path: .
+  basename: init.us.v11
+  compiler: IDO
+  find_file_boundaries: yes
+  target_path: init.us.v11.bin
+  symbol_addrs_path: symbol_addrs.init.us.v11.txt
+  undefined_funcs_auto_path: undefined_funcs_auto.init.us.v11.txt
+  undefined_syms_auto_path: undefined_syms_auto.init.us.v11.txt
+  ld_legacy_generation: True # change this when ready to False
+  extensions_path: ../tools/splat_ext
+  symbol_name_format: $SEG_$VRAM
+  make_full_disasm_for_code: yes
+  hasm_in_src_path: yes
+  generate_asm_macros_files: no
+segments:
+  - name:  init
+    type: code
+    start: 0x0
+    vram:  0x8021ED00
+    bss_size: 0x23A0
+    subsegments:
+    - [0x0, hasm, init/entry]
+    - [0x50, c, init/inflate]
+    - [0x1660, c, init/rarezip]
+    - [0x1A00, c, init/libc/syncprintf]
+    - [0x1A30, c, init/1A30]
+    - [0x1EA0, hasm, init/libc/bzero] # TODO: does not match libultra 2.0I bzero
+    - [0x1F40, c, init/os/initialize]
+    - [0x2170, c, init/io/pirawdma]
+    - [0x2250, c, init/io/pigetstat]
+    - [0x2260, hasm, init/os/setsr]
+    - [0x2270, hasm, init/os/getsr]
+    - [0x2280, hasm, init/os/setfpccsr]
+    - [0x2290, c, init/io/sirawread]
+    - [0x22E0, c, init/io/sirawwrite]
+    - [0x2330, hasm, init/os/exceptasm] # TODO: does not match libultra 2.0D exceptasm
+    - [0x2BA0, hasm, init/os/writebackdcache]
+    - [0x2C20, hasm, init/os/invalicache] # TODO: does not match libultra 2.0D invalicache
+    - [0x2CA0, hasm, init/os/maptlbrdb]
+    - [0x2D00, c, init/io/pirawread]
+    - [0x2D60, c, init/libc/ll]
+    - [0x3020, pad]
+    - [0x3060, c, init/os/virtualtophysical]
+    - [0x30E0, c, init/io/si]
+    - [0x3110, c, init/debug/kdebugserver]
+    - [0x3590, c, init/os/thread]
+    - [0x35D0, c, init/os/syncputchars]
+    - [0x3700, c, init/os/seteventmesg]
+    - [0x3770, hasm, init/os/setintmask]
+    - [0x37D0, c, init/os/destroythread]
+    - [0x38D0, hasm, init/os/probetlb]
+    - [0x3990, hasm, init/os/getcause]
+    - [0x39A0, c, init/os/atomic]
+    - [0x3A00, hasm, init/os/interrupt]
+    - [0x3A40, .data, init/inflate]
+    - [0x3B40, .data, init/rarezip]
+    - [0x3B50, .data, init/1A30]
+    - [0x3B60, .data, init/os/initialize]
+    - [0x3B70, data, init/os/exceptasm]
+    - [0x3B90, .data, init/debug/kdebugserver]
+    - [0x3BA0, .data, init/os/thread]
+    - [0x3BC0, .data, init/os/syncputchars]
+    - [0x3BD0, .rodata, init/rarezip]
+    - [0x3C10, rodata, init/os/exceptasm]
+    - [0x3C60, .rodata, init/os/setintmask]
+    - [0x3CE0, .bss, init/inflate]
+    - [0x3CE0, .bss, init/rarezip]
+    - [0x3CE0, .bss, init/libc/syncprintf]
+    - [0x3CE0, .bss, init/1A30]
+    - [0x3CE0, .bss, init/os/initialize]
+    - [0x3CE0, .bss, init/debug/kdebugserver]
+    - [0x3CE0, .bss, init/os/seteventmesg]
+  - [0x3CE0]

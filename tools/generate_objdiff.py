@@ -3,7 +3,7 @@
 import json
 import os
 
-directories = [["init", ""], ["decompressed", "decompressed"]]
+directories = [["init", "init"], ["game", "game"]]
 
 data = {
     "$schema": "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json",

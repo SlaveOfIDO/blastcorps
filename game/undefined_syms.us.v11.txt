@@ -1,3 +1,8 @@
+/* init's entry point VRAM. Fixed - matches init.us.v11.yaml's own
+ * `vram: 0x8021ED00`. Used to be free (init_VRAM came from the shared
+ * monolithic link); game now builds independently of init, so it's
+ * hardcoded here instead. */
+init_VRAM = 0x8021ED00;
 hd_front_end_VRAM = init_VRAM - 0x37D00;
 
 /* Must be hardcoded */

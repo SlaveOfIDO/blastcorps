@@ -1,0 +1,1271 @@
+options:
+  platform: n64
+  base_path: .
+  basename: game.us.v11
+  compiler: IDO
+  #create_detected_syms: yes
+  find_file_boundaries: yes
+  target_path: game.us.v11.decompressed.bin
+  symbol_addrs_path:
+    - symbol_addrs.us.v11.txt
+    - symbol_addrs.hd_code.us.v11.txt
+  undefined_funcs_auto_path: undefined_funcs_auto.us.v11.txt
+  undefined_syms_auto_path: undefined_syms_auto.us.v11.txt
+  ld_legacy_generation: True # change this when ready to False
+  extensions_path: ../tools/splat_ext
+  symbol_name_format: $SEG_$VRAM
+  make_full_disasm_for_code: yes
+  hasm_in_src_path: yes
+  generate_asm_macros_files: no
+  migrate_rodata_to_functions: True
+  gfx_ucode: f3db
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+segments:
+  - [0x0, bin, blast_offsets]
+  - [0x8000, bin, blast_textures]
+  - [0x1D600, bin, blast_textures2]
+  - [0x34BC70, bin, snd_bank0]
+  - [0x34ECC0, bin, snd_unk1] # unknown/unclaimed
+  - [0x39CC40, bin, snd_bank1]
+  - [0x39FBE0, bin, snd_unk2] # unknown/unclaimed
+  - [0x44A8E0, bin, snd_seqfile]
+  - [0x482370, rzip, titlelogo_usa]
+  - [0x485190, rzip, titlepicture_usa]
+  - [0x48A8C0, rzip, nink]
+  - [0x48AC90, rzip, 64k]
+  - [0x48AD90, rzip, copyrightLogo]
+  - [0x48B1B0, rzip, scientist]
+  - [0x48B6E0, bin, commpoint]
+  - [0x48BB6A, bin, commpoint_dl]
+  - [0x48BDE0, bin, buggy]
+  - [0x48CB3C, bin, buggy_dl]
+  - [0x48D120, bin, driver]
+  - [0x48D9F8, bin, driver_dl]
+  - [0x48DCF0, bin, sideswipe]
+  - [0x48F008, bin, sideswipe_dl]
+  - [0x48F6B0, bin, magoo]
+  - [0x4915EC, bin, magoo_dl]
+  - [0x491DF0, bin, bulldozer]
+  - [0x49295A, bin, bulldozer_dl]
+  - [0x492E10, bin, truck]
+  - [0x493873, bin, truck_dl]
+  - [0x493D00, bin, chopper]
+  - [0x4945C1, bin, chopper_dl]
+  - [0x4949B0, bin, cmo]
+  - [0x49597F, bin, cmo_dl]
+  - [0x496040, bin, crane]
+  - [0x496695, bin, crane_dl]
+  - [0x496950, bin, train]
+  - [0x496E01, bin, train_dl]
+  - [0x497000, bin, hotrod]
+  - [0x4974C0, bin, hotrod_dl]
+  - [0x4977A0, bin, jetpack]
+  - [0x49938C, bin, jetpack_dl]
+  - [0x499C00, bin, bike]
+  - [0x49A634, bin, bike_dl]
+  - [0x49AAC0, bin, barge]
+  - [0x49AFC5, bin, barge_dl]
+  - [0x49B290, bin, police]
+  - [0x49B726, bin, police_dl]
+  - [0x49BA40, bin, ateam]
+  - [0x49C00F, bin, ateam_dl]
+  - [0x49C320, bin, starski]
+  - [0x49C6F6, bin, starski_dl]
+  - [0x49C9B0, bin, minimagoo]
+  - [0x49EB02, bin, minimagoo_dl]
+  - [0x49F440, bin, shuttle]
+  - [0x4A028D, bin, shuttle_dl]
+  - [0x4A0980, bin, lagp]
+  - [0x4A72B1, bin, lagp_dl]
+  - [0x4A7F30, rzip, chimp]
+  - [0x4B24CB, rzip, chimp_dl]
+  - [0x4B3C80, bin, valley]
+  - [0x4BA105, bin, valley_dl]
+  - [0x4BB080, bin, fact]
+  - [0x4BE567, bin, fact_dl]
+  - [0x4BEDE0, bin, dip]
+  - [0x4CEE96, bin, dip_dl]
+  - [0x4D12B0, bin, beetle]
+  - [0x4DCB58, bin, beetle_dl]
+  - [0x4DE290, bin, bonus1]
+  - [0x4DFC04, bin, bonus1_dl]
+  - [0x4E01A0, bin, bonus2]
+  - [0x4E2778, bin, bonus2_dl]
+  - [0x4E2F20, bin, bonus3]
+  - [0x4E3F17, bin, bonus3_dl]
+  - [0x4E4290, bin, level9]
+  - [0x4EF73E, bin, level9_dl]
+  - [0x4F0F30, bin, level10]
+  - [0x4FA7E1, bin, level10_dl]
+  - [0x4FB840, bin, level11]
+  - [0x502093, bin, level11_dl]
+  - [0x5031A0, bin, level12]
+  - [0x50B46A, bin, level12_dl]
+  - [0x50C660, bin, level13]
+  - [0x51C6D7, bin, level13_dl]
+  - [0x51E3A0, bin, level14]
+  - [0x526C94, bin, level14_dl]
+  - [0x528020, bin, level15]
+  - [0x52CBA5, bin, level15_dl]
+  - [0x52DA20, bin, level16]
+  - [0x53864E, bin, level16_dl]
+  - [0x539CD0, bin, level17]
+  - [0x5443BA, bin, level17_dl]
+  - [0x545B40, bin, level18]
+  - [0x54D0CA, bin, level18_dl]
+  - [0x54E100, bin, level19]
+  - [0x54FD53, bin, level19_dl]
+  - [0x550320, bin, level20]
+  - [0x55A525, bin, level20_dl]
+  - [0x55C1B0, bin, level21]
+  - [0x55F9EB, bin, level21_dl]
+  - [0x5605F0, bin, level22]
+  - [0x569417, bin, level22_dl]
+  - [0x56A710, bin, level23]
+  - [0x56D1A8, bin, level23_dl]
+  - [0x56D500, bin, level24]
+  - [0x56E674, bin, level24_dl]
+  - [0x56EA00, bin, level25]
+  - [0x5748D8, bin, level25_dl]
+  - [0x5755E0, bin, level26]
+  - [0x57B37F, bin, level26_dl]
+  - [0x57BE80, bin, level27]
+  - [0x582FC0, bin, level27_dl]
+  - [0x584000, bin, level28]
+  - [0x58685D, bin, level28_dl]
+  - [0x5871A0, bin, level29]
+  - [0x591521, bin, level29_dl]
+  - [0x592EA0, bin, level30]
+  - [0x5961E7, bin, level30_dl]
+  - [0x596AF0, bin, level31]
+  - [0x59F771, bin, level31_dl]
+  - [0x5A0B60, bin, level32]
+  - [0x5AA9E1, bin, level32_dl]
+  - [0x5ABE30, bin, level33]
+  - [0x5B0180, bin, level33_dl]
+  - [0x5B0D50, bin, level34]
+  - [0x5B382E, bin, level34_dl]
+  - [0x5B3ED0, bin, level35]
+  - [0x5BE98C, bin, level35_dl]
+  - [0x5BFFA0, bin, level36]
+  - [0x5C504D, bin, level36_dl]
+  - [0x5C5CE0, bin, level37]
+  - [0x5C7B8E, bin, level37_dl]
+  - [0x5C8270, bin, level38]
+  - [0x5CBAD8, bin, level38_dl]
+  - [0x5CC380, bin, level39]
+  - [0x5D641C, bin, level39_dl]
+  - [0x5D7B50, bin, level40]
+  - [0x5E0E49, bin, level40_dl]
+  - [0x5E2200, bin, level41]
+  - [0x5E67E8, bin, level41_dl]
+  - [0x5E7B20, bin, level42]
+  - [0x5EDF87, bin, level42_dl]
+  - [0x5EEDA0, bin, level43]
+  - [0x5FB299, bin, level43_dl]
+  - [0x5FC7D0, bin, level44]
+  - [0x6048E1, bin, level44_dl]
+  - [0x605A30, bin, level45]
+  - [0x60D9E5, bin, level45_dl]
+  - [0x60EDC0, bin, level46]
+  - [0x617BAC, bin, level46_dl]
+  - [0x619090, bin, level47]
+  - [0x61C50D, bin, level47_dl]
+  - [0x61CE10, bin, level48]
+  - [0x620FCC, bin, level48_dl]
+  - [0x621D00, bin, level49]
+  - [0x62AB91, bin, level49_dl]
+  - [0x62BF50, bin, level50]
+  - [0x630055, bin, level50_dl]
+  - [0x630A20, bin, level51]
+  - [0x637020, bin, level51_dl]
+  - [0x637D30, bin, level52]
+  - [0x63C9F6, bin, level52_dl]
+  - [0x63D250, bin, level53]
+  - [0x63F3EC, bin, level53_dl]
+  - [0x63FB30, bin, level54]
+  - [0x641075, bin, level54_dl]
+  - [0x6413A0, bin, level55]
+  - [0x6423D7, bin, level55_dl]
+  - [0x642870, bin, level56]
+  - [0x64E94E, bin, level56_dl]
+  - [0x6502E0, bin, level57]
+  - [0x65A649, bin, level57_dl]
+  - [0x65BC70, bin, level58]
+  - [0x66082A, bin, level58_dl]
+  - [0x6612A0, bin, level59]
+  - [0x666E69, bin, level59_dl]
+  - [0x667C20, rzip, worldtextures]
+  - [0x686870, rzip, ambertextures]
+  - [0x69E5D0, rzip, traffictextures]
+  - [0x6A40C0, rzip, controllertextures]
+  - [0x6A5230, bin, attract]
+  - [0x6A8710, bin, attract2]
+  - [0x6BA610, bin, attract3]
+  - [0x6CF050, bin, attract4]
+  - [0x6E3CA0, bin, usa_star]
+  - [0x6E551E, bin, usa_star_dl]
+  - [0x6E5B70, bin, ninlogo]
+  - [0x6E5D45, bin, ninlogo_dl]
+  - [0x6E5EB0, bin, reflectlogo]
+  - [0x6E70F4, bin, reflectlogo_dl]
+  - [0x6E77E0, bin, somelookup]
+  - [0x6E7FE0, bin, lamisc1]
+  - [0x6E8388, bin, lamisc1_dl]
+  - [0x6E84D8, bin, lapetrol1]
+  - [0x6E8942, bin, lapetrol1_dl]
+  - [0x6E8AC0, bin, laburger1]
+  - [0x6E8E62, bin, laburger1_dl]
+  - [0x6E8FCE, bin, laorph6]
+  - [0x6E96EC, bin, laorph6_dl]
+  - [0x6E9967, bin, lashop2]
+  - [0x6E9E2C, bin, lashop2_dl]
+  - [0x6E9FEB, bin, lamisc2]
+  - [0x6EA211, bin, lamisc2_dl]
+  - [0x6EA308, bin, lagrage4]
+  - [0x6EA879, bin, lagrage4_dl]
+  - [0x6EAAF5, bin, lamisc4]
+  - [0x6EADC4, bin, lamisc4_dl]
+  - [0x6EAF17, bin, laflat5]
+  - [0x6EB8B4, bin, laflat5_dl]
+  - [0x6EBBC8, bin, lawine5]
+  - [0x6EC436, bin, lawine5_dl]
+  - [0x6EC727, bin, lamisc5]
+  - [0x6EC8A3, bin, lamisc5_dl]
+  - [0x6EC982, bin, laflat3]
+  - [0x6ED481, bin, laflat3_dl]
+  - [0x6ED890, bin, lamisc3]
+  - [0x6ED9BE, bin, lamisc3_dl]
+  - [0x6EDA70, bin, lashop8]
+  - [0x6EEA2C, bin, lashop8_dl]
+  - [0x6EEED5, bin, laflat8]
+  - [0x6EF56A, bin, laflat8_dl]
+  - [0x6EF824, bin, labigo7]
+  - [0x6F08DB, bin, labigo7_dl]
+  - [0x6F0EED, bin, lanicl7]
+  - [0x6F1065, bin, lanicl7_dl]
+  - [0x6F114F, bin, laflat7]
+  - [0x6F1A69, bin, laflat7_dl]
+  - [0x6F1D3D, bin, laflat9]
+  - [0x6F2002, bin, laflat9_dl]
+  - [0x6F2143, bin, laflt10]
+  - [0x6F2A14, bin, laflt10_dl]
+  - [0x6F2DB2, bin, laflt11]
+  - [0x6F3673, bin, laflt11_dl]
+  - [0x6F3A0B, bin, laorp12]
+  - [0x6F42D0, bin, laorp12_dl]
+  - [0x6F45D8, bin, laflt13]
+  - [0x6F5012, bin, laflt13_dl]
+  - [0x6F5442, bin, laflt14]
+  - [0x6F5F8A, bin, laflt14_dl]
+  - [0x6F63BB, bin, lamsc14]
+  - [0x6F6500, bin, lamsc14_dl]
+  - [0x6F65B3, bin, laflt15]
+  - [0x6F6FF1, bin, laflt15_dl]
+  - [0x6F73E8, bin, lamsc16]
+  - [0x6F76CB, bin, lamsc16_dl]
+  - [0x6F77FF, bin, ladrm16]
+  - [0x6F7A1C, bin, ladrm16_dl]
+  - [0x6F7B1B, bin, laflt17]
+  - [0x6F7CF4, bin, laflt17_dl]
+  - [0x6F7E03, bin, chrod17]
+  - [0x6F8246, bin, chrod17_dl]
+  - [0x6F841D, bin, chlx7a]
+  - [0x6F8534, bin, chlx7a_dl]
+  - [0x6F85D5, bin, chsta5]
+  - [0x6F8CE0, bin, chsta5_dl]
+  - [0x6F8F61, bin, chbar8]
+  - [0x6FA0E0, bin, chbar8_dl]
+  - [0x6FA542, bin, chmisc8]
+  - [0x6FA73E, bin, chmisc8_dl]
+  - [0x6FA869, bin, chwag8]
+  - [0x6FAB2A, bin, chwag8_dl]
+  - [0x6FAC7A, bin, chshd6]
+  - [0x6FB16A, bin, chshd6_dl]
+  - [0x6FB2C3, bin, chbog9]
+  - [0x6FB500, bin, chbog9_dl]
+  - [0x6FB61F, bin, chbat6]
+  - [0x6FB7F5, bin, chbat6_dl]
+  - [0x6FB8E4, bin, chmisc6]
+  - [0x6FBBF8, bin, chmisc6_dl]
+  - [0x6FBD24, bin, chwin5]
+  - [0x6FBF83, bin, chwin5_dl]
+  - [0x6FC0B2, bin, chbur9]
+  - [0x6FC59C, bin, chbur9_dl]
+  - [0x6FC77C, bin, chmisc9]
+  - [0x6FCA4D, bin, chmisc9_dl]
+  - [0x6FCBD2, bin, chhse3]
+  - [0x6FD634, bin, chhse3_dl]
+  - [0x6FD982, bin, chmisc3]
+  - [0x6FDB98, bin, chmisc3_dl]
+  - [0x6FDCA2, bin, chlfa12]
+  - [0x6FEA16, bin, chlfa12_dl]
+  - [0x6FEDAE, bin, chmsc12]
+  - [0x6FF1C0, bin, chmsc12_dl]
+  - [0x6FF36B, bin, chtra12]
+  - [0x6FFB83, bin, chtra12_dl]
+  - [0x6FFEA7, bin, chgin14]
+  - [0x70073A, bin, chgin14_dl]
+  - [0x700A0D, bin, chhar15]
+  - [0x701546, bin, chhar15_dl]
+  - [0x7017F4, bin, chhor10]
+  - [0x702081, bin, chhor10_dl]
+  - [0x70237C, bin, lacar1]
+  - [0x7025ED, bin, lacar1_dl]
+  - [0x70272E, bin, docno1]
+  - [0x70298B, bin, docno1_dl]
+  - [0x702AE9, bin, docng1]
+  - [0x702D3A, bin, docng1_dl]
+  - [0x702EAF, bin, docnw1]
+  - [0x70313F, bin, docnw1_dl]
+  - [0x7032C7, bin, moiron1]
+  - [0x703521, bin, moiron1_dl]
+  - [0x70364E, bin, truck4]
+  - [0x7044BA, bin, truck4_dl]
+  - [0x704932, bin, trucker3US]
+  - [0x7056BE, bin, trucker3US_dl]
+  - [0x705AAE, bin, chgun16]
+  - [0x7064DA, bin, chgun16_dl]
+  - [0x7067FE, bin, chmsc16]
+  - [0x706ACC, bin, chmsc16_dl]
+  - [0x706BDC, bin, chhut16]
+  - [0x706E9B, bin, chhut16_dl]
+  - [0x706FC7, bin, chhse17]
+  - [0x7077CD, bin, chhse17_dl]
+  - [0x707A1D, bin, chgar17]
+  - [0x707CAF, bin, chgar17_dl]
+  - [0x707DDD, bin, chgas17]
+  - [0x7082E1, bin, chgas17_dl]
+  - [0x708464, bin, chhut17]
+  - [0x708775, bin, chhut17_dl]
+  - [0x7088A2, bin, chmsc17]
+  - [0x7089AB, bin, chmsc17_dl]
+  - [0x708A4D, bin, chsha18]
+  - [0x708FF0, bin, chsha18_dl]
+  - [0x709188, bin, chmsc18]
+  - [0x70938A, bin, chmsc18_dl]
+  - [0x70949E, bin, chmsc19]
+  - [0x7097C3, bin, chmsc19_dl]
+  - [0x709909, bin, chhse18]
+  - [0x70A3CB, bin, chhse18_dl]
+  - [0x70A6EF, bin, chgar18]
+  - [0x70A956, bin, chgar18_dl]
+  - [0x70AABD, bin, chhse20]
+  - [0x70B733, bin, chhse20_dl]
+  - [0x70BAA0, bin, chmsc20]
+  - [0x70BEFF, bin, chmsc20_dl]
+  - [0x70C08F, bin, chhse21]
+  - [0x70CB49, bin, chhse21_dl]
+  - [0x70CE50, bin, chmsc21]
+  - [0x70CFFD, bin, chmsc21_dl]
+  - [0x70D104, bin, chhot22]
+  - [0x70DA1F, bin, chhot22_dl]
+  - [0x70DC25, bin, chmsc22]
+  - [0x70DDCA, bin, chmsc22_dl]
+  - [0x70DECD, bin, chhse23]
+  - [0x70E9B5, bin, chhse23_dl]
+  - [0x70EC9B, bin, chmsc23]
+  - [0x70EE44, bin, chmsc23_dl]
+  - [0x70EF4C, bin, chhse24]
+  - [0x70FA10, bin, chhse24_dl]
+  - [0x70FCEF, bin, chbar25]
+  - [0x710A97, bin, chbar25_dl]
+  - [0x710E12, bin, chmsc25]
+  - [0x7111E2, bin, chmsc25_dl]
+  - [0x711332, bin, chmsc26]
+  - [0x7114FD, bin, chmsc26_dl]
+  - [0x711604, bin, chhut26]
+  - [0x711CF0, bin, chhut26_dl]
+  - [0x711F47, bin, chmsc27]
+  - [0x71221D, bin, chmsc27_dl]
+  - [0x712355, bin, chhut27]
+  - [0x7128AE, bin, chhut27_dl]
+  - [0x712A98, bin, chmsc28]
+  - [0x712D1E, bin, chmsc28_dl]
+  - [0x712E36, bin, chhse29]
+  - [0x7135EF, bin, chhse29_dl]
+  - [0x713859, bin, chhut30]
+  - [0x713CE4, bin, chhut30_dl]
+  - [0x713EB6, bin, chhse30]
+  - [0x7149D5, bin, chhse30_dl]
+  - [0x714CDE, bin, chmsc30]
+  - [0x714F6E, bin, chmsc30_dl]
+  - [0x715086, bin, chhse31]
+  - [0x715A31, bin, chhse31_dl]
+  - [0x715D0A, bin, chmsc31]
+  - [0x7160CF, bin, chmsc31_dl]
+  - [0x716239, bin, chhse32]
+  - [0x716EA9, bin, chhse32_dl]
+  - [0x7171D8, bin, chmsc32]
+  - [0x7173E2, bin, chmsc32_dl]
+  - [0x7174F1, bin, chhse33]
+  - [0x717FD5, bin, chhse33_dl]
+  - [0x71830F, bin, chtreel]
+  - [0x7184DC, bin, chtreel_dl]
+  - [0x7185BA, bin, chtrees]
+  - [0x71878A, bin, chtrees_dl]
+  - [0x718865, bin, labigo2]
+  - [0x71991C, bin, labigo2_dl]
+  - [0x719F2E, bin, movan1]
+  - [0x71A9A9, bin, movan1_dl]
+  - [0x71ADB2, bin, mocono1]
+  - [0x71AF4F, bin, mocono1_dl]
+  - [0x71B06D, bin, moconr1]
+  - [0x71B1F7, bin, moconr1_dl]
+  - [0x71B307, bin, moconw1]
+  - [0x71B48C, bin, moconw1_dl]
+  - [0x71B59C, bin, mocong1]
+  - [0x71B73A, bin, mocong1_dl]
+  - [0x71B858, bin, mocrat1]
+  - [0x71B9C3, bin, mocrat1_dl]
+  - [0x71BAFE, bin, mogas1]
+  - [0x71BE51, bin, mogas1_dl]
+  - [0x71C046, bin, mogas2]
+  - [0x71C752, bin, mogas2_dl]
+  - [0x71CA54, bin, moconr2]
+  - [0x71CBF0, bin, moconr2_dl]
+  - [0x71CD12, bin, moconb2]
+  - [0x71CE96, bin, moconb2_dl]
+  - [0x71CFA6, bin, moconw2]
+  - [0x71D133, bin, moconw2_dl]
+  - [0x71D242, bin, mocono2]
+  - [0x71D3E0, bin, mocono2_dl]
+  - [0x71D4FD, bin, mocong2]
+  - [0x71D69C, bin, mocong2_dl]
+  - [0x71D7B9, bin, mowhwr1]
+  - [0x71DBAA, bin, mowhwr1_dl]
+  - [0x71DDA2, bin, mowhbo1]
+  - [0x71E179, bin, mowhbo1_dl]
+  - [0x71E355, bin, mowhrr1]
+  - [0x71E737, bin, mowhrr1_dl]
+  - [0x71E907, bin, mowhwo1]
+  - [0x71ECFC, bin, mowhwo1_dl]
+  - [0x71EEFC, bin, mowhwb2]
+  - [0x71F2F7, bin, mowhwb2_dl]
+  - [0x71F4F4, bin, mosid1l]
+  - [0x71F8C3, bin, mosid1l_dl]
+  - [0x71FA89, bin, mosid1r]
+  - [0x71FEAC, bin, mosid1r_dl]
+  - [0x720051, bin, mostep1]
+  - [0x720C2B, bin, mostep1_dl]
+  - [0x72106C, bin, mosky1]
+  - [0x7219C6, bin, mosky1_dl]
+  - [0x721D01, bin, mosky2]
+  - [0x722744, bin, mosky2_dl]
+  - [0x722AD6, bin, mosky3]
+  - [0x723B75, bin, mosky3_dl]
+  - [0x724064, bin, mosky4]
+  - [0x724B91, bin, mosky4_dl]
+  - [0x724FAA, bin, mosky5]
+  - [0x725B7D, bin, mosky5_dl]
+  - [0x725F9A, bin, mosky6]
+  - [0x726B5E, bin, mosky6_dl]
+  - [0x726F45, bin, mosky7]
+  - [0x727D3A, bin, mosky7_dl]
+  - [0x7281F1, bin, mosky8]
+  - [0x728C48, bin, mosky8_dl]
+  - [0x72901E, bin, mosky9]
+  - [0x729DBD, bin, mosky9_dl]
+  - [0x72A26F, bin, mosky10]
+  - [0x72ACF3, bin, mosky10_dl]
+  - [0x72B104, bin, mosky11]
+  - [0x72BB6A, bin, mosky11_dl]
+  - [0x72BF77, bin, mosky12]
+  - [0x72C736, bin, mosky12_dl]
+  - [0x72CB35, bin, chfact1]
+  - [0x72D72C, bin, chfact1_dl]
+  - [0x72DAC6, bin, chwhse1]
+  - [0x72DE24, bin, chwhse1_dl]
+  - [0x72DF78, bin, chwhse2]
+  - [0x72E314, bin, chwhse2_dl]
+  - [0x72E462, bin, chwhse3]
+  - [0x72E80B, bin, chwhse3_dl]
+  - [0x72E94E, bin, chconc1]
+  - [0x72F6E4, bin, chconc1_dl]
+  - [0x72FB78, bin, chsilo1]
+  - [0x730416, bin, chsilo1_dl]
+  - [0x730646, bin, laorphx]
+  - [0x730CC4, bin, laorphx_dl]
+  - [0x730F3F, bin, lapcab1]
+  - [0x73133F, bin, lapcab1_dl]
+  - [0x7314DA, bin, laslid1]
+  - [0x732247, bin, laslid1_dl]
+  - [0x732686, bin, laconc1]
+  - [0x7338F3, bin, laconc1_dl]
+  - [0x733CA7, bin, labuil1]
+  - [0x734169, bin, labuil1_dl]
+  - [0x734329, bin, lastor1]
+  - [0x734765, bin, lastor1_dl]
+  - [0x7348B8, bin, lamscf]
+  - [0x734C52, bin, lamscf_dl]
+  - [0x734D9B, bin, chpost1]
+  - [0x734F0D, bin, chpost1_dl]
+  - [0x734FDB, bin, chdes3]
+  - [0x735E17, bin, chdes3_dl]
+  - [0x736353, bin, modam2]
+  - [0x7364A9, bin, modam2_dl]
+  - [0x7365A2, bin, dsout1]
+  - [0x73684E, bin, dsout1_dl]
+  - [0x736962, bin, dspylo1]
+  - [0x736B63, bin, dspylo1_dl]
+  - [0x736C6E, bin, laft15b]
+  - [0x737268, bin, laft15b_dl]
+  - [0x737403, bin, mocons1]
+  - [0x737E67, bin, mocons1_dl]
+  - [0x7381AD, bin, mocons2]
+  - [0x738C07, bin, mocons2_dl]
+  - [0x738EF3, bin, mocons3]
+  - [0x739855, bin, mocons3_dl]
+  - [0x739B0C, bin, mocons4]
+  - [0x73A516, bin, mocons4_dl]
+  - [0x73A86F, bin, mocons5]
+  - [0x73B234, bin, mocons5_dl]
+  - [0x73B54D, bin, mocons6]
+  - [0x73BE76, bin, mocons6_dl]
+  - [0x73C131, bin, moboat1]
+  - [0x73CBB0, bin, moboat1_dl]
+  - [0x73CF10, bin, mosid2t]
+  - [0x73D438, bin, mosid2t_dl]
+  - [0x73D6D3, bin, mosid2b]
+  - [0x73DAFE, bin, mosid2b_dl]
+  - [0x73DCE9, bin, mosid3l]
+  - [0x73E158, bin, mosid3l_dl]
+  - [0x73E31C, bin, mosid3r]
+  - [0x73E840, bin, mosid3r_dl]
+  - [0x73EABD, bin, mosid5t]
+  - [0x73F40D, bin, mosid5t_dl]
+  - [0x73F72C, bin, mosid5b]
+  - [0x73FE97, bin, mosid5b_dl]
+  - [0x7400FB, bin, mosid6t]
+  - [0x74051D, bin, mosid6t_dl]
+  - [0x7406D8, bin, mosid6b]
+  - [0x740AEF, bin, mosid6b_dl]
+  - [0x740CCA, bin, mocast2]
+  - [0x741981, bin, mocast2_dl]
+  - [0x741DC1, bin, mocran1]
+  - [0x7428C3, bin, mocran1_dl]
+  - [0x742CBD, bin, mocran2]
+  - [0x7437EB, bin, mocran2_dl]
+  - [0x743BE5, bin, moboat2]
+  - [0x74469E, bin, moboat2_dl]
+  - [0x744A64, bin, labigox]
+  - [0x744E74, bin, labigox_dl]
+  - [0x7450A9, bin, chhseb]
+  - [0x745B27, bin, chhseb_dl]
+  - [0x745E8C, bin, lasup1]
+  - [0x746025, bin, lasup1_dl]
+  - [0x746120, bin, lamsc10]
+  - [0x746316, bin, lamsc10_dl]
+  - [0x746411, bin, chvalfm]
+  - [0x74678F, bin, chvalfm_dl]
+  - [0x7468A7, bin, mohot1]
+  - [0x747611, bin, mohot1_dl]
+  - [0x747B17, bin, mohot2]
+  - [0x7485FE, bin, mohot2_dl]
+  - [0x748A66, bin, mohot3]
+  - [0x74985B, bin, mohot3_dl]
+  - [0x749BFA, bin, chhse40]
+  - [0x74A7A0, bin, chhse40_dl]
+  - [0x74AA90, bin, chhse41]
+  - [0x74B71C, bin, chhse41_dl]
+  - [0x74BA7C, bin, la2gsx]
+  - [0x74BEE2, bin, la2gsx_dl]
+  - [0x74C0E3, bin, mohot4]
+  - [0x74D0EA, bin, mohot4_dl]
+  - [0x74D60E, bin, mohot5]
+  - [0x74E67C, bin, mohot5_dl]
+  - [0x74EC2C, bin, token1]
+  - [0x74F17C, bin, token1_dl]
+  - [0x74F3A4, bin, moart1]
+  - [0x74F5A4, bin, moart1_dl]
+  - [0x74F705, bin, larock1]
+  - [0x7500D1, bin, larock1_dl]
+  - [0x7503D2, bin, larock2]
+  - [0x750CFA, bin, larock2_dl]
+  - [0x750FDB, bin, ball1]
+  - [0x7519A8, bin, ball1_dl]
+  - [0x751C76, bin, ball2]
+  - [0x752A70, bin, ball2_dl]
+  - [0x752DE6, bin, ball3]
+  - [0x753A90, bin, ball3_dl]
+  - [0x753D51, bin, float1]
+  - [0x754113, bin, float1_dl]
+  - [0x7542DD, bin, cohse1]
+  - [0x754B80, bin, cohse1_dl]
+  - [0x754DA5, bin, cohse2]
+  - [0x7553B0, bin, cohse2_dl]
+  - [0x755621, bin, lablk1]
+  - [0x755861, bin, lablk1_dl]
+  - [0x7559E5, bin, stbac1]
+  - [0x756385, bin, stbac1_dl]
+  - [0x7566EA, bin, stbar1]
+  - [0x756923, bin, stbar1_dl]
+  - [0x756A5C, bin, stdnut1]
+  - [0x756F1A, bin, stdnut1_dl]
+  - [0x75710B, bin, stgls1]
+  - [0x757770, bin, stgls1_dl]
+  - [0x7579D6, bin, stncp1]
+  - [0x758557, bin, stncp1_dl]
+  - [0x758927, bin, ststat1]
+  - [0x758FBC, bin, ststat1_dl]
+  - [0x759206, bin, cochim1]
+  - [0x759665, bin, cochim1_dl]
+  - [0x759820, bin, cohut1]
+  - [0x759CEF, bin, cohut1_dl]
+  - [0x759EE5, bin, copit1]
+  - [0x75A2FF, bin, copit1_dl]
+  - [0x75A4A3, bin, palite2]
+  - [0x75AED7, bin, palite2_dl]
+  - [0x75B171, bin, pacran1]
+  - [0x75BA17, bin, pacran1_dl]
+  - [0x75BE11, bin, lafire3]
+  - [0x75C7DF, bin, lafire3_dl]
+  - [0x75CB76, bin, lafire4]
+  - [0x75D24D, bin, lafire4_dl]
+  - [0x75D545, bin, lanewf3]
+  - [0x75DF41, bin, lanewf3_dl]
+  - [0x75E39C, bin, lasky1]
+  - [0x75EE07, bin, lasky1_dl]
+  - [0x75F1CD, bin, lasky2]
+  - [0x75FC15, bin, lasky2_dl]
+  - [0x75FFE0, bin, door1]
+  - [0x76009F, bin, door1_dl]
+  - [0x76013D, bin, door2]
+  - [0x7601FC, bin, door2_dl]
+  - [0x76029A, bin, mohot1a]
+  - [0x7607BB, bin, mohot1a_dl]
+  - [0x760A91, bin, mohot1b]
+  - [0x760E7F, bin, mohot1b_dl]
+  - [0x7610ED, bin, mohot1c]
+  - [0x76141D, bin, mohot1c_dl]
+  - [0x76161C, bin, mohot1d]
+  - [0x761906, bin, mohot1d_dl]
+  - [0x761AD2, bin, mohot2a]
+  - [0x761D5C, bin, mohot2a_dl]
+  - [0x761ED9, bin, mohot2b]
+  - [0x76225E, bin, mohot2b_dl]
+  - [0x762484, bin, mohot2c]
+  - [0x762711, bin, mohot2c_dl]
+  - [0x76289A, bin, mohot2d]
+  - [0x762C2B, bin, mohot2d_dl]
+  - [0x762E84, bin, mohot3a]
+  - [0x7632B0, bin, mohot3a_dl]
+  - [0x76351A, bin, mohot3b]
+  - [0x763859, bin, mohot3b_dl]
+  - [0x763A34, bin, mohot3c]
+  - [0x763E17, bin, mohot3c_dl]
+  - [0x76402C, bin, mohot3d]
+  - [0x7642AB, bin, mohot3d_dl]
+  - [0x7643F7, bin, head1]
+  - [0x76537E, bin, head1_dl]
+  - [0x76590E, bin, head2]
+  - [0x7669D2, bin, head2_dl]
+  - [0x76709C, bin, head3]
+  - [0x768063, bin, head3_dl]
+  - [0x76861A, bin, head4]
+  - [0x769031, bin, head4_dl]
+  - [0x769605, bin, mostat1]
+  - [0x76A4C6, bin, mostat1_dl]
+  - [0x76A90E, bin, cork1]
+  - [0x76AA71, bin, cork1_dl]
+  - [0x76AB3D, bin, ghdig1]
+  - [0x76B3EC, bin, ghdig1_dl]
+  - [0x76B6CE, bin, mocrat2]
+  - [0x76B838, bin, mocrat2_dl]
+  - [0x76B973, bin, ghdig2]
+  - [0x76C22A, bin, ghdig2_dl]
+  - [0x76C51D, bin, ghdig3]
+  - [0x76CEA6, bin, ghdig3_dl]
+  - [0x76D18E, bin, ghdig4]
+  - [0x76DAF4, bin, ghdig4_dl]
+  - [0x76DDEB, bin, modam3]
+  - [0x76E2DF, bin, modam3_dl]
+  - [0x76E4E6, bin, cohse3]
+  - [0x76ED85, bin, cohse3_dl]
+  - [0x76EFAA, bin, cohse4]
+  - [0x76FCCC, bin, cohse4_dl]
+  - [0x76FFCF, bin, cohse5]
+  - [0x770730, bin, cohse5_dl]
+  - [0x770955, bin, cohse6]
+  - [0x7714D5, bin, cohse6_dl]
+  - [0x7717D8, bin, cosqr1]
+  - [0x7721BF, bin, cosqr1_dl]
+  - [0x7724BA, bin, coshd1]
+  - [0x772817, bin, coshd1_dl]
+  - [0x77294D, bin, cohut1_dupe]       # dupe
+  - [0x772E1C, bin, cohut1_dl_dupe]       # dupe
+  - [0x773012, bin, costor2]
+  - [0x773381, bin, costor2_dl]
+  - [0x773520, bin, colong2]
+  - [0x773936, bin, colong2_dl]
+  - [0x773ABF, bin, cochim2]
+  - [0x773D4B, bin, cochim2_dl]
+  - [0x773E91, bin, copit2]
+  - [0x77430B, bin, copit2_dl]
+  - [0x774509, bin, cosid4]
+  - [0x774B50, bin, cosid4_dl]
+  - [0x774DDE, bin, cofact2]
+  - [0x7758C2, bin, cofact2_dl]
+  - [0x775C56, bin, corail2]
+  - [0x775E95, bin, corail2_dl]
+  - [0x775FB5, bin, spcen1]
+  - [0x776A75, bin, spcen1_dl]
+  - [0x776E26, bin, sparmn1]
+  - [0x7771E4, bin, sparmn1_dl]
+  - [0x7773F8, bin, sparme1]
+  - [0x7777BB, bin, sparme1_dl]
+  - [0x7779CF, bin, sparmw1]
+  - [0x777D8B, bin, sparmw1_dl]
+  - [0x777FA1, bin, sparms1]
+  - [0x778347, bin, sparms1_dl]
+  - [0x77855D, bin, spbox1]
+  - [0x778DF0, bin, spbox1_dl]
+  - [0x77911B, bin, spsola1]
+  - [0x779421, bin, spsola1_dl]
+  - [0x779598, bin, spsola2]
+  - [0x7798A9, bin, spsola2_dl]
+  - [0x779A21, bin, spsola3]
+  - [0x779CE9, bin, spsola3_dl]
+  - [0x779E60, bin, spcons1]
+  - [0x77A271, bin, spcons1_dl]
+  - [0x77A3E1, bin, spcons2]
+  - [0x77AB3B, bin, spcons2_dl]
+  - [0x77AD90, bin, spcons3]
+  - [0x77B28E, bin, spcons3_dl]
+  - [0x77B43C, bin, spflt1]
+  - [0x77C7C5, bin, spflt1_dl]
+  - [0x77CC4C, bin, shnob1]
+  - [0x77D1E0, bin, shnob1_dl]
+  - [0x77D462, bin, desflt1]
+  - [0x77D6A1, bin, desflt1_dl]
+  - [0x77D81B, bin, desflt2]
+  - [0x77DAB8, bin, desflt2_dl]
+  - [0x77DC54, bin, desnew1]
+  - [0x77DDF0, bin, desnew1_dl]
+  - [0x77DEEE, bin, desnew2]
+  - [0x77E098, bin, desnew2_dl]
+  - [0x77E19A, bin, desnew3]
+  - [0x77EEE0, bin, desnew3_dl]
+  - [0x77F3B3, bin, desnew4]
+  - [0x77F647, bin, desnew4_dl]
+  - [0x77F7ED, bin, destow1]
+  - [0x77FAA9, bin, destow1_dl]
+  - [0x77FC48, bin, laezflt]
+  - [0x780509, bin, laezflt_dl]
+  - [0x78084E, bin, lapump1]
+  - [0x7809DC, bin, lapump1_dl]
+  - [0x780A9D, bin, chpump1]
+  - [0x780C53, bin, chpump1_dl]
+  - [0x780D2A, bin, endsid1]
+  - [0x7811E4, bin, endsid1_dl]
+  - [0x781362, bin, endsid2]
+  - [0x781876, bin, endsid2_dl]
+  - [0x781A22, bin, endsid3]
+  - [0x7820FC, bin, endsid3_dl]
+  - [0x7822CD, bin, endsid4]
+  - [0x7828C2, bin, endsid4_dl]
+  - [0x782A8F, bin, endsid5]
+  - [0x78308F, bin, endsid5_dl]
+  - [0x7832F0, bin] # hd_code_text.us.v11 will be extracted and decompressed by Makefile
+  - [0x7DEDF0, bin] # hd_front_end_text.us.v11 will be extracted and decompressed by Makefile
+  - [0x7F4F00, bin, trailer]                   # 0xff to end
+  - name:  hd_code
+    type: code
+    start: 0x7FB320
+    vram:  0x802447C0
+    bss_size: 0xF09A0
+    subsegments:
+      - [0x7FB320, c, hd_code/hd] # done
+      - [0x80E0A0, c, hd_code/12D80] # done
+      - [0x80ED90, c, hd_code/13A70] # done
+      - [0x80FE50, c, hd_code/14B30] # done
+      - [0x811BD0, c, hd_code/168B0] # done
+      - [0x812530, c, hd_code/17210] # done
+      - [0x812D90, c, hd_code/17A70] # done
+      - [0x813130, c, hd_code/17E10] # done
+      - [0x815950, c, hd_code/1A630] # done
+      - [0x817780, c, hd_code/1C460] # done
+      - [0x818CB0, c, hd_code/1D990] # done
+      - [0x81B780, c, hd_code/20460] # done
+      - [0x81E200, c, hd_code/22EE0] # done: audi.c
+      - [0x81EF40, c, hd_code/23C20] # done
+      - [0x821890, c, hd_code/yoshi] # done
+      - [0x826710, c, hd_code/2B3F0] # done
+      - [0x827880, c, hd_code/sched] # done
+      - [0x828B30, c, hd_code/2D810] # done
+      - [0x8297B0, c, hd_code/2E490] # done
+      - [0x82B750, c, hd_code/30430] # done: fade.c
+      - [0x82BF90, c, hd_code/30C70] # done
+      - [0x82E180, c, hd_code/32E60] # done
+      - [0x82F750, c, hd_code/34430] # done: mb.c
+      - [0x832850, c, hd_code/37530] # done
+      - [0x834370, c, hd_code/39050] # done
+      - [0x8397E0, c, hd_code/3E4C0] # done
+      - [0x83B910, c, hd_code/405F0] # done, uses data from 00000
+      - [0x83BCF0, c, hd_code/409D0] # done: stats_perm.c
+      - [0x83CC50, c, hd_code/41930] # done: academy.c
+      - [0x83D560, c, hd_code/42240] # done
+      - [0x83ED80, c, hd_code/43A60] # done
+      - [0x840ED0, c, hd_code/45BB0] # controller.c
+      - [0x841F40, c, hd_code/46C20] # done
+      - [0x842280, c, hd_code/46F60] # done
+      - [0x842CF0, c, hd_code/479D0] # done
+      - [0x844020, c, hd_code/48D00] # done
+      - [0x846770, c, hd_code/4B450] # done
+      - [0x846900, c, hd_code/4B5E0] # done
+      - [0x848DA0, c, hd_code/4DA80] # done
+      - [0x849F00, c, hd_code/4EBE0] # done
+      - [0x84B990, c, hd_code/50670] # done
+      - [0x84C9B0, c, hd_code/51690] # done
+      - [0x84E090, c, hd_code/52D70] # done
+      - [0x84E540, c, hd_code/53220] # done
+      - [0x84EB40, c, hd_code/53820] # inflate.c
+      - [0x850150, c, hd_code/54E30] # done
+      - [0x850C90, c, hd_code/55970] # done
+      - [0x851060, c, hd_code/55D40] # done
+      - [0x851330, c, hd_code/56010] # done
+      - [0x851360, c, hd_code/56040] # done: hasm
+      - [0x851570, c, hd_code/56250] # done: hasm
+      - [0x857260, c, hd_code/5BF40]
+      - [0x857E80, c, hd_code/5CB60]
+      - [0x85B070, c, hd_code/5FD50]
+      - [0x85C070, c, hd_code/60D50]
+      - [0x85C280, c, hd_code/60F60]
+      - [0x85DA60, c, hd_code/62740]
+      - [0x862D00, c, hd_code/679E0]
+      - [0x863B30, asm, hd_code/68810] # contains rodata in .text section
+      - [0x864ED0, c, hd_code/69BB0]
+      - [0x8667C0, c, hd_code/6B4A0]
+      - [0x867900, c, hd_code/6C5E0]
+      - [0x869520, c, hd_code/6E200]
+      - [0x86C460, c, hd_code/71140]
+      - [0x86DEA0, c, hd_code/72B80]
+      - [0x8707B0, c, hd_code/75490]
+      - [0x8725C0, c, hd_code/772A0]
+      - [0x873140, c, hd_code/77E20]
+      - [0x878CF0, .data, hd_code/7D9D0]
+      - [0x878F50, hasm, hd_code/7DC30_data] # TODO: what is this?
+      - [0x87ABD0, c, hd_code/7F8B0]
+      - [0x87B400, hasm, hd_code/800E0_data] # TODO: what is this?
+      - [0x87B5A0, c, hd_code/7FB50]
+      - [0x87EC30, c, hd_code/83910]
+      - [0x8806F0, c, hd_code/853D0]
+      - [0x8821F0, c, hd_code/86ED0]
+      - [0x882280, c, hd_code/86F60]
+      - [0x883480, c, hd_code/88160]
+      - [0x884570, c, hd_code/89250]
+      - [0x8853A0, c, hd_code/8A080]
+      - [0x885600, c, hd_code/8A2E0]
+      - [0x886200, c, hd_code/8AEE0]
+      - [0x887EC0, c, hd_code/8CBA0]
+      - [0x8890D0, c, hd_code/8DDB0]
+      - [0x889C30, hasm, hd_code/8E910]
+      - [0x88AB80, c, hd_code/os/initialize]
+      - [0x88ADB0, c, hd_code/io/pirawread]
+      - [0x88AE10, c, hd_code/os/createthread]
+      - [0x88AF60, c, hd_code/os/startthread]
+      - [0x88B0B0, c, hd_code/io/dpsetstat]
+      - [0x88B0C0, c, hd_code/io/pimgr]
+      - [0x88B240, c, hd_code/os/setthreadpri]
+      - [0x88B320, c, hd_code/os/sendmesg]
+      - [0x88B470, c, hd_code/os/recvmesg]
+      - [0x88B5B0, c, hd_code/io/viblack]
+      - [0x88B620, c, hd_code/os/gettime]
+      - [0x88B6B0, c, hd_code/libc/ll]
+      - [0x88B970, c, hd_code/audio/cspgetstate]
+      - [0x88B980, c, hd_code/os/virtualtophysical]
+      - [0x88BA00, hasm, hd_code/os/writebackdcache]
+      - [0x88BA80, c, hd_code/gu/translate]
+      - [0x88BB20, c, hd_code/gu/ortho]
+      - [0x88BCE0, c, hd_code/gu/perspective]
+      - [0x88BF70, c, hd_code/gu/align]
+      - [0x88C160, c, hd_code/gu/mtxcatf]
+      - [0x88C370, c, hd_code/gu/mtxutil]
+      - [0x88C5E0, c, hd_code/gu/scale]
+      - [0x88C680, c, hd_code/gu/lookatref]
+      - [0x88CB40, hasm, hd_code/gu/sqrtf]
+      - [0x88CB50, c, hd_code/gu/lookat]
+      - [0x88CE80, c, hd_code/gu/sinf]
+      - [0x88D040, c, hd_code/os/createmesgqueue]
+      - [0x88D070, pad] # nops
+      - [0x88D0B0, c, hd_code/io/visetspecial]
+      - [0x88D270, hasm, hd_code/os/writebackdcacheall]
+      - [0x88D2A0, hasm, hd_code/os/invaldcache]
+      - [0x88D350, c, hd_code/os/destroythread]
+      - [0x88D450, c, hd_code/gu/cosf]
+      - [0x88D5C0, c, hd_code/libc/sprintf]
+      - [0x88D670, c, hd_code/audio/heapalloc]
+      - [0x88D6D0, c, hd_code/audio/event]
+      - [0x88DA10, c, hd_code/audio/sl]
+      - [0x88DAD0, c, hd_code/audio/synaddplayer]
+      - [0x88DB20, c, hd_code/audio/synallocvoice]
+      - [0x88DD50, c, hd_code/audio/synsetvol]
+      - [0x88DDF0, c, hd_code/audio/synstartvoice]
+      - [0x88DE80, c, hd_code/audio/synsetpan]
+      - [0x88DF10, c, hd_code/audio/synsetpitch]
+      - [0x88DFA0, c, hd_code/audio/synsetfxmix]
+      - [0x88E040, c, hd_code/audio/synstopvoice]
+      - [0x88E0C0, c, hd_code/audio/synfreevoice]
+      - [0x88E170, c, hd_code/audio/cents2ratio]
+      - [0x88E1C0, hasm, hd_code/os/setintmask]
+      - [0x88E220, c, hd_code/audio/cspstop]
+      - [0x88E250, c, hd_code/audio/cseq]
+      - [0x88ED10, c, hd_code/audio/cspsetseq]
+      - [0x88ED50, c, hd_code/audio/cspplay]
+      - [0x88ED80, c, hd_code/audio/cspsetvol]
+      - [0x88EDC0, c, hd_code/audio/cspgettempo]
+      - [0x88EE00, c, hd_code/audio/cspsettempo]
+      - [0x88EE70, c, hd_code/audio/cspgetvol]
+      - [0x88EE80, c, hd_code/audio/heapinit]
+      - [0x88EEC0, c, hd_code/audio/bnkf]
+      - [0x88F110, c, hd_code/audio/csplayer]
+      - [0x890340, c, hd_code/audio/cspsetbank]
+      - [0x890380, hasm, hd_code/os/getcount]
+      - [0x890390, c, hd_code/gu/sins]
+      - [0x890400, c, hd_code/gu/coss]
+      - [0x890430, c, hd_code/io/vi]
+      - [0x890560, c, hd_code/io/aisetfreq]
+      - [0x8906C0, c, hd_code/io/aisetnextbuf]
+      - [0x890770, c, hd_code/io/aigetlen]
+      - [0x890780, c, hd_code/audio/synthesizer]
+      - [0x890E50, c, hd_code/io/pidma]
+      - [0x890F60, c, hd_code/libc/llcvt]
+      - [0x891170, c, hd_code/io/vimgr]
+      - [0x8914D0, c, hd_code/io/visetmode]
+      - [0x891540, c, hd_code/os/seteventmesg]
+      - [0x8915B0, c, hd_code/os/visetevent]
+      - [0x891620, c, hd_code/io/dpgetstat]
+      - [0x891630, c, hd_code/io/vigetcurrframebuf]
+      - [0x891670, c, hd_code/io/vigetnextframebuf]
+      - [0x8916B0, c, hd_code/io/viswapbuf]
+      - [0x891700, c, hd_code/os/settimer]
+      - [0x8917E0, c, hd_code/io/sptaskyielded]
+      - [0x891860, c, hd_code/io/sptask]
+      - [0x891B20, c, hd_code/io/sptaskyield]
+      - [0x891B40, c, hd_code/gu/mtxcatl]
+      - [0x891C00, c, hd_code/io/controller]
+      - [0x891FC0, c, hd_code/io/contsetch]
+      - [0x892030, c, hd_code/io/contreaddata]
+      - [0x892290, hasm, hd_code/os/invalicache]
+      - [0x892310, hasm, hd_code/libc/bzero]
+      - [0x8923B0, c, hd_code/io/contquery]
+      - [0x892460, c, hd_code/gu/normalize]
+      - [0x8924F0, hasm, hd_code/os/setsr]
+      - [0x892500, hasm, hd_code/os/getsr]
+      - [0x892510, hasm, hd_code/os/setfpccsr]
+      - [0x892520, c, hd_code/io/sirawread]
+      - [0x892570, c, hd_code/io/sirawwrite]
+      - [0x8925C0, hasm, hd_code/os/exceptasm]
+      - [0x892E30, hasm, hd_code/os/maptlbrdb]
+      - [0x892E90, hasm, hd_code/os/interrupt]
+      - [0x892ED0, c, hd_code/os/thread]
+      - [0x892F10, c, hd_code/io/piacs]
+      - [0x892FD0, c, hd_code/os/getthreadpri]
+      - [0x892FF0, c, hd_code/io/pirawdma]
+      - [0x8930D0, c, hd_code/io/devmgr]
+      - [0x893250, c, hd_code/os/timerintr]
+      - [0x893650, hasm, hd_code/os/probetlb]
+      - [0x893710, c, hd_code/libc/xprintf]
+      - [0x8948A0, c, hd_code/libc/string]
+      - [0x894940, c, hd_code/audio/copy]
+      - [0x8949C0, c, hd_code/audio/syndelete]
+      - [0x8949D0, c, hd_code/audio/seqplayer]
+      - [0x896310, c, hd_code/audio/synstartvoiceparam]
+      - [0x896400, c, hd_code/io/viswapcontext]
+      - [0x896760, c, hd_code/io/ai]
+      - [0x896790, c, hd_code/audio/drvrNew]
+      - [0x896F10, c, hd_code/audio/synallocfx]
+      - [0x896FB0, c, hd_code/audio/mainbus]
+      - [0x897100, c, hd_code/audio/load]
+      - [0x897C50, c, hd_code/audio/resample]
+      - [0x897F50, c, hd_code/audio/env]
+      - [0x898B30, c, hd_code/audio/auxbus]
+      - [0x898C40, c, hd_code/audio/save]
+      - [0x898D00, c, hd_code/os/jammesg]
+      - [0x898E50, c, hd_code/io/pigetcmdq]
+      - [0x898E80, c, hd_code/io/vigetcurrcontext]
+      - [0x898E90, c, hd_code/io/spgetstat]
+      - [0x898EA0, hasm, hd_code/libc/bcopy]
+      - [0x8991B0, c, hd_code/io/spsetstat]
+      - [0x8991C0, c, hd_code/io/spsetpc]
+      - [0x899200, c, hd_code/io/sprawdma]
+      - [0x899290, c, hd_code/io/sp]
+      - [0x8992C0, c, hd_code/io/sirawdma]
+      - [0x899370, c, hd_code/io/siacs]
+      - [0x899430, c, hd_code/io/si]
+      - [0x899460, c, hd_code/debug/kdebugserver]
+      - [0x8998E0, c, hd_code/os/syncputchars]
+      - [0x899A10, hasm, hd_code/os/setcompare]
+      - [0x899A20, c, hd_code/libc/xlitob]
+      - [0x899D20, c, hd_code/libc/xldtob]
+      - [0x89AAF0, c, hd_code/audio/seq]
+      - [0x89B110, c, hd_code/audio/synsetpriority]
+      - [0x89B120, c, hd_code/audio/filter]
+      - [0x89B140, c, hd_code/audio/reverb]
+      - [0x89BD50, hasm, hd_code/os/getcause]
+      - [0x89BD60, c, hd_code/os/atomic]
+      - [0x89BDC0, c, hd_code/libc/ldiv]
+      - [0x89BF50, textbin, hd_code/f3d]
+      - [0x89D380, textbin, hd_code/rspboot]
+      - [0x89D450, textbin, hd_code/asp]
+      - [0x89E310, data, hd_code/A2FF0_data]
+      - [0x89F730, .data, hd_code/hd] # done
+      - [0x89F7C0, .data, hd_code/13A70] # done
+      - [0x89F7D0, .data, hd_code/14B30] # done
+      - [0x89F810, .data, hd_code/17210] # done
+      - [0x89F830, .data, hd_code/17E10] # done
+      - [0x89F840, .data, hd_code/1A630] # done
+      - [0x89F860, .data, hd_code/1C460] # done
+      - [0x89FA90, .data, hd_code/1D990] # done
+      - [0x8A0B10, .data, hd_code/20460] # done
+      - [0x8AA650, .data, hd_code/22EE0] # done
+      - [0x8AA770, .data, hd_code/23C20] # done
+      - [0x8AB220, .data, hd_code/yoshi] # done
+      - [0x8B0520, .data, hd_code/2B3F0] # done
+      - [0x8B0DD0, .data, hd_code/sched] # done
+      - [0x8B0DE0, .data, hd_code/2D810] # done
+      - [0x8B1410, .data, hd_code/30430] # done
+      - [0x8B14A0, .data, hd_code/30C70] # done
+      - [0x8B18B0, .data, hd_code/32E60] # done
+      - [0x8B2A30, .data, hd_code/34430] # done
+      - [0x8B2BE0, .data, hd_code/37530] # done
+      - [0x8B2F50, .data, hd_code/39050] # done
+      - [0x8B3110, .data, hd_code/3E4C0] # done
+      - [0x8B45C0, .data, hd_code/405F0] # done
+      - [0x8B4670, .data, hd_code/409D0] # done
+      - [0x8B4690, .data, hd_code/46C20] # done
+      - [0x8B46A0, .data, hd_code/479D0] # done
+      - [0x8B46D0, .data, hd_code/48D00] # done
+      - [0x8B4730, .data, hd_code/4B450] # done
+      - [0x8B4740, .data, hd_code/4B5E0] # done
+      - [0x8B4F20, .data, hd_code/4DA80] # done
+      - [0x8B54E0, .data, hd_code/4EBE0] # done
+      - [0x8B5C30, .data, hd_code/50670] # done
+      - [0x8B5CE0, .data, hd_code/53220] # done
+      - [0x8B6190, .data, hd_code/53820] # done
+      - [0x8B6290, .data, hd_code/nuke] # done
+      - [0x8B7BA0, .data, hd_code/symbol_data] # done
+      - [0x8BB5F0, .data, hd_code/55D40 ] # done
+      - [0x8BC550, .data, hd_code/56250 ] # done
+      - [0x8BC6F0, .data, hd_code/60D50 ] # done
+      - [0x8BC770, .data, hd_code/60F60 ] # done
+      - [0x8BC7B0, .data, hd_code/62740 ] # done
+      - [0x8BC7D0, data, hd_code/68810 ] # TODO: data of 68810 which contains rodata in .text
+      - [0x8BC810, .data, hd_code/69BB0 ] # done
+      - [0x8BC840, .data, hd_code/6B4A0 ] # done
+      - [0x8BC850, data, hd_code/hd_code_data_rest ] # TODO: assembly data
+      - [0x8BD0F0, .data, hd_code/os/initialize ]
+      - [0x8BD100, .data, hd_code/io/pimgr ]
+      - [0x8BD120, .data, hd_code/audio/sl ]
+      - [0x8BD130, .data, hd_code/gu/sins ]
+      - [0x8BD930, .data, hd_code/io/vi ]
+      - [0x8BD9A0, .data, hd_code/io/aisetnextbuf ]
+      - [0x8BD9B0, .data, hd_code/io/vimgr ]
+      - [0x8BD9D0, data, hd_code/io/vitbl_data ] # TODO: .data
+      - [0x8BE290, .data, hd_code/io/controller ]
+      - [0x8BE2A0, .data, hd_code/os/exceptasm ]
+      - [0x8BE2C0, .data, hd_code/os/thread ]
+      - [0x8BE2E0, .data, hd_code/io/piacs ]
+      - [0x8BE2F0, .data, hd_code/os/timerintr ]
+      - [0x8BE300, .data, hd_code/libc/xprintf ]
+      - [0x8BE350, .data, hd_code/io/vimodentsclan1 ]
+      - [0x8BE3A0, .data, hd_code/io/vimodepallan1 ]
+      - [0x8BE3F0, .data, hd_code/audio/drvrNew ]
+      - [0x8BE580, .data, hd_code/audio/env ]
+      - [0x8BE680, .data, hd_code/io/siacs ]
+      - [0x8BE690, .data, hd_code/debug/kdebugserver ]
+      - [0x8BE6A0, .data, hd_code/os/syncputchars ]
+      - [0x8BE6B0, .data, hd_code/libc/xlitob ]
+      - [0x8BE6E0, data, hd_code/unused_data ] # TODO: unused data
+      - [0x8BE6F0, .rodata, hd_code/hd] # done
+      - [0x8BF840, .rodata, hd_code/12D80] # done
+      - [0x8BF840, .rodata, hd_code/13A70] # done
+      - [0x8BF840, .rodata, hd_code/14B30] # done
+      - [0x8BFA40, .rodata, hd_code/168B0] # done
+      - [0x8BFAF0, .rodata, hd_code/17210] # done
+      - [0x8BFB90, .rodata, hd_code/17A70] # done
+      - [0x8BFBD0, .rodata, hd_code/17E10] # done
+      - [0x8BFC00, .rodata, hd_code/1A630] # done
+      - [0x8BFD50, .rodata, hd_code/1C460] # done
+      - [0x8BFE10, .rodata, hd_code/1D990] # done
+      - [0x8C01A0, .rodata, hd_code/20460] # done
+      - [0x8C0260, .rodata, hd_code/22EE0] # done: audi.c
+      - [0x8C0390, .rodata, hd_code/23C20] # done
+      - [0x8C0530, .rodata, hd_code/yoshi] # done
+      - [0x8C2B20, .rodata, hd_code/2B3F0] # done
+      - [0x8C2B80, .rodata, hd_code/sched] # done: sched.c
+      - [0x8C3030, .rodata, hd_code/2D810] # done
+      - [0x8C3050, .rodata, hd_code/30430] # done: fade.c
+      - [0x8C30A0, .rodata, hd_code/30C70] # done
+      - [0x8C30D0, .rodata, hd_code/32E60] # done
+      - [0x8C3170, .rodata, hd_code/34430] # done: mb.c
+      - [0x8C3230, .rodata, hd_code/37530] # done
+      - [0x8C3240, .rodata, hd_code/39050] # done
+      - [0x8C3350, .rodata, hd_code/3E4C0] # done
+      - [0x8C33F0, .rodata, hd_code/405F0] # done
+      - [0x8C3410, .rodata, hd_code/409D0] # done
+      - [0x8C3530, .rodata, hd_code/41930] # done: academy.c
+      - [0x8C3700, .rodata, hd_code/42240] # done
+      - [0x8C3710, .rodata, hd_code/43A60] # done
+      - [0x8C3730, .rodata, hd_code/45BB0] # controller.c
+      - [0x8C3800, .rodata, hd_code/46C20] # done
+      - [0x8C3810, .rodata, hd_code/46F60] # done
+      - [0x8C3810, .rodata, hd_code/479D0] # done
+      - [0x8C3840, .rodata, hd_code/48D00] # done
+      - [0x8C3850, .rodata, hd_code/4DA80] # done
+      - [0x8C3890, .rodata, hd_code/4EBE0] # done
+      - [0x8C38C0, .rodata, hd_code/50670] # done
+      - [0x8C3940, .rodata, hd_code/53220] # done
+      - [0x8C40E0, .rodata, hd_code/54E30] # done
+      - [0x8C43D0, .rodata, hd_code/56250] # done
+      - [0x8C43E0, .rodata, hd_code/5CB60] # done
+      - [0x8C43F0, .rodata, hd_code/62740] # done
+      - [0x8C4400, .rodata, hd_code/6B4A0] # done
+      - [0x8C4410, .rodata, hd_code/6C5E0] # done
+      - [0x8C4420, .rodata, hd_code/6E200] # done
+      - [0x8C4440, .rodata, hd_code/71140] # done
+      - [0x8C4460, .rodata, hd_code/72B80] # done
+      - [0x8C4480, .rodata, hd_code/75490] # done
+      - [0x8C44A0, .rodata, hd_code/7F8B0] # done
+      - [0x8C44B0, .rodata, hd_code/7FB50] # done
+      - [0x8C44E0, .rodata, hd_code/83910] # done
+      - [0x8C44F0, .rodata, hd_code/853D0] # done
+      - [0x8C4510, .rodata, hd_code/86F60] # done
+      - [0x8C4520, .rodata, hd_code/88160] # done
+      - [0x8C4530, .rodata, hd_code/8AEE0] # done
+      - [0x8C4540, .rodata, hd_code/8CBA0] # done
+      - [0x8C4550, .rodata, hd_code/gu/perspective ]
+      - [0x8C4560, .rodata, hd_code/gu/align]
+      - [0x8C4570, .rodata, hd_code/gu/lookatref]
+      - [0x8C4580, .rodata, hd_code/gu/sinf]
+      - [0x8C45D0, .rodata, hd_code/gu/cosf]
+      - [0x8C4620, .rodata, hd_code/audio/cents2ratio ]
+      - [0x8C4630, .rodata, hd_code/os/setintmask ]
+      - [0x8C46B0, .rodata, hd_code/audio/cseq ]
+      - [0x8C46C0, .rodata, hd_code/audio/csplayer ]
+      - [0x8C4900, .rodata, hd_code/audio/synthesizer ]
+      - [0x8C4910, .rodata, hd_code/libc/llcvt ]
+      - [0x8C4920, .rodata, hd_code/os/exceptasm ]
+      - [0x8C4970, rodata, hd_code/libm_qnan ]
+      - [0x8C4980, .rodata, hd_code/libc/xprintf ]
+      - [0x8C4A80, .rodata, hd_code/audio/seqplayer ]
+      - [0x8C4CC0, .rodata, hd_code/audio/drvrNew ]
+      - [0x8C4CF0, .rodata, hd_code/audio/resample ]
+      - [0x8C4D30, .rodata, hd_code/audio/env ]
+      - [0x8C4E50, .rodata, hd_code/libc/xldtob ]
+      - [0x8C4EB0, .rodata, hd_code/audio/seq ]
+      - [0x8C4EC0, .rodata, hd_code/audio/reverb ]
+      - [0x8C4EF0, databin, hd_code/f3d]
+      - [0x8C56F0, databin, hd_code/asp]
+      - { start: 0x8C61C0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/13A70, vram: 0x803650B0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/14B30, vram: 0x80365340 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/168B0, vram: 0x80365360 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/17210, vram: 0x80365580 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/17A70, vram: 0x803669C0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/17E10, vram: 0x80366A00 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/1A630, vram: 0x80366BD0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/1C460, vram: 0x80366C30 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/1D990, vram: 0x80367750 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/20460, vram: 0x80367D60 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/22EE0, vram: 0x80368050 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/23C20, vram: 0x8036AFB0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/yoshi, vram: 0x8036B980 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/2B3F0, vram: 0x8036BBB0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/sched, vram: 0x8036BEF0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/2D810, vram: 0x8036BFC0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/2E490, vram: 0x8036BFE0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/30430, vram: 0x8036C770 } # done
+      - { start: 0x8C61C0, type: bss, name: hd_code/hd_code_bss_rest, vram: 0x8036C790 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/54E30, vram: 0x803A6AF0 }
+      - { start: 0x8C61C0, type: bss, name: hd_code/hd_code_bss_rest2, vram: 0x803A6B10 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/gu/align, vram: 0x803FDF60 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/io/vimgr, vram: 0x803FDF70 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/os/seteventmesg, vram: 0x803FF180 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/io/sptask, vram: 0x803FF200 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/io/controller, vram: 0x803FF240 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/io/piacs, vram: 0x803FF2D0 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/os/timerintr, vram: 0x803FF2F0 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/io/siacs, vram: 0x803FF330 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/debug/kdebugserver, vram: 0x803FF350 }
+      - { start: 0x8C61C0, type: bss, name: hd_code/hd_code_bss_rest3, vram: 0x803FF600 }
+     #- { start: 0x8C61C0, type: bss, vram: 0x8030F660 }
+  - name:  hd_front_end
+    type: code
+    start: 0x8C61C0
+    vram:  0x801E7000
+    bss_size: 0xDE70
+    subsegments:
+      - [0x8C61C0, c, hd_front_end/CAEA0 ] # done
+      - [0x8C7E00, c, hd_front_end/CCAE0 ] # done
+      - [0x8CC950, c, hd_front_end/D1630 ] # done
+      - [0x8CD550, c, hd_front_end/D2230 ] # done
+      - [0x8CD9C0, c, hd_front_end/D26A0 ] # done
+      - [0x8CE540, c, hd_front_end/D3220 ] # done
+      - [0x8CF730, c, hd_front_end/D4410 ] # done
+      - [0x8D2870, c, hd_front_end/D7550 ] # done
+      - [0x8D4030, c, hd_front_end/D8D10 ] # done
+      - [0x8D4970, c, hd_front_end/D9650 ] # done
+      - [0x8D6A10, c, hd_front_end/DB6F0_texts ] # done
+      - [0x8D6A10, c, hd_front_end/DB6F0 ] # done
+      - [0x8D76F0, c, hd_front_end/DC3D0 ] # done
+      - [0x8DDB50, c, hd_front_end/E2830 ] # done
+      - [0x8DF8B0, c, hd_front_end/E4590 ] # done
+      - [0x8E0400, c, hd_front_end/E50E0 ] # done
+      - [0x8E1040, c, hd_front_end/E5D20 ] # done
+      - [0x8E12C0, c, hd_front_end/E5FA0 ] # done
+      - [0x8E18F0, c, hd_front_end/io/pfsfreeblocks ]
+      - [0x8E1A40, c, hd_front_end/io/conteepprobe ]
+      - [0x8E1AB0, c, hd_front_end/io/pfschecker ]
+      - [0x8E2510, c, hd_front_end/io/pfsinit ]
+      - [0x8E26D0, c, hd_front_end/io/pfsallocatefile ]
+      - [0x8E2E80, c, hd_front_end/io/pfsdeletefile ]
+      - [0x8E3490, c, hd_front_end/io/conteeplongwrite ]
+      - [0x8E35D0, c, hd_front_end/io/conteeplongread ]
+      - [0x8E3710, c, hd_front_end/io/pfssearchfile ]
+      - [0x8E38D0, c, hd_front_end/io/pfsreadwritefile ]
+      - [0x8E3DD0, c, hd_front_end/io/conteepwrite ]
+      - [0x8E42B0, c, hd_front_end/io/conteepread ]
+      - [0x8E45B0, c, hd_front_end/io/pfsfilestate ]
+      - [0x8E48A0, c, hd_front_end/io/crc ]
+      - [0x8E4A20, c, hd_front_end/io/contpfs ]
+      - [0x8E5780, c, hd_front_end/io/contramread ]
+      - [0x8E5B30, c, hd_front_end/io/contramwrite ]
+      - [0x8E5EE0, c, hd_front_end/io/pfsisplug ]
+      - [0x8E6250, textbin, hd_front_end/menu_rsp ]
+      - [0x8E7200, .data, hd_front_end/CAEA0 ] # done
+      - [0x8E7380, .data, hd_front_end/CCAE0 ] # done
+      - [0x8E7670, .data, hd_front_end/D1630 ] # done
+      - [0x8E7690, .data, hd_front_end/D26A0 ] # done
+      - [0x8E76B0, .data, hd_front_end/D4410 ] # done
+      - [0x8EAEF0, .data, hd_front_end/D7550 ] # done
+      - [0x8EB0A0, .data, hd_front_end/D9650 ] # done
+      - [0x8EB230, .data, hd_front_end/DB6F0_texts ] # done
+      - [0x8EC9C0, .data, hd_front_end/DB6F0 ] # done
+      - [0x8EC9D0, .data, hd_front_end/DC3D0 ] # done
+      - [0x8ED5A0, .data, hd_front_end/E50E0 ]
+      - [0x8ED600, .rodata, hd_front_end/CAEA0 ] # done
+      - [0x8ED690, .rodata, hd_front_end/CCAE0 ] # done
+      - [0x8EDF00, .rodata, hd_front_end/D1630 ] # done
+      - [0x8EDF70, .rodata, hd_front_end/D26A0 ] # done
+      - [0x8EE170, .rodata, hd_front_end/D3220 ] # done
+      - [0x8EE180, .rodata, hd_front_end/D4410 ] # done
+      - [0x8EE250, .rodata, hd_front_end/D7550 ] # done
+      - [0x8EE270, .rodata, hd_front_end/D9650 ] # done
+      - [0x8EE640, .rodata, hd_front_end/DB6F0_texts ] # done
+      - [0x8EF0E0, .rodata, hd_front_end/DB6F0 ] # done
+      - [0x8EF140, .rodata, hd_front_end/DC3D0 ] # done
+      - [0x8EF710, .rodata, hd_front_end/E2830 ] # done
+      - [0x8EF7E0, .rodata, hd_front_end/E4590 ] # done
+      - [0x8EF830, .rodata, hd_front_end/E5D20 ] # done
+      - [0x8EF850, databin, hd_front_end/menu_rsp ]
+      - { start: 0x8F0050, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
+      - { start: 0x8F0050, type: bss, name: hd_front_end/CCAE0, vram: 0x80215440 }
+      - { start: 0x8F0050, type: bss, name: hd_front_end/D1630, vram: 0x80215960 }
+      - { start: 0x8F0050, type: bss, name: hd_front_end/hd_code_bss_rest, vram: 0x802159C0 }
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/DC3D0, vram: 0x8021A840 }
+      - { start: 0x8F0050, type: bss, name: hd_front_end/hd_code_bss_rest2, vram: 0x8021AB70 }
+  - [0x8F0050]

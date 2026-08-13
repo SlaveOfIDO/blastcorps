@@ -118,6 +118,10 @@ s32 func_hd_code_8029A518(struct Model1* arg0, s32 arg1) {
 
     sp54 = 0;
     sp64 = arg1;
+#if NON_MATCHING
+    // retail reads uninitialized stack here too (see docs/RELOC_PROBLEMS.md); IDO's layout happens to match, GCC's doesn't
+    sp58 = 0;
+#endif
     for(sp5C = 0; sp5C < 0x52; sp5C++) {
         sp60 = &D_hd_code_80304A90[sp5C];
         if (sp60->unk0 & 1) {
@@ -179,4 +183,3 @@ s32 func_hd_code_8029A518(struct Model1* arg0, s32 arg1) {
     }
     return sp64;
 }
-

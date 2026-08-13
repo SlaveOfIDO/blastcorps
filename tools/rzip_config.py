@@ -17,6 +17,28 @@ CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rzip.con
 NEXT_AVAILABLE_FREE_SPACE = 0x800000
 NM = "mips-linux-gnu-nm"
 
+# init's declared ROM start (see blastcorps.<version>.yaml) - fixed
+# regardless of init's actual compiled size, since it's right after the
+# fixed-size header+boot region.
+INIT_ROM_START = 0x1000
+
+# The "game" segment's start in the *original* ROM (see
+# blastcorps.<version>.yaml) - used only to reproduce the segment names
+# splat chose for game's yaml-declared (address-based) placeholders during
+# extraction (e.g. "_7832F0_ROM_START"), which are permanently fixed to
+# the original ROM's layout regardless of this build's actual sizes. Not
+# to be confused with computeGameRomBase's game_rom_base, this build's
+# actual, possibly different, absolute ROM base for game.
+ORIGINAL_GAME_ROM_START = 0x4CE0
+
+
+def computeGameRomBase(initBinPath: str) -> int:
+    """game's real, absolute ROM base for this build: right after
+    init's real compiled size, not assumed fixed at the original ROM's
+    0x4CE0 boundary - see the root Makefile's init-size/game-build
+    targets and tools/patch_game_rom_base.py."""
+    return INIT_ROM_START + os.path.getsize(initBinPath)
+
 
 def readSymbol(elfPath, symbolName) -> Optional[int]:
     """Reads an absolute symbol's value straight out of a linked ELF via nm,

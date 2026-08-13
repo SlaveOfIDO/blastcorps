@@ -1,5 +1,13 @@
 #include "common.h"
 
+// <data>
+f64 D_hd_code_80305C50 = 2000.0;
+u32 D_hd_code_80305C58[6] = {
+    0x0000000B, 0x0000B3B0, 0x00000005,
+    0x00000000, 0x00000000, 0x00000000
+};
+// </data>
+
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/62740/func_hd_code_802A6F00.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/62740/func_hd_code_802A6F6C.s")
