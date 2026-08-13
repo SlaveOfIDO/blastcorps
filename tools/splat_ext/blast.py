@@ -1,10 +1,6 @@
-from segtypes.n64.segment import N64Segment
-from segtypes.n64.rgba16 import N64SegRgba16
-from segtypes.n64.rgba32 import N64SegRgba32
-from segtypes.n64.ia8 import N64SegIa8
-from segtypes.n64.ia16 import N64SegIa16
-from segtypes.n64.img import N64SegImg
-from util import options
+import n64img.image
+from splat.segtypes.segment import Segment
+from splat.util import options
 import struct
 from enum import Enum
 
@@ -49,16 +45,16 @@ def blast_get_decoded_extension(blast_type: Blast) -> str:
             return "%s%d" % (blast_get_format(blast_type), blast_get_depth(blast_type))
 
 
-def blast_get_png_writer(blast_type: Blast) -> N64SegImg:
+def blast_get_png_writer(blast_type: Blast):
     match blast_type:
         case Blast.BLAST1_RGBA16:
-            return N64SegRgba16
+            return n64img.image.RGBA16
         case (Blast.BLAST2_RGBA32 | Blast.BLAST5_RGBA32):
-            return N64SegRgba32
+            return n64img.image.RGBA32
         case (Blast.BLAST3_IA8 | Blast.BLAST6_IA8):
-            return N64SegIa8
+            return n64img.image.IA8
         case Blast.BLAST4_IA16:
-            return N64SegIa16
+            return n64img.image.IA16
         case _:
             return None
 
@@ -247,15 +243,15 @@ def split_segment_bytes(subsegments, decoded_bytes: bytes):
     return segment_bytes
 
 
-class N64SegBlast(N64Segment):
+class N64SegBlast(Segment):
     def get_latest_lut256(self):
-        lut_dir_path = options.get_asset_path() / self.dir
+        lut_dir_path = options.opts.asset_path / self.dir
         lut_files = list(lut_dir_path.glob("*.lut256.bin"))
         lut_files.sort()
         return lut_files[-1]
 
     def write_encoded_file(self, blast_type: Blast, address: str, encoded_bytes: bytes):
-        encoded_dir_path = options.get_asset_path() / self.dir / "split"
+        encoded_dir_path = options.opts.asset_path / self.dir / "split"
         encoded_dir_path.mkdir(exist_ok=True, parents=True)
         encoded_file_path = encoded_dir_path / f"{address}.blast{blast_type.value}"
         with open(encoded_file_path, 'wb') as f:
@@ -264,13 +260,13 @@ class N64SegBlast(N64Segment):
     def decode(self, blast_type: Blast, encoded_bytes: bytes) -> bytes:
         match blast_type:
             case Blast.BLAST4_IA16:
-                lut_path = options.get_asset_path() / self.dir / "047480.lut128.bin"
+                lut_path = options.opts.asset_path / self.dir / "047480.lut128.bin"
                 with open(lut_path, 'rb') as f:
                     lut = f.read()
                 return decode_blast_lookup(blast_type, encoded_bytes, lut)
             case Blast.BLAST5_RGBA32:
                 # TODO: Figure out proper LUT assignment
-                lut_path = options.get_asset_path() / self.dir / "152970.lut256.bin"
+                lut_path = options.opts.asset_path / self.dir / "152970.lut256.bin"
                 if not lut_path.exists():
                     lut_path = self.get_latest_lut256()
                 with open(lut_path, 'rb') as f:
@@ -280,7 +276,7 @@ class N64SegBlast(N64Segment):
                 return decode_blast(blast_type, encoded_bytes)
 
     def write_decoded_file(self, blast_type: Blast, name: str, decoded_bytes: bytes):
-        decoded_dir_path = options.get_asset_path() / self.dir / "uncompressed"
+        decoded_dir_path = options.opts.asset_path / self.dir / "uncompressed"
         decoded_dir_path.mkdir(exist_ok=True, parents=True)
         decoded_ext = blast_get_decoded_extension(blast_type)
         decoded_file_path = decoded_dir_path / f"{name}.{decoded_ext}"
@@ -293,20 +289,16 @@ class N64SegBlast(N64Segment):
 
     def write_png(self, blast_type: Blast, address: str, width: int, height: int, decoded_bytes: bytes):
         writer_class = blast_get_png_writer(blast_type)
-        png_writer = writer_class.get_writer(width, height)
-        png_dir_path = options.get_asset_path() / self.dir / "png" / f"blast{blast_type.value}"
+        png_dir_path = options.opts.asset_path / self.dir / "png" / f"blast{blast_type.value}"
         png_dir_path.mkdir(exist_ok=True, parents=True)
         png_file_path = png_dir_path / f"{address}.png"
-        with open(png_file_path, "wb") as f:
-            match blast_type:
-                case Blast.BLAST4_IA16:
-                    png_writer.write_array(f, decoded_bytes)
-                case _:
-                    png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
+        img = writer_class(decoded_bytes, width, height)
+        img.flip_v = blast_type != Blast.BLAST4_IA16
+        img.write(png_file_path)
 
     def write_png_segments(self, blast_type: Blast, address: str, subsegments, segment_bytes):
         writer_class = blast_get_png_writer(blast_type)
-        png_dir_path = options.get_asset_path() / self.dir / "png" / f"blast{blast_type.value}"
+        png_dir_path = options.opts.asset_path / self.dir / "png" / f"blast{blast_type.value}"
         png_dir_path.mkdir(exist_ok=True, parents=True)
 
         assert len(segment_bytes) == len(subsegments)
@@ -314,16 +306,11 @@ class N64SegBlast(N64Segment):
         for i in range(len(segment_bytes)):
             width = subsegments[i][1]
             height = subsegments[i][2]
-            png_writer = writer_class.get_writer(width, height)
 
             png_file_path = png_dir_path / f"{address}.{i}.png"
-            with open(png_file_path, "wb") as f:
-                match blast_type:
-                    case Blast.BLAST4_IA16:
-                        png_writer.write_array(f, segment_bytes[i])
-                    case _:
-                        png_writer.write_array(f, writer_class.parse_image(segment_bytes[i],
-                                                                           width, height, False, True))
+            img = writer_class(segment_bytes[i], width, height)
+            img.flip_v = blast_type != Blast.BLAST4_IA16
+            img.write(png_file_path)
 
     def split(self, rom_bytes):
         width = 0

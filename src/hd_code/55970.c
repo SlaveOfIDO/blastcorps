@@ -5,16 +5,16 @@
 #include "variables.h"
 #include "yoshi.h"
 
-extern u8* D_48FA70;
-extern u8* D_48FE90;
+extern u8* copyrightLogo_ROM_START;
+extern u8* scientist_ROM_START;
 extern u8* D_hd_code_803A6B10;
 extern s16 D_hd_code_803A6B14;
 
 void func_hd_code_8029A130(void) {
   s32 sp24;
 
-  sp24 = (u32)&D_48FE90 - (u32)&D_48FA70;
-  InitiateDma(&D_48FA70, D_hd_code_80358070, &sp24, 0xCU, 0U, 1U);
+  sp24 = (u32)&scientist_ROM_START - (u32)&copyrightLogo_ROM_START;
+  InitiateDma(&copyrightLogo_ROM_START, D_hd_code_80358070, &sp24, 0xCU, 0U, 1U);
   D_hd_code_803A6B10 = D_hd_code_80358070;
   D_hd_code_80358070 += sp24;
   D_hd_code_803A6B14 = 0;

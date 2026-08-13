@@ -29,7 +29,7 @@ u32 D_hd_code_803669F0; // output write offset; proposed name: gzWriteOfs
 // decoder, then advances *arg0 by the bytes consumed and *arg1 by the bytes
 // written.
 // Proposed name: DecompressGzip
-void func_hd_code_8025C230(s32* arg0, s32* arg1, s32 arg2) {
+void func_hd_code_8025C230(s32* arg0, s32* arg1, s32 arg2) {   
   D_hd_code_803669C0 = *arg0;
   D_hd_code_803669C4 = *arg1;
   D_hd_code_8039CAE0 = arg2;

@@ -1081,7 +1081,7 @@ Gfx *func_hd_front_end_801EC770(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
   }
   entry = func_hd_code_80274AA4(entry);
   if (D_hd_code_80364AA8 != 1) {
-    func_hd_code_80264A34(D_hd_front_end_80215470, D_802E8FCC[levelno][-sp63], 0); // TODO: find correct base
+    func_hd_code_80264A34(D_hd_front_end_80215470, D_hd_code_802E8F94[levelno].unk30[4-sp63], 0);
     D_hd_front_end_80215470[5]  = 0;
     func_hd_code_80259DC8(arg1, D_hd_front_end_80215470, 0, 0, 0, 0x29, 0x7D, 0x10, 0x10, 1, 0xFF, 0xB4, 0, D_hd_front_end_80215910[1], 0xFF, 0x78, 0, D_hd_front_end_80215910[1]);
   }

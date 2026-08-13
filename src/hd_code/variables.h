@@ -134,8 +134,8 @@ extern s16 D_hd_code_803FCD68;
 extern s16 D_hd_code_802E8C8C[2];
 extern s16 D_hd_code_802E8C90[2];
 extern struct vec3s* D_hd_code_8036C794;
-extern s32 D_6A9F10; // attract.raw
-extern s32 D_6AD3F0; // 6AD3F0.bin
+extern s32 attract_ROM_START; // attract.raw
+extern s32 attract2_ROM_START; // 6AD3F0.bin
 extern OSThread D_hd_front_end_80218D30;
 extern s32 D_hd_front_end_80218EE0;
 extern s32 D_hd_front_end_80219F58;
@@ -369,9 +369,9 @@ extern u32 D_hd_code_80366BBC;
 extern struct S_802FA8B0* D_hd_code_80366BA0;
 extern s16 D_hd_code_80366A14;
 extern s16 D_hd_code_80366A16;
-extern s32 D_487050; // titlelogo_usa
-extern s32 D_489E70; // titlepicture_usa
-extern s32 D_48F5A0; // nink.raw
+extern s32 titlelogo_usa_ROM_START; // titlelogo_usa
+extern s32 titlepicture_usa_ROM_START; // titlepicture_usa
+extern u8 nink_ROM_START[]; // nink.raw
 extern s32 D_hd_code_80366BB0[];
 extern s16 D_hd_code_80366A00;
 extern s16 D_hd_code_80366A02;
@@ -405,11 +405,11 @@ extern u8 D_hd_code_80367C01;
 extern s16 D_hd_code_80367D50;
 extern struct S_80367D52 D_hd_code_80367D52;
 extern s32 D_hd_code_8036772C;
-extern u8 D_350950;
-extern u8 D_3539A0;
-extern u8 D_3A1920;
-extern u8 D_3A48C0;
-extern u8 D_44F5C0;
+extern u8 snd_bank0_ROM_START;
+extern u8 snd_unk1_ROM_START;
+extern u8 snd_bank1_ROM_START;
+extern u8 snd_unk2_ROM_START;
+extern u8 snd_seqfile_ROM_START;
 extern f32 D_hd_code_80367710;
 extern ALHeap D_hd_code_80367718;
 extern ALBank* D_hd_code_8036773C;

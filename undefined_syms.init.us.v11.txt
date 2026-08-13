@@ -1,1 +1,10 @@
-hd_front_end_VRAM = init_VRAM - 0x37D00;
+/* Static addresses for the hd_code/hd_front_end overlay, referenced by
+ * src/1A30.c's NON_MATCHING=1 reimplementation. These are fixed load
+ * addresses - unlike the overlay's *ROM* position (rzip_*) or the VRAM
+ * *end* of its content (hd_code_BSS_END), they don't depend on compiled
+ * size at all, so they're safe to hardcode here. hd_code_BSS_END is
+ * computed dynamically instead, by tools/compute_rzip_reloc.py, and -T'd
+ * in from rzip_reloc_auto.init.*.txt by the root Makefile alongside rzip_*. */
+hd_code_VRAM = 0x802447C0;
+hd_front_end_VRAM = 0x801E7000;
+MainJump = hd_code_VRAM; /* hd_code's entry point, placed at its VRAM start */

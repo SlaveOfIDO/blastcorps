@@ -9,10 +9,11 @@
 void func_hd_front_end_801F4E70(s32);  /* extern */
 s32 func_hd_front_end_801F4FBC(struct Model1 *, s32);  /* extern */
 
-extern u8 ASSET_NINK_START[];
-extern u8 ASSET_NINK_END[];
-extern u8 ASSET_64K_START[];
-extern u8 ASSET_64K_END[];
+extern u8 nink_ROM_START[];
+extern u8 nink_ROM_END[];
+extern u8 _64k_ROM_START[];
+extern u8 _64k_ROM_END[];
+extern u8 copyrightLogo_ROM_START[];
 extern u16 D_hd_front_end_802159D0;
 extern u8 *D_hd_front_end_802159D4;
 extern u8 *D_hd_front_end_802159D8;
@@ -24,8 +25,8 @@ extern void* D_hd_code_8035806C; // static data segment pointer (segment 1); pro
 extern Mtx  D_hd_front_end_802182D0[];
 
 void func_hd_front_end_801EF380(s32 arg0) {
-  s32 assetNinkSize = (u32)&ASSET_NINK_END - (u32)&ASSET_NINK_START,
-      asset64kSize = (u32)&ASSET_64K_END - (u32)&ASSET_64K_START;
+  s32 assetNinkSize = (u32)nink_ROM_END - (u32)nink_ROM_START,
+      asset64kSize = (u32)_64k_ROM_END - (u32)_64k_ROM_START;
 
   func_hd_front_end_801F4E70(arg0);
   if (arg0 == 2) {
@@ -33,10 +34,10 @@ void func_hd_front_end_801EF380(s32 arg0) {
   } else {
     D_hd_front_end_802159D0 = 0;
   }
-  InitiateDma(ASSET_NINK_START, D_hd_code_80358070, &assetNinkSize, 0xCU, 0U, 1U);
+  InitiateDma(nink_ROM_START, D_hd_code_80358070, &assetNinkSize, 0xCU, 0U, 1U);
   D_hd_front_end_802159D4 = D_hd_code_80358070;
   D_hd_code_80358070 += assetNinkSize;
-  InitiateDma(ASSET_64K_START, D_hd_code_80358070, &asset64kSize, 0xCU, 0U, 1U);
+  InitiateDma(_64k_ROM_START, D_hd_code_80358070, &asset64kSize, 0xCU, 0U, 1U);
   D_hd_front_end_802159D8 = D_hd_code_80358070;
   D_hd_code_80358070 += asset64kSize;
   D_hd_front_end_802159DC = arg0;

@@ -4,6 +4,7 @@
 *.ld
 *.ok
 *.z64
+*.map
 *auto*.txt
 
 # directories
@@ -29,9 +30,6 @@ permuter-bench
 
 # other code for inspiration
 other/
-
-# build artifacts
-decompressed/decompressed.map
 
 # objdiff
 objdiff.json

@@ -17,8 +17,8 @@ extern s32 D_hd_front_end_8021ABA4;
 extern ALSoundState D_hd_front_end_8021ABA8;
 extern u8 D_hd_front_end_8021ABA1;
 extern u8 D_hd_front_end_8021ABA2;
-extern s32 D_6A32B0;
-extern u8 D_68B550[];
+extern s32 traffictextures_ROM_START;
+extern u8 ambertextures_ROM_START[];
 
 // <data>
 s16 D_hd_front_end_8020E3E0[] = { 0x53, 0x81, 0x61, 0xB4 };
@@ -40,8 +40,8 @@ void func_hd_front_end_80201240(s32 arg0) {
   s32 sp24;
   s32 sp20;
 
-  sp24 = (s32)&D_6A32B0 - (s32)D_68B550;
-  InitiateDma(D_68B550, D_hd_code_80358070, &sp24, 0xD, 0, 1);
+  sp24 = (s32)&traffictextures_ROM_START - (s32)ambertextures_ROM_START;
+  InitiateDma(ambertextures_ROM_START, D_hd_code_80358070, &sp24, 0xD, 0, 1);
   for (sp20 = 0; sp20 < 4; sp20++) {
     D_hd_front_end_8021AB90[sp20] = &D_hd_code_80358070[sp20 * 160 * 120 * 2];
   }

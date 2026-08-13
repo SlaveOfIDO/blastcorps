@@ -4,7 +4,6 @@
 #include <PR/os.h>
 #include <PR/rcp.h>
 #include "inflate.h"
-#include "../vram.h"
 
 void func_init_80220360(u8** arg0, u8** arg1, struct huft* arg2);
 void MainJump();
@@ -40,8 +39,12 @@ void func_init_80220730() {
     *p = 0;
   }
 
-  *((s32*)VRAM_FRONT_END_START_ADDR) = rzip_HD_FRONT_END_TEXT_START;
-  *((s32*)VRAM_FRONT_END_END_ADDR) = rzip_LAYOUT_END;
+  // Mailbox for src/hd_code/46C20.c (D_hd_code_802FDB30/34): the last two
+  // words of hd_code's just-zeroed bss, so their address has to track
+  // hd_code_BSS_END, not a hardcoded constant - it moves as hd_code's own
+  // compiled size does.
+  *((s32*)(hd_code_BSS_END - 8)) = rzip_HD_FRONT_END_TEXT_START;
+  *((s32*)(hd_code_BSS_END - 4)) = rzip_LAYOUT_END;
 
   osSyncPrintf("got here 2\n");
 

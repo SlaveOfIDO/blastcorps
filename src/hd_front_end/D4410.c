@@ -33,8 +33,8 @@ extern s32 D_hd_front_end_80217390[];   /* grid Y */
 extern s32 D_hd_front_end_80217490[];   /* grid S */
 extern s32 D_hd_front_end_80217590[];   /* grid T */
 extern Vtx D_hd_front_end_80215A88[];
-extern u8 D_66C900[];
-extern u8 D_68B550[];
+extern u8 worldtextures_ROM_START[];
+extern u8 ambertextures_ROM_START[];
 extern u8 *D_hd_front_end_80215A70[];
 extern u8 *D_hd_front_end_80215A7C;
 extern u8 *D_hd_front_end_80215A80;
@@ -759,8 +759,8 @@ Gfx *func_hd_front_end_801F1568(void) {
     Gfx *sp64;
 
     spAC = (u16 (*)[49][420])D_hd_code_80358070;
-    spA8 = (s32) &D_68B550 - (s32) &D_66C900;
-    InitiateDma(D_66C900, D_hd_code_80358070, &spA8, 0xDU, 0U, 1U);
+    spA8 = (s32) &ambertextures_ROM_START - (s32) &worldtextures_ROM_START;
+    InitiateDma(worldtextures_ROM_START, D_hd_code_80358070, &spA8, 0xDU, 0U, 1U);
     D_hd_code_80358070 += spA8;
     D_hd_front_end_8021728C = D_hd_code_80358070 - 0x6600;
     for (sp9C = 0; sp9C < 3; sp9C++) {

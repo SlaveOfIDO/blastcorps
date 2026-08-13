@@ -683,26 +683,26 @@ void func_hd_code_80261588(void) {
     s32 sp20;
 
     alHeapInit(&D_hd_code_80367718, &D_hd_code_80370C80, 0x2A280);
-    sp38 = sp34 = (s32)&D_3539A0 - (s32)&D_350950;
-    InitiateDma(&D_350950, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
+    sp38 = sp34 = (s32)&snd_unk1_ROM_START - (s32)&snd_bank0_ROM_START;
+    InitiateDma(&snd_bank0_ROM_START, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
     sp3C = alHeapAlloc(&D_hd_code_80367718, 1, sp38);
-    InitiateDma(&D_350950, sp3C, &sp34, 0xDU, 0, 2);
-    alBnkfNew(sp3C, &D_3539A0);
+    InitiateDma(&snd_bank0_ROM_START, sp3C, &sp34, 0xDU, 0, 2);
+    alBnkfNew(sp3C, &snd_unk1_ROM_START);
     D_hd_code_8036773C = sp3C->bankArray[0];
-    sp38 = sp34 = (s32)&D_3A48C0 - (s32)&D_3A1920;
+    sp38 = sp34 = (s32)&snd_unk2_ROM_START - (s32)&snd_bank1_ROM_START;
 
-    InitiateDma(&D_3A1920, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
+    InitiateDma(&snd_bank1_ROM_START, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
     sp40 = alHeapAlloc(&D_hd_code_80367718, 1, sp38);
-    InitiateDma(&D_3A1920, sp40, &sp34, 0xDU, 0, 2);
-    alBnkfNew(sp40, &D_3A48C0);
+    InitiateDma(&snd_bank1_ROM_START, sp40, &sp34, 0xDU, 0, 2);
+    alBnkfNew(sp40, &snd_unk2_ROM_START);
     D_hd_code_80367738 = sp40->bankArray[0];
     D_hd_code_80367514 = alHeapAlloc(&D_hd_code_80367718, 1, 4);
     sp20 = 4;
-    InitiateDma(&D_44F5C0, D_hd_code_80367514, &sp20, 0U, 0, 0);
+    InitiateDma(&snd_seqfile_ROM_START, D_hd_code_80367514, &sp20, 0U, 0, 0);
     sp24 = (D_hd_code_80367514->seqCount * 8) + 4;
     D_hd_code_80367514 = alHeapAlloc(&D_hd_code_80367718, 1, 0x214);
-    InitiateDma(&D_44F5C0, D_hd_code_80367514, &sp24, 0U, 0, 0);
-    alSeqFileNew(D_hd_code_80367514, &D_44F5C0);
+    InitiateDma(&snd_seqfile_ROM_START, D_hd_code_80367514, &sp24, 0U, 0, 0);
+    alSeqFileNew(D_hd_code_80367514, &snd_seqfile_ROM_START);
     D_hd_code_80367510 = alHeapAlloc(&D_hd_code_80367718, 1, 0x21AE);
     for(sp30 = 0; sp30 < 0x42U; sp30++) {
         D_hd_code_80367408[sp30] = D_hd_code_80367514->seqArray[sp30].len;

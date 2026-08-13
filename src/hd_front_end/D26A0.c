@@ -241,13 +241,13 @@ u8 func_hd_front_end_801EF2BC(u16 arg0, u8 arg1, u8 arg2) {
   struct S_80367C04 *sp0;
 
   sp0 = &D_hd_code_802E8F94[arg1];
-  if ((sp0->unk30 >= arg0) && (arg2 >= 0xC)) {
+  if ((sp0->unk30[0] >= arg0) && (arg2 >= 0xC)) {
     sp7 = 4;
-  } else if (sp0->unk32 >= arg0) {
+  } else if (sp0->unk30[1] >= arg0) {
     sp7 = 3;
-  } else if (sp0->unk34 >= arg0) {
+  } else if (sp0->unk30[2] >= arg0) {
     sp7 = 2;
-  } else if (sp0->unk36 >= arg0) {
+  } else if (sp0->unk30[3] >= arg0) {
     sp7 = 1;
   } else {
     sp7 = 5;

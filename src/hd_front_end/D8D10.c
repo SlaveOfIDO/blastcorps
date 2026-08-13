@@ -12,10 +12,10 @@ void func_hd_front_end_80202100(s32, u8**, s32*, s32*);                         
 void func_hd_front_end_80202270(u8*, s32*, struct S_80211AC0*);                   /* extern */
 void func_hd_front_end_802022EC(struct S_80211AC0*, s32, s32, s32, f32, s32, s32); /* extern */
 
-extern u8 D_6E8980; // usa_star.raw
-extern u8 D_6EA850; // ninlogo.raw
-extern u8 D_6EAB90; // reflectlogo.raw
-extern u8 D_6EC4C0;
+extern u8 usa_star_ROM_START; // usa_star.raw
+extern u8 ninlogo_ROM_START; // ninlogo.raw
+extern u8 reflectlogo_ROM_START; // reflectlogo.raw
+extern u8 somelookup_ROM_START;
 extern s32 D_hd_front_end_802182C0;
 extern u8* D_hd_front_end_802182C4;
 extern u8* D_hd_front_end_802182C8;
@@ -48,16 +48,16 @@ void func_hd_front_end_801F4E70(s32 arg0) {
   func_hd_code_802A0700();
   switch ((u8) arg0) {                            /* irregular */
     case 0:
-      D_hd_front_end_802182C4 = &D_6E8980;
-      D_hd_front_end_802182C0 = &D_6EA850 - &D_6E8980;
+      D_hd_front_end_802182C4 = &usa_star_ROM_START;
+      D_hd_front_end_802182C0 = &ninlogo_ROM_START - &usa_star_ROM_START;
       break;
     case 1:
-      D_hd_front_end_802182C4 = &D_6EA850;
-      D_hd_front_end_802182C0 = &D_6EAB90 - &D_6EA850;
+      D_hd_front_end_802182C4 = &ninlogo_ROM_START;
+      D_hd_front_end_802182C0 = &reflectlogo_ROM_START - &ninlogo_ROM_START;
       break;
     case 2:
-      D_hd_front_end_802182C4 = &D_6EAB90;
-      D_hd_front_end_802182C0 = &D_6EC4C0 - &D_6EAB90;
+      D_hd_front_end_802182C4 = &reflectlogo_ROM_START;
+      D_hd_front_end_802182C0 = &somelookup_ROM_START - &reflectlogo_ROM_START;
       break;
   }
   InitiateDma(D_hd_front_end_802182C4, D_hd_code_80358070, &D_hd_front_end_802182C0, 0xCU, 0xAU, 1U);

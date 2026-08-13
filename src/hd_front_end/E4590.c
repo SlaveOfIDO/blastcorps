@@ -11,9 +11,9 @@
 void func_hd_front_end_80200714(u8);                   /* extern */
 
 extern u8 D_hd_front_end_8021AB84;
-extern s32 D_6BF2F0;
-extern s32 D_6D3D30;
-extern s32 D_6E8980;
+extern s32 attract3_ROM_START;
+extern s32 attract4_ROM_START;
+extern s32 usa_star_ROM_START;
 extern u8* D_hd_front_end_8021AB80;
 extern u8 D_hd_front_end_8021AB84;
 
@@ -38,20 +38,20 @@ void func_hd_front_end_80200714(u8 arg0) {
     case 1:
     case 2:
     case 3:
-      sp34 = &D_6AD3F0;
-      sp30 = &D_6BF2F0;
+      sp34 = &attract2_ROM_START;
+      sp30 = &attract3_ROM_START;
       break;
     case 4:
     case 7:
     case 8:
-      sp34 = &D_6BF2F0;
-      sp30 = &D_6D3D30;
+      sp34 = &attract3_ROM_START;
+      sp30 = &attract4_ROM_START;
       break;
     case 5:
     case 6:
     case 9:
-      sp34 = &D_6D3D30;
-      sp30 = &D_6E8980;
+      sp34 = &attract4_ROM_START;
+      sp30 = &usa_star_ROM_START;
       break;
     default:
       return;

@@ -1,0 +1,34 @@
+hd_front_end_VRAM = init_VRAM - 0x37D00;
+
+/* Must be hardcoded */
+D_1000010 = 0x1000010;
+D_1000038 = 0x1000038;
+D_2000000 = 0x2000000;
+osTvType = 0x80000300;
+osRomBase = 0x80000308;
+osResetType = 0x8000030C;
+osAppNMIBuffer = 0x8000031C;
+D_80000400 = 0x80000400; /* framebuffers */
+
+func_init_8021ED00 = 0x8021ED00;
+
+/* hd.c's PrepareStateTransition DMAs+decompresses this fixed 0xC0-byte chunk
+ * every state transition (not just for the rmonPrintf, despite the old
+ * comment here - it's the actual DMA source address/size). It isn't its own
+ * splat segment, but it sits at a fixed offset inside endsid5_dl's raw
+ * bytes: in a fully matching build endsid5_dl_ROM_END == 0x787FD0, and
+ * 0x787FD0 - 0x90 == 0x787F40 and + 0xC0 == 0x788000, exactly the old
+ * hardcoded values - so anchor to endsid5_dl_ROM_END instead of the literal
+ * addresses, which drift whenever anything upstream changes size under
+ * NON_MATCHING and previously caused this DMA to decompress garbage. */
+D_787F40 = endsid5_dl_ROM_END - 0x90;
+D_788000 = D_787F40 + 0xC0;
+
+/* TODO */
+D_hd_code_802C3804 = 0x802C3804;
+D_hd_code_802C382C = 0x802C382C;
+D_hd_code_802C28E4 = 0x802C28E4;
+D_hd_code_802C3B44 = 0x802C3B44;
+D_hd_code_802E8FCA = 0x802E8FCA;
+D_hd_code_802F499A = 0x802F499A;
+D_hd_code_8030EE60 = 0x8030EE60;

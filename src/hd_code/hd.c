@@ -4474,67 +4474,67 @@ void func_hd_code_80255DC8(void) {
 }
 
 //region Level Addresses
-extern u8 D_4A5660;
-extern u8 D_4ACC10;
-extern u8 D_4B8960;
-extern u8 D_4BFD60;
-extern u8 D_4C3AC0;
-extern u8 D_4D5F90;
-extern u8 D_4E2F70;
-extern u8 D_4E4E80;
-extern u8 D_4E7C00;
-extern u8 D_4E8F70;
-extern u8 D_4F5C10;
-extern u8 D_500520;
-extern u8 D_507E80;
-extern u8 D_511340;
-extern u8 D_523080;
-extern u8 D_52CD00;
-extern u8 D_532700;
-extern u8 D_53E9B0;
-extern u8 D_54A820;
-extern u8 D_552DE0;
-extern u8 D_555000;
-extern u8 D_560E90;
-extern u8 D_5652D0;
-extern u8 D_56F3F0;
-extern u8 D_5721E0;
-extern u8 D_5736E0;
-extern u8 D_57A2C0;
-extern u8 D_580B60;
-extern u8 D_588CE0;
-extern u8 D_58BE80;
-extern u8 D_597B80;
-extern u8 D_59B7D0;
-extern u8 D_5A5840;
-extern u8 D_5B0B10;
-extern u8 D_5B5A30;
-extern u8 D_5B8BB0;
-extern u8 D_5C4C80;
-extern u8 D_5CA9C0;
-extern u8 D_5CCF50;
-extern u8 D_5D1060;
-extern u8 D_5DC830;
-extern u8 D_5E6EE0;
-extern u8 D_5EC800;
-extern u8 D_5F3A80;
-extern u8 D_6014B0;
-extern u8 D_60A710;
-extern u8 D_613AA0;
-extern u8 D_61DD70;
-extern u8 D_621AF0;
-extern u8 D_6269E0;
-extern u8 D_630C30;
-extern u8 D_635700;
-extern u8 D_63CA10;
-extern u8 D_641F30;
-extern u8 D_644810;
-extern u8 D_646080;
-extern u8 D_647550;
-extern u8 D_654FC0;
-extern u8 D_660950;
-extern u8 D_665F80;
-extern u8 D_66C900;
+extern u8 lagp_ROM_START;
+extern u8 chimp_ROM_START;
+extern u8 valley_ROM_START;
+extern u8 fact_ROM_START;
+extern u8 dip_ROM_START;
+extern u8 beetle_ROM_START;
+extern u8 bonus1_ROM_START;
+extern u8 bonus2_ROM_START;
+extern u8 bonus3_ROM_START;
+extern u8 level9_ROM_START;
+extern u8 level10_ROM_START;
+extern u8 level11_ROM_START;
+extern u8 level12_ROM_START;
+extern u8 level13_ROM_START;
+extern u8 level14_ROM_START;
+extern u8 level15_ROM_START;
+extern u8 level16_ROM_START;
+extern u8 level17_ROM_START;
+extern u8 level18_ROM_START;
+extern u8 level19_ROM_START;
+extern u8 level20_ROM_START;
+extern u8 level21_ROM_START;
+extern u8 level22_ROM_START;
+extern u8 level23_ROM_START;
+extern u8 level24_ROM_START;
+extern u8 level25_ROM_START;
+extern u8 level26_ROM_START;
+extern u8 level27_ROM_START;
+extern u8 level28_ROM_START;
+extern u8 level29_ROM_START;
+extern u8 level30_ROM_START;
+extern u8 level31_ROM_START;
+extern u8 level32_ROM_START;
+extern u8 level33_ROM_START;
+extern u8 level34_ROM_START;
+extern u8 level35_ROM_START;
+extern u8 level36_ROM_START;
+extern u8 level37_ROM_START;
+extern u8 level38_ROM_START;
+extern u8 level39_ROM_START;
+extern u8 level40_ROM_START;
+extern u8 level41_ROM_START;
+extern u8 level42_ROM_START;
+extern u8 level43_ROM_START;
+extern u8 level44_ROM_START;
+extern u8 level45_ROM_START;
+extern u8 level46_ROM_START;
+extern u8 level47_ROM_START;
+extern u8 level48_ROM_START;
+extern u8 level49_ROM_START;
+extern u8 level50_ROM_START;
+extern u8 level51_ROM_START;
+extern u8 level52_ROM_START;
+extern u8 level53_ROM_START;
+extern u8 level54_ROM_START;
+extern u8 level55_ROM_START;
+extern u8 level56_ROM_START;
+extern u8 level57_ROM_START;
+extern u8 level58_ROM_START;
+extern u8 level59_ROM_START;
+extern u8 worldtextures_ROM_START;
 //endregion
 
 // DMA the level data blob for level arg0 into arg1, returning its size in
@@ -4544,244 +4544,244 @@ void LoadLevel(u32 arg0, void* arg1, s32* arg2) {
 
     switch (arg0) {
     case 0x1:
-        sp24 = &D_4A5660;
-        *arg2 = &D_4ACC10 - &D_4A5660;
+        sp24 = &lagp_ROM_START;
+        *arg2 = &chimp_ROM_START - &lagp_ROM_START;
         break;
     case 0x0:
-        sp24 = &D_4ACC10;
-        *arg2 = &D_4B8960 - &D_4ACC10;
+        sp24 = &chimp_ROM_START;
+        *arg2 = &valley_ROM_START - &chimp_ROM_START;
         break;
     case 0x2:
-        sp24 = &D_4B8960;
-        *arg2 = &D_4BFD60 - &D_4B8960;
+        sp24 = &valley_ROM_START;
+        *arg2 = &fact_ROM_START - &valley_ROM_START;
         break;
     case 0x3:
-        sp24 = &D_4BFD60;
-        *arg2 = &D_4C3AC0 - &D_4BFD60;
+        sp24 = &fact_ROM_START;
+        *arg2 = &dip_ROM_START - &fact_ROM_START;
         break;
     case 0x4:
-        sp24 = &D_4C3AC0;
-        *arg2 = &D_4D5F90 - &D_4C3AC0;
+        sp24 = &dip_ROM_START;
+        *arg2 = &beetle_ROM_START - &dip_ROM_START;
         break;
     case 0x5:
-        sp24 = &D_4D5F90;
-        *arg2 = &D_4E2F70 - &D_4D5F90;
+        sp24 = &beetle_ROM_START;
+        *arg2 = &bonus1_ROM_START - &beetle_ROM_START;
         break;
     case 0x6:
-        sp24 = &D_4E2F70;
-        *arg2 = &D_4E4E80 - &D_4E2F70;
+        sp24 = &bonus1_ROM_START;
+        *arg2 = &bonus2_ROM_START - &bonus1_ROM_START;
         break;
     case 0x7:
-        sp24 = &D_4E4E80;
-        *arg2 = &D_4E7C00 - &D_4E4E80;
+        sp24 = &bonus2_ROM_START;
+        *arg2 = &bonus3_ROM_START - &bonus2_ROM_START;
         break;
     case 0x8:
-        sp24 = &D_4E7C00;
-        *arg2 = &D_4E8F70 - &D_4E7C00;
+        sp24 = &bonus3_ROM_START;
+        *arg2 = &level9_ROM_START - &bonus3_ROM_START;
         break;
     case 0x9:
-        sp24 = &D_4E8F70;
-        *arg2 = &D_4F5C10 - &D_4E8F70;
+        sp24 = &level9_ROM_START;
+        *arg2 = &level10_ROM_START - &level9_ROM_START;
         break;
     case 0xA:
-        sp24 = &D_4F5C10;
-        *arg2 = &D_500520 - &D_4F5C10;
+        sp24 = &level10_ROM_START;
+        *arg2 = &level11_ROM_START - &level10_ROM_START;
         break;
     case 0xB:
-        sp24 = &D_500520;
-        *arg2 = &D_507E80 - &D_500520;
+        sp24 = &level11_ROM_START;
+        *arg2 = &level12_ROM_START - &level11_ROM_START;
         break;
     case 0xC:
-        sp24 = &D_507E80;
-        *arg2 = &D_511340 - &D_507E80;
+        sp24 = &level12_ROM_START;
+        *arg2 = &level13_ROM_START - &level12_ROM_START;
         break;
     case 0xD:
-        sp24 = &D_511340;
-        *arg2 = &D_523080 - &D_511340;
+        sp24 = &level13_ROM_START;
+        *arg2 = &level14_ROM_START - &level13_ROM_START;
         break;
     case 0xE:
-        sp24 = &D_523080;
-        *arg2 = &D_52CD00 - &D_523080;
+        sp24 = &level14_ROM_START;
+        *arg2 = &level15_ROM_START - &level14_ROM_START;
         break;
     case 0xF:
-        sp24 = &D_52CD00;
-        *arg2 = &D_532700 - &D_52CD00;
+        sp24 = &level15_ROM_START;
+        *arg2 = &level16_ROM_START - &level15_ROM_START;
         break;
     case 0x10:
-        sp24 = &D_532700;
-        *arg2 = &D_53E9B0 - &D_532700;
+        sp24 = &level16_ROM_START;
+        *arg2 = &level17_ROM_START - &level16_ROM_START;
         break;
     case 0x11:
-        sp24 = &D_53E9B0;
-        *arg2 = &D_54A820 - &D_53E9B0;
+        sp24 = &level17_ROM_START;
+        *arg2 = &level18_ROM_START - &level17_ROM_START;
         break;
     case 0x12:
-        sp24 = &D_54A820;
-        *arg2 = &D_552DE0 - &D_54A820;
+        sp24 = &level18_ROM_START;
+        *arg2 = &level19_ROM_START - &level18_ROM_START;
         break;
     case 0x13:
-        sp24 = &D_552DE0;
-        *arg2 = &D_555000 - &D_552DE0;
+        sp24 = &level19_ROM_START;
+        *arg2 = &level20_ROM_START - &level19_ROM_START;
         break;
     case 0x14:
-        sp24 = &D_555000;
-        *arg2 = &D_560E90 - &D_555000;
+        sp24 = &level20_ROM_START;
+        *arg2 = &level21_ROM_START - &level20_ROM_START;
         break;
     case 0x15:
-        sp24 = &D_560E90;
-        *arg2 = &D_5652D0 - &D_560E90;
+        sp24 = &level21_ROM_START;
+        *arg2 = &level22_ROM_START - &level21_ROM_START;
         break;
     case 0x16:
-        sp24 = &D_5652D0;
-        *arg2 = &D_56F3F0 - &D_5652D0;
+        sp24 = &level22_ROM_START;
+        *arg2 = &level23_ROM_START - &level22_ROM_START;
         break;
     case 0x17:
-        sp24 = &D_56F3F0;
-        *arg2 = &D_5721E0 - &D_56F3F0;
+        sp24 = &level23_ROM_START;
+        *arg2 = &level24_ROM_START - &level23_ROM_START;
         break;
     case 0x18:
-        sp24 = &D_5721E0;
-        *arg2 = &D_5736E0 - &D_5721E0;
+        sp24 = &level24_ROM_START;
+        *arg2 = &level25_ROM_START - &level24_ROM_START;
         break;
     case 0x19:
-        sp24 = &D_5736E0;
-        *arg2 = &D_57A2C0 - &D_5736E0;
+        sp24 = &level25_ROM_START;
+        *arg2 = &level26_ROM_START - &level25_ROM_START;
         break;
     case 0x1A:
-        sp24 = &D_57A2C0;
-        *arg2 = &D_580B60 - &D_57A2C0;
+        sp24 = &level26_ROM_START;
+        *arg2 = &level27_ROM_START - &level26_ROM_START;
         break;
     case 0x1B:
-        sp24 = &D_580B60;
-        *arg2 = &D_588CE0 - &D_580B60;
+        sp24 = &level27_ROM_START;
+        *arg2 = &level28_ROM_START - &level27_ROM_START;
         break;
     case 0x1C:
-        sp24 = &D_588CE0;
-        *arg2 = &D_58BE80 - &D_588CE0;
+        sp24 = &level28_ROM_START;
+        *arg2 = &level29_ROM_START - &level28_ROM_START;
         break;
     case 0x1D:
-        sp24 = &D_58BE80;
-        *arg2 = &D_597B80 - &D_58BE80;
+        sp24 = &level29_ROM_START;
+        *arg2 = &level30_ROM_START - &level29_ROM_START;
         break;
     case 0x1E:
-        sp24 = &D_597B80;
-        *arg2 = &D_59B7D0 - &D_597B80;
+        sp24 = &level30_ROM_START;
+        *arg2 = &level31_ROM_START - &level30_ROM_START;
         break;
     case 0x1F:
-        sp24 = &D_59B7D0;
-        *arg2 = &D_5A5840 - &D_59B7D0;
+        sp24 = &level31_ROM_START;
+        *arg2 = &level32_ROM_START - &level31_ROM_START;
         break;
     case 0x20:
-        sp24 = &D_5A5840;
-        *arg2 = &D_5B0B10 - &D_5A5840;
+        sp24 = &level32_ROM_START;
+        *arg2 = &level33_ROM_START - &level32_ROM_START;
         break;
     case 0x21:
-        sp24 = &D_5B0B10;
-        *arg2 = &D_5B5A30 - &D_5B0B10;
+        sp24 = &level33_ROM_START;
+        *arg2 = &level34_ROM_START - &level33_ROM_START;
         break;
     case 0x22:
-        sp24 = &D_5B5A30;
-        *arg2 = &D_5B8BB0 - &D_5B5A30;
+        sp24 = &level34_ROM_START;
+        *arg2 = &level35_ROM_START - &level34_ROM_START;
         break;
     case 0x23:
-        sp24 = &D_5B8BB0;
-        *arg2 = &D_5C4C80 - &D_5B8BB0;
+        sp24 = &level35_ROM_START;
+        *arg2 = &level36_ROM_START - &level35_ROM_START;
         break;
     case 0x24:
-        sp24 = &D_5C4C80;
-        *arg2 = &D_5CA9C0 - &D_5C4C80;
+        sp24 = &level36_ROM_START;
+        *arg2 = &level37_ROM_START - &level36_ROM_START;
         break;
     case 0x25:
-        sp24 = &D_5CA9C0;
-        *arg2 = &D_5CCF50 - &D_5CA9C0;
+        sp24 = &level37_ROM_START;
+        *arg2 = &level38_ROM_START - &level37_ROM_START;
         break;
     case 0x26:
-        sp24 = &D_5CCF50;
-        *arg2 = &D_5D1060 - &D_5CCF50;
+        sp24 = &level38_ROM_START;
+        *arg2 = &level39_ROM_START - &level38_ROM_START;
         break;
     case 0x27:
-        sp24 = &D_5D1060;
-        *arg2 = &D_5DC830 - &D_5D1060;
+        sp24 = &level39_ROM_START;
+        *arg2 = &level40_ROM_START - &level39_ROM_START;
         break;
     case 0x28:
-        sp24 = &D_5DC830;
-        *arg2 = &D_5E6EE0 - &D_5DC830;
+        sp24 = &level40_ROM_START;
+        *arg2 = &level41_ROM_START - &level40_ROM_START;
         break;
     case 0x29:
-        sp24 = &D_5E6EE0;
-        *arg2 = &D_5EC800 - &D_5E6EE0;
+        sp24 = &level41_ROM_START;
+        *arg2 = &level42_ROM_START - &level41_ROM_START;
         break;
     case 0x2A:
-        sp24 = &D_5EC800;
-        *arg2 = &D_5F3A80 - &D_5EC800;
+        sp24 = &level42_ROM_START;
+        *arg2 = &level43_ROM_START - &level42_ROM_START;
         break;
     case 0x2B:
-        sp24 = &D_5F3A80;
-        *arg2 = &D_6014B0 - &D_5F3A80;
+        sp24 = &level43_ROM_START;
+        *arg2 = &level44_ROM_START - &level43_ROM_START;
         break;
     case 0x2C:
-        sp24 = &D_6014B0;
-        *arg2 = &D_60A710 - &D_6014B0;
+        sp24 = &level44_ROM_START;
+        *arg2 = &level45_ROM_START - &level44_ROM_START;
         break;
     case 0x2D:
-        sp24 = &D_60A710;
-        *arg2 = &D_613AA0 - &D_60A710;
+        sp24 = &level45_ROM_START;
+        *arg2 = &level46_ROM_START - &level45_ROM_START;
         break;
     case 0x2E:
-        sp24 = &D_613AA0;
-        *arg2 = &D_61DD70 - &D_613AA0;
+        sp24 = &level46_ROM_START;
+        *arg2 = &level47_ROM_START - &level46_ROM_START;
         break;
     case 0x2F:
-        sp24 = &D_61DD70;
-        *arg2 = &D_621AF0 - &D_61DD70;
+        sp24 = &level47_ROM_START;
+        *arg2 = &level48_ROM_START - &level47_ROM_START;
         break;
     case 0x30:
-        sp24 = &D_621AF0;
-        *arg2 = &D_6269E0 - &D_621AF0;
+        sp24 = &level48_ROM_START;
+        *arg2 = &level49_ROM_START - &level48_ROM_START;
         break;
     case 0x31:
-        sp24 = &D_6269E0;
-        *arg2 = &D_630C30 - &D_6269E0;
+        sp24 = &level49_ROM_START;
+        *arg2 = &level50_ROM_START - &level49_ROM_START;
         break;
     case 0x32:
-        sp24 = &D_630C30;
-        *arg2 = &D_635700 - &D_630C30;
+        sp24 = &level50_ROM_START;
+        *arg2 = &level51_ROM_START - &level50_ROM_START;
         break;
     case 0x33:
-        sp24 = &D_635700;
-        *arg2 = &D_63CA10 - &D_635700;
+        sp24 = &level51_ROM_START;
+        *arg2 = &level52_ROM_START - &level51_ROM_START;
         break;
     case 0x34:
-        sp24 = &D_63CA10;
-        *arg2 = &D_641F30 - &D_63CA10;
+        sp24 = &level52_ROM_START;
+        *arg2 = &level53_ROM_START - &level52_ROM_START;
         break;
     case 0x35:
-        sp24 = &D_641F30;
-        *arg2 = &D_644810 - &D_641F30;
+        sp24 = &level53_ROM_START;
+        *arg2 = &level54_ROM_START - &level53_ROM_START;
         break;
     case 0x36:
-        sp24 = &D_644810;
-        *arg2 = &D_646080 - &D_644810;
+        sp24 = &level54_ROM_START;
+        *arg2 = &level55_ROM_START - &level54_ROM_START;
         break;
     case 0x37:
-        sp24 = &D_646080;
-        *arg2 = &D_647550 - &D_646080;
+        sp24 = &level55_ROM_START;
+        *arg2 = &level56_ROM_START - &level55_ROM_START;
         break;
     case 0x38:
-        sp24 = &D_647550;
-        *arg2 = &D_654FC0 - &D_647550;
+        sp24 = &level56_ROM_START;
+        *arg2 = &level57_ROM_START - &level56_ROM_START;
         break;
     case 0x39:
-        sp24 = &D_654FC0;
-        *arg2 = &D_660950 - &D_654FC0;
+        sp24 = &level57_ROM_START;
+        *arg2 = &level58_ROM_START - &level57_ROM_START;
         break;
     case 0x3A:
-        sp24 = &D_660950;
-        *arg2 = &D_665F80 - &D_660950;
+        sp24 = &level58_ROM_START;
+        *arg2 = &level59_ROM_START - &level58_ROM_START;
         break;
     case 0x3B:
-        sp24 = &D_665F80;
-        *arg2 = &D_66C900 - &D_665F80;
+        sp24 = &level59_ROM_START;
+        *arg2 = &worldtextures_ROM_START - &level59_ROM_START;
     }
     InitiateDma(sp24, arg1, arg2, 0xCU, 0xA, 1);
 }

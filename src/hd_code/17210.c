@@ -50,10 +50,10 @@ void func_hd_code_8025B9D0(s32 arg0, s32* arg1) {
   u16 sp26;
   u8* sp20;
 
-  sp30 = &D_6A9F10;
-  sp2C = (s32)&D_6AD3F0 - (s32)&D_6A9F10;
+  sp30 = &attract_ROM_START;
+  sp2C = (s32)&attract2_ROM_START - (s32)&attract_ROM_START;
   sp20 = (u8*)D_hd_code_80358070;
-  InitiateDma(&D_6A9F10, D_hd_code_80358070, &sp2C, 9U, 0, 1);
+  InitiateDma(&attract_ROM_START, D_hd_code_80358070, &sp2C, 9U, 0, 1);
   D_hd_code_80358070 += sp2C;
   func_hd_code_80257490((u8** ) &D_hd_code_80358070, 0x10);
   for (sp34 = 0; sp34 < arg0; sp34++) {

@@ -8,7 +8,7 @@ extern u8* D_hd_code_8039CA90; // wrong type
 extern u8* D_hd_code_8039CA94; // wrong type
 extern u8* D_hd_code_8039CA98;
 extern void* D_hd_code_8039CA9C;
-extern s32 D_6A8DA0;
+extern s32 controllertextures_ROM_START;
 Gfx* func_hd_code_8029700C(Gfx*, s16, s16);         /* extern */
 
 // Proposed file name: controller_display.c
@@ -31,8 +31,8 @@ void func_hd_code_80295E50(void) {
   D_hd_code_8039CA94 = D_hd_code_80358070 + 0x3200;
   D_hd_code_8039CA98 = D_hd_code_8039CA94 + 0xF0;
   D_hd_code_8039CA9C = D_hd_code_8039CA98 + 0x180;
-  sp24 = (u32)&D_6A9F10 - (u32)&D_6A8DA0; // controllertextures.raw
-  InitiateDma((u8* ) &D_6A8DA0, D_hd_code_80358070, &sp24, 0xAU, 0U, 1U);
+  sp24 = (u32)&attract_ROM_START - (u32)&controllertextures_ROM_START; // controllertextures.raw
+  InitiateDma((u8* ) &controllertextures_ROM_START, D_hd_code_80358070, &sp24, 0xAU, 0U, 1U);
   D_hd_code_80358070 += sp24;
   D_hd_code_8039CAA0 = 0;
   D_hd_code_8039CAA2 = 1;

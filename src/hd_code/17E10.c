@@ -256,12 +256,12 @@ void func_hd_code_8025D0B0(u8 arg0) {
 
   switch(arg0) {
     case 1:
-      sp34 = &D_489E70; // titlepicture_usa
-      sp30 = (s32)&D_48F5A0 - (s32)&D_489E70;
+      sp34 = &titlepicture_usa_ROM_START; // titlepicture_usa
+      sp30 = (s32)&nink_ROM_START - (s32)&titlepicture_usa_ROM_START;
       break;
     case 0:
-      sp34 = &D_487050; // titlelogo_usa
-      sp30 = (s32)&D_489E70 - (s32)&D_487050;
+      sp34 = &titlelogo_usa_ROM_START; // titlelogo_usa
+      sp30 = (s32)&titlepicture_usa_ROM_START - (s32)&titlelogo_usa_ROM_START;
       break;
   }
 
