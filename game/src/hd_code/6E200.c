@@ -1,5 +1,17 @@
 #include "common.h"
 
+// <data>
+s32 D_hd_code_80305D00[4] = {
+    0xFF000000, 0x00000000, 0x00000000, 0x00000000
+};
+
+// TODO: this file probably needs to be split. wait for bss to find the right spot
+
+s32 D_hd_code_80305D10[4] = {
+    0xFF000000, 0x00000000, 0x00000000, 0x00000000
+};
+// </data>
+
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/6E200/func_hd_code_802B29C0.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/6E200/func_hd_code_802B2D7C.s")

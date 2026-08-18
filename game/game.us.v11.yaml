@@ -1056,7 +1056,20 @@ segments:
       - [0x8BC7D0, data, hd_code/68810 ] # TODO: data of 68810 which contains rodata in .text
       - [0x8BC810, .data, hd_code/69BB0 ] # done
       - [0x8BC840, .data, hd_code/6B4A0 ] # done
-      - [0x8BC850, data, hd_code/hd_code_data_rest ] # TODO: assembly data
+      - [0x8BC850, .data, hd_code/6C5E0] # done
+      - [0x8BC860, .data, hd_code/6E200] # done
+      - [0x8BC880, .data, hd_code/71140] # done
+      - [0x8BC890, .data, hd_code/72B80] # done
+      - [0x8BC8C0, .data, hd_code/75490] # done
+      - [0x8BC960, .data, hd_code/772A0] # done
+      - [0x8BC970, .data, hd_code/77E20] # done
+      - [0x8BCF50, .data, hd_code/7FB50] # done
+      - [0x8BCF70, .data, hd_code/83910] # done
+      - [0x8BCF80, .data, hd_code/853D0] # done
+      - [0x8BCF90, .data, hd_code/86F60] # done
+      - [0x8BCFA0, .data, hd_code/88160] # done
+      - [0x8BCFB0, .data, hd_code/89250] # done
+      - [0x8BCFC0, .data, hd_code/8AEE0] # done
       - [0x8BD0F0, .data, hd_code/os/initialize ]
       - [0x8BD100, .data, hd_code/io/pimgr ]
       - [0x8BD120, .data, hd_code/audio/sl ]

@@ -1,5 +1,15 @@
 #include "common.h"
 
+// <data>
+s32 D_hd_code_80305D30[4] = {
+    0xFF000000, 0x00000000, 0x00000000, 0x00000000
+};
+
+// TODO: this file probably needs to be split. wait for bss to find the right spot
+
+char D_hd_code_80305D40[32] = "moving to zoom2\n";
+// </data>
+
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/72B80/func_hd_code_802B7340.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/72B80/func_hd_code_802B76AC.s")

@@ -1,5 +1,15 @@
 #include "common.h"
 
+// <data>
+u8 D_hd_code_803063F0[16] = {
+    0x46, 0x5A, 0x64, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+
+s32 D_hd_code_80306400[4] = {
+    0xFF000000, 0x00000000, 0x00000000, 0x00000000
+};
+// </data>
+
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/recordStatus.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C4BF0.s")
