@@ -1,5 +1,10 @@
 #include "common.h"
 
+// <bss>
+// assumed types
+u8 D_hd_code_803ED420[0x40];
+// </bss>
+
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/679E0/func_hd_code_802AC1A0.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/679E0/func_hd_code_802AC284.s")

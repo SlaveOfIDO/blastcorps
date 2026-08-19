@@ -1,5 +1,16 @@
 #include "common.h"
 
+// <bss>
+s32 D_hd_code_803F9320;
+s32 D_hd_code_803F9324;
+u16 D_hd_code_803F9328;
+u16 D_hd_code_803F932A;
+u8 D_hd_code_803F932C;
+u8 D_hd_code_803F932D;
+u8 D_hd_code_803F932E;
+u8 D_hd_code_803F932F;
+// </bss>
+
 // <data>
 s32 D_hd_code_80306450[4] = {
     0xFF000000, 0x00000000, 0x00000000, 0x00000000

@@ -1,5 +1,24 @@
 #include "common.h"
 
+// <bss>
+// assumed types
+u8 D_hd_code_803ED840[0x300];
+u8 D_hd_code_803EDB40[0xA8];
+s32 D_hd_code_803EDBE8;
+s32 D_hd_code_803EDBEC;
+s32 D_hd_code_803EDBF0;
+s32 D_hd_code_803EDBF4;
+s32 D_hd_code_803EDBF8;
+s32 D_hd_code_803EDBFC;
+s16 D_hd_code_803EDC00;
+u16 D_hd_code_803EDC02;
+u8 D_hd_code_803EDC04;
+u8 D_hd_code_803EDC05;
+u16 D_hd_code_803EDC06;
+s32 D_hd_code_803EDC08;
+s32 D_hd_code_803EDC0C;
+// </bss>
+
 // <data>
 s32 D_hd_code_80305CE0 = 0x0405FF00;
 // </data>

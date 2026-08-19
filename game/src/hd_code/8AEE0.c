@@ -1,5 +1,37 @@
 #include "common.h"
 
+// <bss>
+// assumed types
+u8 D_hd_code_803FC200[0x3A8];
+s32 D_hd_code_803FC5A8;
+s32 D_hd_code_803FC5AC;
+s32 D_hd_code_803FC5B0;
+s32 D_hd_code_803FC5B4;
+s32 D_hd_code_803FC5B8;
+s32 D_hd_code_803FC5BC;
+u16 D_hd_code_803FC5C0;
+u8 D_hd_code_803FC5C2;
+u8 D_hd_code_803FC5C3;
+s32 D_hd_code_803FC5C4;
+s32 D_hd_code_803FC5C8;
+s32 D_hd_code_803FC5CC;
+u8 D_hd_code_803FC5D0[0x300];
+u8 D_hd_code_803FC8D0[0xA8];
+s32 D_hd_code_803FC978;
+s32 D_hd_code_803FC97C;
+s32 D_hd_code_803FC980;
+s32 D_hd_code_803FC984;
+s32 D_hd_code_803FC988;
+s32 D_hd_code_803FC98C;
+s32 D_hd_code_803FC990;
+u16 D_hd_code_803FC994;
+u16 D_hd_code_803FC996;
+u8 D_hd_code_803FC998;
+u8 D_hd_code_803FC999;
+u16 D_hd_code_803FC99A;
+s32 D_hd_code_803FC99C;
+// </bss>
+
 // <data>
 s32 D_hd_code_80306460[4] = {
     0xFF000000, 0x00000000, 0x00000000, 0x00000000

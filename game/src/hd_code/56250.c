@@ -6,6 +6,70 @@ struct S_803059F0 {
     s32 unk8;
 };
 
+// <bss>
+// assumed types
+u8 D_hd_code_803A6B30[0x7D0];
+u8 D_hd_code_803A7300[0xF0];
+s32 D_hd_code_803A73F0;
+s32 D_hd_code_803A73F4;
+s32 D_hd_code_803A73F8;
+s32 D_hd_code_803A73FC;
+s32 D_hd_code_803A7400;
+s32 D_hd_code_803A7404;
+s32 D_hd_code_803A7408;
+s32 D_hd_code_803A740C;
+s16 D_hd_code_803A7410;
+s16 D_hd_code_803A7412;
+s32 D_hd_code_803A7414;
+s32 D_hd_code_803A7418;
+s32 D_hd_code_803A741C;
+u16 D_hd_code_803A7420;
+u16 D_hd_code_803A7422;
+u8 D_hd_code_803A7424;
+u8 D_hd_code_803A7425;
+s8 D_hd_code_803A7426;
+u8 D_hd_code_803A7427;
+u8 D_hd_code_803A7428;
+u8 D_hd_code_803A7429;
+u8 D_hd_code_803A742A;
+u8 D_hd_code_803A742B;
+u8 D_hd_code_803A742C;
+u8 D_hd_code_803A742D;
+u8 D_hd_code_803A742E;
+u8 D_hd_code_803A742F;
+s8 D_hd_code_803A7430;
+u8 D_hd_code_803A7431;
+u16 D_hd_code_803A7432;
+s32 D_hd_code_803A7434;
+s32 D_hd_code_803A7438;
+s32 D_hd_code_803A743C;
+u8 D_hd_code_803A7440[0xC0C0];
+u8 D_hd_code_803B3500[0xF0];
+s32 D_hd_code_803B35F0;
+s32 D_hd_code_803B35F4;
+u8 D_hd_code_803B35F8[0x138];
+u8 D_hd_code_803B3730[0x40];
+s32 D_hd_code_803B3770;
+s32 D_hd_code_803B3774;
+u8 D_hd_code_803B3778[0x40];
+s32 D_hd_code_803B37B8;
+s32 D_hd_code_803B37BC;
+u8 D_hd_code_803B37C0[0x1800];
+u8 D_hd_code_803B4FC0[0x1800];
+u8 D_hd_code_803B67C0[0x1800];
+u8 D_hd_code_803B7FC0;
+u8 D_hd_code_803B7FC1;
+u8 D_hd_code_803B7FC2;
+u8 D_hd_code_803B7FC3;
+u8 D_hd_code_803B7FC4;
+u8 D_hd_code_803B7FC5;
+u8 D_hd_code_803B7FC6;
+u8 D_hd_code_803B7FC7;
+u8 D_hd_code_803B7FC8[0x5A0];
+s32 D_hd_code_803B8568;
+s32 D_hd_code_803B856C;
+// </bss>
+
 // <data>
 struct S_803059F0 D_hd_code_803059F0[34] = {
     { 0x0000FFFF, 0x00000038, 0x00FFFFFF },

@@ -10,6 +10,38 @@ extern s32 D_hd_code_802C382C;
 extern s32 D_hd_code_802C3848;
 extern s32 D_hd_code_802C386C;
 
+// <bss>
+// assumed types
+u8 D_hd_code_803C3250[0x1000];
+u8 D_hd_code_803C4250[0x900];
+s32 D_hd_code_803C4B50;
+s32 D_hd_code_803C4B54;
+u8 D_hd_code_803C4B58[0x18];
+u8 D_hd_code_803C4B70[0x3C0];
+u8 D_hd_code_803C4F30[0x40];
+u8 D_hd_code_803C4F70[0x400];
+u8 D_hd_code_803C5370[0x400];
+Gfx D_hd_code_803C5770[384];
+Gfx D_hd_code_803C6370[384];
+Gfx D_hd_code_803C6F70[384];
+Gfx D_hd_code_803C7B70[384];
+u8 D_hd_code_803C8770[0x1000];
+u8 D_hd_code_803C9770[0x1000];
+u8 D_hd_code_803CA770[0x10000];
+u8 D_hd_code_803DA770[0x10000];
+u8 D_hd_code_803EA770[0x1000];
+u8 D_hd_code_803EB770[0x10];
+s32 D_hd_code_803EB780;
+s32 D_hd_code_803EB784;
+s32 D_hd_code_803EB788;
+s32 D_hd_code_803EB78C;
+u16 D_hd_code_803EB790;
+u16 D_hd_code_803EB792;
+s32 D_hd_code_803EB794;
+s32 D_hd_code_803EB798;
+s32 D_hd_code_803EB79C;
+// </bss>
+
 // <data>
 void* D_hd_code_80305C10[9] = {
     &D_hd_code_802C2954, &D_hd_code_802C2984, &D_hd_code_802C2A5C,

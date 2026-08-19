@@ -1,5 +1,51 @@
 #include "common.h"
 
+// <bss>
+// assumed types
+u8 D_hd_code_803F7850[0x300];
+u8 D_hd_code_803F7B50[0xA8];
+s32 D_hd_code_803F7BF8;
+s32 D_hd_code_803F7BFC;
+s32 D_hd_code_803F7C00;
+s32 D_hd_code_803F7C04;
+s32 D_hd_code_803F7C08;
+s32 D_hd_code_803F7C0C;
+s32 D_hd_code_803F7C10;
+s32 D_hd_code_803F7C14;
+s32 D_hd_code_803F7C18;
+s32 D_hd_code_803F7C1C;
+s32 D_hd_code_803F7C20;
+s32 D_hd_code_803F7C24;
+s32 D_hd_code_803F7C28;
+s32 D_hd_code_803F7C2C;
+u16 D_hd_code_803F7C30;
+u16 D_hd_code_803F7C32;
+s16 D_hd_code_803F7C34;
+u8 D_hd_code_803F7C36;
+u8 D_hd_code_803F7C37;
+u8 D_hd_code_803F7C38;
+u8 D_hd_code_803F7C39;
+u8 D_hd_code_803F7C3A;
+u8 D_hd_code_803F7C3B;
+u8 D_hd_code_803F7C3C;
+u8 D_hd_code_803F7C3D;
+u8 D_hd_code_803F7C3E;
+u8 D_hd_code_803F7C3F;
+u8 D_hd_code_803F7C40;
+u8 D_hd_code_803F7C41;
+u8 D_hd_code_803F7C42;
+u8 D_hd_code_803F7C43;
+u8 D_hd_code_803F7C44;
+u8 D_hd_code_803F7C45;
+u8 D_hd_code_803F7C46;
+u8 D_hd_code_803F7C47;
+u8 D_hd_code_803F7C48;
+u8 D_hd_code_803F7C49;
+u8 D_hd_code_803F7C4A;
+u8 D_hd_code_803F7C4B;
+s32 D_hd_code_803F7C4C;
+// </bss>
+
 // <data>
 u8 D_hd_code_803063F0[16] = {
     0x46, 0x5A, 0x64, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

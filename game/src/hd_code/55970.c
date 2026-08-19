@@ -10,6 +10,14 @@ extern u8* scientist_ROM_START;
 extern u8* D_hd_code_803A6B10;
 extern s16 D_hd_code_803A6B14;
 
+// <bss>
+u8* D_hd_code_803A6B10;
+s16 D_hd_code_803A6B14;
+s16 D_hd_code_803A6B16;
+s32 D_hd_code_803A6B18;
+s32 D_hd_code_803A6B1C;
+// </bss>
+
 void func_hd_code_8029A130(void) {
   s32 sp24;
 

@@ -12,9 +12,12 @@ struct S_80304A90 {
   char unk6[42];
 }; // Size: 0x30
 
-
-extern s32 D_hd_code_803A6B20;
-extern s32 D_hd_code_803A6B24;
+// <bss>
+s32 D_hd_code_803A6B20;
+s32 D_hd_code_803A6B24;
+s32 D_hd_code_803A6B28;
+s32 D_hd_code_803A6B2C;
+// </bss>
 
 // <data>
 struct S_80304A90 D_hd_code_80304A90[82] = {

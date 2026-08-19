@@ -1,5 +1,46 @@
 #include "common.h"
 
+// <bss>
+// assumed types
+u8 D_hd_code_803EF330[0x3A6];
+u16 D_hd_code_803EF6D6;
+s32 D_hd_code_803EF6D8;
+s32 D_hd_code_803EF6DC;
+s32 D_hd_code_803EF6E0;
+s32 D_hd_code_803EF6E4;
+s32 D_hd_code_803EF6E8;
+s32 D_hd_code_803EF6EC;
+s32 D_hd_code_803EF6F0;
+s32 D_hd_code_803EF6F4;
+s32 D_hd_code_803EF6F8;
+u16 D_hd_code_803EF6FC;
+u8 D_hd_code_803EF6FE;
+u8 D_hd_code_803EF6FF;
+u8 D_hd_code_803EF700;
+u8 D_hd_code_803EF701;
+u16 D_hd_code_803EF702;
+s32 D_hd_code_803EF704;
+s32 D_hd_code_803EF708;
+s32 D_hd_code_803EF70C;
+u8 D_hd_code_803EF710;
+u8 D_hd_code_803EF711;
+u16 D_hd_code_803EF712;
+s32 D_hd_code_803EF714;
+s32 D_hd_code_803EF718;
+s32 D_hd_code_803EF71C;
+u8 D_hd_code_803EF720[0x3A8];
+s32 D_hd_code_803EFAC8;
+s32 D_hd_code_803EFACC;
+s32 D_hd_code_803EFAD0;
+s32 D_hd_code_803EFAD4;
+s32 D_hd_code_803EFAD8;
+s32 D_hd_code_803EFADC;
+s32 D_hd_code_803EFAE0;
+s32 D_hd_code_803EFAE4;
+s32 D_hd_code_803EFAE8;
+s32 D_hd_code_803EFAEC;
+// </bss>
+
 // <data>
 // D_hd_code_80305D62 (size 0x12) is packed right after this array with no
 // alignment padding; IDO forces 4-byte alignment on separate array symbols,
