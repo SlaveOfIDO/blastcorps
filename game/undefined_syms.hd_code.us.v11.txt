@@ -53,5 +53,7 @@ D_hd_code_8030631F = 0x8030631F;
 D_hd_code_803ED392 = 0x803ED392;
 D_hd_code_803ED394 = 0x803ED394;
 
+D_hd_front_end_80219F58 = 0x80219F58;
+
 nink_ROM_END = 0x48f970;
 _64k_ROM_END = 0x48fa70;

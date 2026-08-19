@@ -28,19 +28,8 @@ void func_hd_front_end_801F374C(struct S_8020BD30 *);
 void func_hd_front_end_801F4878(s32 *, struct Model1 *);
 void func_hd_front_end_801F36B0(void);
 
-extern s32 D_hd_front_end_80217290[];   /* grid X */
-extern s32 D_hd_front_end_80217390[];   /* grid Y */
-extern s32 D_hd_front_end_80217490[];   /* grid S */
-extern s32 D_hd_front_end_80217590[];   /* grid T */
-extern Vtx D_hd_front_end_80215A88[];
 extern u8 worldtextures_ROM_START[];
 extern u8 ambertextures_ROM_START[];
-extern u8 *D_hd_front_end_80215A70[];
-extern u8 *D_hd_front_end_80215A7C;
-extern u8 *D_hd_front_end_80215A80;
-extern u8 *D_hd_front_end_80215A84;
-extern s32 D_hd_front_end_8021728C;
-extern u16 D_hd_front_end_80217288;
 extern struct S_8020BD30 D_hd_front_end_8020BE98;
 extern u8   D_hd_front_end_80217A10[];
 extern s32  D_hd_front_end_80217B50;
@@ -53,6 +42,22 @@ extern f32  D_hd_front_end_80217B68;
 extern s32  D_hd_front_end_80217B6C;
 extern S_80218270 D_hd_front_end_80218270[];
 extern s16  D_hd_front_end_802182A8;
+
+// <bss>
+u8 D_hd_front_end_802159F0[0x80];
+u8 *D_hd_front_end_80215A70[3];
+u8 *D_hd_front_end_80215A7C;
+u8 *D_hd_front_end_80215A80;
+u8 *D_hd_front_end_80215A84;
+Vtx D_hd_front_end_80215A88[384];
+u16 D_hd_front_end_80217288;
+u16 D_hd_front_end_8021728A;
+s32 D_hd_front_end_8021728C;
+s32 D_hd_front_end_80217290[64];   /* grid X */
+s32 D_hd_front_end_80217390[64];   /* grid Y */
+s32 D_hd_front_end_80217490[64];   /* grid S */
+s32 D_hd_front_end_80217590[64];   /* grid T */
+// </bss>
 
 // <data>
 u16 D_hd_front_end_802084F0[1372] = {

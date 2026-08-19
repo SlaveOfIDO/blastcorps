@@ -37,11 +37,6 @@ extern struct S_8020C070* D_hd_code_8036BB24; // 21 elements
 extern u8 D_hd_front_end_8020C01C[];
 extern u16 D_80301080[];
 extern u8 D_hd_front_end_8020C488[];
-extern u8 D_hd_front_end_802189C0[][0x11];
-extern u8 D_hd_front_end_80218AD0[][0x5];
-extern u8 D_hd_front_end_80218740[][0x28];
-extern u8 D_hd_front_end_80219F90[0x28];
-extern u8 D_hd_front_end_80219FB0[0x28];
 extern u16 D_hd_code_80364F70[];
 extern s32 D_hd_code_802FA264;
 extern OSMesg D_hd_code_8039C4B4;
@@ -52,27 +47,43 @@ extern s32 D_hd_code_8039B620;
 extern s8 D_hd_front_end_8020F19C;
 extern s8 D_hd_front_end_8020F1C8;
 extern s8 D_hd_front_end_8020F1D0;
-extern s32 D_hd_front_end_80218D24;
-extern s32 D_hd_front_end_80218EF0;
-extern s32 D_hd_front_end_80219F88;
 extern OSThread g_Thread3;
 extern u8 D_hd_front_end_8020C000[]; // "BLASTCORPS GAME"
 extern u8 D_hd_front_end_8020C014[];
 extern u8 D_hd_front_end_8020F128;
 extern u8 D_hd_front_end_8020F140;
-extern OSThread D_hd_front_end_80218D30;
-extern u8 D_hd_front_end_80218EF8;
-extern void* D_hd_front_end_80219F10;
-extern OSMesgQueue D_hd_front_end_80219F30;
-extern void* D_hd_front_end_80219F48;
-extern void* D_hd_front_end_80219F68;
 extern OSPfs D_hd_code_8039B630;
 extern s32 D_hd_code_8039B698[]; // Line no
-extern OSPfsState D_hd_front_end_80218B20[];
 extern s32 D_hd_code_802FA264;
 extern u16 D_hd_code_80364EF0[][16];
-extern s32 D_hd_front_end_80218D28;
 extern u8 D_hd_front_end_8020C01C[];
+
+// <bss>
+u8 D_hd_front_end_80218740[16][0x28];
+u8 D_hd_front_end_802189C0[16][0x11];
+u8 D_hd_front_end_80218AD0[16][0x5];
+OSPfsState D_hd_front_end_80218B20[16];
+s32 D_hd_front_end_80218B20_pad;
+s32 D_hd_front_end_80218D24;
+s32 D_hd_front_end_80218D28;
+s32 D_hd_front_end_80218D28_pad;
+OSThread D_hd_front_end_80218D30;
+OSScClient D_hd_front_end_80218EE0;
+s32 D_hd_front_end_80218EF0;
+s32 D_hd_front_end_80218EF0_pad;
+u8 D_hd_front_end_80218EF8[0x1000];
+OSMesgQueue D_hd_front_end_80219EF8;
+void* D_hd_front_end_80219F10[8];
+OSMesgQueue D_hd_front_end_80219F30;
+void* D_hd_front_end_80219F48;
+s32 D_hd_front_end_80219F48_pad;
+OSMesgQueue D_hd_front_end_80219F50;
+void* D_hd_front_end_80219F68[8];
+s32 D_hd_front_end_80219F88;
+s32 D_hd_front_end_80219F88_pad;
+u8 D_hd_front_end_80219F90[0x20];
+u8 D_hd_front_end_80219FB0[0x20];
+// </bss>
 
 // <data>
 u8 D_hd_front_end_8020BEE0[256] = {
@@ -110,7 +121,7 @@ u8 D_hd_front_end_8020C01C[69] = {
 
 void func_hd_front_end_801F57B0(void) {
   s32 sp24 = 0xDE0;
-  osCreateThread(&D_hd_front_end_80218D30, 2, func_hd_front_end_801F58E8, NULL, &D_hd_front_end_80218EF8 + 0x1000, 0xB);
+  osCreateThread(&D_hd_front_end_80218D30, 2, func_hd_front_end_801F58E8, NULL, &D_hd_front_end_80218EF8[0x1000], 0xB);
   osCreateMesgQueue(&D_hd_front_end_80219EF8, &D_hd_front_end_80219F10, 8);
   osCreateMesgQueue(&D_hd_front_end_80219F30, &D_hd_front_end_80219F48, 1);
   osCreateMesgQueue(&D_hd_front_end_80219F50, &D_hd_front_end_80219F68, 8);

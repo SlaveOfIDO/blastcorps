@@ -1327,7 +1327,13 @@ segments:
       - { start: 0x8F0050, type: bss, name: hd_front_end/CAEA0, vram: 0x80210E90 }
       - { start: 0x8F0050, type: bss, name: hd_front_end/CCAE0, vram: 0x80215440 }
       - { start: 0x8F0050, type: bss, name: hd_front_end/D1630, vram: 0x80215960 }
-      - { start: 0x8F0050, type: bss, name: hd_front_end/hd_code_bss_rest, vram: 0x802159C0 }
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/D2230, vram: 0x802159C0 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/D3220, vram: 0x802159D0 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/D4410, vram: 0x802159F0 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/D7550, vram: 0x80217690 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/D8D10, vram: 0x802182B0 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/D9650, vram: 0x80218740 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/DB6F0, vram: 0x80219FD0 } # done
       - { start: 0x8F0050, type: .bss, name: hd_front_end/DC3D0, vram: 0x8021A840 }
       - { start: 0x8F0050, type: bss, name: hd_front_end/hd_code_bss_rest2, vram: 0x8021AB70 }
   - [0x8F0050]

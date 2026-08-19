@@ -14,15 +14,22 @@ extern u8 nink_ROM_END[];
 extern u8 _64k_ROM_START[];
 extern u8 _64k_ROM_END[];
 extern u8 copyrightLogo_ROM_START[];
-extern u16 D_hd_front_end_802159D0;
-extern u8 *D_hd_front_end_802159D4;
-extern u8 *D_hd_front_end_802159D8;
-extern s16 D_hd_front_end_802159DC;
-extern f32 D_hd_front_end_802159E0;
-extern f32 D_hd_front_end_802159E4;
 extern s32 D_hd_code_80358078; // current top-level display list length; proposed name: topLevelDlLen
 extern void* D_hd_code_8035806C; // static data segment pointer (segment 1); proposed name: staticSegment
 extern Mtx  D_hd_front_end_802182D0[];
+
+// <bss>
+u16 D_hd_front_end_802159D0;
+u16 D_hd_front_end_802159D2;
+u8 *D_hd_front_end_802159D4;
+u8 *D_hd_front_end_802159D8;
+s16 D_hd_front_end_802159DC;
+s16 D_hd_front_end_802159DE;
+f32 D_hd_front_end_802159E0;
+f32 D_hd_front_end_802159E4;
+s32 D_hd_front_end_802159E8;
+s32 D_hd_front_end_802159EC;
+// </bss>
 
 void func_hd_front_end_801EF380(s32 arg0) {
   s32 assetNinkSize = (u32)nink_ROM_END - (u32)nink_ROM_START,

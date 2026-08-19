@@ -23,16 +23,20 @@ Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
 s32 func_hd_code_80272ED8(s32, s32, u8, s32, u32, s32, f32); /* extern */
 s32 func_hd_code_80274AA4(s32);                     /* extern */
 
-extern u8 D_hd_front_end_8021A7D0[];
 extern u8 D_hd_front_end_8021A8F0;
-extern u8 D_hd_front_end_80219FD0[][0x20];
-extern u8 D_hd_front_end_8021A7D0[];
-extern u8 D_hd_front_end_8021A7E8[];
-extern u32 D_hd_front_end_8021A828;
 extern u8 D_hd_code_80365060[];
 extern u16 D_hd_code_80364EF0[][16];
-extern u8 D_hd_front_end_8021A7E8[];
-extern u32 D_hd_front_end_8021A828;
+
+// <bss>
+u8 D_hd_front_end_80219FD0[64][0x20];
+u8 D_hd_front_end_8021A7D0[24];
+u8 D_hd_front_end_8021A7E8[64];
+u32 D_hd_front_end_8021A828;
+u32 D_hd_front_end_8021A82C;
+u64 D_hd_front_end_8021A830;
+s32 D_hd_front_end_8021A838;
+s32 D_hd_front_end_8021A83C;
+// </bss>
 
 // <data>
 char D_hd_front_end_8020D800[4][4] = {

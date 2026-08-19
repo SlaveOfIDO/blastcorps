@@ -105,7 +105,7 @@ void func_hd_front_end_80202380(s32);                  /* extern */
 
 Gfx* func_hd_code_8026BBD0(Gfx*, struct Model1*, s32*); /* extern */
 Gfx* func_hd_front_end_80200BE0(Gfx*, struct Model1*, s32*); /* extern */
-void func_hd_front_end_802021FC(struct S_80211AC0*, s32, s32); /* extern */
+void func_hd_front_end_802021FC(u8 (*)[0x300], s32, s32); /* extern */
 void func_hd_front_end_802025D0(u8, u32);              /* extern */
 extern OSMesgQueue D_hd_code_80315180;
 extern void* D_hd_code_8035806C;
@@ -160,10 +160,7 @@ extern Mtx D_hd_front_end_80211A28;
 extern s16 D_hd_front_end_80211A68;
 extern s16 D_hd_front_end_80211A6A;
 extern f32 D_hd_front_end_80211A70[0x50/4];
-struct S_80211AC0 {
-    u8 pad0[0x300];
-}; // Size: 0x300
-extern struct S_80211AC0 D_hd_front_end_80211AC0[0x3900/0x300];
+extern u8 D_hd_front_end_80211AC0[0x13][0x300];
 extern u8 D_hd_front_end_802153C0[19];
 extern f32 D_hd_front_end_802153D4;
 extern f32 D_hd_front_end_802153D8;

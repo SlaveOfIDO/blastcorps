@@ -8,10 +8,16 @@
 
 
 extern s16 D_hd_code_8036BB18;
-extern s32 D_hd_front_end_802159C0;
 extern s32 D_hd_code_80358078; // current top-level display list length; proposed name: topLevelDlLen
 extern void* D_hd_code_8035806C; // static data segment pointer (segment 1); proposed name: staticSegment
 extern OSMesgQueue D_hd_code_80315180;
+
+// <bss>
+s32 D_hd_front_end_802159C0;
+s32 D_hd_front_end_802159C4;
+s32 D_hd_front_end_802159C8;
+s32 D_hd_front_end_802159CC;
+// </bss>
 
 void func_hd_front_end_801EE390(void) {
 }

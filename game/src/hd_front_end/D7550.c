@@ -19,22 +19,31 @@ Gfx* func_hd_front_end_801F3964(Gfx*, struct Model1*, struct S_8020BD30*, f32); 
 Gfx* func_hd_front_end_801F4110(Gfx*, struct Model1*, struct S_8020BD30*, f32); /* extern */
 Gfx* func_hd_front_end_801FE238(Gfx*, struct Model1*);                         /* extern */
 
-extern f32 D_hd_front_end_80217B54;
-extern f32 D_hd_front_end_80217B58;
-extern f32 D_hd_front_end_80217B5C;
-extern S_80218270 D_hd_front_end_80218270[];
 extern f32 D_hd_front_end_8020BDEC;
-extern f32  D_hd_front_end_80217A10[][4][4];
-extern s32 D_hd_front_end_80217B50;
-extern Mtx D_hd_front_end_80217B70[][4];
 extern u8 *D_hd_front_end_80215A7C;
 extern u8 *D_hd_front_end_80215A80;
-extern Vtx D_hd_front_end_80217690[7][2][4]; // Size: 0x380 / 0x40
-extern Mtx D_hd_front_end_80217B70[7][4]; // Size: 0x700 / 0x100
 extern u8 *D_hd_front_end_80215A84;
 extern f32 D_hd_front_end_8021A918;
 extern f32 D_hd_front_end_8021A91C;
 extern f32 D_hd_front_end_8021A920;
+
+// <bss>
+Vtx D_hd_front_end_80217690[7][2][4]; // Size: 0x380 / 0x40
+f32 D_hd_front_end_80217A10[5][4][4];
+s32 D_hd_front_end_80217B50;
+f32 D_hd_front_end_80217B54;
+f32 D_hd_front_end_80217B58;
+f32 D_hd_front_end_80217B5C;
+f32 D_hd_front_end_80217B60;
+f32 D_hd_front_end_80217B64;
+f32 D_hd_front_end_80217B68;
+s32 D_hd_front_end_80217B6C;
+Mtx D_hd_front_end_80217B70[7][4]; // Size: 0x700 / 0x100
+S_80218270 D_hd_front_end_80218270[7];
+s16 D_hd_front_end_802182A8;
+s16 D_hd_front_end_802182AA;
+s32 D_hd_front_end_802182AC;
+// </bss>
 
 // <data>
 struct S_8020BD30 D_hd_front_end_8020BD30 = { 4476.0f, 0x41DA6666, 27.2999992f, 614.0f, 0x00000000, 0x00000000, 0xC8, 0xC8, 0xC8, 0x00, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };

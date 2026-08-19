@@ -9,29 +9,40 @@
 
 void func_hd_code_802A08B4(u8*, u8*);               /* extern */
 void func_hd_front_end_80202100(s32, u8**, s32*, s32*);                           /* extern */
-void func_hd_front_end_80202270(u8*, s32*, struct S_80211AC0*);                   /* extern */
-void func_hd_front_end_802022EC(struct S_80211AC0*, s32, s32, s32, f32, s32, s32); /* extern */
+void func_hd_front_end_80202270(u8*, s32*, u8 (*)[0x300]);                   /* extern */
+void func_hd_front_end_802022EC(u8 (*)[0x300], s32, s32, s32, f32, s32, s32); /* extern */
 
 extern u8 usa_star_ROM_START; // usa_star.raw
 extern u8 ninlogo_ROM_START; // ninlogo.raw
 extern u8 reflectlogo_ROM_START; // reflectlogo.raw
 extern u8 somelookup_ROM_START;
-extern s32 D_hd_front_end_802182C0;
-extern u8* D_hd_front_end_802182C4;
-extern u8* D_hd_front_end_802182C8;
-extern u8* D_hd_front_end_802182CC;
 extern s16 D_hd_code_8036BB20;
-extern u8* D_hd_front_end_80218350;
-extern s32 D_hd_front_end_80218358[2];
-extern s32 D_hd_front_end_80218360[2];
-extern s32 D_hd_front_end_80218368[2];
-extern Mtx D_hd_front_end_80218370;
-extern Mtx D_hd_front_end_802183B0;
-extern Mtx D_hd_front_end_802183F0;
-extern struct S_80211AC0 D_hd_front_end_80218430;
-extern u32 D_hd_front_end_80218730;
-extern u16 D_hd_front_end_80218734;
-extern Mtx  D_hd_front_end_802182D0[];
+
+// <bss>
+s32 D_hd_front_end_802182B0;
+s32 D_hd_front_end_802182B4;
+s32 D_hd_front_end_802182B8;
+s32 D_hd_front_end_802182BC;
+s32 D_hd_front_end_802182C0;
+u8* D_hd_front_end_802182C4;
+u8* D_hd_front_end_802182C8;
+u8* D_hd_front_end_802182CC;
+Mtx D_hd_front_end_802182D0[2];
+u8* D_hd_front_end_80218350;
+s32 D_hd_front_end_80218354;
+s32 D_hd_front_end_80218358[2];
+s32 D_hd_front_end_80218360[2];
+s32 D_hd_front_end_80218368[2];
+Mtx D_hd_front_end_80218370;
+Mtx D_hd_front_end_802183B0;
+Mtx D_hd_front_end_802183F0;
+u8 D_hd_front_end_80218430[0x300];
+u32 D_hd_front_end_80218730;
+u16 D_hd_front_end_80218734;
+u16 D_hd_front_end_80218736;
+s32 D_hd_front_end_80218738;
+s32 D_hd_front_end_8021873C;
+// </bss>
 
 typedef struct {
   u8 pad0[0x14];

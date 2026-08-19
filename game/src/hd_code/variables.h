@@ -137,7 +137,7 @@ extern struct vec3s* D_hd_code_8036C794;
 extern s32 attract_ROM_START; // attract.raw
 extern s32 attract2_ROM_START; // 6AD3F0.bin
 extern OSThread D_hd_front_end_80218D30;
-extern s32 D_hd_front_end_80218EE0;
+extern OSScClient D_hd_front_end_80218EE0;
 extern s32 D_hd_front_end_80219F58;
 
 extern s32 D_hd_code_80358068;
