@@ -1254,7 +1254,7 @@ segments:
       - { start: 0x8C61C0, type: .bss, name: hd_code/os/timerintr, vram: 0x803FF2F0 }
       - { start: 0x8C61C0, type: .bss, name: hd_code/io/siacs, vram: 0x803FF330 }
       - { start: 0x8C61C0, type: .bss, name: hd_code/debug/kdebugserver, vram: 0x803FF350 }
-      - { start: 0x8C61C0, type: bss, name: hd_code/hd_code_bss_rest3, vram: 0x803FF600 }
+      - { start: 0x8C61C0, type: bss, name: hd_code/bss, vram: 0x803FF600 } # contains a scratch area and two mailbox addresses
   - name:  hd_front_end
     type: code
     start: 0x8C61C0
@@ -1335,5 +1335,10 @@ segments:
       - { start: 0x8F0050, type: .bss, name: hd_front_end/D9650, vram: 0x80218740 } # done
       - { start: 0x8F0050, type: .bss, name: hd_front_end/DB6F0, vram: 0x80219FD0 } # done
       - { start: 0x8F0050, type: .bss, name: hd_front_end/DC3D0, vram: 0x8021A840 }
-      - { start: 0x8F0050, type: bss, name: hd_front_end/hd_code_bss_rest2, vram: 0x8021AB70 }
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/E2830, vram: 0x8021AB70 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/E4590, vram: 0x8021AB80 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/E50E0, vram: 0x8021AB90 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/io/conteepwrite, vram: 0x8021ABB0 } # done
+      - { start: 0x8F0050, type: .bss, name: hd_front_end/io/pfsisplug, vram: 0x8021ABF0 } # done
+      - { start: 0x8F0050, type: bss, name: hd_front_end/menu_rsp_bss, vram: 0x8021AC30 }
   - [0x8F0050]

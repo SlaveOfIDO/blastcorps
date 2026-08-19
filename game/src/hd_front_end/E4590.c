@@ -10,12 +10,19 @@
 
 void func_hd_front_end_80200714(u8);                   /* extern */
 
-extern u8 D_hd_front_end_8021AB84;
 extern s32 attract3_ROM_START;
 extern s32 attract4_ROM_START;
 extern s32 usa_star_ROM_START;
-extern u8* D_hd_front_end_8021AB80;
-extern u8 D_hd_front_end_8021AB84;
+
+// <bss>
+u8* D_hd_front_end_8021AB80;
+u8 D_hd_front_end_8021AB84;
+u8 D_hd_front_end_8021AB85_pad;
+u8 D_hd_front_end_8021AB86_pad;
+u8 D_hd_front_end_8021AB87_pad;
+s32 D_hd_front_end_8021AB88_pad;
+s32 D_hd_front_end_8021AB8C_pad;
+// </bss>
 
 void func_hd_front_end_802006F0(void) {
   func_hd_front_end_80200714(D_hd_front_end_8021AB84);
@@ -23,7 +30,7 @@ void func_hd_front_end_802006F0(void) {
 
 void func_hd_front_end_80200714(u8 arg0) {
   s32* sp34;
-  s32* sp30;                                      /* compiler-managed */
+  s32* sp30;
   u32 sp2C;
   u16* sp28;
   u32 sp24;

@@ -4,8 +4,9 @@
 
 extern u8 __osMaxControllers;
 
-// BSS TODO
-extern OSPifRam __osPfsPifRam;
+// <bss>
+OSPifRam __osPfsPifRam;
+// </bss>
 
 s32 osPfsIsPlug(OSMesgQueue *queue, u8 *pattern) {
     s32 ret;

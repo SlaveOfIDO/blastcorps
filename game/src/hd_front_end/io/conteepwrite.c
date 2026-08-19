@@ -5,6 +5,10 @@
 
 void __osPackEepWriteData(u8 address, u8 *buffer);
 
+// <bss>
+OSPifRam __osEepPifRam;
+// </bss>
+
 s32 osEepromWrite(OSMesgQueue *mq, u8 address, u8 *buffer)
 {
 

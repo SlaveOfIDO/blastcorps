@@ -9,16 +9,19 @@
 #include "../hd_code/io/controller.h"
 #include "structs.h"
 
-extern u8* D_hd_front_end_8021AB90[4];
-extern s8 D_hd_front_end_8021ABA0;
 s32 func_hd_front_end_801E96F8(void);               /* extern */
 extern u32 D_hd_code_802FAD50[];
-extern s32 D_hd_front_end_8021ABA4;
-extern ALSoundState D_hd_front_end_8021ABA8;
-extern u8 D_hd_front_end_8021ABA1;
-extern u8 D_hd_front_end_8021ABA2;
 extern s32 traffictextures_ROM_START;
 extern u8 ambertextures_ROM_START[];
+
+// <bss>
+u8* D_hd_front_end_8021AB90[4];
+s8 D_hd_front_end_8021ABA0;
+u8 D_hd_front_end_8021ABA1;
+u8 D_hd_front_end_8021ABA2;
+s32 D_hd_front_end_8021ABA4;
+ALLink D_hd_front_end_8021ABA8;
+// </bss>
 
 // <data>
 s16 D_hd_front_end_8020E3E0[] = { 0x53, 0x81, 0x61, 0xB4 };
@@ -138,7 +141,7 @@ Gfx* func_hd_front_end_80201364(s32 arg0, Gfx* gfx) {
         }
         break;
     }
-    if (((u8) D_hd_front_end_8021ABA2 >= 0x3D) && (D_hd_front_end_8021ABA8.link.next == NULL)) {
+    if (((u8) D_hd_front_end_8021ABA2 >= 0x3D) && (D_hd_front_end_8021ABA8.next == NULL)) {
         sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0x69, &D_hd_front_end_8021ABA8);
     }
     gDPSetPrimColor(entry++, 0, 0, 0, 0, 0, D_hd_front_end_8021ABA2);

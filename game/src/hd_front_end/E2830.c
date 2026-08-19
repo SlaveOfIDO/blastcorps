@@ -32,11 +32,21 @@ extern u8 D_hd_code_8039C541;
 extern s8 D_hd_front_end_80210550;
 extern s32 D_hd_front_end_80219F58;
 extern u64 D_hd_front_end_8021A830;
-extern u8 D_hd_front_end_8021AB70;
+
+// <bss>
+u8 D_hd_front_end_8021AB70;
+u8 D_hd_front_end_8021AB71_pad;
+// TODO: this is someway off. Perhaps D_hd_front_end_8021AB70 was a u8[4] misused array?
 extern u8 D_hd_front_end_8021AB72[];
-extern u16 D_hd_front_end_8021AB74;
-extern u16 D_hd_front_end_8021AB76;
+u8 D_hd_front_end_8021AB72_pad;
+u8 D_hd_front_end_8021AB73_pad;
+u16 D_hd_front_end_8021AB74;
+u16 D_hd_front_end_8021AB76;
+// TODO: what is this?
 extern ALSoundState D_hd_front_end_8021AB7C;
+s32 D_hd_front_end_8021AB78_pad;
+s32 D_hd_front_end_8021AB7C_pad;
+// </bss>
 extern u8 D_hd_code_80365060[];
 extern OSMesgQueue D_hd_code_80315180;
 extern s16 D_hd_code_8036BB20;
