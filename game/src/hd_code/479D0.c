@@ -54,6 +54,12 @@ void func_hd_code_8028C41C(Vtx* arg0, u8 arg1, s16 x, s16 y, s16 z);
 extern struct S_8039AF00 D_hd_code_8039AF00[];
 extern s32 D_hd_code_8039B068;
 
+// <bss>
+struct S_8039AF00 D_hd_code_8039AF00[15];
+s32 D_hd_code_8039B068;
+s32 D_hd_code_8039B06C;
+// </bss>
+
 // <data>
 struct S_802FDB40 D_hd_code_802FDB40[2] = {
   { 0xFFF6, 0x000A, 0x0000, 0x0014, 0xFFF6, 0x000A, 0x0995, 0x0995, 0x0280, 0x0064, 0x0A  },

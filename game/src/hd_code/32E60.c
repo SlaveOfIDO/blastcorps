@@ -17,6 +17,42 @@
 // double buffer D_hd_code_8036CB48, with radio-crackle static bursts via the NOISE
 // combiner.
 
+// <bss>
+struct S_8036C8D0 D_hd_code_8036C8D0[50];
+u8 D_hd_code_8036CB28;
+u8 D_hd_code_8036CB29;
+s16 D_hd_code_8036CB2A;
+s16 D_hd_code_8036CB2C;
+u8 D_hd_code_8036CB2E;
+u8 D_hd_code_8036CB2F;
+u8 D_hd_code_8036CB30;
+u8 D_hd_code_8036CB31;
+u8 D_hd_code_8036CB32;
+u8 D_hd_code_8036CB33;
+u8 D_hd_code_8036CB34;
+u8 D_hd_code_8036CB35;
+u8 D_hd_code_8036CB36;
+u8 D_hd_code_8036CB37;
+u8 D_hd_code_8036CB38;
+u8 D_hd_code_8036CB39;
+u8 D_hd_code_8036CB3A;
+u8 D_hd_code_8036CB3B;
+u8 D_hd_code_8036CB3C;
+u8 D_hd_code_8036CB3D;
+u16 D_hd_code_8036CB3E;
+Vtx* D_hd_code_8036CB40;
+u8 D_hd_code_8036CB44;
+u8 D_hd_code_8036CB45;
+u16 D_hd_code_8036CB46;
+u8* D_hd_code_8036CB48[2];
+u8 D_hd_code_8036CB50;
+u8 D_hd_code_8036CB51;
+u16 D_hd_code_8036CB52;
+s32 D_hd_code_8036CB54;
+s32 D_hd_code_8036CB58;
+s32 D_hd_code_8036CB5C;
+// </bss>
+
 // <data>
 u32 D_hd_code_802FAD50[32*32] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,

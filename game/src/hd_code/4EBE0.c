@@ -67,6 +67,22 @@ extern f32 D_hd_code_8039CA50; /* proposed: gSplineT  — interpolation paramete
 extern f32 D_hd_code_8039CA54; /* proposed: gSplineT2 — t^2 */
 extern f32 D_hd_code_8039CA58; /* proposed: gSplineT3 — t^3 */
 
+// <bss>
+f32 D_hd_code_8039CA10[4][4];
+f32 D_hd_code_8039CA50;
+f32 D_hd_code_8039CA54;
+f32 D_hd_code_8039CA58;
+s32 D_hd_code_8039CA5C;
+u8 D_hd_code_8039CA60;
+u8 D_hd_code_8039CA61;
+u8 D_hd_code_8039CA62;
+u8 D_hd_code_8039CA63;
+u16 D_hd_code_8039CA64;
+u16 D_hd_code_8039CA66;
+// D_hd_code_8039CA68 is used from 50670.c; struct S_8039CA68 is defined there.
+struct S_8039CA68* D_hd_code_8039CA68[2];
+// </bss>
+
 /* Proposed name: BuildingPathNode — one waypoint of a movement type 3 path. */
 struct S_802FE980_sub {
   s16 unk0; /* x */

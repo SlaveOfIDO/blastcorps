@@ -68,6 +68,17 @@ extern u8 D_hd_code_8036DC92; // segments in the current strip; proposed name: t
 extern u32 D_hd_code_8036DC94; // frame of the last recorded segment (gap = new strip); proposed name: trackLastFrame
 
 
+// <bss>
+struct S_8036D3D0 D_hd_code_8036D3D0[0x50];
+u8 D_hd_code_8036DC90;
+u8 D_hd_code_8036DC91;
+u8 D_hd_code_8036DC92;
+u8 D_hd_code_8036DC93;
+u32 D_hd_code_8036DC94;
+s32 D_hd_code_8036DC98;
+s32 D_hd_code_8036DC9C;
+// </bss>
+
 // <data>
 struct S_802FC368_sub D_hd_code_802FC080[4] = {
   { 0x10CC, 0x1294, 0x10CC, 0x1249, 0x0CAF, 0x1249, 0x00C3, 0x00D2 },

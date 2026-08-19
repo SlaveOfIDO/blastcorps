@@ -18,6 +18,17 @@ extern s8 D_hd_code_803ED40A;
 extern s16 D_hd_code_803ED400;
 extern s16 D_hd_code_803F7C34;
 
+// <bss>
+u16 D_hd_code_80370C70;
+s16 D_hd_code_80370C72;
+s8 D_hd_code_80370C74;
+s8 D_hd_code_80370C75;
+s16 D_hd_code_80370C76;
+s32 D_hd_code_80370C78;
+s32 D_hd_code_80370C7C;
+u8 D_hd_code_80370C80[0x2A280]; // TODO: perhaps this is a dedicated file. It is the audio heap
+// </bss>
+
 // Proposed file name: steering.c
 //
 // This file converts the camera-relative analog stick into a vehicle's

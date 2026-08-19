@@ -29,6 +29,24 @@ extern u8* D_hd_code_8036EC20;
 extern Vtx* D_hd_code_8036EC24;
 extern s16 D_hd_code_8036EC28;
 
+// <bss>
+u8 *D_hd_code_8036EC00;
+Vtx* D_hd_code_8036EC04;
+Mtx* D_hd_code_8036EC08;
+Mtx* D_hd_code_8036EC0C;
+s16 D_hd_code_8036EC10;
+u16 D_hd_code_8036EC12;
+u8* D_hd_code_8036EC14;
+Vtx* D_hd_code_8036EC18;
+s16 D_hd_code_8036EC1C;
+u16 D_hd_code_8036EC1E;
+u8* D_hd_code_8036EC20;
+Vtx* D_hd_code_8036EC24;
+s16 D_hd_code_8036EC28;
+u16 D_hd_code_8036EC2A;
+s32 D_hd_code_8036EC2C;
+// </bss>
+
 // Init the vehicle-3 dial gauge: load its 40x40 face texture (0x760),
 // allocate matrices, and set up the face quad plus the small needle quad
 // Proposed name: InitDialGauge

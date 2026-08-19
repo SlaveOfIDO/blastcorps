@@ -27,6 +27,10 @@ extern s32 D_hd_code_803F7660; // carrier-related value; 0x98967F (9999999) = no
 extern u16 D_hd_code_802FCEB0[32 * 32]; // Texture data, RGBA16, carrier arrow surface; proposed name: carrierArrowTex
 extern Vtx D_hd_code_802FD9B8[10]; // 3D carrier arrow model (9 triangles); proposed name: carrierArrowVtx
 
+// <bss>
+Mtx D_hd_code_8036E5E0[2];
+// </bss>
+
 // <data>
 u16 D_hd_code_802FC5B0[128] = {
   0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFF44,

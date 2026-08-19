@@ -93,6 +93,37 @@ struct S_Tnt {
     s16 unkA;
 }; // Size: 0xC
 
+// <bss>
+struct S_8039B070 D_hd_code_8039B070[20];
+s32 D_hd_code_8039B610;
+s32 D_hd_code_8039B614;
+s32 D_hd_code_8039B618;
+s32 D_hd_code_8039B61C;
+s8 D_hd_code_8039B620;
+u8 D_hd_code_8039B621;
+u16 D_hd_code_8039B622;
+s32 D_hd_code_8039B624;
+s32 D_hd_code_8039B628;
+s32 D_hd_code_8039B62C;
+OSPfs D_hd_code_8039B630;
+s32 D_hd_code_8039B698[902];
+u8 D_hd_code_8039C4B0;
+u8 D_hd_code_8039C4B1;
+u16 D_hd_code_8039C4B2;
+OSMesg D_hd_code_8039C4B4;
+u8 pakBuffer[0x40];
+PakData D_hd_code_8039C4F8;
+u8 D_hd_code_8039C539;
+u16 D_hd_code_8039C53A;
+u8 saveIt[4];
+u8 saveLevel;
+u8 D_hd_code_8039C541;
+u16 D_hd_code_8039C542;
+s32 D_hd_code_8039C544;
+s32 D_hd_code_8039C548;
+s32 D_hd_code_8039C54C;
+// </bss>
+
 // <data>
 s16 D_hd_code_802FDB70[20] = {
   0x0000, 0x0087, 0x0069, 0x0096,

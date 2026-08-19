@@ -139,6 +139,45 @@ extern s16 D_hd_code_80367BD6;
 extern u8 D_hd_code_8036E4D3;
 extern s32 D_hd_code_8036E4D4;
 
+// <bss>
+Vtx* D_hd_code_8036DCA0[2];
+Vtx* D_hd_code_8036DCA8[2];
+s32 D_hd_code_8036DCB0;
+s32 D_hd_code_8036DCB4;
+Vtx* D_hd_code_8036DCB8[2];
+Vtx* D_hd_code_8036DCC0[2];
+Gfx* D_hd_code_8036DCC8[2];
+u8 D_hd_code_8036DCD0;
+u8 D_hd_code_8036DCD1;
+s16 D_hd_code_8036DCD2;
+u8 D_hd_code_8036DCD4;
+u8 D_hd_code_8036DCD5;
+u8 D_hd_code_8036DCD6;
+u8 D_hd_code_8036DCD7;
+struct S_8036DCD8 D_hd_code_8036DCD8;
+s16 D_hd_code_8036DCE0[12][6];
+Vtx D_hd_code_8036DD70[2][12][4];
+u8 D_hd_code_8036E370;
+u8 D_hd_code_8036E371;
+u16 D_hd_code_8036E372;
+s32 D_hd_code_8036E374;
+u8* D_hd_code_8036E378;
+s32 D_hd_code_8036E37C;
+struct S_8036E380 D_hd_code_8036E380[4];
+s32 D_hd_code_8036E4C0;
+s32 D_hd_code_8036E4C4;
+s16 D_hd_code_8036E4C8;
+u8 D_hd_code_8036E4CA;
+u8 D_hd_code_8036E4CB;
+u8* D_hd_code_8036E4CC;
+s16 D_hd_code_8036E4D0;
+u8 D_hd_code_8036E4D2;
+u8 D_hd_code_8036E4D3;
+s32 D_hd_code_8036E4D4;
+Mtx D_hd_code_8036E4D8[2][2];
+f32 D_hd_code_8036E5D8[2];
+// </bss>
+
 // <data>
 struct S_802FC3F0 D_hd_code_802FC3F0[3] = {
   { 0x36, 0x14, 0x14, 0x00, 0x0671, 0x06DF, 0x0EC3, 0x13C5, { 0x0102, 0x0028, 0x0021, 0x0000 }, 20.0f, 14.0f, 100.0f, 73.0f, 0x00, 0x00, 0x0000, 0x0C080000, 0x00104A50, 0x01, 0x01, 0x00, 0x00 },

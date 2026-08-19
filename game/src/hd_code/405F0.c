@@ -25,6 +25,17 @@ extern s32 __hd_front_end_menu_rsp_textbin;
 // microcode. Up to 5 concurrent task slots are tracked, each double-buffered
 // per frame, with the in-flight flags in D_hd_code_8036E68C.
 
+// <bss>
+void* D_hd_code_8036E660[6];
+void* D_hd_code_8036E678[5];
+u8 D_hd_code_8036E68C[4];
+s32 D_hd_code_8036E690;
+Gfx* D_hd_code_8036E694;
+OSScTask D_hd_code_8036E698[5][2];
+s32 D_hd_code_8036EA58;
+s32 D_hd_code_8036EA5C;
+// </bss>
+
 // <data>
 u8 D_hd_code_802FDA60[16] = {
   0x00, 0x00, 0x05, 0x05,

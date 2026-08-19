@@ -1192,7 +1192,29 @@ segments:
       - { start: 0x8C61C0, type: .bss, name: hd_code/2D810, vram: 0x8036BFC0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/2E490, vram: 0x8036BFE0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/30430, vram: 0x8036C770 } # done
-      - { start: 0x8C61C0, type: bss, name: hd_code/hd_code_bss_rest, vram: 0x8036C790 }
+      - { start: 0x8C61C0, type: .bss, name: hd_code/30C70, vram: 0x8036C790 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/32E60, vram: 0x8036C8D0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/34430, vram: 0x8036CB60 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/37530, vram: 0x8036D3D0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/39050, vram: 0x8036DCA0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/3E4C0, vram: 0x8036E5E0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/405F0, vram: 0x8036E660 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/409D0, vram: 0x8036EA60 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/41930, vram: 0x8036EBA0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/42240, vram: 0x8036EC00 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/43A60, vram: 0x8036EC30 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/45BB0, vram: 0x80370BC0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/46F60, vram: 0x80370C70 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/479D0, vram: 0x8039AF00 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/48D00, vram: 0x8039B070 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/4B5E0, vram: 0x8039C550 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/4DA80, vram: 0x8039C960 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/4EBE0, vram: 0x8039CA10 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/50670, vram: 0x8039CA70 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/51690, vram: 0x8039CA90 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/52D70, vram: 0x8039CAB0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/53220, vram: 0x8039CAD0 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/53820, vram: 0x8039CAE0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/54E30, vram: 0x803A6AF0 }
       - { start: 0x8C61C0, type: bss, name: hd_code/hd_code_bss_rest2, vram: 0x803A6B10 }
       - { start: 0x8C61C0, type: .bss, name: hd_code/gu/align, vram: 0x803FDF60 }

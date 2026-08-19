@@ -15,6 +15,14 @@ extern s32 D_hd_code_803669EC;
 extern u8 *D_hd_code_803669C0;
 extern u8 *D_hd_code_803669C4;
 
+// <bss>
+struct huft* D_hd_code_8039CAE0;
+u32 D_hd_code_8039CAE4;
+u32 D_hd_code_8039CAE8;
+u32 D_hd_code_8039CAEC;
+u8 D_hd_code_8039CAF0[0x50 * 0x200];
+// </bss>
+
 // <data>
 
 // border

@@ -66,6 +66,21 @@ extern s16 D_hd_code_803ED390[3];
 extern s8 D_hd_code_8030CD7C;
 extern u16 D_hd_code_803C30A8[];
 
+// <bss>
+s32 D_hd_code_8039CA70[2];
+s32 D_hd_code_8039CA78;
+u8 D_hd_code_8039CA7C;
+u8 D_hd_code_8039CA7D;
+u8 D_hd_code_8039CA7E;
+u8 D_hd_code_8039CA7F;
+s32 D_hd_code_8039CA80;
+s32 D_hd_code_8039CA84;
+u32 D_hd_code_8039CA88;
+u8 D_hd_code_8039CA8C;
+u8 D_hd_code_8039CA8D;
+u16 D_hd_code_8039CA8E;
+// </bss>
+
 // <data>
 u32 D_hd_code_802FF0D0[19] = {
   0x00004E20, 0x00001B58, 0x00006590, 0x00002AF8,

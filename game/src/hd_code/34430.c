@@ -43,6 +43,28 @@ void func_hd_code_8027A7DC(Gfx**, s32, s32);
 u8 func_hd_code_802796D8(s32, s32*, s32*);
 u8 invertTransformMatrix(f32[4][4], f32[4][4]);
 
+// <bss>
+struct S_8036CB60 D_hd_code_8036CB60[11];
+s32 D_hd_code_8036CC68;
+s32 D_hd_code_8036CC6C;
+Mtx D_hd_code_8036CC70[2][10];
+u8* D_hd_code_8036D170;
+f32 D_hd_code_8036D174;
+u8 D_hd_code_8036D178;
+u8 D_hd_code_8036D179;
+u16 D_hd_code_8036D17A;
+s32 D_hd_code_8036D17C;
+s32 D_hd_code_8036D180;
+f32 D_hd_code_8036D184;
+Gfx D_hd_code_8036D188[40];
+Mtx D_hd_code_8036D2C8;
+Mtx D_hd_code_8036D308;
+Mtx D_hd_code_8036D348;
+Mtx D_hd_code_8036D388;
+s32 D_hd_code_8036D3C8;
+s32 D_hd_code_8036D3CC;
+// </bss>
+
 // <data>
 Vp D_hd_code_802FBED0 = { { { 0x00F0, 0x00B4, 0x01FF, 0x0000 }, { 0x00F0, 0x00B4, 0x01FF, 0x0000 } } };
 Vtx D_hd_code_802FBEE0[24] = {

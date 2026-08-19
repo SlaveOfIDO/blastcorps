@@ -98,7 +98,6 @@ void func_hd_code_802CEA68(s32, s32);                  /* extern */
 void func_hd_code_802CE9A4();                          /* extern */
 void func_hd_code_802CE9C8(void*, u8, u8);             /* extern */
 
-extern struct S_8039C720 D_hd_code_8039C720[];
 extern s32 D_hd_code_8039C710;
 extern struct S_8039C718 D_hd_code_8039C718[];
 extern s32 D_hd_code_8039C7F8;
@@ -112,6 +111,28 @@ extern s32 D_hd_code_8039C954;
 extern s32 D_hd_code_8039C958;
 extern s32 D_hd_code_8039C95C;
 extern s32 D_hd_code_803FB8B0;
+
+// <bss>
+struct S_8039C550 D_hd_code_8039C550[8];
+s32 D_hd_code_8039C710;
+s32 D_hd_code_8039C714;
+struct S_8039C718 D_hd_code_8039C718[8];
+s32 D_hd_code_8039C7F8;
+s32 D_hd_code_8039C7FC;
+struct S_8039C800 D_hd_code_8039C800[8];
+u8 D_hd_code_8039C940;
+u8 D_hd_code_8039C941;
+u16 D_hd_code_8039C942;
+s32 D_hd_code_8039C944;
+s32 D_hd_code_8039C948;
+s32 D_hd_code_8039C94C;
+s8 D_hd_code_8039C950;
+u8 D_hd_code_8039C951;
+u16 D_hd_code_8039C952;
+s32 D_hd_code_8039C954;
+s32 D_hd_code_8039C958;
+s32 D_hd_code_8039C95C;
+// </bss>
 
 // <data>
 s16 D_hd_code_802FDBE0[20] = {
@@ -479,7 +500,7 @@ void func_hd_code_802906C0(u8 arg0) {
                 if (D_hd_code_8039C550[sp74].unk4 == D_hd_code_8039C550[sp74].unk1C) {
                     sndPlaySfx(D_hd_code_80367738, 0x64, NULL);
                 }
-                sp34 = D_hd_code_8039C720[D_hd_code_8039C550[sp74].unk13].unk4;
+                sp34 = D_hd_code_8039C718[D_hd_code_8039C550[sp74].unk13].unkC;
                 sp4C = (D_hd_code_8039C550[sp74].unk14 * D_hd_code_8039C550[sp74].unk18) + ((D_hd_code_8039C550[sp74].unk18 * (-4)) * D_hd_code_8039C550[sp74].unk18);
                 D_hd_code_8039C550[sp74].unk4 = D_hd_code_8039C550[sp74].unk1C + sp4C;
                 if (D_hd_code_8039C550[sp74].unk4 < sp34) {

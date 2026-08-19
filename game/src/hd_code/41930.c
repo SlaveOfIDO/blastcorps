@@ -32,6 +32,10 @@ extern struct S_80367C04 D_hd_code_802E8F94[];
 extern s32 D_hd_code_802FA26C;
 extern struct LevelData D_hd_front_end_8020D810[];
 
+// <bss>
+u8 D_hd_code_8036EBA0[96];
+// </bss>
+
 
 // Show the cutscene / congratulations message for the player's current
 // campaign stage (skipping the few stages that have no message): set the

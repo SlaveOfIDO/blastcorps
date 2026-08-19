@@ -15,6 +15,20 @@
 // color), D_hd_code_802FAD40/44/48 = the bracket pulse animation, and
 // D_hd_code_8036C7CC = how many marker points were on screen this frame.
 
+// <bss>
+struct vec3s* D_hd_code_8036C790;
+struct vec3s* D_hd_code_8036C794;
+s32 D_hd_code_8036C798;
+s32 D_hd_code_8036C79C;
+struct vec3s* D_hd_code_8036C7A0[10];
+s32 D_hd_code_8036C7C8;
+u8 D_hd_code_8036C7CC;
+u8 D_hd_code_8036C7CD;
+u16 D_hd_code_8036C7CE;
+Vtx D_hd_code_8036C7D0[2][4];
+Mtx D_hd_code_8036C850[2];
+// </bss>
+
 // <data>
 u8 D_hd_code_802FA940[32*32] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

@@ -8,6 +8,15 @@
 u8 func_hd_code_80297F74();                         /* extern */
 extern u8 D_hd_code_8039CAD0;
 extern u8 D_hd_code_802FF180[6];
+
+// <bss>
+u8 D_hd_code_8039CAD0;
+u8 D_hd_code_8039CAD1;
+u16 D_hd_code_8039CAD2;
+s32 D_hd_code_8039CAD4;
+s32 D_hd_code_8039CAD8;
+s32 D_hd_code_8039CADC;
+// </bss>
 extern char* D_hd_code_802FF188[][20][2];
 extern u8 D_hd_code_802FF5E8[];
 

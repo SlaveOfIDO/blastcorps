@@ -89,6 +89,31 @@ extern s16 D_hd_code_80370B98[];
 extern s32 D_hd_code_80370BB0;
 extern s32 D_hd_code_80370BB4;
 
+// <bss>
+struct S_8036EC30* D_hd_code_8036EC30;
+s32 D_hd_code_8036EC34;
+struct S_8036EC38 D_hd_code_8036EC38[50];
+Mtx D_hd_code_8036F278[2][50];
+s32 D_hd_code_80370B78;
+s32 D_hd_code_80370B7C;
+s32 D_hd_code_80370B80;
+u8 D_hd_code_80370B84;
+u8 D_hd_code_80370B85;
+u16 D_hd_code_80370B86;
+s32 D_hd_code_80370B88;
+u8 D_hd_code_80370B8C;
+u8 D_hd_code_80370B8D;
+u8 D_hd_code_80370B8E;
+u8 D_hd_code_80370B8F;
+u8* D_hd_code_80370B90;
+s32 D_hd_code_80370B94;
+s16 D_hd_code_80370B98[12];
+s32 D_hd_code_80370BB0;
+s32 D_hd_code_80370BB4;
+s32 D_hd_code_80370BB8;
+s32 D_hd_code_80370BBC;
+// </bss>
+
 // Init the particle system at level start: clear all 50 particle slots and
 // allocate the frame-texture cache buffer
 // Proposed name: InitParticles

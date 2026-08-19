@@ -13,6 +13,24 @@ extern u8 D_hd_code_8039CAC8;
 extern Gfx* D_hd_code_8039CABC;
 extern void* D_hd_code_8039CAC0;
 
+// <bss>
+s16 D_hd_code_8039CAB0;
+s16 D_hd_code_8039CAB2;
+s16 D_hd_code_8039CAB4;
+u8 D_hd_code_8039CAB6;
+u8 D_hd_code_8039CAB7;
+u8 D_hd_code_8039CAB8;
+u8 D_hd_code_8039CAB9;
+u16 D_hd_code_8039CABA;
+Gfx* D_hd_code_8039CABC;
+void* D_hd_code_8039CAC0;
+Mtx* D_hd_code_8039CAC4;
+u8 D_hd_code_8039CAC8;
+u8 D_hd_code_8039CAC9;
+u16 D_hd_code_8039CACA;
+s32 D_hd_code_8039CACC;
+// </bss>
+
 // Proposed file name: academy_marker.c
 //
 // This file handles the academy-test location marker: on the six special

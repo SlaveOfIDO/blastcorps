@@ -2,9 +2,14 @@
 #define __STRUCTS_H
 
 #include <PR/gbi.h>
+#include <PR/libaudio.h>
 
 
 #define TOPLEVEL_DL_SIZE (0xB5E)
+
+struct S_8036DCD8 {
+  ALLink link;
+}; // Size: 0x8
 
 
 

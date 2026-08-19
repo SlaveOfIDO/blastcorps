@@ -20,6 +20,19 @@ Gfx* func_hd_code_8029700C(Gfx*, s16, s16);         /* extern */
 // Z/R trigger and D-pad textures. The displayed input comes from the
 // playback button/stick state (D_hd_code_80370C30/32/33).
 
+// <bss>
+u8* D_hd_code_8039CA90;
+u8* D_hd_code_8039CA94;
+u8* D_hd_code_8039CA98;
+void* D_hd_code_8039CA9C;
+s16 D_hd_code_8039CAA0;
+u8 D_hd_code_8039CAA2;
+u8 D_hd_code_8039CAA3;
+s32 D_hd_code_8039CAA4;
+s32 D_hd_code_8039CAA8;
+s32 D_hd_code_8039CAAC;
+// </bss>
+
 // Allocate and DMA the controller display textures from ROM
 // (controllertextures.raw) into level memory, carving out the body, stick,
 // trigger and D-pad sub-textures

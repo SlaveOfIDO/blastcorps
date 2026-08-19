@@ -56,6 +56,10 @@ void func_hd_code_80292DDC(s32);
 extern struct S_8039C960 D_hd_code_8039C960[4];
 extern u16 D_hd_code_803BE716;
 
+// <bss>
+struct S_8039C960 D_hd_code_8039C960[4];
+// </bss>
+
 // <data>
 extern struct S_802FE3C0 D_hd_code_802FE3C0[1] = {
   {
