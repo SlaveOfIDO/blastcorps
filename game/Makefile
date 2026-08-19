@@ -71,6 +71,7 @@ build/src/hd_code/audio/%.c.o: OPT_FLAGS = -O3
 default: $(TARGET).bin
 
 extract:
+	VERSION=$(VERSION) $(PYTHON) $(TOOLS_DIR)/decompress_game.py
 	splat split game.$(VERSION).yaml
 
 dirs:

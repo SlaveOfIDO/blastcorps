@@ -672,3 +672,5 @@ D_hd_code_802ACFD0 = 0x802ACFD0; // type:u32 size:0x804
 func_hd_code_802AD7FC = 0x802AD7FC; // type:func
 D_hd_code_80305CB0 = 0x80305CB0; // size:0x30
 D_hd_code_80305D60 = 0x80305D60; // size:0x14
+func_hd_front_end_80202024 = 0x80202024; // ignore:true
+MainJump = 0x802447C0; // type:func
