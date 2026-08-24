@@ -21,6 +21,29 @@ def split_segment_bytes(subsegments, decoded_bytes: bytes):
     return segment_bytes
 
 
+def get_gzip_original_filename(gz_file_path) -> str | None:
+    with open(gz_file_path, "rb") as f:
+        header = f.read(10)
+        magic1, magic2, method, flags = header[0], header[1], header[2], header[3]
+        assert magic1 == 0x1F and magic2 == 0x8B, f"{gz_file_path} is not a gzip file"
+
+        FEXTRA = 0x04
+        FNAME = 0x08
+
+        if flags & FEXTRA:
+            xlen = int.from_bytes(f.read(2), "little")
+            f.read(xlen)
+
+        if not flags & FNAME:
+            return None
+
+        name_bytes = bytearray()
+        while (b := f.read(1)) not in (b"", b"\x00"):
+            name_bytes += b
+        return name_bytes.decode("latin-1")
+    return None
+
+
 def get_png_writer(file_type: str):
     match file_type:
         case "rgba16":
@@ -110,8 +133,9 @@ class N64SegRzip(Segment):
         # Decompressed
         subprocess.call(["gzip", "-d", "-k", "-N", "-f", gz_file_path])
 
-        gzip_info = subprocess.check_output(["gzip", "-N", "-l", gz_file_path])
-        decompressed_file_name = gzip_info.decode().splitlines()[-1].split()[-1].split("/")[-1]
+        decompressed_file_name = get_gzip_original_filename(gz_file_path)
+        decompressed_file_name = decompressed_file_name.split("/")[-1]
+
         decompressed_file_path = options.opts.asset_path / self.dir / "split" / decompressed_file_name
 
         decoded_dir_path = options.opts.asset_path / self.dir / "uncompressed"
