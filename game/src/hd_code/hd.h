@@ -3,13 +3,14 @@
 
 #include <PR/sched.h>
 #include <PR/ultratypes.h>
+#include "structs.h"
 
 struct UnknownStruct_803644BC {
   // size: 0x74
   /* 0x00 */ s32 unk0;
   /* 0x04 */ s32 unk4; // D_80364464
   /* 0x08 */ s32 unk8; // D_80364468
-  /* 0x0C */ s32 unkC; // D_8036446C
+  /* 0x0C */ void* unkC; // D_8036446C
   /* 0x10 */ s32 unk10; // D_80364470
   /* 0x14 */ s32 unk14; // D_80364474
   /* 0x18 */ s32 unused18; // D_80364478
@@ -57,7 +58,7 @@ typedef struct UnknownData8024C414_s {
 extern u8 D_hd_code_802E8BD0;
 extern u8 D_hd_code_802E8BD4;
 extern u8 D_hd_code_802E8BD8;
-extern s32 levelno;
+extern s32 g_currentLevel;
 extern u8 D_hd_code_802E8BE4;
 extern s32 D_hd_code_802E8BE8;
 extern s32 D_hd_code_802E8BEC;
@@ -67,14 +68,14 @@ extern u8 D_hd_code_802E8C44[];
 extern OSMesgQueue D_hd_code_803150A0;
 extern OSMesgQueue D_hd_code_803153D8;
 extern OSSched sc; // 0x80315440
-extern void* D_hd_code_803156D8;
+extern OSScClient D_hd_code_803156D8;
 extern u8 D_hd_code_803156F4;
 extern struct Model1 D_hd_code_803156F8[2];
 extern u32 D_hd_code_80358058;
 extern u8 D_hd_code_8035805C;
 extern u32 D_hd_code_80358060;
 extern s32 D_hd_code_80358064;
-extern u8* D_hd_code_80358070;
+extern u8* g_heap;
 extern u16 D_hd_code_8035807C;
 extern struct Textures D_hd_code_803643C8;
 extern u8 D_hd_code_803643D4;

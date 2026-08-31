@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -70,8 +71,7 @@ u8 D_hd_code_802FAD48 = 0;
 // </data>
 
 // Reset the marked-target list at level init
-// Proposed name: ResetTargetMarkers
-void func_hd_code_80275430(void)
+void targetMarkersReset(void)
 {
   s32 sp4;
 
@@ -646,11 +646,11 @@ void func_hd_code_80276E50(Gfx** arg0, struct Model1* arg1, u8 arg2, s32 arg3, s
 void func_hd_code_802775C0() {
   D_hd_code_8036CB34 = 0;
 
-  D_hd_code_8036CB48[0] = D_hd_code_80358070;
-  D_hd_code_80358070 += 0xC80;
+  D_hd_code_8036CB48[0] = g_heap;
+  g_heap += 0xC80;
 
-  D_hd_code_8036CB48[1] = D_hd_code_80358070;
-  D_hd_code_80358070 += 0xC80;
+  D_hd_code_8036CB48[1] = g_heap;
+  g_heap += 0xC80;
 
   D_hd_code_8036CB28 = 0;
   D_hd_code_8036CB29 = 0;

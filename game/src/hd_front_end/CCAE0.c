@@ -13,7 +13,7 @@ Gfx* func_hd_code_80274AA4(Gfx*);                     /* extern */
 s32 func_hd_code_8025B558(u16*);                    /* extern */
 Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
 void func_hd_front_end_801F8354(u8);  /* extern */
-void func_hd_front_end_801FE018(s32);  /* extern */
+void func_hd_front_end_801FE018(u8);  /* extern */
 void func_hd_front_end_801E8DCC(u8);                   /* extern */
 void func_hd_front_end_801E8EB8(u8, s32);                /* extern */
 s16 func_hd_code_8025B370(s32);                     /* extern */
@@ -984,7 +984,7 @@ void func_hd_front_end_801EC30C(u8 arg0) {
   func_hd_code_80272C5C(D_hd_front_end_802082E8, 0, 1U, 2U, 1, 1.0f);
   D_hd_front_end_80215902[0] = 3;
   D_hd_front_end_80215902[1] = arg0;
-  if (D_hd_code_802E8F94[levelno].unk0 == 1) {
+  if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
     sp24 = 0;
   } else {
     sp24 = 1;
@@ -1081,7 +1081,7 @@ Gfx *func_hd_front_end_801EC770(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
   }
   entry = func_hd_code_80274AA4(entry);
   if (D_hd_code_80364AA8 != 1) {
-    func_hd_code_80264A34(D_hd_front_end_80215470, D_hd_code_802E8F94[levelno].unk30[4-sp63], 0);
+    func_hd_code_80264A34(D_hd_front_end_80215470, D_hd_code_802E8F94[g_currentLevel].unk30[4-sp63], 0);
     D_hd_front_end_80215470[5]  = 0;
     func_hd_code_80259DC8(arg1, D_hd_front_end_80215470, 0, 0, 0, 0x29, 0x7D, 0x10, 0x10, 1, 0xFF, 0xB4, 0, D_hd_front_end_80215910[1], 0xFF, 0x78, 0, D_hd_front_end_80215910[1]);
   }
@@ -1106,14 +1106,14 @@ void func_hd_front_end_801ECB18(void) {
   func_hd_front_end_801FE018(8);
   D_hd_code_80364A87 = 0;
   D_hd_code_803643D5 = 0;
-  if (((players[playerNumber].unk18[levelno] > 0) && (players[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
-    if (D_hd_code_802E8F94[levelno].unk0 == 1) {
-      osSendMesg(&D_hd_front_end_80219EF8, (void *) ((levelno << 8) | 0xC | (playerNumber << 0x10)), 1);
+  if (((players[playerNumber].unk18[g_currentLevel] > 0) && (players[playerNumber].unk18[g_currentLevel] < 6)?1:0) != 0) {
+    if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
+      osSendMesg(&D_hd_front_end_80219EF8, (void *) ((g_currentLevel << 8) | 0xC | (playerNumber << 0x10)), 1);
     }
-    osSendMesg(&D_hd_front_end_80219EF8, (void *) ((levelno << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
+    osSendMesg(&D_hd_front_end_80219EF8, (void *) ((g_currentLevel << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
     return;
   }
-  osSendMesg(&D_hd_front_end_80219EF8, (void *) ((levelno << 8) | 0x16 | (playerNumber << 0x10) | 0x01000000), 1);
+  osSendMesg(&D_hd_front_end_80219EF8, (void *) ((g_currentLevel << 8) | 0x16 | (playerNumber << 0x10) | 0x01000000), 1);
   func_hd_front_end_801F8354(playerNumber);
 }
 
@@ -1130,7 +1130,7 @@ void func_hd_front_end_801ECC8C(void) {
       }
       osSendMesg(&D_hd_front_end_80219EF8, (void *) ((sp1C << 0x10) | 0x14), 1);
       rmonPrintf("saving player %d on level %d\n", sp1C, saveIt[sp1C] - 1);
-      players[sp1C].levelno = levelno;
+      players[sp1C].levelno = g_currentLevel;
       osSendMesg(&D_hd_front_end_80219EF8, (void *) (((saveIt[sp1C] - 1) << 8) | 7 | (sp1C << 0x10)), 1);
       osSendMesg(&D_hd_front_end_80219EF8, (void *) (((saveIt[sp1C] - 1) << 8) | 9 | (sp1C << 0x10)), 1);
       osSendMesg(&D_hd_front_end_80219EF8, (void *) (((saveIt[sp1C] - 1) << 8) | 0xB | (sp1C << 0x10)), 1);
@@ -1163,7 +1163,7 @@ void func_hd_front_end_801ECF5C(void) {
     UnknownData8024C414 *sp6C  = &players[playerNumber];
     u16 sp4C[16];
     struct S_80367C04 *sp48;
-    u8 sp40[5] = D_hd_front_end_8020849C;
+    INIT_FROM_ARRAY(u8 sp40[5], sp40, D_hd_front_end_8020849C);
     u8 sp3F;
     u16 sp3C;
     s32 sp38;
@@ -1196,7 +1196,7 @@ void func_hd_front_end_801ECF5C(void) {
         }
     }
     func_hd_front_end_801ED480(sp4C, D_hd_code_80364EF0[playerNumber]);
-    levelno = 0;
+    g_currentLevel = 0;
     rmonPrintf(" %d %d %d %d %d\n", sp40[2] * 3, sp40[1] * 2, sp40[0], sp6C->unkA, sp3C);
     sp6C->unkA += (sp40[2] * 3) + (sp40[1] * 2) + sp40[0];
     sp3F = (sp6C->unkA / 12) - (sp3C / 12);
@@ -1261,7 +1261,7 @@ void func_hd_front_end_801ED4B8(void) {
     }
   }
   func_hd_front_end_801ED480((u8*)sp34, (u8*)D_hd_code_80364EF0[playerNumber]);
-  levelno = 0;
+  g_currentLevel = 0;
   sp2F = (sp54->unkA / 12) - (sp2C / 12);
   sp54->unkC += sp2F;
   rmonPrintf("cmo destroy %d stars\n", sp2F);

@@ -138,18 +138,18 @@ u8 D_hd_code_8036EB9C[4];
 // the par time (from the medal-tier table D_hd_code_80364EF0), the current
 // medal, and whether the level is already completed (D_hd_code_8036EB98)
 // Proposed name: LoadLevelStats
-void func_hd_code_80285190(void) {
+void statsLoadLevelStats(void) {
   s32 sp4;
 
-  D_hd_code_8036EA7B = players[playerNumber].unk92[levelno];
-  D_hd_code_8036EA74 = (s32) D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_802E8F94[levelno].unk0 == 1 ? 1 : D_hd_code_8036EA7B]];
-  D_hd_code_8036EA7A = (u8) ((s32) players[playerNumber].unk18[levelno] % 8);
+  D_hd_code_8036EA7B = players[playerNumber].unk92[g_currentLevel];
+  D_hd_code_8036EA74 = (s32) D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_802E8F94[g_currentLevel].unk0 == 1 ? 1 : D_hd_code_8036EA7B]];
+  D_hd_code_8036EA7A = (u8) ((s32) players[playerNumber].unk18[g_currentLevel] % 8);
 
   for(sp4 = 0; sp4 < 4; sp4++) {
     D_hd_code_8036EB94[sp4] = 0;
   }
 
-  if (players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6) {
+  if (players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6) {
     D_hd_code_8036EB98 = 1;
     return;
   }
@@ -258,16 +258,16 @@ u8 func_hd_code_80285814(void) {
     rmonPrintf(ASSERT_MESSAGE, "frontEndPresent", "stats_perm.c", 0x8C);
   }
   frontEndPresent = 1;
-  func_hd_code_80255DC8();
+  hdPrepareStateTransition();
   if ((D_hd_code_80364A90 == 0x4000)) {
     osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
   }
-  if ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) {
-    if (D_hd_code_802E8F94[levelno].unk0 == 1) {
+  if ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) {
+    if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
       if (*(u64*)pakBuffer == 0x1234567887654321) {
-        func_hd_code_80256A34(NULL);
+        hdInitLevel(NULL);
         rmonPrintf("Creating status ...\n");
-        coin = players[playerNumber].unk18[levelno];
+        coin = players[playerNumber].unk18[g_currentLevel];
         if (coin == 5) {
           coin = 4;
         }
@@ -279,27 +279,27 @@ u8 func_hd_code_80285814(void) {
         func_hd_code_80264C20((s32) pakBuffer);
         sp27 = 1;
       } else {
-        func_hd_code_80256A34((s32* ) pakBuffer);
+        hdInitLevel((s32* ) pakBuffer);
       }
     } else {
-      func_hd_code_80256A34(NULL);
+      hdInitLevel(NULL);
     }
   } else {
-    func_hd_code_80256A34(NULL);
+    hdInitLevel(NULL);
   }
-  func_hd_code_80285A78((s32* ) &D_hd_code_8036EA70, &D_hd_code_8036EA60);
-  func_hd_code_80285A78((s32* ) &D_hd_code_8036EA70, &D_hd_code_8036EA80);
-  func_hd_code_80285A78((s32* ) &D_hd_code_8036EA70, &D_hd_code_8036EA90);
+  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA60);
+  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA80);
+  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA90);
   return sp27;
 }
 
 // Copy a 16-byte stats block from arg0 to arg1 (snapshot/restore)
 // Proposed name: CopyStatsBlock
-void func_hd_code_80285A78(u8* arg0, u8* arg1) {
+void func_hd_code_80285A78(u8* src, u8* dst) {
   u32 sp4;
 
   for(sp4 = 0; sp4 < 16; sp4++) {
-    arg1[sp4] = arg0[sp4];
+    dst[sp4] = src[sp4];
   }
 }
 
@@ -308,13 +308,13 @@ void func_hd_code_80285A78(u8* arg0, u8* arg1) {
 // Proposed name: SetObjectiveBit
 void func_hd_code_80285AB0(u8 arg0) {
   D_hd_code_80364A87 |= 2;
-  players[playerNumber].unk54[levelno] |= (1 << (arg0 + 0x1F));
+  players[playerNumber].unk54[g_currentLevel] |= (1 << (arg0 + 0x1F));
 }
 
 // Has sub-objective arg0 been achieved on this level?
 // Proposed name: GetObjectiveBit
 s32 func_hd_code_80285B10(u8 arg0) {
-  return (players[playerNumber].unk54[levelno] & (1 << (arg0 + 0x1F))) ? 1 : 0;
+  return (players[playerNumber].unk54[g_currentLevel] & (1 << (arg0 + 0x1F))) ? 1 : 0;
 }
 
 // Demolition-level checkpoint: when a completed non-demolition objective is
@@ -323,11 +323,11 @@ s32 func_hd_code_80285B10(u8 arg0) {
 // Proposed name: TriggerLevelCheckpoint
 void func_hd_code_80285B68(s32 arg0) {
   if (D_hd_code_80364A90 & 0x104) {
-    if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_802E8F94[levelno].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
+    if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
       func_hd_code_802CF5B0();
       D_hd_code_802E8BD8 = 1;
       func_hd_code_80275270(0x4000, 1.25f);
-      saveIt[playerNumber] = levelno + 1;
+      saveIt[playerNumber] = g_currentLevel + 1;
       D_hd_code_8036EB99 = 1;
     }
   }
@@ -404,7 +404,7 @@ void func_hd_code_80285EF4(s32 arg0) {
   D_hd_code_8036EA74 += sp1C;
   func_hd_code_802852EC();
   D_hd_code_8036EA74 -= sp1C;
-  func_hd_code_80285A78((s32* ) &D_hd_code_8036EA70, &D_hd_code_8036EA60);
+  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA60);
   D_hd_code_802F5804[0x18].unk0 &= ~1;
   D_hd_code_802F5804[0x18].unk0 |= 0x800;
   D_hd_code_802F5804[0x17].unk0 &= ~1;

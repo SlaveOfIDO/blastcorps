@@ -48,7 +48,7 @@ typedef struct {
 u8 D_hd_code_802E8BD0 = 0;
 u8 D_hd_code_802E8BD4 = 0;
 u8 D_hd_code_802E8BD8 = 0;
-s32 levelno = 0;
+s32 g_currentLevel = 0;
 f32 D_hd_code_802E8BE0 = 1.3f;
 u8 D_hd_code_802E8BE4 = 0;
 s32 D_hd_code_802E8BE8 = 0;
@@ -74,7 +74,7 @@ u8 D_hd_code_802E8C44[28] = {
 };
 // </data>
 
-// BSS begin
+// <bss>
 u8 D_hd_code_8030F660;
 s32 D_hd_code_8030F664;
 struct UnknownStruct8030F668 D_hd_code_8030F668;
@@ -95,8 +95,7 @@ u8 D_hd_code_803153F0;
 OSMesg D_hd_code_803153F8[0x10];
 u8 D_hd_code_80315438;
 OSSched sc; // 0x80315440
-void* D_hd_code_803156D8;
-u8 bss_pad_4[0x4 * 2];
+OSScClient D_hd_code_803156D8;
 s32 D_hd_code_803156E8;
 s32 D_hd_code_803156EC;
 s32 D_hd_code_803156F0;
@@ -116,7 +115,7 @@ u32 D_hd_code_80358060; // frames since the level/state started; proposed name: 
 s32 D_hd_code_80358064; // replay-relevant frame counter (reset on unpause sync); proposed name: replayFrameCount
 s32 D_hd_code_80358068; // unpaused frame counter; proposed name: unpausedFrameCount
 void* D_hd_code_8035806C; // static data segment pointer (segment 1); proposed name: staticSegment
-u8* D_hd_code_80358070; // level memory bump allocator pointer (reset to 0x8004B400 each level); proposed name: levelAllocPtr
+u8* g_heap; // level memory bump allocator pointer (reset to 0x8004B400 each level); proposed name: levelAllocPtr
 Gfx* D_hd_code_80358074; // loaded level data base; proposed name: levelData
 s32 D_hd_code_80358078; // current top-level display list length; proposed name: topLevelDlLen
 u16 D_hd_code_8035807C; // perspective normalization scale from guPerspective; proposed name: perspNorm
@@ -264,7 +263,7 @@ struct vec3 D_hd_code_80365090; // some 3d vec
 u16 D_hd_code_8036509C;
 s16 D_hd_code_8036509E; // camera target type: vehicle id, or 0xFF/0xFE/0xFD for train/carrier/shuttle views; proposed name: cameraTargetType
 s16 D_hd_code_803650A0;
-// BSS End
+// </bss>
 
 // Boot entry point: osInitialize, read 16 words of boot arguments from the
 // cart via raw PI reads, parse the debug command-line flags
@@ -280,7 +279,7 @@ void MainJump() {
   for (sp68 = (u32*)0xFFB000, sp74 = 0; sp74 < 0x10; sp74++, sp68++) {
     osPiRawReadIo((u32)sp68, &sp28[sp74]);
   }
-  func_hd_code_80270AE0(sp28);
+  func_hd_code_80270AE0((u8*)sp28);
   osCreateThread(&g_Thread1, 1, Thread1, NULL, g_Thread1Stack + 0x200, 0xA);
   osStartThread(&g_Thread1);
 }
@@ -329,14 +328,14 @@ void Thread3(void* arg0) {
         {
           case 0x0000000000000020:
           {
-            func_hd_code_80255DC8();
-            func_801EF380(2);
+            hdPrepareStateTransition();
+            func_hd_front_end_801EF380(2);
             break;
           }
           case 0x0000000000000010:
           {
-            func_hd_code_80255DC8();
-            func_801EF380(1);
+            hdPrepareStateTransition();
+            func_hd_front_end_801EF380(1);
             sp60 = sc.unk803156C4;
             if ((u32) (sc.unk803156C4 - sc.unk803156C4) < 0xFU) {
               do {
@@ -347,16 +346,16 @@ void Thread3(void* arg0) {
           }
           case 0x0000000100000000:
           {
-            func_801F6F18();
+            func_hd_front_end_801F6F18();
             func_hd_code_8026AF6C(0x8012);
             D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
             break;
           }
           case 0x0000080000000000:
           {
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             func_hd_code_8025D184();
-            func_80200714(1);
+            func_hd_front_end_80200714(1);
             osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000001, OS_MESG_BLOCK);
             func_hd_code_8026AF6C(0x8011);
             break;
@@ -365,25 +364,25 @@ void Thread3(void* arg0) {
           {
             D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
             func_hd_code_8025D184();
-            func_801EA4B8();
-            func_801E8DCC(playerNumber);
+            func_hd_front_end_801EA4B8();
+            func_hd_front_end_801E8DCC(playerNumber);
             func_hd_code_8026AF6C(0x800A);
             break;
           }
           case 0x0000000010000000:
           {
             osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000001, OS_MESG_BLOCK);
-            func_801E8DCC(4U);
+            func_hd_front_end_801E8DCC(4U);
             func_hd_code_8026AF6C(0x8011);
             break;
           }
           case 0x0020000000000000:
           {
             sndDeactivateAllSfxByFlag_1();
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             func_hd_code_802A0700();
             func_hd_code_8025D184();
-            func_80200714(1);
+            func_hd_front_end_80200714(1);
             osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x0100000F, OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, &sp5C, OS_MESG_BLOCK);
             if (sp5C != 0 || D_hd_code_8039C541 != 0) {
@@ -394,7 +393,7 @@ void Thread3(void* arg0) {
             }
             D_hd_code_8039C541 = 0;
             if (D_hd_code_802E8BF8 == 0) {
-              func_801E8C40(4U);
+              func_hd_front_end_801E8C40(4U);
               D_hd_code_80364AA0 = 0x10000000;
             }
             else {
@@ -411,11 +410,11 @@ void Thread3(void* arg0) {
               osRecvMesg(&D_hd_front_end_80219F50, &sp5C, OS_MESG_BLOCK);
               if (sp5C == 0)
               {
-                sp5C = func_80201E80();
+                sp5C = func_hd_front_end_80201E80();
               }
               if (sp5C != 0)
               {
-                func_801EA108(playerNumber, 1, 1);
+                func_hd_front_end_801EA108(playerNumber, 1, 1);
                 D_hd_code_80364AA0 = 0x40000;
               }
               else
@@ -428,11 +427,11 @@ void Thread3(void* arg0) {
           }
           case 0x0004000000000000:
           {
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             func_hd_code_802A0700();
             func_hd_code_8025D184();
-            func_80200714(4);
-            func_801E8C40(4U);
+            func_hd_front_end_80200714(4);
+            func_hd_front_end_801E8C40(4U);
             func_hd_code_8026AF6C(0x8038);
             break;
           }
@@ -443,7 +442,7 @@ void Thread3(void* arg0) {
             D_hd_code_80365065 = 0;
             D_hd_code_80364AA0 = 0x2;
             D_hd_code_8039C541 = 0;
-            func_801ECE9C();
+            func_hd_front_end_801ECE9C();
             break;
           }
           case 0x0000000000000002:
@@ -455,11 +454,11 @@ void Thread3(void* arg0) {
                   case 6:
                   if(D_hd_code_80364A90 == 0x2) {
                       D_hd_code_80364A98 = 0x1000000000000;
-                      func_hd_code_80255DC8();
-                      func_80200714(7);
-                      func_80201240(D_hd_code_80364AC4 & 3);
+                      hdPrepareStateTransition();
+                      func_hd_front_end_80200714(7);
+                      func_hd_front_end_80201240(D_hd_code_80364AC4 & 3);
                       func_hd_code_8026AF6C(0x8035);
-                      func_801E8C40(D_hd_code_80364AC4 & 3);
+                      func_hd_front_end_801E8C40(D_hd_code_80364AC4 & 3);
                       D_hd_code_80364AC4 += 1;
                       break;
                   }
@@ -472,14 +471,14 @@ void Thread3(void* arg0) {
                         D_hd_code_802E8BF0 ^= 1;
                       }
                       D_hd_code_8039CAA0 = 0;
-                      func_hd_code_80255DC8();
+                      hdPrepareStateTransition();
                       func_hd_code_8025D184();
                       func_hd_code_80295E50();
-                      func_hd_code_8025B9D0(D_hd_code_802E8BEC, &levelno);
+                      func_hd_code_8025B9D0(D_hd_code_802E8BEC, &g_currentLevel);
                       if (D_hd_code_802E8BEC == 0) {
                         func_hd_code_8029A130();
                       }
-                      func_hd_code_80256A34(NULL);
+                      hdInitLevel(NULL);
                       break;
                   }
               }
@@ -492,30 +491,30 @@ void Thread3(void* arg0) {
               playerNumber = (u8) D_hd_code_80364AEA;
             }
             func_hd_code_8028B3E0();
-            rmonPrintf("World screen centred on level %d\n", levelno);
+            rmonPrintf("World screen centred on level %d\n", g_currentLevel);
             playerNumber = (u8) D_hd_code_80364AEA;
-            func_801ECE9C();
+            func_hd_front_end_801ECE9C();
             if (D_hd_code_80365065 == 0) {
               D_hd_code_80365065 = 1;
               D_hd_code_80364A87 = 0;
               D_hd_code_803643D5 = 0;
-              func_801FE018(8);
-              levelno = players[playerNumber].levelno;
-              rmonPrintf("going to level %d\n", levelno);
+              func_hd_front_end_801FE018(8);
+              g_currentLevel = players[playerNumber].levelno;
+              rmonPrintf("going to level %d\n", g_currentLevel);
             }
 
-            if (D_hd_code_8039CA60 = 0, ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0)) {
-                if(levelno > 0x2A && levelno < 0x2E) {
-                    if(!((players[playerNumber].unk18[levelno+1] > 0 && players[playerNumber].unk18[levelno+1] < 6)?1:0)) {
-                        levelno++;
+            if (D_hd_code_8039CA60 = 0, ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0)) {
+                if(g_currentLevel > 0x2A && g_currentLevel < 0x2E) {
+                    if(!((players[playerNumber].unk18[g_currentLevel+1] > 0 && players[playerNumber].unk18[g_currentLevel+1] < 6)?1:0)) {
+                        g_currentLevel++;
                     }
                 }
             }
-            func_hd_code_80255DC8();
-            func_801ECC8C();
+            hdPrepareStateTransition();
+            func_hd_front_end_801ECC8C();
             osViBlack(TRUE);
             func_hd_code_802A0700();
-            func_801F8530(levelno);
+            func_hd_front_end_801F8530(g_currentLevel);
             break;
           }
           case 0x0000800000000000:
@@ -530,17 +529,17 @@ void Thread3(void* arg0) {
           }
           case 0x0800000000000000:
           {
-            func_hd_code_80255DC8();
-            func_80200714(1);
+            hdPrepareStateTransition();
+            func_hd_front_end_80200714(1);
             func_hd_code_8025D184();
             func_hd_code_8026AF6C(0x8059);
             break;
           }
           case 0x0000040000000000:
           {
-            func_hd_code_80255DC8();
-            func_80200714(3);
-            func_801E8C40(playerNumber);
+            hdPrepareStateTransition();
+            func_hd_front_end_80200714(3);
+            func_hd_front_end_801E8C40(playerNumber);
             func_hd_code_8025D184();
             D_hd_front_end_8021A830 = D_hd_code_80364A90;
             func_hd_code_8026AF6C(0x8016);
@@ -548,25 +547,25 @@ void Thread3(void* arg0) {
           }
           case 0x0200000000000000:
           {
-            func_801E8EB8(playerNumber, 1);
-            func_801F8228();
+            func_hd_front_end_801E8EB8(playerNumber, 1);
+            func_hd_front_end_801F8228();
             func_hd_code_8026AF6C(0x8016);
             D_hd_code_80364A98 = 0x40000000000;
             break;
           }
           case 0x0000000000002000:
           {
-            func_hd_code_80255DC8();
-            if (D_hd_code_802E8F94[levelno].unk0 != 1) {
-              func_hd_code_80256A34(NULL);
+            hdPrepareStateTransition();
+            if (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) {
+              hdInitLevel(NULL);
               func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA60);
               func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA80);
               D_hd_code_802E8BD8 = 1;
             } else {
-              if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0)) {
-                func_hd_code_80256A34(&pakBuffer);
+              if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0)) {
+                hdInitLevel(&pakBuffer);
               } else {
-                func_hd_code_80256A34(NULL);
+                hdInitLevel(NULL);
               }
               func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA60);
               func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA80);
@@ -588,14 +587,14 @@ void Thread3(void* arg0) {
                 break;
               case 0x2000:
               {
-                if (D_hd_code_802E8F94[levelno].unk0 != 1) {
+                if (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) {
                   D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
                 }
 
                 D_hd_code_802E8BD4 = 1;\
                 D_hd_code_802E8BD4 &= !func_hd_code_8026AD30(0x52);\
                 D_hd_code_802E8BD4 &= !func_hd_code_8026AD30(0x56);\
-                if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && D_hd_code_802E8F94[levelno].unk0 == 1) \
+                if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && D_hd_code_802E8F94[g_currentLevel].unk0 == 1) \
                   D_hd_code_802E8BD4 &= !func_hd_code_8026AD30(0x55);\
                 else \
                   D_hd_code_802E8BD4 &= !func_hd_code_8026AD30(0x57);
@@ -644,9 +643,9 @@ void Thread3(void* arg0) {
               }
 
             }
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             if (sp5B != 0) {
-              osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((levelno << 8) | 0xD | (playerNumber << 0x10)), OS_MESG_BLOCK);
+              osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((g_currentLevel << 8) | 0xD | (playerNumber << 0x10)), OS_MESG_BLOCK);
             }
 
             D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~1;
@@ -661,34 +660,34 @@ void Thread3(void* arg0) {
             D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk8 &= ~8;
 
             func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA60);
-            D_hd_code_80315438 = func_801EE800(&D_hd_code_80364A60, 1, 0),
-            func_801E8C40(playerNumber);
-            func_801EC30C(D_hd_code_80315438);
-            func_801EC288(D_hd_code_80315438);
-            func_80200714(1);
-            D_hd_code_80364A71 = func_801EF1E0();
+            D_hd_code_80315438 = func_hd_front_end_801EE800(&D_hd_code_80364A60, 1, 0),
+            func_hd_front_end_801E8C40(playerNumber);
+            func_hd_front_end_801EC30C(D_hd_code_80315438);
+            func_hd_front_end_801EC288(D_hd_code_80315438);
+            func_hd_front_end_80200714(1);
+            D_hd_code_80364A71 = func_hd_front_end_801EF1E0();
             if (D_hd_code_80364A71 != -1) {
-              func_801F55D8();
+              func_hd_front_end_801F55D8();
             }
             break;
           }
           case IN_LEVEL_GAME_STATE:
           {
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             if (D_hd_code_80364A90 == 0x4000) {
               osRecvMesg(&D_hd_front_end_80219F50, NULL, OS_MESG_BLOCK);
             }
             osViBlack(TRUE);
-            func_hd_code_80256A34(NULL);
+            hdInitLevel(NULL);
             func_hd_code_802661EC();
-            if (levelno == 0x32) {
+            if (g_currentLevel == 0x32) {
               func_hd_code_8026AF6C(0x8024);
             }
             break;
           }
           case 0x0000000040000000:
           {
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             sp54 = sc.unk803156C4;
             if ((u32)(sc.unk803156C4 - sc.unk803156C4) < 0xFU)
             {
@@ -697,15 +696,15 @@ void Thread3(void* arg0) {
 
               } while ((u32)(sc.unk803156C4 - sp54) < 0xFU);
             }
-            func_801ED790();
-            func_80200714(3);
-            D_hd_code_80364A71 = func_801EF1E0();
+            func_hd_front_end_801ED790();
+            func_hd_front_end_80200714(3);
+            D_hd_code_80364A71 = func_hd_front_end_801EF1E0();
             if (D_hd_code_80364A71 != -1)
             {
-              func_801F55D8();
+              func_hd_front_end_801F55D8();
             }
-            func_801E8C40(playerNumber);
-            func_801EC30C(D_hd_code_80315438);
+            func_hd_front_end_801E8C40(playerNumber);
+            func_hd_front_end_801EC30C(D_hd_code_80315438);
             break;
           }
           case 0x0000000008000000:{
@@ -715,18 +714,18 @@ void Thread3(void* arg0) {
               case 0x400:
               case 0x20000000:
               {
-                func_hd_code_80255DC8();
-                func_80200714(1);
-                D_hd_code_80364A71 = func_801EF1E0();
+                hdPrepareStateTransition();
+                func_hd_front_end_80200714(1);
+                D_hd_code_80364A71 = func_hd_front_end_801EF1E0();
                 if (D_hd_code_80364A71 != -1)
                 {
-                  func_801F55D8();
+                  func_hd_front_end_801F55D8();
                 }
-                func_801E8C40(playerNumber);
+                func_hd_front_end_801E8C40(playerNumber);
                 func_hd_code_80285A78(&D_hd_code_8036EA90, &D_hd_code_8036EA70);
-                D_hd_code_80315438 = func_801EE800(&D_hd_code_80364A60, 1, 0);
-                func_801EC30C(D_hd_code_80315438);
-                func_801EC288(D_hd_code_80315438);
+                D_hd_code_80315438 = func_hd_front_end_801EE800(&D_hd_code_80364A60, 1, 0);
+                func_hd_front_end_801EC30C(D_hd_code_80315438);
+                func_hd_front_end_801EC288(D_hd_code_80315438);
                 break;
               }
               case 0x40000000:
@@ -745,33 +744,33 @@ void Thread3(void* arg0) {
                   D_hd_code_803643D5 = 0;
                   func_hd_code_80285814();
                 }
-                func_hd_code_80255DC8();
-                D_hd_code_80364A71 = func_801EF1E0();
+                hdPrepareStateTransition();
+                D_hd_code_80364A71 = func_hd_front_end_801EF1E0();
                 if (D_hd_code_80364A71 != -1)
                 {
-                  func_801F55D8();
+                  func_hd_front_end_801F55D8();
                 }
-                func_801E8C40(playerNumber);
-                D_hd_code_80315438 = func_801EE800(&D_hd_code_80364A60, 1, 0);
-                func_80200714(1);
-                func_801EC30C(D_hd_code_80315438);
-                func_801EC288(D_hd_code_80315438);
+                func_hd_front_end_801E8C40(playerNumber);
+                D_hd_code_80315438 = func_hd_front_end_801EE800(&D_hd_code_80364A60, 1, 0);
+                func_hd_front_end_80200714(1);
+                func_hd_front_end_801EC30C(D_hd_code_80315438);
+                func_hd_front_end_801EC288(D_hd_code_80315438);
                 break;
               }
 
               default:
               {
-                if (saveIt[playerNumber] && saveIt[playerNumber] != levelno + 1)
+                if (saveIt[playerNumber] && saveIt[playerNumber] != g_currentLevel + 1)
                 {
                   rmonPrintf(ASSERT_MESSAGE, "!saveIt[playerNumber] || saveIt[playerNumber]==levelno+1", "./master_switch.c", 0x1E8U);
                 }
-                saveIt[playerNumber] = levelno + 1;
+                saveIt[playerNumber] = g_currentLevel + 1;
                 if (D_hd_code_803643D7 != 0)
                 {
-                  func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
+                  func_hd_code_802C1DD0(D_hd_code_802E8F94[g_currentLevel].unk0 == 0x20 || D_hd_code_802E8F94[g_currentLevel].unk0 == 0x80);
                 }
 
-                D_hd_code_803643D5 = !((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0);
+                D_hd_code_803643D5 = !((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0);
 
                 if (playerNumber == D_hd_code_80364AEA) D_hd_code_80364A87 |= D_hd_code_803643D5;
 
@@ -796,7 +795,7 @@ void Thread3(void* arg0) {
                       0x201U);
                   }
                   if ((saveLevel != 0) &&
-                      (saveLevel != (levelno + 1)))
+                      (saveLevel != (g_currentLevel + 1)))
                   {
                     rmonPrintf(
                       ASSERT_MESSAGE,
@@ -804,7 +803,7 @@ void Thread3(void* arg0) {
                       "./master_switch.c",
                       0x203U);
                   }
-                  saveLevel = levelno + 1;
+                  saveLevel = g_currentLevel + 1;
                   if ((u32)(func_hd_code_8028604C(D_hd_code_80364A5C) +
                             D_hd_code_8036EA74) >= 0xEA60U)
                   {
@@ -818,7 +817,7 @@ void Thread3(void* arg0) {
                 else if (D_hd_code_803643D7 != 0)
                 {
                   func_hd_code_80264AEC();
-                  D_hd_code_8036EA74 = D_hd_code_802E8FCA[levelno].unk0 - D_hd_code_80367BF6;
+                  D_hd_code_8036EA74 = D_hd_code_802E8FCA[g_currentLevel].unk0 - D_hd_code_80367BF6;
                 }
                 else
                 {
@@ -835,7 +834,7 @@ void Thread3(void* arg0) {
                 {
                   D_hd_code_8036EA74 = 1;
                 }
-                func_hd_code_80255DC8();
+                hdPrepareStateTransition();
                 if (D_hd_code_80365066 != 0)
                 {
                   D_hd_code_8036EA78 = D_hd_code_8036EB92;
@@ -849,7 +848,7 @@ void Thread3(void* arg0) {
                 {
                   func_hd_code_80285A78(&D_hd_code_8036EA80, &D_hd_code_8036EA60);
                 }
-                D_hd_code_80315438 = func_801EE800(&D_hd_code_80364A60, 1, 1),
+                D_hd_code_80315438 = func_hd_front_end_801EE800(&D_hd_code_80364A60, 1, 1),
                 func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA90);
 
                 if (D_hd_code_80364A60 != 0)
@@ -860,14 +859,14 @@ void Thread3(void* arg0) {
                 }
                 else
                 {
-                  func_801EC30C(D_hd_code_80315438);
-                  func_80200714(1);
-                  D_hd_code_80364A71 = func_801EF1E0();
+                  func_hd_front_end_801EC30C(D_hd_code_80315438);
+                  func_hd_front_end_80200714(1);
+                  D_hd_code_80364A71 = func_hd_front_end_801EF1E0();
                   if (D_hd_code_80364A71 != -1)
                   {
-                    func_801F55D8();
+                    func_hd_front_end_801F55D8();
                   }
-                  func_801E8C40(playerNumber);
+                  func_hd_front_end_801E8C40(playerNumber);
                 }
 
                 D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 |= 1;
@@ -901,7 +900,7 @@ void Thread3(void* arg0) {
               func_hd_code_8028B3E0();
               D_hd_code_8036EA74 = func_hd_code_8028604C(D_hd_code_80364A5C),
               func_hd_code_80285A78(&D_hd_code_8036EA70, &D_hd_code_8036EA60);
-              func_801EE800(&D_hd_code_80364A60, 0, 1);
+              func_hd_front_end_801EE800(&D_hd_code_80364A60, 0, 1);
             }
             D_hd_code_802F5804[0x18].unk0 = D_hd_code_802F5804[0x18].unk0 | 1;
             D_hd_code_802F5804[0x18].unk0 = D_hd_code_802F5804[0x18].unk0 & ~0x800;
@@ -910,7 +909,7 @@ void Thread3(void* arg0) {
             D_hd_code_802F5804[0x11].unk0 = D_hd_code_802F5804[0x11].unk0 & ~1;
             D_hd_code_802F5804[0x11].unk0 = D_hd_code_802F5804[0x11].unk0 | 0x800;
 
-            if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0)) {
+            if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0)) {
               D_hd_code_802F8BDC[6].unk18 = 0x18,
               D_hd_code_802F8BDC[7].unk18 = 0x22;
             } else {
@@ -919,11 +918,11 @@ void Thread3(void* arg0) {
             }
             D_hd_code_80364A50 = 0;
             D_hd_code_80364A54 = sc.unk803156C4;
-            func_hd_code_80255DC8();
-            if (D_hd_code_802E8F94[levelno].unk0 == 1 && ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_803643D5 == 0)) {
-              func_hd_code_80256A34(&D_hd_code_8039C4F8);
+            hdPrepareStateTransition();
+            if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1 && ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_803643D5 == 0)) {
+              hdInitLevel(&D_hd_code_8039C4F8);
             } else {
-              func_hd_code_80256A34(NULL);
+              hdInitLevel(NULL);
             }
             func_hd_code_8026B8F8();
             func_hd_code_8025BB50();
@@ -931,16 +930,16 @@ void Thread3(void* arg0) {
           }
           case 0x0000000020000000:
           {
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             if (D_hd_code_80364A90 == 0x4000)
             {
               osRecvMesg(&D_hd_front_end_80219F50, NULL, OS_MESG_BLOCK);
             }
             osViBlack(TRUE);
             func_hd_code_802A0700();
-            if (func_801E7000() != 0)
+            if (func_hd_front_end_801E7000() != 0)
             {
-              func_80200714(2);
+              func_hd_front_end_80200714(2);
             }
             else
             {
@@ -952,7 +951,7 @@ void Thread3(void* arg0) {
           {
             osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((playerNumber << 0x10) | 0x14 | 0x01000000), OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, NULL, OS_MESG_BLOCK);
-            func_801EA93C("ENTER NAME!", D_hd_code_803047A0, 7, 0x1E, &players[playerNumber]);
+            func_hd_front_end_801EA93C("ENTER NAME!", D_hd_code_803047A0, 7, 0x1E, &players[playerNumber]);
             func_hd_code_8026AF6C(0x800B);
             func_hd_code_8025D184();
             D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
@@ -960,8 +959,8 @@ void Thread3(void* arg0) {
           }
           case 0x4000000000000000:
           {
-            func_hd_code_80255DC8();
-            func_80200714(1);
+            hdPrepareStateTransition();
+            func_hd_front_end_80200714(1);
             D_hd_front_end_8020C070[0x09].unkC = "QUIT GAME!",
             D_hd_front_end_8020C070[0x09].unk10 = D_hd_code_803047CC,
             D_hd_front_end_8020C070[0x09].unk8 = 0x16U,
@@ -982,24 +981,24 @@ void Thread3(void* arg0) {
           {
             func_hd_code_80299C0C();
             D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             func_hd_code_80299C20();
-            if (D_hd_code_80364A90 == 0x4000 || levelno == 0x2F) {
+            if (D_hd_code_80364A90 == 0x4000 || g_currentLevel == 0x2F) {
               osRecvMesg(&D_hd_front_end_80219F50, NULL, OS_MESG_BLOCK);
             }
             osViBlack(TRUE);
-            func_hd_code_80256A34(NULL);
+            hdInitLevel(NULL);
             break;
           }
           case 0x0040000000000000:
           {
-            func_hd_code_80255DC8();
+            hdPrepareStateTransition();
             osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000010, OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, &D_hd_code_8039C4B4, OS_MESG_BLOCK);
             if (D_hd_code_8039C4B4 != 0)
             {
               func_hd_code_8025D184();
-              func_80200714(1);
+              func_hd_front_end_80200714(1);
               D_hd_front_end_8020C070[0x09].unkC = "ERASE SAVED GAME!",
               D_hd_front_end_8020C070[0x09].unk10 = D_hd_code_803047B4,
               D_hd_front_end_8020C070[0x09].unk8 = 0x14U,
@@ -1023,7 +1022,7 @@ void Thread3(void* arg0) {
           }
           case 0x0000000000400000:
           {
-            func_801EA6E8();
+            func_hd_front_end_801EA6E8();
             func_hd_code_8026AF6C(0x800A);
             break;
           }
@@ -1049,7 +1048,7 @@ void Thread3(void* arg0) {
         func_hd_code_8025B2B8();
         if (D_hd_code_80364A90 & 0x4000) {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
-          func_801F8980();
+          func_hd_front_end_801F8980();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
 
           if (D_hd_code_8036E68C[2] != 0) {
@@ -1061,14 +1060,14 @@ void Thread3(void* arg0) {
           func_hd_code_80285110(0x4D2);
         } else if (D_hd_code_80364A90 & 0xC9FD8FE7DBFF8080) {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
-          func_801FE990();
+          func_hd_front_end_801FE990();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
           func_hd_code_80285110(0x4D2);
         } else if (D_hd_code_80364A90 & 0x20000000) {
-          func_801E7598();
+          func_hd_front_end_801E7598();
           func_hd_code_80285110(0x4D2);
         } else if (D_hd_code_80364A90 & 0x30) {
-          func_801EF4AC();
+          func_hd_front_end_801EF4AC();
           func_hd_code_80285110(0x4D2);
         } else {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
@@ -1154,7 +1153,7 @@ void func_hd_code_802475D8(void) {
         D_hd_code_803643DA = 1;
         D_hd_code_803643D9 = 0;
         if (D_hd_code_80370C28 & 8) {
-            if (D_hd_code_80364AA8 != 1 || ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) == 0) {
+            if (D_hd_code_80364AA8 != 1 || ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) == 0) {
                 D_hd_code_803643DA = 0;
                 D_hd_code_803643D9 = 1;
             }
@@ -1167,7 +1166,7 @@ void func_hd_code_802475D8(void) {
             func_hd_code_80285AB0(2);
             func_hd_code_80285AB0(1);
         }
-        if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_80364AA8 == 1) && (D_hd_code_803643DA != 0)) {
+        if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_80364AA8 == 1) && (D_hd_code_803643DA != 0)) {
             D_hd_code_802E8BD8 = 1;
             func_hd_code_80275390(0x08000000);
         }
@@ -1400,7 +1399,7 @@ void func_hd_code_802475D8(void) {
     if ((D_hd_code_80370C28 & 0x4000) && !(D_hd_code_80370C2A & 0x4000) && (areWeFading() == 0) && D_hd_code_80364A98 == 0) {
         switch(D_hd_code_80364A90) {
             case 0x100000000000:
-                if((levelno != 0x2F) && (levelno != 0x31) && ((levelno != 0x26) || (D_hd_code_80364A88 == 0x4000))) {
+                if((g_currentLevel != 0x2F) && (g_currentLevel != 0x31) && ((g_currentLevel != 0x26) || (D_hd_code_80364A88 == 0x4000))) {
                     sndPlaySfx(D_hd_code_80367738, 0xDEU, NULL);
                     D_hd_code_80364A98 = 0x4000;
                 }
@@ -1408,7 +1407,7 @@ void func_hd_code_802475D8(void) {
             case 0x40:
             case 0x400:
                 sndPlaySfx(D_hd_code_80367738, 0xDEU, NULL);
-                if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
+                if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) != 0) {
                     D_hd_code_80364A98 = 0x08000000;
                 } else {
                     D_hd_code_80364A98 = 0x4000;
@@ -1416,7 +1415,7 @@ void func_hd_code_802475D8(void) {
                 break;
             case 0x800:
             case 0x1000:
-                if ((levelno != 0x32) || ((D_hd_code_80364A88 == 0x4000))) {
+                if ((g_currentLevel != 0x32) || ((D_hd_code_80364A88 == 0x4000))) {
                     sndPlaySfx(D_hd_code_80367738, 0xDEU, NULL);
                     D_hd_code_80364A98 = 0x4000;
                 }
@@ -1453,7 +1452,7 @@ void func_hd_code_802475D8(void) {
     }
     if ((D_hd_code_80364AC1 != 0) && (D_hd_code_802E8BD0 == 0)) {
         func_hd_code_802D291C();
-        if ((levelno == 0x32) && (D_hd_code_8036BB1C == 1) && ((u32) D_hd_code_80358060 >= 0x33U) && ((0 != 0) || (D_hd_code_80364A90 & 0x1801)) && (areWeFading() == 0)) {
+        if ((g_currentLevel == 0x32) && (D_hd_code_8036BB1C == 1) && ((u32) D_hd_code_80358060 >= 0x33U) && ((0 != 0) || (D_hd_code_80364A90 & 0x1801)) && (areWeFading() == 0)) {
             func_hd_code_80275390(0x2000);
         }
     }
@@ -1465,16 +1464,16 @@ void func_hd_code_802475D8(void) {
         func_hd_code_8024B5E8();
         func_hd_code_8028F794(D_hd_code_80364456);
         func_hd_code_80291FAC(D_hd_code_80364456);
-        func_hd_code_802688C4(levelno);
-        if ((0 == 0) && !(D_hd_code_80364A90 & 0x1801)) {
+        func_hd_code_802688C4(g_currentLevel);
+        if (!(D_hd_code_80364A90 & 0x1801)) {
             func_hd_code_8026FEC4();
         }
         func_hd_code_80281CE4();
-        if ((0 != 0) || (D_hd_code_80364A90 & 0x104)) {
+        if (D_hd_code_80364A90 & 0x104) {
             func_hd_code_80297804(D_hd_code_803643E0, D_hd_code_803643E4, D_hd_code_803643E8);
         }
         func_hd_code_8029E0AC();
-        if (((0 != 0) || (D_hd_code_80364A90 & 0x104)) && (D_hd_code_80364AA8 & 1)) {
+        if (((D_hd_code_80364A90 & 0x104)) && (D_hd_code_80364AA8 & 1)) {
             func_hd_code_8024A348();
             func_hd_code_8024ADD8();
         }
@@ -1484,7 +1483,7 @@ void func_hd_code_802475D8(void) {
         }
     }
     if ((D_hd_code_803643D6 == 0) && (D_hd_code_803643D7 == 0)) {
-        if ((levelno == 0x32) && (D_hd_code_8036EB98 != 0)) {
+        if ((g_currentLevel == 0x32) && (D_hd_code_8036EB98 != 0)) {
             if (((players[playerNumber].unk18[0x4A - 0x18] > 0 && players[playerNumber].unk18[0x4A - 0x18] < 6)?1:0) == 0) {
                 goto block_275;
             }
@@ -1515,7 +1514,7 @@ block_275:
                           &D_hd_code_803156F8[D_hd_code_8035805C].unk21410,
                           &D_hd_code_803156F8[D_hd_code_8035805C].unk21478);
     if (D_hd_code_80364A90 == 4) {
-        func_hd_code_80295C70(levelno, D_hd_code_803643E0, D_hd_code_803643E8);
+        func_hd_code_80295C70(g_currentLevel, D_hd_code_803643E0, D_hd_code_803643E8);
     }
     func_hd_code_802A4CDC(D_hd_code_80358030[D_hd_code_8035805C],
                           D_hd_code_80358038[D_hd_code_8035805C],
@@ -1534,14 +1533,14 @@ block_275:
         func_hd_code_8028C874(D_hd_code_80364456);
     }
     if (D_hd_code_80364AA8 != 1) {
-        if ((0 != 0) || (D_hd_code_80364A90 & 0x40)) {
+        if (D_hd_code_80364A90 & 0x40) {
             func_hd_code_8026420C();
         }
-        if ((0 != 0) || (D_hd_code_80364A90 & 0x04002104)) {
+        if (D_hd_code_80364A90 & 0x04002104) {
             func_hd_code_80262BF4();
         }
     } else if (D_hd_code_803BE738 != 0) {
-        if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) == 0) {
+        if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) == 0) {
             D_hd_code_803643D9 = 1;
         } else if (areWeFading() == 0) {
             D_hd_code_803643DA = 1;
@@ -1560,7 +1559,7 @@ block_275:
     }
     func_hd_code_80279514(D_hd_code_803643E0, D_hd_code_803643E4, D_hd_code_803643E8, D_hd_code_803643F8, D_hd_code_803643FC, D_hd_code_80364400);
     func_hd_code_80277620(D_hd_code_80358060);
-    func_hd_code_8027D810(levelno);
+    func_hd_code_8027D810(g_currentLevel);
     func_hd_code_802C2054();
     if (D_hd_code_802E8BD0 == 0) {
         func_hd_code_8026A9B4();
@@ -1596,12 +1595,12 @@ block_275:
         if ((D_hd_code_802E8BEC == 0) && (D_hd_code_80366A12 == 3) && (D_hd_code_80364A90 == 2)) {
             sp5C = func_hd_code_8029A1A8(&D_hd_code_803156F8, sp5C);
         }
-        if (D_hd_code_80364A90 == 2 || levelno == 0x2F) {
+        if (D_hd_code_80364A90 == 2 || g_currentLevel == 0x2F) {
             func_hd_code_8025C5D0();
         }
     }
     if ((D_hd_code_80364A90 & 0x1801)) {
-        if ((D_hd_code_80358060 == 0x96) && (levelno != 0x32)) {
+        if ((D_hd_code_80358060 == 0x96) && (g_currentLevel != 0x32)) {
             func_hd_code_8026AF6C(0x8040);
         }
         if (players[playerNumber].unk91 == 0 && (D_hd_code_80358060 == 0xA)) {
@@ -1612,17 +1611,17 @@ block_275:
     if ((D_hd_code_80364A90 & 0x440) && ((u32) (sc.unk803156C4 - D_hd_code_80364A54) >= 0xA1U) && ((u8) D_hd_code_80364A50 == 0)) {
         D_hd_code_80364A50 = 1;
         if (D_hd_code_8036BB1C == 1) {
-            if ((((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) == 0) || (D_hd_code_80364AA8 == 1)) {
+            if ((((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) == 0) || (D_hd_code_80364AA8 == 1)) {
                 func_hd_code_8026AF6C(
                      D_hd_code_802F4870[func_hd_code_8026F92C(D_hd_code_80364AA8)] | 0x8000
                 );
             }
         }
     }
-    if (D_hd_code_80364A90 == 8 && (areWeFading() == 0) && ((alCSPGetState(D_hd_code_80367734) == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) >= 0x12DU))) {
+    if (D_hd_code_80364A90 == 8 && (areWeFading() == 0) && ((alCSPGetState(g_musicPlayer) == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) >= 0x12DU))) {
         func_hd_code_80275390(0x08000000);
     }
-    if ((levelno == 0x31) && (D_hd_code_8036BB1C == 1)) {
+    if ((g_currentLevel == 0x31) && (D_hd_code_8036BB1C == 1)) {
         sp5C = func_hd_code_8029A518(&D_hd_code_803156F8[D_hd_code_8035805C], sp5C);
     }
     func_hd_code_80259C24(&sp5C, &D_hd_code_803156F8[D_hd_code_8035805C]);
@@ -1659,14 +1658,14 @@ block_275:
             case 0x800:
             case 0x1000:
             case 0x1:
-                if (levelno != 0x32 || D_hd_code_80364A88 == 0x4000) {
+                if (g_currentLevel != 0x32 || D_hd_code_80364A88 == 0x4000) {
                     D_hd_code_80364A98 = 0x2000;
                     sndPlaySfx(D_hd_code_80367738, 0x1EU, NULL);
                 }
                 break;
             case 0x400:
             case 0x40:
-                if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_80364AA8 != 1)) {
+                if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_80364AA8 != 1)) {
                     D_hd_code_80364A98 = 0x08000000;
                     sndPlaySfx(D_hd_code_80367738, 0x1EU, NULL);
                 } else if (D_hd_code_8036BB1C == 1) {
@@ -1689,7 +1688,7 @@ block_275:
             case 0x100:
             case 0x4:
                 if ((D_hd_code_80370C28 & 0x1000) && (D_hd_code_802E8BD0 == 0)) {
-                    if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) && (D_hd_code_80364AA8 == 1)) {
+                    if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_80364AA8 == 1)) {
                         D_hd_code_802F5804[2].unk0 |= 1;
                         D_hd_code_802F5804[2].unk18 = 7;
                     } else {
@@ -1830,7 +1829,7 @@ void func_hd_code_8024A92C(u32 arg0) {
     u32 sp2C;
     u32 sp28;
 
-    switch (levelno) {                              /* irregular */
+    switch (g_currentLevel) {                              /* irregular */
     case 0x1D:
         sp2C = 0x55F0;
         sp28 = 0x36B0;
@@ -1923,7 +1922,7 @@ void func_hd_code_8024A92C(u32 arg0) {
             break;
         case 0:                                     /* switch 1 */
             sndDeactivate(D_hd_code_803156E8);
-            if ((D_hd_code_802E8F94[levelno].unk0 != 0x80) || (func_hd_code_802C1AA0() == 0)) {
+            if ((D_hd_code_802E8F94[g_currentLevel].unk0 != 0x80) || (func_hd_code_802C1AA0() == 0)) {
                 rmonPrintf("popTuneImmediate();\n");
                 func_hd_code_80261040();
             } else {
@@ -2362,10 +2361,10 @@ void func_hd_code_8024B8F4(void* arg0, void* arg1) {
   gSPSegment(entry++, 0, 0);
   gSPSegment(entry++, 1, osVirtualToPhysical(D_hd_code_8035806C));
   gSPDisplayList(entry++, D_1000010);
-  gSPMatrix(entry++, (s32)arg0 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(arg0), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
   gSPPerspNormalize(entry++, D_hd_code_8035807C);
-  gSPMatrix(entry++, (s32)arg1 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-  gSPVertex(entry++, (s32)vertices & 0x1FFFFFFF, 8, 0);
+  gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(arg1), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+  gSPVertex(entry++, VIRTUAL_TO_PHYSICAL(vertices), 8, 0);
   gSP1Triangle(entry++, 0, 1, 4, 0);
   gSP1Triangle(entry++, 1, 4, 5, 0);
   gSP1Triangle(entry++, 0, 3, 4, 0);
@@ -2415,7 +2414,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 func_hd_code_8028B240();
                 break;
             case 0x3:
-                if (D_hd_code_802E8F94[levelno].unk0 & 0x81) {
+                if (D_hd_code_802E8F94[g_currentLevel].unk0 & 0x81) {
                     func_hd_code_80275270(0x2000, 0.5f);
                 } else {
                     func_hd_code_80275270(0x20000000, 0.5f);
@@ -2483,7 +2482,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
             break;
         case 0x40:
         case 0x400:
-            if (((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
+            if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) != 0) {
                 if ((*arg0 == 0x18) || (*arg0 == 0x22) || (*arg0 == 0xFFFF)) {
                     D_hd_code_80364A98 = 0x08000000;
                 } else {
@@ -2554,12 +2553,12 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     func_hd_code_802507C8(&arg0->projection2, &arg0->lookAt, &arg0->unk180);
 
     gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358050[D_hd_code_8035805C]);
-    entry = func_hd_code_80271FD0(entry, arg0, levelno, D_hd_code_80364452, (s32) D_hd_code_80364454, &sp180);
+    entry = func_hd_code_80271FD0(entry, arg0, g_currentLevel, D_hd_code_80364452, (s32) D_hd_code_80364454, &sp180);
 
     gDPPipeSync(entry++);
     gDPSetCycleType(entry++, G_CYC_FILL);
 
-    switch(levelno) {
+    switch(g_currentLevel) {
         case 0xD:
         case 0xE:
         case 0x10:
@@ -2756,7 +2755,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
         func_hd_code_80275478(arg0, &entry, D_hd_code_80364A90 & 0x100 || D_hd_code_8036BB18 == 0x4D || D_hd_code_8036BB18 == 0x49);
     }
     if ((D_hd_code_80364A98 == 0) && (areWeFading() == 0)) {
-        if (!(D_hd_code_80364A90 & 0x200000100400230C) && ((u32) ((u32) (((u32) sc.unk803156C4 % 50U) * 0x3C) / 60U) >= 0x15U) && (D_hd_code_8036BB1C == 1) && ((!(D_hd_code_80364A90 & 2)) || ((D_hd_code_802E8BEC != 0) && ((D_hd_code_80366A12 == 3) || (D_hd_code_802E8BEC == 1)))) && ((D_hd_code_80364A90 != 0x100000000000) || (D_hd_code_803A6B04 != 0)) && ((!(D_hd_code_80364A90 & 0x1801)) || (players[playerNumber].unk91 != 0)) && (levelno != 0x2F)) {
+        if (!(D_hd_code_80364A90 & 0x200000100400230C) && ((u32) ((u32) (((u32) sc.unk803156C4 % 50U) * 0x3C) / 60U) >= 0x15U) && (D_hd_code_8036BB1C == 1) && ((!(D_hd_code_80364A90 & 2)) || ((D_hd_code_802E8BEC != 0) && ((D_hd_code_80366A12 == 3) || (D_hd_code_802E8BEC == 1)))) && ((D_hd_code_80364A90 != 0x100000000000) || (D_hd_code_803A6B04 != 0)) && ((!(D_hd_code_80364A90 & 0x1801)) || (players[playerNumber].unk91 != 0)) && (g_currentLevel != 0x2F)) {
             func_hd_code_80259CCC(arg0, "PRESS START", NULL, 1, 0, 0x5C, 0xC4, 0x1A, 0x1A, 1, 0xFF, 0xFF, 0xFF, 0xFF);
         }
         if ((u32) ((u32) (((u32) sc.unk803156C4 % 40U) * 60) / 60U) >= 16U) {
@@ -2775,7 +2774,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
             }
         }
     }
-    if (( (D_hd_code_80364A90 & 0x440) || (levelno == 0x26)) && (D_hd_code_8036BB1C == 1) && (areWeFading() == 0)) {
+    if (( (D_hd_code_80364A90 & 0x440) || (g_currentLevel == 0x26)) && (D_hd_code_8036BB1C == 1) && (areWeFading() == 0)) {
         if (( (D_hd_code_80364A90 & 0x440)) && (D_hd_code_80364AA8 != 1)) {
             func_hd_code_80274B40(&entry, arg0, D_hd_code_80365580, 0x108, 0x12);
         } else {
@@ -2791,8 +2790,8 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     if ((D_hd_code_803643DB != 0) && (D_hd_code_80364A90 == 4)) {
         func_hd_code_80282C80(&entry, arg0, D_hd_code_803643E0, D_hd_code_803643E4, D_hd_code_803643E8, D_hd_code_803EF6DC, D_hd_code_803EF6E0, D_hd_code_803EF6E4);
     }
-    if ((D_hd_code_802E8F94[levelno].unk0 & 0x81) && (D_hd_code_80364A90 == 4) ) {
-        if (levelno != 0x32 || ((players[playerNumber].unk18[0x32] > 0 && players[playerNumber].unk18[0x32] < 6) ? 1 : 0)) {
+    if ((D_hd_code_802E8F94[g_currentLevel].unk0 & 0x81) && (D_hd_code_80364A90 == 4) ) {
+        if (g_currentLevel != 0x32 || ((players[playerNumber].unk18[0x32] > 0 && players[playerNumber].unk18[0x32] < 6) ? 1 : 0)) {
             func_hd_code_8028376C(&entry, arg0, D_hd_code_8035805C, D_hd_code_803643E0, D_hd_code_803643E8, D_hd_code_803EF6DC, D_hd_code_803EF6E4);
         }
     }
@@ -3044,12 +3043,12 @@ void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
     u8 sp5D;
 
     entry = *arg0;
-    
+
     sp5D = D_hd_code_803649E8 == 0 && (D_hd_code_803649EC != 0 || D_hd_code_80364A90 & 0x1801);
     sp60 = 0;
     while (&D_hd_code_80364460[sp60] != D_hd_code_803649D0) {
         if (((D_hd_code_80364460[sp60].unk5C != 0) || (sp5D != 0)) && ((D_hd_code_80364460[sp60].unk5C != 0xFF) || (D_hd_code_803EF6FF == 0)) && ((D_hd_code_80364460[sp60].unk5C == 0xFD) || (D_hd_code_80364A84 == 0) || (D_hd_code_80364AC1 == 0))) {
-            gSPSegment(entry++, 0x06, osVirtualToPhysical(D_hd_code_80364460[sp60].unk0));               
+            gSPSegment(entry++, 0x06, osVirtualToPhysical(D_hd_code_80364460[sp60].unk0));
             if (((D_hd_code_80364A90 & 0x1801)) && (((D_hd_code_80364460[sp60].unk5C == 0xFE)) || (D_hd_code_80364460[sp60].unk5C == 0))) {
                 sp5E = D_hd_code_8035805C;
             } else {
@@ -3298,7 +3297,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     spF0 = 0.95f;
     spEC = 0.97f;
     spE8 = 0.95f;
-    if ( (D_hd_code_80364A90 == 0x40) && (levelno == 0x3B)) {
+    if ( (D_hd_code_80364A90 == 0x40) && (g_currentLevel == 0x3B)) {
         spFC = 1.0f;
         spF8 = 1.0f;
         spF4 = 1.0f;
@@ -3661,7 +3660,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             } else {
                 D_hd_code_803643EC = (D_hd_code_803EF6DC + spD8 + 0xFA0) << 11;
                 D_hd_code_803643F0 = (D_hd_code_803EF6E0 + 0x960) << 11;
-                if (levelno == 0) {
+                if (g_currentLevel == 0) {
                     D_hd_code_803643F0 = D_hd_code_803643F0 + 0x5DC000;
                 }
                 D_hd_code_803643F4 = ((D_hd_code_803EF6E4 + spD4) - 0xFA0) << 11;
@@ -3680,7 +3679,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             } else {
                 D_hd_code_803643EC = ((D_hd_code_803EF6DC + spD8) - 0xFA0) << 11;
                 D_hd_code_803643F0 = (D_hd_code_803EF6E0 + 0x960) << 11;
-                if (levelno == 0) {
+                if (g_currentLevel == 0) {
                     D_hd_code_803643F0 = D_hd_code_803643F0 + 0x5DC000;
                 }
                 D_hd_code_803643F4 = (D_hd_code_803EF6E4 + spD4 + 0xFA0) << 11;
@@ -3874,7 +3873,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     }
 
 
-    if ((D_hd_code_803643D6 != 0) && (levelno == 0x31)) {
+    if ((D_hd_code_803643D6 != 0) && (g_currentLevel == 0x31)) {
         D_hd_code_803643EC = (D_hd_code_803EF6DC + spD8 + 0x3E80) << 11;
         D_hd_code_803643F0 = (D_hd_code_803EF6E0 + 0x3A98) << 11;
         D_hd_code_803643F4 = ((D_hd_code_803EF6E4 + spD4) - 0xBB8) << 11;
@@ -3892,7 +3891,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         D_hd_code_8036507C = (f32) (D_hd_code_803FCD4C + 0x7D0) / 32.0f;
         D_hd_code_80365080 = D_hd_code_803FCD50 / 32.0f;
     }
-    if ( (D_hd_code_80364A90 == 0x40) && (levelno == 0x3B)) {
+    if ( (D_hd_code_80364A90 == 0x40) && (g_currentLevel == 0x3B)) {
         D_hd_code_803643EC = (D_hd_code_803643E0 + 0x1900) << 11;
         D_hd_code_803643F0 = (D_hd_code_803643E4 + 0x3070) << 11;
         D_hd_code_803643F4 = (D_hd_code_803643E8 - 0x1900) << 11;
@@ -3900,11 +3899,11 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         D_hd_code_8036507C = (f32) D_hd_code_803643E4 / 32.0f;
         D_hd_code_80365080 = (f32) D_hd_code_803643E8 / 32.0f;
     }
-    if (((D_hd_code_80364A90 & 0x2000000000002104) ) && (D_hd_code_8036B8B0 == 0) && (sp95 == 0) && ((D_hd_code_80364A90 != 0x100)) && (levelno != 0x23) && (D_hd_code_80364A85 == 0)) {
+    if (((D_hd_code_80364A90 & 0x2000000000002104) ) && (D_hd_code_8036B8B0 == 0) && (sp95 == 0) && ((D_hd_code_80364A90 != 0x100)) && (g_currentLevel != 0x23) && (D_hd_code_80364A85 == 0)) {
         sp70 = (s32) ((f64) D_hd_code_80365078 * 65536.0);
         sp6C = (s32) ((f64) D_hd_code_8036507C * 65536.0);
         sp68 = (s32) ((f64) D_hd_code_80365080 * 65536.0);
-        if ((levelno == 0x10) && (8718.0f < D_hd_code_80365078) && (D_hd_code_80365078 < 8919.0f) && (9051.0f < D_hd_code_80365080) && (D_hd_code_80365080 < 9251.0f)) {
+        if ((g_currentLevel == 0x10) && (8718.0f < D_hd_code_80365078) && (D_hd_code_80365078 < 8919.0f) && (9051.0f < D_hd_code_80365080) && (D_hd_code_80365080 < 9251.0f)) {
             D_hd_code_802E8BE0 = 1.5f;
             spF8 = 0.1f;
         }
@@ -4270,7 +4269,7 @@ u8 func_hd_code_80255628(void) {
   if (((D_hd_code_80364A90 == 0x100000000000) ) || ((D_hd_code_80364A90 == 2) )) {
     sp37 = 1;
   } else {
-    switch (levelno) {                   /* irregular */
+    switch (g_currentLevel) {                   /* irregular */
       case 0x4:
         if ((func_hd_code_802AC4C4((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, 0xE56, 0x8EC, 0xBB8, 0x6A4, 0x1068, 0x1F4) != 0) || (func_hd_code_802AC4C4((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, 0xE56, 0x8EC, 0x1068, 0x1F4, 0x1324, 0x4B0) != 0)) {
           sp37 = 1;
@@ -4405,18 +4404,17 @@ void func_hd_code_80255D34(void) {
 // block to its home, reset the level bump allocator (to 0x8004B400) and
 // reserve the controller-input/ghost buffers, reset the shadow texture list,
 // clear all mission flags, reset HUD sprites and menu windows.
-// Proposed name: PrepareStateTransition
-void func_hd_code_80255DC8(void) {
+void hdPrepareStateTransition(void) {
     s32 sp2C;
     s32 pad;
     s32 sp24;
-    Gfx* sp20;
+    u8* sp20;
 
     sp24 = (s32)&D_788000 - (s32)&D_787F40;
     osViBlack(TRUE);
     D_hd_code_80364A70 = func_hd_code_80261A44(D_hd_code_80364A98);
     osWritebackDCacheAll();
-    osInvalDCache(0x80000000, 0x400000);
+    osInvalDCache((void*)0x80000000, 0x400000);
     D_hd_code_803649F4 = 0;
     D_hd_code_80358068 = 0;
     D_hd_code_80358064 = 0;
@@ -4428,19 +4426,19 @@ void func_hd_code_80255DC8(void) {
     func_hd_code_8028AE88();
     func_hd_code_8028B720();
     D_hd_code_8035806C = &D_hd_code_803FF600;
-    InitiateDma(&D_787F40, &D_hd_code_803FF600, &sp24, 0xA, 0, 2);
+    INITIATE_DMA(&D_787F40, &D_hd_code_803FF600, &sp24, 0xA, 0, 2);
     sp2C = ((s32)&D_788000 - (s32)&D_787F40) + (s32)&D_hd_code_803FF600;
     rmonPrintf("Static end = 0x%x, space=0x%x (%d) bytes\n", sp2C, 0x80400000 - (s32)sp2C, 0x80400000 - (s32)sp2C);
     D_hd_code_80358078 = 0;
     func_hd_code_802558C8(D_hd_code_803156F8[D_hd_code_8035805C].dp, &D_hd_code_80358078);
     func_hd_code_802559F8(D_hd_code_803156F8[D_hd_code_8035805C].dp, &D_hd_code_80358078);
-    D_hd_code_80358070 = (u8*)0x8004B400;
-    func_hd_code_80257490(&D_hd_code_80358070, 0x10);
-    D_hd_code_8036E694 = D_hd_code_80358070;
-    D_hd_code_80358070 += 0x1400 * 8;
-    if ((D_hd_code_802E8F94[levelno].unk0 == 2) && !(D_hd_code_80364A98 & 0x0000100000000002)) {
+    g_heap = (u8*)VRAM_HEAP_START;
+    hdAlignPointer(&g_heap, 0x10);
+    g_gfxTaskOutputBuffer = (Gfx*)g_heap;
+    g_heap += 0x1400 * 8;
+    if ((D_hd_code_802E8F94[g_currentLevel].unk0 == 2) && !(D_hd_code_80364A98 & 0x0000100000000002)) {
         rmonPrintf("Allocating ghost buffer memory\n");
-        D_hd_code_80358070 += 0x4000 * 8;
+        g_heap += 0x4000 * 8;
     }
     D_hd_code_803B9888 = 0;
     func_hd_code_802A0700();
@@ -4459,14 +4457,14 @@ void func_hd_code_80255DC8(void) {
     if (D_hd_code_80364A98 & 0xC9FD8FE7FBFFC0B0) {
         func_hd_code_8028B3E0();
     }
-    func_hd_code_80297530(levelno);
+    func_hd_code_80297530(g_currentLevel);
     func_hd_code_80272C50();
-    if ((D_hd_code_80364A98 == 0x40000000000)) {
-        func_801F7850();
+    if (D_hd_code_80364A98 == 0x40000000000) {
+        func_hd_front_end_801F7850();
     }
-    sp20 = D_hd_code_80358070;
+    sp20 = g_heap;
     func_hd_code_8026B118(0);
-    rmonPrintf("Yoshi windows allocated %d bytes, %x\n", (u32)D_hd_code_80358070 - (u32)sp20, D_hd_code_80358070);
+    rmonPrintf("Yoshi windows allocated %d bytes, %x\n", (u32)g_heap - (u32)sp20, g_heap);
     D_hd_code_803649D0 = D_hd_code_80364460;
     func_hd_code_8028A42C();
     func_hd_code_802592F0();
@@ -4539,251 +4537,251 @@ extern u8 worldtextures_ROM_START;
 
 // DMA the level data blob for level arg0 into arg1, returning its size in
 // *arg2 (the per-level ROM address ranges come from the extern table above)
-void LoadLevel(u32 arg0, void* arg1, s32* arg2) {
-    u8* sp24;
+void LoadLevel(u32 level, void* arg1, s32* arg2) {
+    u8* levelRomPosition;
 
-    switch (arg0) {
+    switch (level) {
     case 0x1:
-        sp24 = &lagp_ROM_START;
+        levelRomPosition = &lagp_ROM_START;
         *arg2 = &chimp_ROM_START - &lagp_ROM_START;
         break;
     case 0x0:
-        sp24 = &chimp_ROM_START;
+        levelRomPosition = &chimp_ROM_START;
         *arg2 = &valley_ROM_START - &chimp_ROM_START;
         break;
     case 0x2:
-        sp24 = &valley_ROM_START;
+        levelRomPosition = &valley_ROM_START;
         *arg2 = &fact_ROM_START - &valley_ROM_START;
         break;
     case 0x3:
-        sp24 = &fact_ROM_START;
+        levelRomPosition = &fact_ROM_START;
         *arg2 = &dip_ROM_START - &fact_ROM_START;
         break;
     case 0x4:
-        sp24 = &dip_ROM_START;
+        levelRomPosition = &dip_ROM_START;
         *arg2 = &beetle_ROM_START - &dip_ROM_START;
         break;
     case 0x5:
-        sp24 = &beetle_ROM_START;
+        levelRomPosition = &beetle_ROM_START;
         *arg2 = &bonus1_ROM_START - &beetle_ROM_START;
         break;
     case 0x6:
-        sp24 = &bonus1_ROM_START;
+        levelRomPosition = &bonus1_ROM_START;
         *arg2 = &bonus2_ROM_START - &bonus1_ROM_START;
         break;
     case 0x7:
-        sp24 = &bonus2_ROM_START;
+        levelRomPosition = &bonus2_ROM_START;
         *arg2 = &bonus3_ROM_START - &bonus2_ROM_START;
         break;
     case 0x8:
-        sp24 = &bonus3_ROM_START;
+        levelRomPosition = &bonus3_ROM_START;
         *arg2 = &level9_ROM_START - &bonus3_ROM_START;
         break;
     case 0x9:
-        sp24 = &level9_ROM_START;
+        levelRomPosition = &level9_ROM_START;
         *arg2 = &level10_ROM_START - &level9_ROM_START;
         break;
     case 0xA:
-        sp24 = &level10_ROM_START;
+        levelRomPosition = &level10_ROM_START;
         *arg2 = &level11_ROM_START - &level10_ROM_START;
         break;
     case 0xB:
-        sp24 = &level11_ROM_START;
+        levelRomPosition = &level11_ROM_START;
         *arg2 = &level12_ROM_START - &level11_ROM_START;
         break;
     case 0xC:
-        sp24 = &level12_ROM_START;
+        levelRomPosition = &level12_ROM_START;
         *arg2 = &level13_ROM_START - &level12_ROM_START;
         break;
     case 0xD:
-        sp24 = &level13_ROM_START;
+        levelRomPosition = &level13_ROM_START;
         *arg2 = &level14_ROM_START - &level13_ROM_START;
         break;
     case 0xE:
-        sp24 = &level14_ROM_START;
+        levelRomPosition = &level14_ROM_START;
         *arg2 = &level15_ROM_START - &level14_ROM_START;
         break;
     case 0xF:
-        sp24 = &level15_ROM_START;
+        levelRomPosition = &level15_ROM_START;
         *arg2 = &level16_ROM_START - &level15_ROM_START;
         break;
     case 0x10:
-        sp24 = &level16_ROM_START;
+        levelRomPosition = &level16_ROM_START;
         *arg2 = &level17_ROM_START - &level16_ROM_START;
         break;
     case 0x11:
-        sp24 = &level17_ROM_START;
+        levelRomPosition = &level17_ROM_START;
         *arg2 = &level18_ROM_START - &level17_ROM_START;
         break;
     case 0x12:
-        sp24 = &level18_ROM_START;
+        levelRomPosition = &level18_ROM_START;
         *arg2 = &level19_ROM_START - &level18_ROM_START;
         break;
     case 0x13:
-        sp24 = &level19_ROM_START;
+        levelRomPosition = &level19_ROM_START;
         *arg2 = &level20_ROM_START - &level19_ROM_START;
         break;
     case 0x14:
-        sp24 = &level20_ROM_START;
+        levelRomPosition = &level20_ROM_START;
         *arg2 = &level21_ROM_START - &level20_ROM_START;
         break;
     case 0x15:
-        sp24 = &level21_ROM_START;
+        levelRomPosition = &level21_ROM_START;
         *arg2 = &level22_ROM_START - &level21_ROM_START;
         break;
     case 0x16:
-        sp24 = &level22_ROM_START;
+        levelRomPosition = &level22_ROM_START;
         *arg2 = &level23_ROM_START - &level22_ROM_START;
         break;
     case 0x17:
-        sp24 = &level23_ROM_START;
+        levelRomPosition = &level23_ROM_START;
         *arg2 = &level24_ROM_START - &level23_ROM_START;
         break;
     case 0x18:
-        sp24 = &level24_ROM_START;
+        levelRomPosition = &level24_ROM_START;
         *arg2 = &level25_ROM_START - &level24_ROM_START;
         break;
     case 0x19:
-        sp24 = &level25_ROM_START;
+        levelRomPosition = &level25_ROM_START;
         *arg2 = &level26_ROM_START - &level25_ROM_START;
         break;
     case 0x1A:
-        sp24 = &level26_ROM_START;
+        levelRomPosition = &level26_ROM_START;
         *arg2 = &level27_ROM_START - &level26_ROM_START;
         break;
     case 0x1B:
-        sp24 = &level27_ROM_START;
+        levelRomPosition = &level27_ROM_START;
         *arg2 = &level28_ROM_START - &level27_ROM_START;
         break;
     case 0x1C:
-        sp24 = &level28_ROM_START;
+        levelRomPosition = &level28_ROM_START;
         *arg2 = &level29_ROM_START - &level28_ROM_START;
         break;
     case 0x1D:
-        sp24 = &level29_ROM_START;
+        levelRomPosition = &level29_ROM_START;
         *arg2 = &level30_ROM_START - &level29_ROM_START;
         break;
     case 0x1E:
-        sp24 = &level30_ROM_START;
+        levelRomPosition = &level30_ROM_START;
         *arg2 = &level31_ROM_START - &level30_ROM_START;
         break;
     case 0x1F:
-        sp24 = &level31_ROM_START;
+        levelRomPosition = &level31_ROM_START;
         *arg2 = &level32_ROM_START - &level31_ROM_START;
         break;
     case 0x20:
-        sp24 = &level32_ROM_START;
+        levelRomPosition = &level32_ROM_START;
         *arg2 = &level33_ROM_START - &level32_ROM_START;
         break;
     case 0x21:
-        sp24 = &level33_ROM_START;
+        levelRomPosition = &level33_ROM_START;
         *arg2 = &level34_ROM_START - &level33_ROM_START;
         break;
     case 0x22:
-        sp24 = &level34_ROM_START;
+        levelRomPosition = &level34_ROM_START;
         *arg2 = &level35_ROM_START - &level34_ROM_START;
         break;
     case 0x23:
-        sp24 = &level35_ROM_START;
+        levelRomPosition = &level35_ROM_START;
         *arg2 = &level36_ROM_START - &level35_ROM_START;
         break;
     case 0x24:
-        sp24 = &level36_ROM_START;
+        levelRomPosition = &level36_ROM_START;
         *arg2 = &level37_ROM_START - &level36_ROM_START;
         break;
     case 0x25:
-        sp24 = &level37_ROM_START;
+        levelRomPosition = &level37_ROM_START;
         *arg2 = &level38_ROM_START - &level37_ROM_START;
         break;
     case 0x26:
-        sp24 = &level38_ROM_START;
+        levelRomPosition = &level38_ROM_START;
         *arg2 = &level39_ROM_START - &level38_ROM_START;
         break;
     case 0x27:
-        sp24 = &level39_ROM_START;
+        levelRomPosition = &level39_ROM_START;
         *arg2 = &level40_ROM_START - &level39_ROM_START;
         break;
     case 0x28:
-        sp24 = &level40_ROM_START;
+        levelRomPosition = &level40_ROM_START;
         *arg2 = &level41_ROM_START - &level40_ROM_START;
         break;
     case 0x29:
-        sp24 = &level41_ROM_START;
+        levelRomPosition = &level41_ROM_START;
         *arg2 = &level42_ROM_START - &level41_ROM_START;
         break;
     case 0x2A:
-        sp24 = &level42_ROM_START;
+        levelRomPosition = &level42_ROM_START;
         *arg2 = &level43_ROM_START - &level42_ROM_START;
         break;
     case 0x2B:
-        sp24 = &level43_ROM_START;
+        levelRomPosition = &level43_ROM_START;
         *arg2 = &level44_ROM_START - &level43_ROM_START;
         break;
     case 0x2C:
-        sp24 = &level44_ROM_START;
+        levelRomPosition = &level44_ROM_START;
         *arg2 = &level45_ROM_START - &level44_ROM_START;
         break;
     case 0x2D:
-        sp24 = &level45_ROM_START;
+        levelRomPosition = &level45_ROM_START;
         *arg2 = &level46_ROM_START - &level45_ROM_START;
         break;
     case 0x2E:
-        sp24 = &level46_ROM_START;
+        levelRomPosition = &level46_ROM_START;
         *arg2 = &level47_ROM_START - &level46_ROM_START;
         break;
     case 0x2F:
-        sp24 = &level47_ROM_START;
+        levelRomPosition = &level47_ROM_START;
         *arg2 = &level48_ROM_START - &level47_ROM_START;
         break;
     case 0x30:
-        sp24 = &level48_ROM_START;
+        levelRomPosition = &level48_ROM_START;
         *arg2 = &level49_ROM_START - &level48_ROM_START;
         break;
     case 0x31:
-        sp24 = &level49_ROM_START;
+        levelRomPosition = &level49_ROM_START;
         *arg2 = &level50_ROM_START - &level49_ROM_START;
         break;
     case 0x32:
-        sp24 = &level50_ROM_START;
+        levelRomPosition = &level50_ROM_START;
         *arg2 = &level51_ROM_START - &level50_ROM_START;
         break;
     case 0x33:
-        sp24 = &level51_ROM_START;
+        levelRomPosition = &level51_ROM_START;
         *arg2 = &level52_ROM_START - &level51_ROM_START;
         break;
     case 0x34:
-        sp24 = &level52_ROM_START;
+        levelRomPosition = &level52_ROM_START;
         *arg2 = &level53_ROM_START - &level52_ROM_START;
         break;
     case 0x35:
-        sp24 = &level53_ROM_START;
+        levelRomPosition = &level53_ROM_START;
         *arg2 = &level54_ROM_START - &level53_ROM_START;
         break;
     case 0x36:
-        sp24 = &level54_ROM_START;
+        levelRomPosition = &level54_ROM_START;
         *arg2 = &level55_ROM_START - &level54_ROM_START;
         break;
     case 0x37:
-        sp24 = &level55_ROM_START;
+        levelRomPosition = &level55_ROM_START;
         *arg2 = &level56_ROM_START - &level55_ROM_START;
         break;
     case 0x38:
-        sp24 = &level56_ROM_START;
+        levelRomPosition = &level56_ROM_START;
         *arg2 = &level57_ROM_START - &level56_ROM_START;
         break;
     case 0x39:
-        sp24 = &level57_ROM_START;
+        levelRomPosition = &level57_ROM_START;
         *arg2 = &level58_ROM_START - &level57_ROM_START;
         break;
     case 0x3A:
-        sp24 = &level58_ROM_START;
+        levelRomPosition = &level58_ROM_START;
         *arg2 = &level59_ROM_START - &level58_ROM_START;
         break;
     case 0x3B:
-        sp24 = &level59_ROM_START;
+        levelRomPosition = &level59_ROM_START;
         *arg2 = &worldtextures_ROM_START - &level59_ROM_START;
     }
-    InitiateDma(sp24, arg1, arg2, 0xCU, 0xA, 1);
+    INITIATE_DMA(levelRomPosition, arg1, arg2, 0xCU, 0xA, 1);
 }
 
 // Level init ("enter initlevel"). arg0 = optional saved level state buffer
@@ -4795,8 +4793,7 @@ void LoadLevel(u32 arg0, void* arg1, s32* arg2) {
 // mission init (func_hd_code_80262320 in 1D990.c), builds all object
 // shadows, initializes the sky (func_hd_code_802729F0 - note its first
 // argument is the pending game state), and resets camera/popup/money state.
-// Proposed name: InitLevel
-void func_hd_code_80256A34(s32* arg0) {
+void hdInitLevel(s32* pakBuffer) {
     s32 sp4C;
     s32 sp48;
     struct Texture* sp44;
@@ -4812,7 +4809,7 @@ void func_hd_code_80256A34(s32* arg0) {
     D_hd_code_803649E8 = 0;
     D_hd_code_803649EC = 0;
     D_hd_code_803643C8.end = D_hd_code_803643C8.textures;
-    D_hd_code_80364AA8 = (s32)D_hd_code_802E8F94[levelno].unk0;
+    D_hd_code_80364AA8 = (s32)D_hd_code_802E8F94[g_currentLevel].unk0;
     D_hd_code_802E8BE4 = 0;
     D_hd_code_802E8BE8 = 0;
     D_hd_code_803643E0 = 0;
@@ -4829,8 +4826,9 @@ void func_hd_code_80256A34(s32* arg0) {
     D_hd_code_803649EE = 0;
     D_hd_code_80364A84 = 0;
     D_hd_code_80364456 = 0;
+
     if (frontEndPresent) {
-        if (D_hd_code_8039C4B0 != 0) {
+        if (g_pakBusy != 0) {
             rmonPrintf(ASSERT_MESSAGE, "!pakBusy", "hd.c", 0x1042);
         }
         if (D_hd_front_end_80219F58 != 0) {
@@ -4839,8 +4837,10 @@ void func_hd_code_80256A34(s32* arg0) {
         osScRemoveClient(&sc, &D_hd_front_end_80218EE0);
         osDestroyThread(&D_hd_front_end_80218D30);
     }
+
     D_hd_code_8039CA62 = 0;
     D_hd_code_8039CA61 = 0;
+
     if (D_hd_code_80364AA8 == 2 && (D_hd_code_80364A98 == 0x2000)) {
         if (D_hd_code_8039CA60 == 0) {
             func_hd_code_80294E30();
@@ -4848,29 +4848,31 @@ void func_hd_code_80256A34(s32* arg0) {
         func_hd_code_80294E88();
         func_hd_code_80294EB8();
     }
-    LoadLevel(levelno, D_hd_code_80358070, &sp48);
-    D_hd_code_80358074 = D_hd_code_80358070;
-    D_hd_code_80358070 = (Gfx*)((u8*)D_hd_code_80358070 + sp48);
-    func_hd_code_80257490(&D_hd_code_80358070, 0x10);
-    func_hd_code_80285190();
-    func_hd_code_80275430();
-    func_hd_code_802621DC(levelno);
-    func_hd_code_80262238(levelno);
-    func_hd_code_80262150(levelno);
+
+    LoadLevel(g_currentLevel, g_heap, &sp48);
+    D_hd_code_80358074 = (Gfx*)g_heap;
+    g_heap += sp48;
+    hdAlignPointer(&g_heap, 0x10);
+
+    statsLoadLevelStats();
+    targetMarkersReset();
+    func_hd_code_802621DC(g_currentLevel);
+    func_hd_code_80262238(g_currentLevel);
+    func_hd_code_80262150(g_currentLevel);
     D_hd_code_80367BFF = 0;
     func_hd_code_802CE840();
     rmonPrintf("enter initlevel game_mode=%d loop_done=%d\n", func_hd_code_8026F92C(D_hd_code_80364A90), func_hd_code_8026F92C(D_hd_code_80364A98));
-    sp3C = D_hd_code_80358070;
-    func_hd_code_802A1674(D_hd_code_80358074, arg0);
-    rmonPrintf("exit initlevel allocated %d bytes, %x\n", (u32)D_hd_code_80358070 - (u32)sp3C, D_hd_code_80358070);
+    sp3C = g_heap;
+    func_hd_code_802A1674(D_hd_code_80358074, pakBuffer);
+    rmonPrintf("exit initlevel allocated %d bytes, %x\n", (u32)g_heap - (u32)sp3C, g_heap);
     func_hd_code_80257234();
     if (D_hd_code_80364A98 != 2) {
-        if((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0) {
+        if((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) {
             func_hd_code_802CF628();
         }
     }
     func_hd_code_802C1DD0(D_hd_code_80364AA8 == 0x20 || D_hd_code_80364AA8 == 0x80);
-    func_hd_code_80262320(levelno);
+    func_hd_code_80262320(g_currentLevel);
     if (D_hd_code_80364410 != 0) {
         D_hd_code_80364A86 = func_hd_code_80272C5C(&D_hd_code_802E8BF4, 0, 1, 1, 1, 1.0f);
     }
@@ -4886,33 +4888,33 @@ void func_hd_code_80256A34(s32* arg0) {
     }
     func_hd_code_802821D0();
     func_hd_code_80282728();
-    func_hd_code_80281A70(levelno);
-    if (D_hd_code_802E8F94[levelno].unk0 == 1) {
-        func_hd_code_80264C20(arg0);
+    func_hd_code_80281A70(g_currentLevel);
+    if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
+        func_hd_code_80264C20(pakBuffer);
     }
     func_hd_code_80288220();
     func_hd_code_8027BE4C();
     func_hd_code_80292240();
-    func_hd_code_8027E344(levelno);
-    func_hd_code_802807D8(levelno);
-    func_hd_code_80268664(levelno);
+    func_hd_code_8027E344(g_currentLevel);
+    func_hd_code_802807D8(g_currentLevel);
+    func_hd_code_80268664(g_currentLevel);
     func_hd_code_8026A988();
     sp44 = D_hd_code_803643C8.textures;
     while (sp44 != D_hd_code_803643C8.end) {
         sp4C = 0;
         sp43 = 0;
-        do {
+        while (sp43 == 0) {
             if (D_hd_code_80364460[sp4C].unk5C == sp44->unk1022) {
                 sp43 = 1;
             } else {
                 sp4C += 1;
             }
-        } while (sp43 == 0);
+        }
         func_hd_code_80258544(sp44, sp44->unk1004, sp44->unk1010, sp44->unk100C, sp44->unk1000, D_hd_code_80364460[sp4C].unk54, D_hd_code_80364460[sp4C].unk0, D_hd_code_80364460[sp4C].unk4);
         func_hd_code_80285110(0x61F);
         sp44++;
     }
-    func_hd_code_802729F0((s32)D_hd_code_80364A98, levelno);
+    func_hd_code_802729F0((s32)D_hd_code_80364A98, g_currentLevel);
     D_hd_code_80364452 = 0x2000;
     D_hd_code_80364454 = 0x2000;
     D_hd_code_80364456 = 0;
@@ -4946,9 +4948,9 @@ void func_hd_code_80256A34(s32* arg0) {
     if (D_hd_code_803669B4 != 0) {
         func_hd_code_8025BD98();
     }
-    rmonPrintf("Level %d: mem_pool=0x%x, code seg=0x%x, space=%d bytes\n", (s32* ) levelno, D_hd_code_80358070, VRAM_HD_CODE, 0x8021ED00 - (s32)D_hd_code_80358070);
+    rmonPrintf("Level %d: mem_pool=0x%x, code seg=0x%x, space=%d bytes\n", (s32* ) g_currentLevel, g_heap, VRAM_HD_CODE, 0x8021ED00 - (s32)g_heap);
     if (D_hd_code_8039CAB7 != 0) {
-        func_hd_code_802979E0(levelno);
+        func_hd_code_802979E0(g_currentLevel);
     }
     func_hd_code_802A56C4();
     func_hd_code_802A5FA8();
@@ -4963,7 +4965,7 @@ void func_hd_code_80257234(void) {
   s32 spC;
   s32 sp8;
 
-  switch (levelno) {
+  switch (g_currentLevel) {
     case 16:
     case 29:
       sp14 = 0x32;
@@ -5006,27 +5008,26 @@ void func_hd_code_80257234(void) {
       }
       break;
   }
-  D_hd_code_80358030[0] = D_hd_code_80358070;
-  D_hd_code_80358070 += sp14 * 8;
-  D_hd_code_80358038[0] = D_hd_code_80358070;
-  D_hd_code_80358070 += sp10 * 8;
-  D_hd_code_80358040[0] = D_hd_code_80358070;
-  D_hd_code_80358070 += spC * 8;
-  D_hd_code_80358048[0] = D_hd_code_80358070;
-  D_hd_code_80358070 += sp8 * 8;
-  D_hd_code_80358030[1] = D_hd_code_80358070;
-  D_hd_code_80358070 += sp14 * 8;
-  D_hd_code_80358038[1] = D_hd_code_80358070;
-  D_hd_code_80358070 += sp10 * 8;
-  D_hd_code_80358040[1] = D_hd_code_80358070;
-  D_hd_code_80358070 += spC * 8;
-  D_hd_code_80358048[1] = D_hd_code_80358070;
-  D_hd_code_80358070 += sp8 * 8;
+  D_hd_code_80358030[0] = g_heap;
+  g_heap += sp14 * 8;
+  D_hd_code_80358038[0] = g_heap;
+  g_heap += sp10 * 8;
+  D_hd_code_80358040[0] = g_heap;
+  g_heap += spC * 8;
+  D_hd_code_80358048[0] = g_heap;
+  g_heap += sp8 * 8;
+  D_hd_code_80358030[1] = g_heap;
+  g_heap += sp14 * 8;
+  D_hd_code_80358038[1] = g_heap;
+  g_heap += sp10 * 8;
+  D_hd_code_80358040[1] = g_heap;
+  g_heap += spC * 8;
+  D_hd_code_80358048[1] = g_heap;
+  g_heap += sp8 * 8;
 }
 
 // Align a bump-allocator pointer up to an arg1-byte boundary
-// Proposed name: AlignPointer
-void func_hd_code_80257490(u8** arg0, s32 arg1) {
+void hdAlignPointer(u8** arg0, s32 arg1) {
   s32 sp4;
 
   sp4 = (s32) *arg0 % arg1;

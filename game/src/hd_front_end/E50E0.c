@@ -44,11 +44,11 @@ void func_hd_front_end_80201240(s32 arg0) {
   s32 sp20;
 
   sp24 = (s32)&traffictextures_ROM_START - (s32)ambertextures_ROM_START;
-  InitiateDma(ambertextures_ROM_START, D_hd_code_80358070, &sp24, 0xD, 0, 1);
+  INITIATE_DMA(ambertextures_ROM_START, g_heap, &sp24, 0xD, 0, 1);
   for (sp20 = 0; sp20 < 4; sp20++) {
-    D_hd_front_end_8021AB90[sp20] = &D_hd_code_80358070[sp20 * 160 * 120 * 2];
+    D_hd_front_end_8021AB90[sp20] = &g_heap[sp20 * 160 * 120 * 2];
   }
-  D_hd_code_80358070 = &D_hd_code_80358070[sp24];
+  g_heap = &g_heap[sp24];
   D_hd_front_end_8021ABA0 = arg0;
   D_hd_front_end_8021ABA2 = 0;
   D_hd_front_end_8021ABA1 = 0;

@@ -301,8 +301,8 @@ void func_hd_front_end_801F8530(s32 arg0) {
     D_hd_front_end_8021A900 = func_hd_front_end_801F2000();
 
     for (sp38 = 0; sp38 < 2; sp38++) {
-        D_hd_front_end_8021A928[sp38] = D_hd_code_80358070;
-        D_hd_code_80358070 += 0x17000;
+        D_hd_front_end_8021A928[sp38] = g_heap;
+        g_heap += 0x17000;
     }
 
     D_hd_front_end_8021A8F8 = func_hd_front_end_801F2E20();
@@ -397,7 +397,7 @@ void func_hd_front_end_801F8980(void) {
             sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0x1E, NULL);
             D_hd_front_end_8021A924 = 2;
             rmonPrintf("selected level %d\n", D_hd_front_end_8021A905);
-            levelno = D_hd_front_end_8021A905;
+            g_currentLevel = D_hd_front_end_8021A905;
             func_hd_front_end_801ECB18();
             D_hd_front_end_8021AB2E = 0;
         } else {
@@ -409,7 +409,7 @@ void func_hd_front_end_801F8980(void) {
         D_hd_code_80364A87 = 0;
         sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0xDE, NULL);
         func_hd_code_80275390(0x4000000000000000);
-        levelno = D_hd_front_end_8021A905;
+        g_currentLevel = D_hd_front_end_8021A905;
     }
     sp3C = (D_hd_code_80370C2C * D_hd_code_80370C2C) + (D_hd_code_80370C2D * D_hd_code_80370C2D);
     if (sp3C < 0x5DC) {
@@ -457,7 +457,7 @@ void func_hd_front_end_801F8980(void) {
             D_hd_front_end_8021AB2C -= 0x40;
         }
         if (D_hd_front_end_8021A918 <= 300.0) {
-            D_hd_code_80364A98 = func_hd_code_80299FE8(levelno);
+            D_hd_code_80364A98 = func_hd_code_80299FE8(g_currentLevel);
         }
         break;
     default:

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -106,10 +107,9 @@ void func_hd_code_80264C20(s32 arg0) {
   D_hd_code_80368038 = 0x05F5E0FF;
   if (arg0 != 0) {
     D_hd_code_8036EA79 = (u8) D_hd_code_80368040;
-    return;
+  } else {
+    D_hd_code_8036EA79 = 0;
   }
-  D_hd_code_8036EA79 = 0;
-  return;
 }
 
 // Spawn arg5 survivors at (arg0, arg1, arg2) - e.g. out of a destroyed

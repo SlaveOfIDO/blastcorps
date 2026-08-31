@@ -69,13 +69,13 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
     s32 pad;
 
     sp3C = &players[playerNumber];
-    sp38 = &D_hd_code_802E8F94[levelno];
+    sp38 = &D_hd_code_802E8F94[g_currentLevel];
     rmonPrintf("new ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA70, D_hd_code_8036EA74, D_hd_code_8036EA78, D_hd_code_8036EA79, D_hd_code_8036EA7C, D_hd_code_8036EA7A, D_hd_code_8036EA7B);
     rmonPrintf("old ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA60, D_hd_code_8036EA64, D_hd_code_8036EA68, D_hd_code_8036EA69, D_hd_code_8036EA6C, D_hd_code_8036EA6A, D_hd_code_8036EA6B);
     rmonPrintf("res ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA80, D_hd_code_8036EA84, D_hd_code_8036EA88, D_hd_code_8036EA89, D_hd_code_8036EA8C, D_hd_code_8036EA8A, D_hd_code_8036EA8B);
     rmonPrintf("rs2 ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA90, D_hd_code_8036EA94, D_hd_code_8036EA98, D_hd_code_8036EA99, D_hd_code_8036EA9C, D_hd_code_8036EA9A, D_hd_code_8036EA9B);
     rmonPrintf("units %d\n", sp3C->unkA);
-    if (D_hd_code_802E8F94[levelno].unk0 == 1) {
+    if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
         sp34 = func_hd_code_802852EC();
         if (arg2 != 0) {
             if (arg1 != 0) {
@@ -99,15 +99,15 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
         }
         sp33 = D_hd_code_8036EA7A;
     } else {
-        sp33 = func_hd_front_end_801EEDB4(levelno, arg1, arg2);
+        sp33 = func_hd_front_end_801EEDB4(g_currentLevel, arg1, arg2);
     }
-    sprintf(D_hd_code_8036B980, "%s", D_hd_front_end_8020D810[levelno].name);
+    sprintf(D_hd_code_8036B980, "%s", D_hd_front_end_8020D810[g_currentLevel].name);
     *arg0 = 0;
     if ((arg1 != 0) && (arg2 != 0)) {
-        if ((levelno == 0x31) || (levelno == 0x2F) || (levelno == 0x26)) {
+        if ((g_currentLevel == 0x31) || (g_currentLevel == 0x2F) || (g_currentLevel == 0x26)) {
             rmonPrintf(ASSERT_MESSAGE, "!DUMMY_LEVELS(levelno)", "stats.c", 0x5E);
         }
-        if (D_hd_code_802E8F94[levelno].unk0 == 1) {
+        if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
             sp3C->unk14 = D_hd_code_803649F0;
         }
         if (sp3C->unkA < 0x168) {
@@ -121,14 +121,14 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
             *arg0 = 1;
             sp3C->unkC++;
         }
-        if (!(D_hd_code_802E8F94[levelno].unk0 & 0x81)) {
-            sp3C->unk92[levelno] = D_hd_code_8036EA7B;
+        if (!(D_hd_code_802E8F94[g_currentLevel].unk0 & 0x81)) {
+            sp3C->unk92[g_currentLevel] = D_hd_code_8036EA7B;
         }
         D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_8036EA7B]] = D_hd_code_8036EA74;
-        if ((D_hd_code_803643D5 != 0) && (D_hd_code_802E8F94[levelno].unk0 == 1)) {
+        if ((D_hd_code_803643D5 != 0) && (D_hd_code_802E8F94[g_currentLevel].unk0 == 1)) {
             D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[0]] = D_hd_code_8036EA74;
         }
-        sp3C->unk18[levelno] = sp33;
+        sp3C->unk18[g_currentLevel] = sp33;
         func_hd_front_end_801E8DCC(playerNumber);
     }
     return sp33;
@@ -222,14 +222,14 @@ s8 func_hd_front_end_801EF1E0(void) {
   s32 sp8;
   s32 sp4;
 
-  spC = &D_hd_front_end_8020D810[levelno];
+  spC = &D_hd_front_end_8020D810[g_currentLevel];
   if (spC->unk18[0] == -1) {
     return -1;
   }
 
 
   for(sp8 = 0, sp4 = 0; ((spC->unk18[sp8] != -1) && (sp8 < 2)); sp8++) {
-    if (players[playerNumber].unk54[levelno] & (1 << sp8)) {
+    if (players[playerNumber].unk54[g_currentLevel] & (1 << sp8)) {
       sp4++;
     }
   }

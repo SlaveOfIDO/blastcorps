@@ -1,6 +1,7 @@
 #include "common.h"
 #include "functions.h"
 #include "hd.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -500,30 +501,30 @@ void func_hd_code_8027E344(s32 arg0) {
         return;
     }
     D_hd_code_8036DCD4 = 1;
-    D_hd_code_8036DCA0[0] = (Vtx*)D_hd_code_80358070;
-    D_hd_code_80358070 += ((D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk1 + 1) * (D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2 + 1)) * sizeof(Vtx);
-    D_hd_code_8036DCA0[1] = (Vtx*) D_hd_code_80358070;
-    D_hd_code_80358070 += ((D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk1 + 1) * (D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2 + 1)) * sizeof(Vtx);
-    D_hd_code_8036DCA8[0] = (Vtx*)D_hd_code_80358070;
-    D_hd_code_80358070 += 0x12C0;
-    D_hd_code_8036DCA8[1] = (Vtx*)D_hd_code_80358070;
-    D_hd_code_80358070 += 0x12C0;
+    D_hd_code_8036DCA0[0] = (Vtx*)g_heap;
+    g_heap += ((D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk1 + 1) * (D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2 + 1)) * sizeof(Vtx);
+    D_hd_code_8036DCA0[1] = (Vtx*) g_heap;
+    g_heap += ((D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk1 + 1) * (D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2 + 1)) * sizeof(Vtx);
+    D_hd_code_8036DCA8[0] = (Vtx*)g_heap;
+    g_heap += 0x12C0;
+    D_hd_code_8036DCA8[1] = (Vtx*)g_heap;
+    g_heap += 0x12C0;
     sp20 = D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk1 * D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2 * 2 * 8;
 
     sp20 += ((((s32) D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk1 / 8) + 1) * D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk2 * 8);
     sp20 += 0x1C20;
-    D_hd_code_8036DCC8[0] = (Gfx*)D_hd_code_80358070;
-    D_hd_code_80358070 = &D_hd_code_80358070[sp20];
-    D_hd_code_8036DCC8[1] = (Gfx*)D_hd_code_80358070;
-    D_hd_code_80358070 = &D_hd_code_80358070[sp20];
+    D_hd_code_8036DCC8[0] = (Gfx*)g_heap;
+    g_heap = &g_heap[sp20];
+    D_hd_code_8036DCC8[1] = (Gfx*)g_heap;
+    g_heap = &g_heap[sp20];
     D_hd_code_8036DCD7 = D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk31;
     D_hd_code_8036DCD5 = D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk24;
     if (D_hd_code_8036DCD5 != 0) {
-        D_hd_code_8036DCB8[0] = (Vtx*)D_hd_code_80358070;
+        D_hd_code_8036DCB8[0] = (Vtx*)g_heap;
         func_hd_code_802A0CC8(D_hd_code_802FC3F0[D_hd_code_8036DCD6].unk26, 0);
     } else {
         for(sp34 = 0; sp34 < 3; sp34++) {
-            D_hd_code_8036DCB8[sp34] = (Vtx*)D_hd_code_80358070;
+            D_hd_code_8036DCB8[sp34] = (Vtx*)g_heap;
             func_hd_code_802A0CC8(D_hd_code_802FC48C[sp34], 0);
         }
     }
@@ -945,7 +946,7 @@ void func_hd_code_802807D8(u8 arg0) {
 
     if (sp1F != 0) {
         D_hd_code_8036E374 = (s32) D_hd_code_802FC494[D_hd_code_8036E370].unkE;
-        D_hd_code_8036E378 = D_hd_code_80358070;
+        D_hd_code_8036E378 = g_heap;
         func_hd_code_802A0CC8(D_hd_code_802FC494[D_hd_code_8036E370].unk14, 0);
         for(sp34 = 0; sp34 < D_hd_code_8036E374; sp34++) {
             sp2E = func_hd_code_8026A828(D_hd_code_802FC494[D_hd_code_8036E370].unk2, D_hd_code_802FC494[D_hd_code_8036E370].unk6);
@@ -1166,9 +1167,9 @@ void func_hd_code_80281E44(Gfx** gfx) {
 // Load the warning icon texture (asset 0xA98) and reset its state
 // Proposed name: InitWarningIcon
 void func_hd_code_802821D0(void) {
-  D_hd_code_8036E4CC = D_hd_code_80358070;
+  D_hd_code_8036E4CC = g_heap;
   func_hd_code_802A0B00(0xA98U, NULL);
-  D_hd_code_80358070 += 0x800;
+  g_heap += 0x800;
   D_hd_code_8036E4D0 = 0;
   D_hd_code_8036E4D2 = 0;
 }

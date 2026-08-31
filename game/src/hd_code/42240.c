@@ -54,17 +54,17 @@ void func_hd_code_80286A00(void) {
   D_hd_code_80364A68 = 1;
 
   // Load texture
-  D_hd_code_8036EC00 = D_hd_code_80358070;
+  D_hd_code_8036EC00 = g_heap;
   func_hd_code_802A0CC8(0x760, 0);
 
-  D_hd_code_8036EC08 = (Mtx*)D_hd_code_80358070;
-  D_hd_code_80358070 += 2 * sizeof(Mtx);
+  D_hd_code_8036EC08 = (Mtx*)g_heap;
+  g_heap += 2 * sizeof(Mtx);
 
-  D_hd_code_8036EC0C = (Mtx*)D_hd_code_80358070;
-  D_hd_code_80358070 += 0x80;
+  D_hd_code_8036EC0C = (Mtx*)g_heap;
+  g_heap += 0x80;
 
-  D_hd_code_8036EC04 = (Vtx*)D_hd_code_80358070;
-  D_hd_code_80358070 += 8 * sizeof(Vtx);
+  D_hd_code_8036EC04 = (Vtx*)g_heap;
+  g_heap += 8 * sizeof(Vtx);
   D_hd_code_8036EC04[0].v.ob[0] = 0x26;
   D_hd_code_8036EC04[0].v.ob[1] = 0x7B;
   D_hd_code_8036EC04[0].v.ob[2] = -5;
@@ -169,10 +169,10 @@ void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
 // Proposed name: InitCounterA
 void func_hd_code_802873AC(void) {
   D_hd_code_80364A6A = 1;
-  D_hd_code_8036EC14 = D_hd_code_80358070;
+  D_hd_code_8036EC14 = g_heap;
   func_hd_code_802A0CC8(0x996, 0);
-  D_hd_code_8036EC18 = (Vtx* ) D_hd_code_80358070;
-  D_hd_code_80358070 += 4 * sizeof(Vtx);
+  D_hd_code_8036EC18 = (Vtx* ) g_heap;
+  g_heap += 4 * sizeof(Vtx);
 
   D_hd_code_8036EC18[0].v.ob[0] = 0x22;
   D_hd_code_8036EC18[0].v.ob[1] = 0x87;
@@ -254,10 +254,10 @@ void func_hd_code_80287530(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
 void func_hd_code_80287AE4(void) {
   D_hd_code_80364A6C = 1;
 
-  D_hd_code_8036EC20 = D_hd_code_80358070;
+  D_hd_code_8036EC20 = g_heap;
   func_hd_code_802A0CC8(0x998, 0);
-  D_hd_code_8036EC24 = (Vtx* ) D_hd_code_80358070;
-  D_hd_code_80358070 += 4 * sizeof(Vtx);
+  D_hd_code_8036EC24 = (Vtx* ) g_heap;
+  g_heap += 4 * sizeof(Vtx);
 
   D_hd_code_8036EC24[0].v.ob[0] = 0x22;
   D_hd_code_8036EC24[0].v.ob[1] = 0x91;

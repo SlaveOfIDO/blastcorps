@@ -4,6 +4,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "yoshi.h"
 
 // Proposed file name: fade.c (the original name - the assert in
 // func_hd_code_80275270 references "fade.c")
@@ -13,7 +14,7 @@
 // when a state starts, drawn as a full-screen black rectangle.
 
 extern u32 D_hd_code_803156C4;
-extern s32 levelno;
+extern s32 g_currentLevel;
 
 // <data>
 struct S_802FA8B0 D_hd_code_802FA8B0[2] = {
@@ -42,7 +43,7 @@ Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
 
     entry = gfx;
     if (D_hd_code_80358060 == 0) {
-        if ((D_hd_code_80364A90 & 0x4055800100040000) || (((D_hd_code_80364A90 & 0x1801)) && (levelno == 0x32))) {
+        if ((D_hd_code_80364A90 & 0x4055800100040000) || (((D_hd_code_80364A90 & 0x1801)) && (g_currentLevel == 0x32))) {
             D_hd_code_8036C784 = 0xFF;
             if ((D_hd_code_80364A90 & 0x51800100040000)) {
                 D_hd_code_8036C770 = func_hd_code_8026B10C();

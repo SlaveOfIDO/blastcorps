@@ -1,6 +1,7 @@
 #include "common.h"
 #include "functions.h"
 #include "gu/guint.h"
+#include "macros.h"
 #include "snd.h"
 #include "structs.h"
 #include "variables.h"
@@ -29,7 +30,7 @@ u8 D_hd_code_80367729; // push state machine: 1 = waiting to snapshot state, 2 =
 u8 D_hd_code_8036772A; // volume fade in progress flag; proposed name: musicFadeActive
 s32 D_hd_code_8036772C; // saved tempo to restore once player is playing; proposed name: savedTempo
 s8 D_hd_code_80367730; // set when tune stack is at the bottom (nothing pushed); proposed name: tuneStackEmpty
-ALCSPlayer* D_hd_code_80367734; // the compressed MIDI sequence player; proposed name: seqPlayer
+ALCSPlayer* g_musicPlayer; // the compressed MIDI sequence player
 ALBank* D_hd_code_80367738; // SFX instrument bank; proposed name: sfxBank
 ALBank* D_hd_code_8036773C; // music instrument bank; proposed name: musicBank
 s32 D_hd_code_80367740; // saved timer/frame counter (set alongside results music); proposed name: resultsMusicStartFrame
@@ -414,31 +415,33 @@ struct S_802E8EB4 D_hd_code_802E8EB4[5] = {
 // Start playing a tune: toggles the sequence double-buffer, stops the player,
 // DMAs the sequence data into RAM, attaches it to the player and plays it.
 // Volume = per-tune base volume * arg1 * master volume.
-// Proposed name: PlayTune
-void func_hd_code_80260C20(u8 arg0, f32 arg1) {
-  void* sp24;
+void musicPlayTune(u8 sequenceId, f32 sequenceVolume) {
+  u8* sp24;
 
   D_hd_code_802E8D84 ^= 1;
-  alCSPStop(D_hd_code_80367734);
+  alCSPStop(g_musicPlayer);
 
   D_hd_code_8036772A = 0;
-  D_hd_code_8036770C = arg1;
-  D_hd_code_80367708 = arg0;
-  sp24 = D_hd_code_80367514->seqArray[arg0].offset;
+  D_hd_code_8036770C = sequenceVolume;
+  D_hd_code_80367708 = sequenceId;
 
 
-  InitiateDma(sp24, D_hd_code_80367510, &D_hd_code_80367408[arg0], 0U, 0, 0);
+
+  INITIATE_DMA(sp24, D_hd_code_80367510, &D_hd_code_80367408[sequenceId], 0U, 0, 0);
   alCSeqNew(&D_hd_code_80367518[D_hd_code_802E8D84], D_hd_code_80367510);
   alCSPSetSeq(D_hd_code_80367734, &D_hd_code_80367518[D_hd_code_802E8D84]);
   alCSPPlay(D_hd_code_80367734);
   alCSPSetVol(D_hd_code_80367734, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
+  alCSPSetSeq(g_musicPlayer, &D_hd_code_80367518[D_hd_code_802E8D84]);
+  alCSPPlay(g_musicPlayer);
+  alCSPSetVol(g_musicPlayer, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
 }
 
 // Set the master music volume multiplier and apply it immediately
 // Proposed name: SetMusicMasterVolume
 void func_hd_code_80260D7C(f32 arg0) {
   D_hd_code_802E8D88 = arg0;
-  alCSPSetVol(D_hd_code_80367734, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
+  alCSPSetVol(g_musicPlayer, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
 }
 
 // Get the master music volume multiplier
@@ -450,7 +453,7 @@ f32 func_hd_code_80260DF0(void) {
 // Push the current level's jingle tune (from D_hd_code_802E8DC8) onto the tune stack
 // Proposed name: PushLevelJingle
 void func_hd_code_80260DFC(void) {
-  func_hd_code_80260EE0(D_hd_code_802E8DC8[levelno]);
+  func_hd_code_80260EE0(D_hd_code_802E8DC8[g_currentLevel]);
 }
 
 // Save the current timer and tempo, then hard-play the current level's tune
@@ -458,8 +461,8 @@ void func_hd_code_80260DFC(void) {
 // Proposed name: PlayLevelResultsTune
 void func_hd_code_80260E2C(void) {
   D_hd_code_80367740 = (s32) sc.unk803156C4;
-  D_hd_code_8036772C = alCSPGetTempo(D_hd_code_80367734);
-  func_hd_code_80261FB0(D_hd_code_802E8E04[levelno]);
+  D_hd_code_8036772C = alCSPGetTempo(g_musicPlayer);
+  func_hd_code_80261FB0(D_hd_code_802E8E04[g_currentLevel]);
 }
 
 // Save the current timer, then hard-play the current level's tune from the
@@ -467,7 +470,7 @@ void func_hd_code_80260E2C(void) {
 // Proposed name: PlayLevelResultsTuneAlt
 void func_hd_code_80260E80(void) {
   D_hd_code_80367740 = (s32) sc.unk803156C4;
-  func_hd_code_80261FB0(D_hd_code_802E8E40[levelno]);
+  func_hd_code_80261FB0(D_hd_code_802E8E40[g_currentLevel]);
 }
 
 // Wrapper for func_hd_code_80260DFC (push current level's jingle tune)
@@ -507,7 +510,7 @@ void func_hd_code_80260F60(f32 arg0) {
   }
   rmonPrintf("2 pop tune %d\n", D_hd_code_80367400->unk1F0);
   D_hd_code_80367708 = D_hd_code_80367400->unk1F0;
-  alCSPStop(D_hd_code_80367734);
+  alCSPStop(g_musicPlayer);
   D_hd_code_80367728 = 2;
   D_hd_code_80367714 = arg0;
 }
@@ -535,21 +538,21 @@ void func_hd_code_80261068(void) {
 
   switch(D_hd_code_80367728) {
     case 2:
-      if (alCSPGetState(D_hd_code_80367734) == 0) {
-        func_hd_code_80260C20(D_hd_code_80367708, D_hd_code_80367714);
+      if (alCSPGetState(g_musicPlayer) == 0) {
+        musicPlayTune(D_hd_code_80367708, D_hd_code_80367714);
         D_hd_code_80367728 = 1;
       }
       break;
 
     case 1:
       alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp28);
-      if ((alCSPGetState(D_hd_code_80367734) == 1) && (sp28.lastTicks != 0)) {
+      if ((alCSPGetState(g_musicPlayer) == 1) && (sp28.lastTicks != 0)) {
         alCSeqSetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
-        alCSPSetTempo(D_hd_code_80367734, D_hd_code_80367400->unk1EC);
+        alCSPSetTempo(g_musicPlayer, D_hd_code_80367400->unk1EC);
         // Reads 4 channels 4 * 0x10
         for(sp114 = 0; sp114 < 0x40U; sp114++) {
           // Raw data transfer
-          *(((u32*)D_hd_code_80367734->chanState) + sp114) = D_hd_code_80367400->unk0[sp114];
+          *(((u32*)g_musicPlayer->chanState) + sp114) = D_hd_code_80367400->unk0[sp114];
         }
         D_hd_code_80367728 = 0;
         if ((f64) D_hd_code_80367714 != 1.0) {
@@ -568,7 +571,7 @@ void func_hd_code_802611F0(void) {
   ALCSeqMarker sp1C;
 
   alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &sp1C);
-  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alCSPGetState(D_hd_code_80367734) == 0) && (sp1C.lastTicks != 0)) {
+  if ((D_hd_code_80367729 == 0) && (D_hd_code_80367728 == 0) && (alCSPGetState(g_musicPlayer) == 0) && (sp1C.lastTicks != 0)) {
     rmonPrintf("auto popping\n");
     func_hd_code_8026101C();
   }
@@ -584,22 +587,22 @@ void func_hd_code_80261284(void) {
 
   switch (D_hd_code_80367729) {                           /* irregular */
     case 1:
-      if (alCSPGetState(D_hd_code_80367734) == 1) {
+      if (alCSPGetState(g_musicPlayer) == 1) {
         alCSeqGetLoc(&D_hd_code_80367518[D_hd_code_802E8D84], &D_hd_code_80367400->unk0[0x40]);
-        D_hd_code_80367400->unk1EC = alCSPGetTempo(D_hd_code_80367734);
+        D_hd_code_80367400->unk1EC = alCSPGetTempo(g_musicPlayer);
         for(sp24 = 0; sp24 < 0x40U; sp24++) {
-          D_hd_code_80367400->unk0[sp24] = *(((u32*)D_hd_code_80367734->chanState)+sp24);
+          D_hd_code_80367400->unk0[sp24] = *(((u32*)g_musicPlayer->chanState)+sp24);
 
         }
-        alCSPStop(D_hd_code_80367734);
+        alCSPStop(g_musicPlayer);
         D_hd_code_80367400++;
         D_hd_code_80367729 = 2;
         return;
       }
       return;
     case 2:
-      if (alCSPGetState(D_hd_code_80367734) == 0) {
-        func_hd_code_80260C20(D_hd_code_80367708, 1.0f);
+      if (alCSPGetState(g_musicPlayer) == 0) {
+        musicPlayTune(D_hd_code_80367708, 1.0f);
         D_hd_code_80367729 = 0;
       }
       break;
@@ -615,22 +618,22 @@ void func_hd_code_802613C8(void) {
   f32 sp28;
   s16 sp26;
 
-  sp2C = alCSPGetVol(D_hd_code_80367734);
+  sp2C = alCSPGetVol(g_musicPlayer);
   sp28 = D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_802E8D88;
   sp26 = sp2C + (sp28 * D_hd_code_8036770C - sp2C) * 0.075;
   if ((ABS(sp26 - sp28 * D_hd_code_8036770C)) < 10.0f) {
     sp26 = sp28 * D_hd_code_8036770C;
     D_hd_code_8036772A = 0;
   }
-  alCSPSetVol(D_hd_code_80367734, (s32) sp26);
+  alCSPSetVol(g_musicPlayer, (s32) sp26);
 }
 
 // Deferred tempo restore: once the player reaches the playing state, apply the
 // tempo saved in D_hd_code_8036772C
 // Proposed name: RestoreSavedTempo
 void func_hd_code_80261528(void) {
-  if (D_hd_code_80367734->state == 1) {
-    alCSPSetTempo(D_hd_code_80367734, D_hd_code_8036772C);
+  if (g_musicPlayer->state == 1) {
+    alCSPSetTempo(g_musicPlayer, D_hd_code_8036772C);
     D_hd_code_8036772C = 0;
   }
 }
@@ -650,28 +653,8 @@ void func_hd_code_80261570(f32 arg0) {
 // Proposed name: InitAudio
 void func_hd_code_80261588(void) {
     ALSeqpSfxConfig sp84;
-    s32 sp80;
-    s32 sp7C;
-    s32 sp78;
-    ALHeap* sp74;
-    s8 pad73;
-    s8 pad72;
-    s8 pad71;
-    s8 sp70;
-    s32 sp6C;
-    s32 sp68;
-    s32 sp64;
-    s8 pad63;
-    s8 pad62;
-    s8 pad61;
-    s8 sp60;
-    s32 sp5C;
-    ALHeap* sp58;
-    s32 sp54;
-    s32 sp50;
-    s32 sp4C;
-    s32 sp48;
-    s32 sp44;
+    ALSeqpConfig sp68;
+    ALSynConfig sp44;
     ALBankFile* sp40;
     ALBankFile* sp3C;
     s32 sp38;
@@ -684,24 +667,24 @@ void func_hd_code_80261588(void) {
 
     alHeapInit(&D_hd_code_80367718, &D_hd_code_80370C80, 0x2A280);
     sp38 = sp34 = (s32)&snd_unk1_ROM_START - (s32)&snd_bank0_ROM_START;
-    InitiateDma(&snd_bank0_ROM_START, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
+    INITIATE_DMA(&snd_bank0_ROM_START, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
     sp3C = alHeapAlloc(&D_hd_code_80367718, 1, sp38);
-    InitiateDma(&snd_bank0_ROM_START, sp3C, &sp34, 0xDU, 0, 2);
+    INITIATE_DMA(&snd_bank0_ROM_START, sp3C, &sp34, 0xDU, 0, 2);
     alBnkfNew(sp3C, &snd_unk1_ROM_START);
     D_hd_code_8036773C = sp3C->bankArray[0];
     sp38 = sp34 = (s32)&snd_unk2_ROM_START - (s32)&snd_bank1_ROM_START;
 
-    InitiateDma(&snd_bank1_ROM_START, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
+    INITIATE_DMA(&snd_bank1_ROM_START, (void* )0x8004B400, &sp38, 0xDU, 0, 2);
     sp40 = alHeapAlloc(&D_hd_code_80367718, 1, sp38);
-    InitiateDma(&snd_bank1_ROM_START, sp40, &sp34, 0xDU, 0, 2);
+    INITIATE_DMA(&snd_bank1_ROM_START, sp40, &sp34, 0xDU, 0, 2);
     alBnkfNew(sp40, &snd_unk2_ROM_START);
     D_hd_code_80367738 = sp40->bankArray[0];
     D_hd_code_80367514 = alHeapAlloc(&D_hd_code_80367718, 1, 4);
     sp20 = 4;
-    InitiateDma(&snd_seqfile_ROM_START, D_hd_code_80367514, &sp20, 0U, 0, 0);
+    INITIATE_DMA(&snd_seqfile_ROM_START, D_hd_code_80367514, &sp20, 0U, 0, 0);
     sp24 = (D_hd_code_80367514->seqCount * 8) + 4;
     D_hd_code_80367514 = alHeapAlloc(&D_hd_code_80367718, 1, 0x214);
-    InitiateDma(&snd_seqfile_ROM_START, D_hd_code_80367514, &sp24, 0U, 0, 0);
+    INITIATE_DMA(&snd_seqfile_ROM_START, D_hd_code_80367514, &sp24, 0U, 0, 0);
     alSeqFileNew(D_hd_code_80367514, &snd_seqfile_ROM_START);
     D_hd_code_80367510 = alHeapAlloc(&D_hd_code_80367718, 1, 0x21AE);
     for(sp30 = 0; sp30 < 0x42U; sp30++) {
@@ -710,27 +693,28 @@ void func_hd_code_80261588(void) {
             D_hd_code_80367408[sp30]++;
         }
     }
-    // TODO: find matching struct. probably ALSynConfig
-    sp44 = 0;
-    sp48 = 0x18;
-    sp4C = 0x80;
-    sp50 = 1;
-    sp54 = 0;
-    sp60 = 6;
-    sp5C = 0;
-    sp58 = &D_hd_code_80367718;
+
+    sp44.maxVVoices = 0;
+    sp44.maxPVoices = 0x18;
+    sp44.maxUpdates = 0x80;
+    sp44.maxFXbusses = 1;
+    sp44.dmaproc = 0; // amCreateAudioManager overwrites this
+    sp44.fxType = AL_FX_CUSTOM;;
+    sp44.outputRate = 0; // amCreateAudioManager overwrites this
+    sp44.heap = &D_hd_code_80367718;
     amCreateAudioManager(&sp44, 0xC);
-    // TODO: find matching struct
-    sp68 = 0x18;
-    sp6C = 0x20;
-    sp70 = 0x10;
-    sp74 = &D_hd_code_80367718;
-    sp78 = 0;
-    sp7C = 0;
-    sp80 = 0;
-    D_hd_code_80367734 = alHeapAlloc(&D_hd_code_80367718, 1, 0x7C);
-    alCSPNew(D_hd_code_80367734, &sp68);
-    alCSPSetBank(D_hd_code_80367734, D_hd_code_8036773C);
+
+    sp68.maxVoices = 0x18;
+    sp68.maxEvents = 0x20;
+    sp68.maxChannels = 0x10;
+    sp68.heap = &D_hd_code_80367718;
+    sp68.initOsc = NULL;
+    sp68.updateOsc = NULL;
+    sp68.stopOsc = NULL;
+    g_musicPlayer = alHeapAlloc(&D_hd_code_80367718, 1, sizeof(ALCSPlayer));
+    alCSPNew(g_musicPlayer, &sp68);
+
+    alCSPSetBank(g_musicPlayer, D_hd_code_8036773C);
     sp84.maxEvents = 0x40;
     sp84.maybeSndStateCount = 0x20;
     sp84.maybeMaxSounds = 8;
@@ -814,7 +798,7 @@ u8 func_hd_code_80261A44(u64 arg0) {
 
         case 0x4000: // correct
         case 0x80: // correct
-            if (func_hd_code_80264BA4(levelno) == 3) {
+            if (func_hd_code_80264BA4(g_currentLevel) == 3) {
                 sp27 = 0xC;
             } else {
                 sp27 = 0x13;
@@ -824,21 +808,21 @@ u8 func_hd_code_80261A44(u64 arg0) {
             sp27 = 0xF;
             break;
         case 0x2000:
-            if (D_hd_code_802E8F94[levelno].unk0 != 1) {
+            if (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) {
                 func_hd_code_80261570(0.0f);
                 break;
             }
         case 0x4:
-            sp27 = D_hd_code_802E8D8C[levelno];
+            sp27 = D_hd_code_802E8D8C[g_currentLevel];
             sp26 = 1;
             break;
         case 0x20000000:
             sp27 = 0x1D;
             break;
         case 0x100000000000:
-            sp27 = D_hd_code_802E8D8C[levelno];
+            sp27 = D_hd_code_802E8D8C[g_currentLevel];
             sp26 = 1;
-            if (levelno == 0x26) {
+            if (g_currentLevel == 0x26) {
                 D_hd_code_80367710 = 0.7f;
             }
             break;
@@ -900,7 +884,7 @@ void func_hd_code_80261FB0(u8 arg0) {
   D_hd_code_80367729 = 0;
   D_hd_code_80367400 = &D_hd_code_80366C30[0];
   D_hd_code_80367730 = 1;
-  func_hd_code_80260C20(arg0, D_hd_code_80367710);
+  musicPlayTune(arg0, D_hd_code_80367710);
 }
 
 // Reset the tune stack and play a tune at an explicit volume (does not clear
@@ -909,7 +893,7 @@ void func_hd_code_80261FB0(u8 arg0) {
 void func_hd_code_80262008(u8 arg0, f32 arg1) {
   D_hd_code_80367400 = &D_hd_code_80366C30[0];
   D_hd_code_80367730 = 1;
-  func_hd_code_80260C20(arg0, arg1);
+  musicPlayTune(arg0, arg1);
 }
 
 // Get the currently playing tune id

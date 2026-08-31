@@ -62,8 +62,8 @@ void func_hd_code_80297530(u8 arg0) {
     D_hd_code_8039CAB4 = D_hd_code_802E8F38[sp1E].unk6;
     D_hd_code_8039CAB6 = sp1E;
     D_hd_code_8039CAB8 = 0;
-    D_hd_code_8039CAC4 = (Mtx*)D_hd_code_80358070;
-    D_hd_code_80358070 += 2 * sizeof(Mtx);
+    D_hd_code_8039CAC4 = (Mtx*)g_heap;
+    g_heap += 2 * sizeof(Mtx);
     guTranslate(&D_hd_code_8039CAC4[0], 0.0f, 0.0f, 0.0f);
     guTranslate(&D_hd_code_8039CAC4[1], 0.0f, 0.0f, 0.0f);
     return;

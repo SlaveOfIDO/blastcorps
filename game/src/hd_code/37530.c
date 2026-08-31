@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -181,7 +182,7 @@ s32 func_hd_code_8027BCF0(s16 arg0, s16 arg1, s16 arg2) {
   u8 found = 0;
 
   while(index <= 10 && !found) {
-    if (D_hd_code_802FC360[index].unk8 == levelno) {
+    if (D_hd_code_802FC360[index].unk8 == g_currentLevel) {
       found = 1;
     } else {
       index++;

@@ -126,8 +126,8 @@ void func_hd_code_80288220(void) {
 
   D_hd_code_80370B8C = 0;
   D_hd_code_80370B8D = 0;
-  D_hd_code_80370B90 = D_hd_code_80358070;
-  D_hd_code_80358070 += 0x1400;
+  D_hd_code_80370B90 = g_heap;
+  g_heap += 0x1400;
 }
 
 // Start a particle burst of template arg0 at world (arg1, arg2, arg3) with

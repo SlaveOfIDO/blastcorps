@@ -107,7 +107,7 @@ s32 D_hd_code_8039B628;
 s32 D_hd_code_8039B62C;
 OSPfs D_hd_code_8039B630;
 s32 D_hd_code_8039B698[902];
-u8 D_hd_code_8039C4B0;
+u8 g_pakBusy;
 u8 D_hd_code_8039C4B1;
 u16 D_hd_code_8039C4B2;
 OSMesg D_hd_code_8039C4B4;
@@ -176,8 +176,8 @@ void LoadLevelTnt(struct S_Tnt* arg0, s32 arg1) {
         D_hd_code_8039B070[D_hd_code_8039B610].unk28 = 0;
         D_hd_code_8039B070[D_hd_code_8039B610].unk2A = 0;
         D_hd_code_8039B070[D_hd_code_8039B610].unk18 = 1;
-        D_hd_code_8039B070[D_hd_code_8039B610].unk3C = (Vtx*)D_hd_code_80358070;
-        D_hd_code_80358070 += 8 * sizeof(Vtx);
+        D_hd_code_8039B070[D_hd_code_8039B610].unk3C = (Vtx*)g_heap;
+        g_heap += 8 * sizeof(Vtx);
         func_hd_code_8028DA5C(D_hd_code_8039B070[D_hd_code_8039B610].unk3C, D_hd_code_8039B070[D_hd_code_8039B610].unkE);
         D_hd_code_8039B610 += 1;
         arg0++;
@@ -370,7 +370,7 @@ void func_hd_code_8028DF14(u8 arg0) {
                     sp40 = D_hd_code_803643E4 - D_hd_code_8039B618,
                     sp3C = D_hd_code_803643E8 - D_hd_code_8039B61C;
                     D_hd_code_8039B070[sp4C].unk1E = (s16) (s32) (sqrtf((f32) ((sp44 * sp44) + (sp40 * sp40) + (sp3C * sp3C))) + 8.0f);
-                    if ((D_hd_code_8039B070[sp4C].unk1E > D_hd_code_802FDB70[arg0]) && (levelno != 0x22)) {
+                    if ((D_hd_code_8039B070[sp4C].unk1E > D_hd_code_802FDB70[arg0]) && (g_currentLevel != 0x22)) {
                         D_hd_code_8039B070[sp4C].unk1E = D_hd_code_802FDB70[arg0];
                     }
                 } else {
@@ -417,7 +417,7 @@ void func_hd_code_8028DF14(u8 arg0) {
                 func_hd_code_802CE90C(sp4C + 0x100);
             }
             if (D_hd_code_8039B070[sp4C].unk1E > 0) {
-                D_hd_code_8039B070[sp4C].unk1E -= (levelno != 0x2B ? 8 : 4);
+                D_hd_code_8039B070[sp4C].unk1E -= (g_currentLevel != 0x2B ? 8 : 4);
             } else {
                 D_hd_code_8039B070[sp4C].unk1E = 0;
             }

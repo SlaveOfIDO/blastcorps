@@ -39,7 +39,7 @@ void func_hd_front_end_80200714(u8 arg0) {
   u8 sp21;
   u8 sp20;
 
-  D_hd_front_end_8021AB80 = D_hd_code_80358070;
+  D_hd_front_end_8021AB80 = g_heap;
   D_hd_front_end_8021AB84 = arg0;
   switch (arg0) {                                 /* switch 1 */
     case 1:
@@ -65,8 +65,8 @@ void func_hd_front_end_80200714(u8 arg0) {
   }
 
   sp2C = (u32)sp30 - (u32)sp34;
-  InitiateDma((u8*) sp34, D_hd_code_80358070, &sp2C, 0xD, 0, 2);
-  sp28 = (u16*) D_hd_code_80358070;
+  INITIATE_DMA((u8*) sp34, g_heap, &sp2C, 0xD, 0, 2);
+  sp28 = (u16*) g_heap;
   for (sp24 = 0; sp24 < sp2C >> 1; sp24++) {
     sp23 = sp28[sp24] >> 0xB;
     sp22 = (sp28[sp24] >> 6) & 0x1F;
@@ -91,7 +91,7 @@ void func_hd_front_end_80200714(u8 arg0) {
     sp28[sp24] = (sp23 << 0xB) | (sp22 << 6) | (sp21 * 2) | 1;
   }
 
-  D_hd_code_80358070 = &D_hd_code_80358070[sp2C];
+  g_heap = &g_heap[sp2C];
 }
 
 void func_hd_front_end_80200BD4(u8* arg0) {

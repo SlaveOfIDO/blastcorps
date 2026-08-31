@@ -18,11 +18,11 @@
 // cutscene, the vehicle academy, the bonus levels, or the ending. unk90 is a
 // bitmask of academy tests passed, unkA is the player's overall rank/score.
 
-void func_hd_code_80260C20(u8, f32);                     /* extern */
-void func_801F8354(u8);                                /* extern */
+void musicPlayTune(u8, f32);                     /* extern */
+void func_hd_front_end_801F8354(u8);                                /* extern */
 void func_hd_code_802995F0(s32);                         /* extern */
-void func_801ECF5C();                                  /* extern */
-void func_801ED4B8();                                  /* extern */
+void func_hd_front_end_801ECF5C();                                  /* extern */
+void func_hd_front_end_801ED4B8();                                  /* extern */
 
 extern u8 D_hd_code_802FDA70[];
 extern u8 D_hd_code_8036EBA0[];
@@ -51,8 +51,8 @@ void func_hd_code_802860F0(void) {
 
   if ((players[playerNumber].unk91 != 0xD) && (players[playerNumber].unk91 != 8) && (players[playerNumber].unk91 != 1)) {
     D_hd_code_80364A98 = 0x800000000000;
-    func_hd_code_80255DC8();
-    func_80200714(D_hd_code_802FDA60[players[playerNumber].unk91]);
+    hdPrepareStateTransition();
+    func_hd_front_end_80200714(D_hd_code_802FDA60[players[playerNumber].unk91]);
     switch (players[playerNumber].unk91) {                          /* irregular */
       case 4:
         for(sp37 = 0, sp30 = 0; (sp30 < LEVEL_MAX) && (sp37 == 0); sp30++) {
@@ -69,7 +69,7 @@ void func_hd_code_802860F0(void) {
         D_hd_front_end_8020C070[0x52].unkC = &D_hd_code_8036EBA0;
         break;
       case 6:
-        func_801ECC8C();
+        func_hd_front_end_801ECC8C();
         break;
     }
     func_hd_code_8026AF6C((players[playerNumber].unk91 + 0x16) | 0x8000);
@@ -81,7 +81,7 @@ void func_hd_code_802860F0(void) {
 // Proposed name: StartStageCutsceneMusic
 void func_hd_code_802862DC(void) {
   if (D_hd_code_80358060 == 0) {
-    func_hd_code_80260C20(D_hd_code_802FDA70[players[playerNumber].unk91], 1.0f);
+    musicPlayTune(D_hd_code_802FDA70[players[playerNumber].unk91], 1.0f);
   }
 }
 
@@ -102,7 +102,7 @@ void func_hd_code_80286330(void) {
       D_hd_code_80364A98 = 0x100000000000;
       break;
     case 6:
-      if (levelno != 0x32) {
+      if (g_currentLevel != 0x32) {
         rmonPrintf(ASSERT_MESSAGE, "levelno==50", "academy.c", 0x8C);
       }
       if (players[playerNumber].levelno != LEVEL_SHUTTLE_CLEAR) {
@@ -113,7 +113,7 @@ void func_hd_code_80286330(void) {
       }
       D_hd_code_80364A98 = 0x800;
       D_hd_code_803643D5 = 0;
-      func_801F8354(playerNumber);
+      func_hd_front_end_801F8354(playerNumber);
       break;
     case 7:
       func_hd_code_802995F0(1);
@@ -204,7 +204,7 @@ s32 func_hd_code_8028653C(void) {
             if (((s32) sp30->unkA >= 0xEA) || (D_hd_code_802FA26C != 0)) {
                 func_hd_code_80261570(0.0f);
                 func_hd_code_8028B3E0();
-                func_801ECF5C();
+                func_hd_front_end_801ECF5C();
                 sp2E = 1;
             } else {
                 sp2F = 0;
@@ -218,7 +218,7 @@ s32 func_hd_code_8028653C(void) {
             } else {
                 func_hd_code_80261570(0.0f);
                 func_hd_code_8028B3E0();
-                func_801ED4B8();
+                func_hd_front_end_801ED4B8();
             }
             break;
         case 12:

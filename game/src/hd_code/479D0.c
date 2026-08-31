@@ -82,8 +82,8 @@ void LoadLevelAmmo(struct S_AmmoData* arg0, s32 arg1) {
     D_hd_code_8039AF00[D_hd_code_8039B068].unk8 = 0xFF;
     D_hd_code_8039AF00[D_hd_code_8039B068].unkC = func_hd_code_802A0CC8(D_hd_code_802FDB40[D_hd_code_8039AF00[D_hd_code_8039B068].unk6].unkC, 0);
     D_hd_code_8039AF00[D_hd_code_8039B068].unk10 = func_hd_code_802A0CC8(D_hd_code_802FDB40[D_hd_code_8039AF00[D_hd_code_8039B068].unk6].unkE, 0);
-    D_hd_code_8039AF00[D_hd_code_8039B068].unk14 = (Vtx*)D_hd_code_80358070;
-    D_hd_code_80358070 += 0x80;
+    D_hd_code_8039AF00[D_hd_code_8039B068].unk14 = (Vtx*)g_heap;
+    g_heap += 0x80;
     func_hd_code_8028C41C(D_hd_code_8039AF00[D_hd_code_8039B068].unk14,
                           D_hd_code_8039AF00[D_hd_code_8039B068].unk6,
                           D_hd_code_8039AF00[D_hd_code_8039B068].unk0,

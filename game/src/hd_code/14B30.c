@@ -46,8 +46,8 @@ void func_hd_code_802592F0() {
   if (D_hd_code_80364A98 & 0xC9FD8FE7DBFF8080 ||
       D_hd_code_80364A98 == 0x100000000000 ||
       D_hd_code_80364A98 == 2 ||
-      levelno == 0x28 ||
-      levelno == 0x32) {
+      g_currentLevel == 0x28 ||
+      g_currentLevel == 0x32) {
     maxCharacters = 0x200;
       } else if (D_hd_code_80364A98 == 0x40) {
         maxCharacters = 0x9C;
@@ -56,12 +56,12 @@ void func_hd_code_802592F0() {
       }
 
   for(sp1C = 0; sp1C < 2; sp1C++) {
-    D_hd_code_80365348[sp1C] = D_hd_code_80358070;
-    D_hd_code_80358070 += (maxCharacters << 4) * sizeof(Gfx*);
+    D_hd_code_80365348[sp1C] = g_heap;
+    g_heap += (maxCharacters << 4) * sizeof(Gfx*);
   }
 
-  D_hd_code_80365340.unk0 = D_hd_code_80358070;
-  D_hd_code_80358070 += maxCharacters * 12;
+  D_hd_code_80365340.unk0 = g_heap;
+  g_heap += maxCharacters * 12;
 
   func_hd_code_8025B070();
 }

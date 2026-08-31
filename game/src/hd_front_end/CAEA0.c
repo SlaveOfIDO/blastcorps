@@ -183,7 +183,7 @@ s32 func_hd_front_end_801E7000(void) {
 
     D_hd_front_end_80211A68 = 0;
     sp9C = 0;
-    sp98 = &D_hd_code_802E8F94[levelno];
+    sp98 = &D_hd_code_802E8F94[g_currentLevel];
     D_hd_front_end_80211A6A = 0;
     sp96 = 0xe73c;
     D_hd_front_end_802153E8 = (s32) D_hd_code_803643D4;
@@ -211,7 +211,7 @@ s32 func_hd_front_end_801E7000(void) {
         case 0x4000:
             break;
         case 0x80:
-            sp8C = sp40[players[playerNumber].unk92[levelno]];
+            sp8C = sp40[players[playerNumber].unk92[g_currentLevel]];
             break;
         case 0x08000000:
         case 0x100:

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 #include <PR/gbi.h>
@@ -197,8 +198,8 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
 // and the work buffer from the level allocator
 // Proposed name: InitTitleBuffers
 void func_hd_code_8025CE74(void) {
-  D_hd_code_80366BA0 = (Vtx**)D_hd_code_80358070;
-  D_hd_code_80358070 += 0x40;
+  D_hd_code_80366BA0 = (Vtx**)g_heap;
+  g_heap += 0x40;
   D_hd_code_80366BA0->v[0].v.ob[0] = 0;
   D_hd_code_80366BA0->v[0].v.ob[1] = 0;
   D_hd_code_80366BA0->v[0].v.ob[2] = 0;
@@ -243,8 +244,8 @@ void func_hd_code_8025CE74(void) {
   D_hd_code_80366BA0->v[3].v.cn[2] = 0;
   D_hd_code_80366BA0->v[3].v.cn[3] = 0;
 
-  D_hd_code_80366BA4 = (s32) D_hd_code_80358070;
-  D_hd_code_80358070 += 0x780;
+  D_hd_code_80366BA4 = (s32) g_heap;
+  g_heap += 0x780;
 }
 
 // DMA a title texture into level memory: 0 = the logo ("titlelogo_usa"),
@@ -265,9 +266,9 @@ void func_hd_code_8025D0B0(u8 arg0) {
       break;
   }
 
-  InitiateDma(sp34, D_hd_code_80358070, &sp30, 0xCU, 0, 1);
-  D_hd_code_80366BB0[arg0] = (s32) D_hd_code_80358070 & 0x1FFFFFFF;
-  D_hd_code_80358070 = &D_hd_code_80358070[sp30];
+  INITIATE_DMA(sp34, g_heap, &sp30, 0xCU, 0, 1);
+  D_hd_code_80366BB0[arg0] = VIRTUAL_TO_PHYSICAL(g_heap);
+  g_heap = &g_heap[sp30];
 }
 
 // Set up the title screen for the pending game state: attract/title states
@@ -476,9 +477,9 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
     sp24 = *arg0;
     if ((D_hd_code_803643D7 != 0) && (areWeFading() == 0)) {
         if (D_hd_code_80366BC0.unk0 == 0) {
-            func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
+            func_hd_code_802C1DD0(D_hd_code_802E8F94[g_currentLevel].unk0 == 0x20 || D_hd_code_802E8F94[g_currentLevel].unk0 == 0x80);
             D_hd_code_80366BB8 = 0;
-            if ((players[playerNumber].unk18[levelno] > 0 && players[playerNumber].unk18[levelno] < 6)?1:0 != 0) {
+            if ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0 != 0) {
                 sndDeactivateAllSfxByFlag_11();
                 sndDeactivateAllSfxByFlag_3();
                 D_hd_code_80366BC0.unk2 = 5;
@@ -488,7 +489,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                     D_hd_code_80366BC4.unk0 = 1;
                 }
             } else {
-                switch (levelno) {                  /* irregular */
+                switch (g_currentLevel) {                  /* irregular */
                 case 40:
                     sndDeactivateAllSfxByFlag_3();
                     func_hd_code_80260DFC();
@@ -522,7 +523,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 func_hd_code_80278318();
                 func_hd_code_80277EDC(2, 1, 2, func_hd_code_8026205C(3));
             }
-        } else if ((alCSPGetState(D_hd_code_80367734) != 0) && ((D_hd_code_80366BC4.unk0 == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) < 0x1E1U))) {
+        } else if ((alCSPGetState(g_musicPlayer) != 0) && ((D_hd_code_80366BC4.unk0 == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) < 0x1E1U))) {
             if (D_hd_code_80366BC4.unk0 == 0) {
                 if (sc.unk803156C4 - D_hd_code_80366BB8 > D_hd_code_802E8CD0[(D_hd_code_80364AA8 & 0x81)?1:0]) {
                     goto block_32;
@@ -558,8 +559,8 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
     if (D_hd_code_803643D6 != 0) {
         if (D_hd_code_803643D8 == 0) {
             sndDeactivateAllSfxByFlag_1();
-            func_hd_code_802C1DD0(D_hd_code_802E8F94[levelno].unk0 == 0x20 || D_hd_code_802E8F94[levelno].unk0 == 0x80);
-            switch (levelno) {                      /* switch 1; irregular */
+            func_hd_code_802C1DD0(D_hd_code_802E8F94[g_currentLevel].unk0 == 0x20 || D_hd_code_802E8F94[g_currentLevel].unk0 == 0x80);
+            switch (g_currentLevel) {                      /* switch 1; irregular */
             case 49:                                /* switch 1 */
                 sndPlaySfx(D_hd_code_80367738, 0x31U, NULL);
                 func_hd_code_80261570(0.0f);
@@ -584,7 +585,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
         }
         sp5C = sp60 - D_hd_code_80366BB8;
         if (sp5C >= 0xB4U) {
-            switch (levelno) {                      /* switch 2; irregular */
+            switch (g_currentLevel) {                      /* switch 2; irregular */
             case 49:                                /* switch 2 */
                 if (D_hd_code_80366BC4.unk1 == 0) {
                     sndPlaySfx(D_hd_code_80367738, 0x32U, NULL);
@@ -593,7 +594,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 break;
             case 50:                                /* switch 2 */
                 if ((D_hd_code_8036BB1C == 1) && (areWeFading() == 0)) {
-                    if ((((s32)  players[playerNumber].unk18[levelno] > 0) && ((s32) players[playerNumber].unk18[levelno] < 6)?1:0) != 0) {
+                    if ((((s32)  players[playerNumber].unk18[g_currentLevel] > 0) && ((s32) players[playerNumber].unk18[g_currentLevel] < 6)?1:0) != 0) {
                         func_hd_code_80275390(0x08000000);
                     } else {
                         func_hd_code_80275390(0x40);
@@ -630,7 +631,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                         if ((D_hd_code_80364A90 == 0x100000000000)) {
                             D_hd_code_80364A98 = 0x200000000000;
                         } else {
-                            if ((((s32) players[playerNumber].unk18[levelno] > 0) && ((s32)  players[playerNumber].unk18[levelno] < 6))?1:0 != 0) {
+                            if ((((s32) players[playerNumber].unk18[g_currentLevel] > 0) && ((s32)  players[playerNumber].unk18[g_currentLevel] < 6))?1:0 != 0) {
                                 func_hd_code_80275390(0x08000000);
                             } else {
                                 func_hd_code_80275390(0x40);

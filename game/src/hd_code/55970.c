@@ -22,9 +22,9 @@ void func_hd_code_8029A130(void) {
   s32 sp24;
 
   sp24 = (u32)&scientist_ROM_START - (u32)&copyrightLogo_ROM_START;
-  InitiateDma(&copyrightLogo_ROM_START, D_hd_code_80358070, &sp24, 0xCU, 0U, 1U);
-  D_hd_code_803A6B10 = D_hd_code_80358070;
-  D_hd_code_80358070 += sp24;
+  INITIATE_DMA(&copyrightLogo_ROM_START, g_heap, &sp24, 0xCU, 0U, 1U);
+  D_hd_code_803A6B10 = g_heap;
+  g_heap += sp24;
   D_hd_code_803A6B14 = 0;
 }
 

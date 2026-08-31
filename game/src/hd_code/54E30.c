@@ -6,7 +6,7 @@
 #include "yoshi.h"
 
 void func_hd_code_8029A500();
-u64 func_801ECA50(u8);
+u64 func_hd_front_end_801ECA50(u8);
 
 // <bss>
 u64 D_hd_code_803A6AF0;
@@ -126,20 +126,20 @@ void func_hd_code_802995F0(s32 arg0) {
 }
 
 void func_hd_code_80299C0C(void) {
-  levelno = D_hd_code_803A6B02;
+  g_currentLevel = D_hd_code_803A6B02;
 }
 
 void func_hd_code_80299C20(void) {
-  switch (levelno) {
+  switch (g_currentLevel) {
     case 0x2F:
       D_hd_code_802E8BEC = 0;
       D_hd_code_802E8BF0 = 0;
-      func_hd_code_8025B9D0(0, &levelno);
+      func_hd_code_8025B9D0(0, &g_currentLevel);
       break;
     case 0x37:
       D_hd_code_802E8BEC = 9;
       D_hd_code_802E8BF0 = 0;
-      func_hd_code_8025B9D0(9, &levelno);
+      func_hd_code_8025B9D0(9, &g_currentLevel);
       D_hd_code_803643D4 = 5;
       func_hd_code_8026AF6C(0x8041U);
       func_hd_code_80295E50();
@@ -147,7 +147,7 @@ void func_hd_code_80299C20(void) {
     case 0x1C:
       D_hd_code_802E8BEC = 0xA;
       D_hd_code_802E8BF0 = 0;
-      func_hd_code_8025B9D0(0xA, &levelno);
+      func_hd_code_8025B9D0(0xA, &g_currentLevel);
       D_hd_code_803643D4 = 1;
       func_hd_code_8026AF6C(0x8042U);
       func_hd_code_80295E50();
@@ -155,7 +155,7 @@ void func_hd_code_80299C20(void) {
     case 0x35:
       D_hd_code_802E8BEC = 0xB;
       D_hd_code_802E8BF0 = 0;
-      func_hd_code_8025B9D0(0xB, &levelno);
+      func_hd_code_8025B9D0(0xB, &g_currentLevel);
       D_hd_code_803643D4 = 2;
       func_hd_code_8026AF6C(0x8043U);
       func_hd_code_80295E50();
@@ -163,7 +163,7 @@ void func_hd_code_80299C20(void) {
     case 0x7:
       D_hd_code_802E8BEC = 0xC;
       D_hd_code_802E8BF0 = 0;
-      func_hd_code_8025B9D0(0xC, &levelno);
+      func_hd_code_8025B9D0(0xC, &g_currentLevel);
       D_hd_code_803643D4 = 3;
       func_hd_code_8026AF6C(0x8044U);
       func_hd_code_80295E50();
@@ -171,7 +171,7 @@ void func_hd_code_80299C20(void) {
     case 0x13:
       D_hd_code_802E8BEC = 0xD;
       D_hd_code_802E8BF0 = 0;
-      func_hd_code_8025B9D0(0xD, &levelno);
+      func_hd_code_8025B9D0(0xD, &g_currentLevel);
       D_hd_code_803643D4 = 9;
       func_hd_code_8026AF6C(0x8045U);
       func_hd_code_80295E50();
@@ -188,11 +188,11 @@ void func_hd_code_80299C20(void) {
 void func_hd_code_80299E10(s32 arg0) {
   sndDeactivateAllSfxByFlag_1();
 
-  switch (levelno) {
+  switch (g_currentLevel) {
     case 0x26:
     case 0x2F:
     case 0x31:
-      players[playerNumber].unk18[levelno] = 5;
+      players[playerNumber].unk18[g_currentLevel] = 5;
       break;
     case 0x37:
       players[playerNumber].unk92[0x5C] |= 1;
@@ -213,12 +213,12 @@ void func_hd_code_80299E10(s32 arg0) {
   if (arg0 != 0) {
     sndPlaySfx(D_hd_code_80367738, 0x1E, NULL);
     D_hd_code_80364A98 = D_hd_code_803A6AF0;
-    levelno = D_hd_code_803A6B00;
+    g_currentLevel = D_hd_code_803A6B00;
   } else {
     D_hd_code_80364A98 = D_hd_code_803A6AF8;
-    levelno = D_hd_code_803A6B01;
+    g_currentLevel = D_hd_code_803A6B01;
   }
-  rmonPrintf("finishing sequence and going to level %d\n", levelno);
+  rmonPrintf("finishing sequence and going to level %d\n", g_currentLevel);
 }
 
 u64 func_hd_code_80299FE8(u8 arg0) {
@@ -250,7 +250,7 @@ u64 func_hd_code_80299FE8(u8 arg0) {
       func_hd_code_802995F0(9);
       break;
     default:
-      sp28 = func_801ECA50(arg0);
+      sp28 = func_hd_front_end_801ECA50(arg0);
       break;
   }
   rmonPrintf("get loop done for world %d\n", func_hd_code_8026F92C(sp28));

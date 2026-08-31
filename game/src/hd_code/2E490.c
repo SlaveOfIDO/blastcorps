@@ -1,6 +1,7 @@
 #include "aliases.h"
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -62,15 +63,15 @@ u8 func_hd_code_80272C5C(u16* arg0, u16* arg1, u8 arg2, u8 arg3, u8 arg4, f32 ar
   sp2C = 0;
   for(sp38 = sp28; sp38 < arg2 + sp28; sp38++, sp2C += (arg1 != 0) ? 0 : 1) {
     if (arg1 != 0) {
-      func_hd_code_80257490(&D_hd_code_80358070, 0x10);
-      func_hd_code_802A0EE0(arg1[sp38 - sp28], sp3C = D_hd_code_80358070);
-      D_hd_code_80358070 += 0x80;
+      hdAlignPointer(&g_heap, 0x10);
+      func_hd_code_802A0EE0(arg1[sp38 - sp28], sp3C = g_heap);
+      g_heap += 0x80;
     } else {
-      func_hd_code_80257490(&D_hd_code_80358070, 0x10);
+      hdAlignPointer(&g_heap, 0x10);
       sp3C = NULL;
     }
     for(sp34 = 0; sp34 < arg3; sp34++) {
-      D_hd_code_8036BFE0[sp38][sp34] = D_hd_code_80358070;
+      D_hd_code_8036BFE0[sp38][sp34] = g_heap;
       func_hd_code_802A0B00(arg0[arg3 * sp2C + sp34], sp3C);
     }
 
@@ -79,8 +80,8 @@ u8 func_hd_code_80272C5C(u16* arg0, u16* arg1, u8 arg2, u8 arg3, u8 arg4, f32 ar
     if (arg4 & 4) {
       for(sp34 = 0; sp34 < 2; sp34++) {
         for(sp30 = 0; sp30 < 2; sp30++) {
-          D_hd_code_8036C368[sp34][sp38][sp30] = D_hd_code_80358070;
-          D_hd_code_80358070 += 0x80;
+          D_hd_code_8036C368[sp34][sp38][sp30] = g_heap;
+          g_heap += 0x80;
         }
       }
     }

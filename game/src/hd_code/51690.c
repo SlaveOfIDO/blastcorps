@@ -40,13 +40,13 @@ s32 D_hd_code_8039CAAC;
 void func_hd_code_80295E50(void) {
   s32 sp24;
 
-  D_hd_code_8039CA90 = D_hd_code_80358070;
-  D_hd_code_8039CA94 = D_hd_code_80358070 + 0x3200;
+  D_hd_code_8039CA90 = g_heap;
+  D_hd_code_8039CA94 = g_heap + 0x3200;
   D_hd_code_8039CA98 = D_hd_code_8039CA94 + 0xF0;
   D_hd_code_8039CA9C = D_hd_code_8039CA98 + 0x180;
   sp24 = (u32)&attract_ROM_START - (u32)&controllertextures_ROM_START; // controllertextures.raw
-  InitiateDma((u8* ) &controllertextures_ROM_START, D_hd_code_80358070, &sp24, 0xAU, 0U, 1U);
-  D_hd_code_80358070 += sp24;
+  INITIATE_DMA((u8* ) &controllertextures_ROM_START, g_heap, &sp24, 0xAU, 0U, 1U);
+  g_heap += sp24;
   D_hd_code_8039CAA0 = 0;
   D_hd_code_8039CAA2 = 1;
 }

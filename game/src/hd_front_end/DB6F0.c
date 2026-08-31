@@ -59,14 +59,14 @@ void func_hd_front_end_801F7850(void) {
 
     sp7C = &players[playerNumber];
     sp78 = &D_hd_code_802F8BDC[0x16];
-    D_hd_code_8036BB24 = (struct S_8020C070*) D_hd_code_80358070;
-    D_hd_code_80358070 += 0x71C;
+    D_hd_code_8036BB24 = (struct S_8020C070*) g_heap;
+    g_heap += 0x71C;
 
     for (sp6C = 0; sp6C < 4; sp6C++) {
         if ((D_hd_code_80365060[sp6C] == 1) && (saveIt[sp6C] == 0) &&
-            (((players[sp6C].unk18[levelno] > 0) && (players[sp6C].unk18[levelno] < 6))?1:0) != 0) {
+            (((players[sp6C].unk18[g_currentLevel] > 0) && (players[sp6C].unk18[g_currentLevel] < 6))?1:0) != 0) {
             osSendMesg(&D_hd_front_end_80219EF8,
-                       (void*) ((levelno << 8) | 8 | (sp6C << 0x10) | 0x01000000), 1);
+                       (void*) ((g_currentLevel << 8) | 8 | (sp6C << 0x10) | 0x01000000), 1);
             osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
         } else {
             func_hd_front_end_801F8354(sp6C);
@@ -82,14 +82,14 @@ void func_hd_front_end_801F7850(void) {
                 sp7C = &players[sp6C];
                 if ((D_hd_code_80365060[sp6C] == 1) &&
                     (D_hd_code_80364EF0[sp6C][D_hd_code_802E8C44[sp70]] > 0) &&
-                    ((D_hd_code_802E8F94[levelno].unk0 != 0x80) || (sp7C->unk91 >= 0xB))) {
+                    ((D_hd_code_802E8F94[g_currentLevel].unk0 != 0x80) || (sp7C->unk91 >= 0xB))) {
                     func_hd_code_80264A34(sp48, D_hd_code_80364EF0[sp6C][D_hd_code_802E8C44[sp70]], 0);
                     sprintf(D_hd_front_end_80219FD0[(sp68 * 4) + sp6C], "%-7.7s %s", sp7C, sp48);
                     sp74->unkC = D_hd_front_end_80219FD0[(sp68 * 4) + sp6C];
                     sp74->unk10 = NULL;
                     sp74->unk14 = (func_hd_front_end_801EF2BC(
                         D_hd_code_80364EF0[sp6C][D_hd_code_802E8C44[sp70]],
-                        levelno, players[sp6C].unk91) % 5) + 0x12;
+                        g_currentLevel, players[sp6C].unk91) % 5) + 0x12;
                     sp74->unk18 = sp6C;
                 } else {
                     sp74->unkC = NULL;
@@ -132,7 +132,7 @@ void func_hd_front_end_801F7850(void) {
         sp74->unk4 += (sp70 / 4) * 0x64;
     }
 
-    if (D_hd_code_802E8F94[levelno].unk0 == 0x80) {
+    if (D_hd_code_802E8F94[g_currentLevel].unk0 == 0x80) {
         sp74 = &D_hd_code_8036BB24[sp70];
         sp74->unkC = NULL;
         sp74->unk10 = NULL;
@@ -153,7 +153,7 @@ void func_hd_front_end_801F7850(void) {
 }
 
 s32 func_hd_front_end_801F7F74(u8 arg0) {
-  if (D_hd_code_802E8F94[levelno].unk0 == 0x80) {
+  if (D_hd_code_802E8F94[g_currentLevel].unk0 == 0x80) {
     return arg0 == 0;
   }
   return (players[D_hd_code_80364AEA].unk10 & (1 << arg0))?1:0;
@@ -227,7 +227,7 @@ void func_hd_front_end_801F8354(u8 arg0) {
   if (!frontEndPresent) {
     rmonPrintf(ASSERT_MESSAGE, "frontEndPresent", "bestTimes.c", 0x117);
   }
-  if ((players[arg0].unk18[levelno] > 0) && (players[arg0].unk18[levelno] < 6)?1:0) {
+  if ((players[arg0].unk18[g_currentLevel] > 0) && (players[arg0].unk18[g_currentLevel] < 6)?1:0) {
     return;
   }
   for (sp24 = 0; sp24 < 0x10; sp24++) {
@@ -241,7 +241,7 @@ Gfx* func_hd_front_end_801F8440(s32 arg0, Gfx* arg1) {
 
   sp2A = 0;
   sp2C = arg1;
-  if (D_hd_code_802E8F94[levelno].unk0 != 0x80) {
+  if (D_hd_code_802E8F94[g_currentLevel].unk0 != 0x80) {
     sp2C = func_hd_code_80274868(arg1);
     sp2C = func_hd_code_80272ED8(sp2C,
                D_hd_front_end_8021A7D0[D_hd_code_802F8BDC[0x16].unk18 / 4] + D_hd_front_end_8021A8F0,

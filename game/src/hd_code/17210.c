@@ -52,10 +52,10 @@ void func_hd_code_8025B9D0(s32 arg0, s32* arg1) {
 
   sp30 = &attract_ROM_START;
   sp2C = (s32)&attract2_ROM_START - (s32)&attract_ROM_START;
-  sp20 = (u8*)D_hd_code_80358070;
-  InitiateDma(&attract_ROM_START, D_hd_code_80358070, &sp2C, 9U, 0, 1);
-  D_hd_code_80358070 += sp2C;
-  func_hd_code_80257490((u8** ) &D_hd_code_80358070, 0x10);
+  sp20 = g_heap;
+  INITIATE_DMA(&attract_ROM_START, g_heap, &sp2C, 9U, 0, 1);
+  g_heap += sp2C;
+  hdAlignPointer(&g_heap, 0x10);
   for (sp34 = 0; sp34 < arg0; sp34++) {
     sp28 = (s32) *((s16*)&sp20[0x140C]);
     sp20 = sp20 + sp28 + 0x140E;
@@ -68,7 +68,7 @@ void func_hd_code_8025B9D0(s32 arg0, s32* arg1) {
   D_hd_code_803669AC = (struct S_803669AC *)&sp20[0xC];
   sp28 = *((s16*)&sp20[0x140C]);
   sp20 += 0x140E;
-  func_hd_code_80257490((u8** ) &sp20, 2);
+  hdAlignPointer(&sp20, 2);
   D_hd_code_803669B0 = sp20;
   D_hd_code_80366994 = 0;
   D_hd_code_803669A0 = (s32) D_hd_code_803669AC->unk2;

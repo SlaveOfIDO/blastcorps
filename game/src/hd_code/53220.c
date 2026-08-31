@@ -311,8 +311,8 @@ void func_hd_code_802979E0(u8 arg0) {
         }
         D_hd_code_8039CAD0 = (u8) (sp3C % 6);
     }
-    D_hd_code_8036BB24 = (struct S_8020C070*)D_hd_code_80358070;
-    D_hd_code_80358070 += 0x24C;
+    D_hd_code_8036BB24 = (struct S_8020C070*)g_heap;
+    g_heap += 0x24C;
 
 
 

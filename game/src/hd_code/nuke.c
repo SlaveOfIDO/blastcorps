@@ -1,6 +1,7 @@
 #include "common.h"
 #include "functions.h"
 #include "hd.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 

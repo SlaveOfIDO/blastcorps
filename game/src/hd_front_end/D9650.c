@@ -152,7 +152,7 @@ void func_hd_front_end_801F58E8() {
     u32 sp24;
 
     while(1) {
-        D_hd_code_8039C4B0 = 0;
+        g_pakBusy = 0;
         sp24 = 0;
         osSetEventMesg(OS_EVENT_SI, &D_hd_code_80370BF8, NULL);
         osRecvMesg(&D_hd_front_end_80219EF8, (OSMesg*)&sp3C, 1);
@@ -165,7 +165,7 @@ void func_hd_front_end_801F58E8() {
         sp32 = (sp3C >> 0x10) & 0xFF;
         sp30 = (sp3C >> 0x18) & 0xFF;
         D_hd_front_end_8020C014[0] = sp32 + 0x11;
-        D_hd_code_8039C4B0 = 1;
+        g_pakBusy = 1;
         func_hd_code_8028A42C();
         func_hd_front_end_801EE390();
         D_hd_front_end_80218D24 = 0;

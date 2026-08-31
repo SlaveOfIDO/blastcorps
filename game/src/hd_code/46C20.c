@@ -8,7 +8,7 @@
 
 void func_hd_front_end_801F57B0();
 void func_hd_code_802C4070(void**, void**, u32, u8);
-void func_hd_code_8025C230(s32* arg0, s32* arg1, s32 arg2);
+void func_hd_code_8025C230(uintptr_t* arg0, uintptr_t* arg1, uintptr_t arg2);
 extern void** D_hd_code_802FDB30;
 extern void** D_hd_code_802FDB34;
 extern OSIoMesg D_hd_code_80370C58;
@@ -63,13 +63,6 @@ void InitiateDma(u8* arg0, u8* arg1, s32* arg2, u8 arg3, u8 arg4, u8 arg5) {
   void* sp3C;
   void* sp38;
   u8* sp34;
-
-  /*rmonPrintf("dma 0x%x, arg3=%d, arg4=%d, arg5=%d\n", arg0, arg3, arg4, arg5);
-
-  if((s32)arg0 == 0x46a0b4) {
-    rmonPrintf("it will crash");
-    func_break();
-  }*/
 
   sp38 = arg1;
   if (arg3 || arg4) {

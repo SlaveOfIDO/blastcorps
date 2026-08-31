@@ -763,19 +763,19 @@ Gfx *func_hd_front_end_801F1568(void) {
     Gfx *entry;
     Gfx *sp64;
 
-    spAC = (u16 (*)[49][420])D_hd_code_80358070;
+    spAC = (u16 (*)[49][420])g_heap;
     spA8 = (s32) &ambertextures_ROM_START - (s32) &worldtextures_ROM_START;
-    InitiateDma(worldtextures_ROM_START, D_hd_code_80358070, &spA8, 0xDU, 0U, 1U);
-    D_hd_code_80358070 += spA8;
-    D_hd_front_end_8021728C = D_hd_code_80358070 - 0x6600;
+    INITIATE_DMA(worldtextures_ROM_START, g_heap, &spA8, 0xDU, 0U, 1U);
+    g_heap += spA8;
+    D_hd_front_end_8021728C = g_heap - 0x6600;
     for (sp9C = 0; sp9C < 3; sp9C++) {
-        D_hd_front_end_80215A70[sp9C] = (D_hd_code_80358070 - ((-sp9C * 0x800 + 0x1800) << 1)) - 0x3000;
+        D_hd_front_end_80215A70[sp9C] = (g_heap - ((-sp9C * 0x800 + 0x1800) << 1)) - 0x3000;
     }
-    D_hd_front_end_80215A7C = D_hd_code_80358070 - 0x3000;
-    D_hd_front_end_80215A80 = D_hd_code_80358070 - 0x2000;
-    D_hd_front_end_80215A84 = D_hd_code_80358070 - 0x1000;
-    entry = (Gfx *) D_hd_code_80358070;
-    sp64 = (Gfx*)D_hd_code_80358070;
+    D_hd_front_end_80215A7C = g_heap - 0x3000;
+    D_hd_front_end_80215A80 = g_heap - 0x2000;
+    D_hd_front_end_80215A84 = g_heap - 0x1000;
+    entry = (Gfx *) g_heap;
+    sp64 = (Gfx*)g_heap;
     func_hd_front_end_801F0570();
 
     gSPTexture(entry++, qu016(0.5), qu016(0.5), 4, G_TX_RENDERTILE, G_ON);
@@ -824,7 +824,7 @@ Gfx *func_hd_front_end_801F1568(void) {
 
     gSPEndDisplayList(entry++);
 
-    D_hd_code_80358070 += ((s32) entry - (s32) sp64 >> 3) * 8;
+    g_heap += ((s32) entry - (s32) sp64 >> 3) * 8;
     return sp64;
 }
 
@@ -864,16 +864,16 @@ s32 func_hd_front_end_801F1DA8(s32 arg0) {
 }
 
 Gfx *func_hd_front_end_801F2000(void) {
-    Vtx *sp84 = (Vtx *) D_hd_code_80358070;
-    u8 *sp80 = D_hd_code_80358070;
+    Vtx *sp84 = (Vtx *) g_heap;
+    u8 *sp80 = g_heap;
     Gfx *sp7C;
     Gfx *entry;
     s32 sp74;
     s32 sp70;
 
 
-    D_hd_code_80358070 += 0x300;
-    sp7C = entry = (Gfx*)D_hd_code_80358070;
+    g_heap += 0x300;
+    sp7C = entry = (Gfx*)g_heap;
 
     gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | 0xFFE0CDF8);
     gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK);
@@ -909,14 +909,14 @@ Gfx *func_hd_front_end_801F2000(void) {
     }
     gDPPipeSync(entry++);
     gSPEndDisplayList(entry++);
-    D_hd_code_80358070 = (u8*)entry;
+    g_heap = (u8*)entry;
     osWritebackDCache(sp80, 0x300);
     return sp7C;
 }
 
 Gfx* func_hd_front_end_801F2428(void) {
     struct LevelData* spEC;
-    Vtx* spE8 = (Vtx*)D_hd_code_80358070;
+    Vtx* spE8 = (Vtx*)g_heap;
     Gfx* entry;
     Gfx* spE0;
     s32 spDC;
@@ -928,7 +928,7 @@ Gfx* func_hd_front_end_801F2428(void) {
     s8 spCA;
     u8 spC9;
     f32 spC4;
-    Gfx* spA0[9] = D_hd_front_end_8020BD08;
+    INIT_FROM_ARRAY(Gfx* spA0[9], spA0, D_hd_front_end_8020BD08);
     Gfx* sp9C;
     Gfx* sp98 = 0;
     u8 sp97;
@@ -936,8 +936,8 @@ Gfx* func_hd_front_end_801F2428(void) {
     u8 sp95;
     u8 sp94;
 
-    D_hd_code_80358070 += 0x1E00;
-    entry = (Gfx*)D_hd_code_80358070;
+    g_heap += 0x1E00;
+    entry = (Gfx*)g_heap;
     spE0 = entry;
 
     gDPPipeSync(entry++);
@@ -1048,7 +1048,7 @@ Gfx* func_hd_front_end_801F2428(void) {
     }
     gDPPipeSync(entry++);
     gSPEndDisplayList(entry++);
-    D_hd_code_80358070 = (u8*)entry;
+    g_heap = (u8*)entry;
     osWritebackDCache(spE8, 0x1E00);
     return spE0;
 }
@@ -1056,7 +1056,7 @@ Gfx* func_hd_front_end_801F2428(void) {
 Gfx *func_hd_front_end_801F2E20(void) {
     Vtx *spCC = D_hd_code_803156F8[0].unk15C0;
     Vtx *spC8 = D_hd_code_803156F8[1].unk15C0;
-    Mtx *spC4 = (Mtx*)D_hd_code_80358070;
+    Mtx *spC4 = (Mtx*)g_heap;
     Gfx *entry;
     Gfx *spBC;
     s32 spB8;
@@ -1074,9 +1074,9 @@ Gfx *func_hd_front_end_801F2E20(void) {
     s32 pad88;
     s32 pad84;
 
-    D_hd_code_80358070 += 0x80;
-    entry = (Gfx*)D_hd_code_80358070;
-    spBC = (Gfx*)D_hd_code_80358070;
+    g_heap += 0x80;
+    entry = (Gfx*)g_heap;
+    spBC = (Gfx*)g_heap;
 
     guPerspective(&spC4[0], &D_hd_front_end_80217288, 45.0f, 1.3333334f, 100.0f, 25000.0f, 1.0f);
     guLookAt(&spC4[1], 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
@@ -1118,7 +1118,7 @@ Gfx *func_hd_front_end_801F2E20(void) {
     }
     gDPPipeSync(entry++);
     gSPEndDisplayList(entry++);
-    D_hd_code_80358070 += ((s32) ((s32)entry - (s32)spBC) >> 3) * 8;
+    g_heap += ((s32) ((s32)entry - (s32)spBC) >> 3) * 8;
     osWritebackDCache(spCC, 0x2000);
     return spBC;
 }

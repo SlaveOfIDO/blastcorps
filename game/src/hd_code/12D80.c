@@ -38,8 +38,9 @@ Gfx* func_hd_code_802575F4(Gfx* gfx, s32 arg1, s32 arg2, s16 arg3, s32 width, s3
     } else {
         gSPClearGeometryMode(gfx++, G_ZBUFFER);
     }
-    spBC = arg2 & 0x1FFFFFFF;
-    gSPVertex(gfx++, arg1 & 0x1FFFFFFF, 4, 0);
+
+    spBC = VIRTUAL_TO_PHYSICAL(arg2);
+    gSPVertex(gfx++, VIRTUAL_TO_PHYSICAL(arg1), 4, 0);
 
     switch ((u8)arg3) {                              /* switch 1; irregular */
     case G_IM_SIZ_4b:                                         /* switch 1 */

@@ -10,7 +10,7 @@ void Thread1(void*);
 void Thread3(void*);
 extern void func_hd_code_802D4250(u32*, u32*);
 extern void func_hd_code_80270AE0(u8*);
-void func_hd_code_80257490(u8** arg0, s32 arg1);
+void hdAlignPointer(u8** arg0, s32 arg1);
 void func_hd_code_80259DC8(struct Model1* arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17);
 u8 func_hd_code_802B01DC();                          /* extern */
 u8 func_hd_code_802B1150();                          /* extern */
@@ -145,7 +145,7 @@ void func_hd_code_80284DB0();                          /* extern */
 u8 func_hd_code_8028A370();                         /* extern */
 void func_hd_code_8028FC10();                          /* extern */
 void InitiateDma(u8* arg0, u8* arg1, s32* arg2, u8 arg3, u8 arg4, u8 arg5);
-void func_801F7850();                                  /* extern */
+void func_hd_front_end_801F7850();                                  /* extern */
 void func_hd_code_802559F8(Gfx* gfx, s32* arg1);
 void func_hd_code_802592F0();                          /* extern */
 u8 func_hd_code_80261A44(u64);                 /* extern */
@@ -158,7 +158,7 @@ void func_hd_code_8028AE88();                          /* extern */
 void func_hd_code_8028B3E0();                          /* extern */
 void func_hd_code_80297530(u8);                       /* extern */
 void func_hd_code_802A0700();                          /* extern */
-void LoadLevel(u32 arg0, void* arg1, s32* arg2);                         /* extern */
+void LoadLevel(u32 level, void* arg1, s32* arg2);                         /* extern */
 void func_hd_code_80257234();                          /* extern */
 void func_hd_code_8025BD98();                          /* extern */
 void func_hd_code_80262150(u8);                       /* extern */
@@ -169,7 +169,7 @@ void func_hd_code_80264C20(s32);                       /* extern */
 void func_hd_code_80268664(s32);                       /* extern */
 void func_hd_code_8026A988();                          /* extern */
 void func_hd_code_802729F0(u16, u16);                  /* extern */
-void func_hd_code_80275430();                          /* extern */
+void targetMarkersReset();                          /* extern */
 void func_hd_code_802775C0();                          /* extern */
 void func_hd_code_8027BE4C();                          /* extern */
 void func_hd_code_8027E344(s32);                       /* extern */
@@ -178,7 +178,7 @@ void func_hd_code_80281A70(s32);                       /* extern */
 void func_hd_code_802821D0();                          /* extern */
 void func_hd_code_80282728();                          /* extern */
 void func_hd_code_80285110(s32);                         /* extern */
-void func_hd_code_80285190();                          /* extern */
+void statsLoadLevelStats();                          /* extern */
 void func_hd_code_80286A00();                          /* extern */
 void func_hd_code_802873AC();                          /* extern */
 void func_hd_code_80287AE4();                          /* extern */
@@ -192,43 +192,43 @@ s32 func_hd_code_802A1674(u8*, s32);                   /* extern */
 s32 func_hd_code_802A56C4();                          /* extern */
 s32 func_hd_code_802A5FA8();                          /* extern */
 void func_hd_code_802C1DD0(s32);                       /* extern */
-s32 func_hd_code_802CE840();                          /* extern */
+void func_hd_code_802CE840();                          /* extern */
 void func_hd_code_802CF628();                          /* extern */
 void func_hd_code_8026A5CC(u64*, u64*, s32);
 
-s32 func_801E7000();                                /* extern */
-void func_801E7598();                                  /* extern */
-void func_801E8C40(u8);                                /* extern */
-void func_801E8DCC(u8);                                /* extern */
-void func_801E8EB8(u8, s32);                             /* extern */
-void func_801EA108(u8, s32, s32);                          /* extern */
-void func_801EA4B8();                                  /* extern */
-void func_801EA6E8();                                  /* extern */
-void func_801EA93C(char*, u32*, s32, s32, void*);               /* extern */
-void func_801EC288(u8);                                /* extern */
-void func_801EC30C(u8);                                /* extern */
-void func_801ECC8C();                                  /* extern */
-void func_801ECE9C();                                  /* extern */
-void func_801ED790();                                  /* extern */
-u8 func_801EE800(u8*, s32, s32);                        /* extern */
-s8 func_801EF1E0();                                 /* extern */
-void func_801EF380(s32);                                 /* extern */
-void func_801EF4AC();                                  /* extern */
-void func_801F55D8();                                  /* extern */
-void func_801F6F18();                                  /* extern */
-void func_801F8228();                                  /* extern */
-void func_801F8530(s32);                               /* extern */
-void func_801F8980();                                  /* extern */
-void func_801FE018(s32);                                 /* extern */
-void func_801FE990();                                  /* extern */
-void func_80200714(s32);                                 /* extern */
-void func_80201240(s32);                               /* extern */
-s32 func_80201E80();                                /* extern */
+s32 func_hd_front_end_801E7000();                                /* extern */
+void func_hd_front_end_801E7598();                                  /* extern */
+void func_hd_front_end_801E8C40(u8);                                /* extern */
+void func_hd_front_end_801E8DCC(u8);                                /* extern */
+void func_hd_front_end_801E8EB8(u8, s32);                             /* extern */
+void func_hd_front_end_801EA108(u8, u8, u8);                          /* extern */
+void func_hd_front_end_801EA4B8();                                  /* extern */
+void func_hd_front_end_801EA6E8();                                  /* extern */
+void func_hd_front_end_801EA93C(char*, void*, u8, u8, s8*);               /* extern */
+void func_hd_front_end_801EC288(u8);                                /* extern */
+void func_hd_front_end_801EC30C(u8);                                /* extern */
+void func_hd_front_end_801ECC8C();                                  /* extern */
+void func_hd_front_end_801ECE9C();                                  /* extern */
+void func_hd_front_end_801ED790();                                  /* extern */
+u8 func_hd_front_end_801EE800(s8*, u8, u8);                        /* extern */
+s8 func_hd_front_end_801EF1E0();                                 /* extern */
+void func_hd_front_end_801EF380(s32);                                 /* extern */
+void func_hd_front_end_801EF4AC();                                  /* extern */
+void func_hd_front_end_801F55D8();                                  /* extern */
+s32 func_hd_front_end_801F6F18(void);                                  /* extern */
+void func_hd_front_end_801F8228();                                  /* extern */
+void func_hd_front_end_801F8530(s32);                               /* extern */
+void func_hd_front_end_801F8980();                                  /* extern */
+void func_hd_front_end_801FE018(u8);                                 /* extern */
+void func_hd_front_end_801FE990();                                  /* extern */
+void func_hd_front_end_80200714(u8);                                 /* extern */
+void func_hd_front_end_80201240(s32);                               /* extern */
+void* func_hd_front_end_80201E80(void);                                /* extern */
 void func_hd_code_802475D8();                          /* extern */
 void func_hd_code_80255AD0();                          /* extern */
 void func_hd_code_80255D34();                          /* extern */
-void func_hd_code_80255DC8();                          /* extern */
-void func_hd_code_80256A34(s32*);                        /* extern */
+void hdPrepareStateTransition();                          /* extern */
+void hdInitLevel(s32*);                        /* extern */
 void func_hd_code_8025B2B8();                          /* extern */
 void func_hd_code_8025B9D0(s32, s32*);                 /* extern */
 void func_hd_code_8025BB38();                          /* extern */
@@ -284,7 +284,7 @@ void func_hd_code_802CBA94();                          /* extern */
 void func_hd_code_802CCC8C();                          /* extern */
 void func_hd_code_802CFA0C();                          /* extern */
 void func_hd_code_802D0C68();                          /* extern */
-void LoadLevelTodo40(s32);                             /* extern */
+void LoadLevelTodo40(Gfx*);                             /* extern */
 void func_hd_code_8024A348();                          /* extern */
 void func_hd_code_8024A92C(u32);                       /* extern */
 void func_hd_code_8024ADD8();                          /* extern */
@@ -411,7 +411,7 @@ void func_hd_code_802B5CD8();                          /* extern */
 void func_hd_code_802C5714();                          /* extern */
 void func_hd_code_802C9F54();                          /* extern */
 s32 func_hd_code_8025B300(u8*);                     /* extern */
-void func_hd_code_80257490(u8** arg0, s32 arg1);
+void hdAlignPointer(u8** arg0, s32 arg1);
 void func_hd_code_802A1040(u16, void*, s32);             /* extern */
 void proutSprintf(u8*, const char*, ...);                       /* extern */
 void func_hd_code_80275390(u64);                      /* extern */
@@ -425,7 +425,7 @@ void func_hd_code_802B5CD8();                          /* extern */
 void func_hd_code_802C5714();                          /* extern */
 void func_hd_code_802C9F54();                          /* extern */
 s32 func_hd_code_8025B300(u8*);                     /* extern */
-void func_hd_code_80257490(u8** arg0, s32 arg1);
+void hdAlignPointer(u8** arg0, s32 arg1);
 u8 func_hd_code_80272C5C(u16* arg0, u16* arg1, u8 arg2, u8 arg3, u8 arg4, f32 arg5);
 Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2);
 void func_hd_code_8025E1E0(Gfx**);                      /* extern */
@@ -445,7 +445,7 @@ void func_hd_code_80260A30(s32);                         /* extern */
 u8 func_hd_code_80264BA4(u8);
 void sndDeactivateAllSfxByFlag_11();                   /* extern */
 void sndDeactivateAllSfxByFlag_3();                    /* extern */
-void func_hd_code_80260C20(u8, f32);                   /* extern */
+void musicPlayTune(u8, f32);                   /* extern */
 f32 func_hd_code_80268D84(f32, f32, f32, f32, f32, f32, f32); /* extern */
 f32 func_hd_code_8026A184(f32, f32, f32, f32, f32, f32, f32); /* extern */
 void func_hd_code_8026A2E8(f32, f32*);                 /* extern */

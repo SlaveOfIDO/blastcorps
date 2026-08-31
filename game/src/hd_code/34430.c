@@ -115,9 +115,9 @@ void func_hd_code_80278BF0(Gfx* arg0, Gfx* arg1, Gfx** arg2) {
   s32 sp2C;
   u32 sp28;
 
-  *arg2 = (Gfx* ) D_hd_code_80358070;
+  *arg2 = (Gfx* ) g_heap;
   entry = *arg2;
-  D_hd_code_80358070 += (arg1 - arg0 - 2) * 8;
+  g_heap += (arg1 - arg0 - 2) * 8;
   while (arg0 != arg1) {
     sp3B = arg0->words.w0 >> 24;
     switch (sp3B) {
@@ -160,11 +160,12 @@ void func_hd_code_80278BF0(Gfx* arg0, Gfx* arg1, Gfx** arg2) {
 // Proposed name: InitMotionBlur
 void func_hd_code_80278E3C(void) {
 
-  func_hd_code_80257490(D_hd_code_80358070, 0x40);
-  D_hd_code_8036D170 = D_hd_code_80358070;
 
-  D_hd_code_80358070 += 0x5460;
-  func_hd_code_80257490(D_hd_code_80358070, 8);
+  hdAlignPointer(g_heap, 0x40);
+  D_hd_code_8036D170 = g_heap;
+
+  g_heap += 0x5460;
+  hdAlignPointer(g_heap, 8);
   D_hd_code_8036D178 = 0;
   D_hd_code_8036CC68 = 0;
   D_hd_code_8036CC6C = 0;
@@ -350,11 +351,11 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
 
     if ((u8) D_hd_code_8036D178 != 0) {
         entry = D_hd_code_8036D188;
-        gSPViewport(entry++, (s32) &D_hd_code_802FBED0 & 0x1FFFFFFF);
+        gSPViewport(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_802FBED0));
         gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
         gSPSegment(entry++, 0x00, 0x00000000);
-        gSPSegment(entry++, 0x06, arg7 & 0x1FFFFFFF);
-        gSPSegment(entry++, 0x07, arg8 & 0x1FFFFFFF);
+        gSPSegment(entry++, 0x06, VIRTUAL_TO_PHYSICAL(arg7));
+        gSPSegment(entry++, 0x07, VIRTUAL_TO_PHYSICAL(arg8));
         gDPPipeSync(entry++);
         gDPSetScissor(entry++, G_SC_NON_INTERLACE, 0, 0, 120, 90);
         gDPSetColorDither(entry++, G_CD_DISABLE);
@@ -366,13 +367,13 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
         gDPFillRectangle(entry++, 0, 0, 119, 89);
         gDPPipeSync(entry++);
 
-        gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 120, (u32)D_hd_code_8036D170 & 0x1FFFFFFF);
+        gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 120, VIRTUAL_TO_PHYSICAL(D_hd_code_8036D170));
         gDPSetFillColor(entry++, 0x00000000);
         gDPFillRectangle(entry++, 0, 0, 119, 89);
         gDPPipeSync(entry++);
 
         guPerspective(&D_hd_code_8036D2C8, &spDA, D_hd_code_8036D174, 1.3333334f, 100.0f, 5000.0f, 1.0f);
-        gSPMatrix(entry++, (s32) &D_hd_code_8036D2C8 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+        gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_8036D2C8), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
         gSPPerspNormalize(entry++, spDA);
 
         spD0 = (f32) arg0 / 32.0f;
@@ -390,13 +391,13 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
             sp94 = (f32) (0.0 - (f64) sp94);
         }
         if ((sp98 > 0.5) || (sp94 > 0.5)) {
-            guLookAt((s32) &D_hd_code_8036D388, spC4, spC0, spBC, spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
+            guLookAt(&D_hd_code_8036D388, spC4, spC0, spBC, spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
         } else {
-            guLookAt((s32) &D_hd_code_8036D388, (f32) ((f64) spC4 + 2.0), spC0, (f32) ((f64) spBC + 2.0), spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
+            guLookAt(&D_hd_code_8036D388, (f32) ((f64) spC4 + 2.0), spC0, (f32) ((f64) spBC + 2.0), spD0, spCC, spC8, 0.0f, 1.0f, 0.0f);
         }
-        gSPMatrix(entry++, (s32) &D_hd_code_8036D388 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_8036D388), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(entry++, 0, 0, 0, arg9);
-        gSPDisplayList(entry++, arg6 & 0x1FFFFFFF);
+        gSPDisplayList(entry++, VIRTUAL_TO_PHYSICAL(arg6));
         gSPEndDisplayList(entry++);
         func_hd_code_80284E54(D_hd_code_8036D188, (s32) ((u32)entry - (u32)&D_hd_code_8036D188) >> 3, 2, 0, 0x54D, 0);
     }
@@ -410,7 +411,7 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
 // Proposed name: DrawMotionBlur
 void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
     Gfx* entry = *gfx;
-    u8 sp14B;
+    u8 flag;
     s32 sp144;
     s32 sp140;
     f32 sp100[4][4];
@@ -467,8 +468,8 @@ void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
         for (spBC = 0; spBC < D_hd_code_8036D180; spBC++) {
             gDPSetPrimColor(entry++, 0, 0, 0xFF, 0xFF, 0xFF, spBB);
 
-            sp14B = func_hd_code_802796D8(spB4, &spB0, &spAC);
-            if (sp14B == 0) {
+            flag = func_hd_code_802796D8(spB4, &spB0, &spAC);
+            if (flag == 0) {
                 break;
             }
             spA4 = ((D_hd_code_8036CB60[spAC].unkC - D_hd_code_8036CB60[spB0].unkC) * spA8) + D_hd_code_8036CB60[spB0].unkC;
@@ -498,13 +499,13 @@ void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
             } else {
                 guLookAtF(sp100, (f32) ((f64) sp98 + 2.0), sp94, (f32) ((f64) sp90 + 2.0), spA4, spA0, sp9C, 0.0f, 1.0f, 0.0f);
             }
-            sp14B = invertTransformMatrix(spC0, sp100);
-            if (sp14B == 0) {
+            flag = invertTransformMatrix(spC0, sp100);
+            if (!flag) {
                 rmonPrintf(ASSERT_MESSAGE, "flag", "mb.c", 0x223);
             }
             guMtxF2L(spC0, &D_hd_code_8036CC70[arg2][spBC]);
-            gSPMatrix(entry++, (s32) &D_hd_code_8036CC70[arg2][spBC] & 0x1FFFFFFF, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-            gSPVertex(entry++, (s32) D_hd_code_802FBEE0 & 0x1FFFFFFF, 16, 0);
+            gSPMatrix(entry++, VIRTUAL_TO_PHYSICAL(&D_hd_code_8036CC70[arg2][spBC]), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPVertex(entry++, VIRTUAL_TO_PHYSICAL(D_hd_code_802FBEE0), 16, 0);
 
             sp140 = 0;
             sp144 = 0;
@@ -524,7 +525,7 @@ void func_hd_code_80279EE8(Gfx** gfx, s32* arg1, u8 arg2) {
 
             sp144 += 0xE10,
             sp140 += 4;
-            gSPVertex(entry++, (s32) (D_hd_code_802FBEE0 + 16) & 0x1FFFFFFF, 8, 0);
+            gSPVertex(entry++, VIRTUAL_TO_PHYSICAL(D_hd_code_802FBEE0 + 16), 8, 0);
 
             sp140 = 0;
             func_hd_code_8027A7DC(&entry, sp144, 0);

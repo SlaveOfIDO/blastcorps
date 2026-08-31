@@ -188,7 +188,7 @@ saveLevel = 0x8039C540; // type:u8
 playerNumber = 0x80364AE8; // type:u8
 recordStatus = 0x802C4A40; // type:func
 pakBuffer = 0x8039C4B8;
-levelno = 0x802E8BDC;
+g_currentLevel = 0x802E8BDC;
 areWeFading = 0x802753C0; // type:func
 
 // Perhaps: nextPlayerNumber? Only used in Thread3
@@ -674,3 +674,4 @@ D_hd_code_80305CB0 = 0x80305CB0; // size:0x30
 D_hd_code_80305D60 = 0x80305D60; // size:0x14
 func_hd_front_end_80202024 = 0x80202024; // ignore:true
 MainJump = 0x802447C0; // type:func
+g_heap = 0x80358070;

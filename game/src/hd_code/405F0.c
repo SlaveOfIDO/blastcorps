@@ -30,7 +30,7 @@ void* D_hd_code_8036E660[6];
 void* D_hd_code_8036E678[5];
 u8 D_hd_code_8036E68C[4];
 s32 D_hd_code_8036E690;
-Gfx* D_hd_code_8036E694;
+Gfx* g_gfxTaskOutputBuffer;
 OSScTask D_hd_code_8036E698[5][2];
 s32 D_hd_code_8036EA58;
 s32 D_hd_code_8036EA5C;
@@ -98,9 +98,9 @@ void func_hd_code_80284E54(Gfx* arg0, s32 arg1, u8 arg2, s32 arg3, s32 arg4, s32
   sp18 = arg1 * 8;
   sp1C = &D_hd_code_8036E698[arg2][D_hd_code_8035805C];
   D_hd_code_8036E68C[(u8) arg2] = 1;
-  sp1C->list.t.type = 1;
+  sp1C->list.t.type = M_GFXTASK;
   if ((u8) arg2 == 4) {
-    sp1C->list.t.flags = 2;
+    sp1C->list.t.flags = OS_TASK_DP_WAIT;
   } else {
     sp1C->list.t.flags = 0;
   }
@@ -112,8 +112,8 @@ void func_hd_code_80284E54(Gfx* arg0, s32 arg1, u8 arg2, s32 arg3, s32 arg4, s32
   sp1C->list.t.ucode_data_size = 0x800;
   sp1C->list.t.dram_stack = &D_hd_code_80367750;
   sp1C->list.t.dram_stack_size = 0x400;
-  sp1C->list.t.output_buff = (u64* ) D_hd_code_8036E694;
-  sp1C->list.t.output_buff_size = (u64* ) (D_hd_code_8036E694 + 0x1400);
+  sp1C->list.t.output_buff = (u64* ) g_gfxTaskOutputBuffer;
+  sp1C->list.t.output_buff_size = (u64* ) (g_gfxTaskOutputBuffer + 0x1400);
   sp1C->list.t.data_ptr = (u64* ) arg0;
   sp1C->list.t.data_size = (u32) sp18;
   sp1C->list.t.yield_data_ptr = &D_hd_code_8036AFB0;
@@ -145,7 +145,7 @@ void func_hd_code_80285110(s32 arg0) {
 
   do {
     osRecvMesg((OSMesgQueue* ) &D_hd_code_803153D8, (OSMesg)&sp1C, 1);
-    D_hd_code_8036E68C[sp1C >> 0x10] = 0;
+    D_hd_code_8036E68C[sp1C >> 16] = 0;
     sp1C &= 0xFFFF;
     if ((u32)sp1C != arg0) {
       rmonPrintf("Task %d received message %d\n", arg0, sp1C);

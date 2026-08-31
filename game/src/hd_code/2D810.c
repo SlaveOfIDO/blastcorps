@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -120,7 +121,7 @@ u16 D_hd_code_802FA8A0[2] = { 0, 3 }; // render formats of the two sky layers: G
 // Proposed name: DrawSky
 Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s16 arg4, s32* arg5) {
     Gfx* entry = arg0;
-    u16 sp78[2] = D_hd_code_802FA8A0;
+    INIT_FROM_ARRAY(u16 sp78[2], sp78, D_hd_code_802FA8A0);
     s32 sp74;
     struct S_802FA280* sp70;
     f32 sp6C;
@@ -210,7 +211,7 @@ Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s
 // func_hd_code_802A0B00 into memory at the level bump allocator, disabling
 // the sky entirely if the level's texture asset id is 0.
 // Proposed name: InitSky
-void func_hd_code_802729F0(u16 arg0, u16 arg1) {
+void func_hd_code_802729F0(u16 arg0, u16 levelno) {
   s32 sp2C;
   f32 sp28;
   u16 sp26;
@@ -238,13 +239,13 @@ void func_hd_code_802729F0(u16 arg0, u16 arg1) {
       break;
   }
 
-  if (arg1 == 0x34 || arg1 == 0x3B || arg1 == 0x26 || arg1 == 0x11) {
+  if (levelno == 0x34 || levelno == 0x3B || levelno == 0x26 || levelno == 0x11) {
     D_hd_code_8036BFC0 += 32.0f;
   }
 
   for(sp2C = 0; sp2C < 2; sp2C++) {
-    D_hd_code_802FA280[arg1][sp2C].unk4 = D_hd_code_80358070;
-    sp26 = D_hd_code_802FA280[arg1][sp2C].unk0;
+    D_hd_code_802FA280[levelno][sp2C].unk4 = g_heap;
+    sp26 = D_hd_code_802FA280[levelno][sp2C].unk0;
     if (sp26) {
       func_hd_code_802A0B00(sp26, 0);
     } else {

@@ -331,7 +331,7 @@ void func_hd_code_802936AC(f32 (*arg0)[4], s16 arg1, s16 arg2, s16 arg3, s16 arg
             }
         }
         while ((sp54 < 0x66) && (sp53 == 0)) {
-            if (D_hd_code_802FEDA0[sp54].unk0 == levelno
+            if (D_hd_code_802FEDA0[sp54].unk0 == g_currentLevel
                 && (arg3 >= D_hd_code_802FEDA0[sp54].unk2 - 5)
                 && (arg4 >= D_hd_code_802FEDA0[sp54].unk4 - 5)
                 && (arg3 < D_hd_code_802FEDA0[sp54].unk2 + 5)

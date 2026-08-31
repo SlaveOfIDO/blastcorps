@@ -270,7 +270,7 @@ void amHandleDoneMessage(AudioInfo *info);
 void amMain(void* arg);
 ALDMAproc amDmaNew(DMAState** state);
 
-void amCreateAudioManager(ALSynConfig* alconf, s32 arg1) {
+void amCreateAudioManager(ALSynConfig* alconf, OSPri priority) {
     s32 sp134;
     f32 sp130_fsize;
     s32 sp12C;
@@ -296,7 +296,7 @@ void amCreateAudioManager(ALSynConfig* alconf, s32 arg1) {
     if (alconf->fxType == AL_FX_CUSTOM) {
         sp12C = 0;
         {
-            s32 sp24[CUSTOM_FX_SECTION_COUNT * CUSTOM_FX_SECTION_SIZE + 2] = CUSTOM_FX_PARAMS_N;
+            INIT_FROM_ARRAY(s32 sp24[CUSTOM_FX_SECTION_COUNT * CUSTOM_FX_SECTION_SIZE + 2], sp24, CUSTOM_FX_PARAMS_N);
             alconf->params = sp24;
             alInit(&g_AudioManager.g, alconf);
         }
@@ -328,7 +328,7 @@ void amCreateAudioManager(ALSynConfig* alconf, s32 arg1) {
     osCreateMesgQueue(&g_AudioManager.replyMessageQueue, g_AudioManager.replyMessageBuffer, 8);
     osCreateMesgQueue(&g_AudioManager.frameMessageQueue, g_AudioManager.frameMessageBuffer, 8);
     osCreateMesgQueue(&g_DmaMessageQueue, g_DmaMessageBuffer, AUDIO_DMA_IO_QUEUE_SIZE);
-    osCreateThread(&g_AudioManager.audioThread, 4, amMain, NULL, D_80368308 + 0x2000, arg1);
+    osCreateThread(&g_AudioManager.audioThread, 4, amMain, NULL, D_80368308 + 0x2000, priority);
 }
 
 void amStartAudioThread(void)

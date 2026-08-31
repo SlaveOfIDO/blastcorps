@@ -143,7 +143,7 @@ u8 func_hd_code_8028A370(void) {
 // Kick off an async controller read for this frame (unless the pak is busy)
 // Proposed name: StartControllerRead
 void func_hd_code_8028A3E4(void) {
-  if (!D_hd_code_8039C4B0) {
+  if (!g_pakBusy) {
     func_hd_code_8028A42C();
     osContStartReadData(&D_hd_code_80370BF8);
     D_hd_code_80370C10 = 1;
@@ -174,7 +174,7 @@ void func_hd_code_8028A470(void) {
 
     sp44 = &D_hd_code_80370BD8;
     if (D_hd_code_80358064 != 0) {
-        if ((D_hd_code_8039C4B0 == 0) && (D_hd_code_80370C10 != 0)) {
+        if ((g_pakBusy == 0) && (D_hd_code_80370C10 != 0)) {
             osRecvMesg(&D_hd_code_80370BF8, NULL, 1);
             osContGetReadData(sp44);
             if (sp44->errno != 0) {
@@ -213,7 +213,7 @@ void func_hd_code_8028A470(void) {
             case 0x400:
             case 0x40:
             case 0x2:
-                if ((levelno != 0x26) && (levelno != 0x31)) {
+                if ((g_currentLevel != 0x26) && (g_currentLevel != 0x31)) {
                     do {
                         func_hd_code_8025BEF8();
                         if (D_hd_code_80370C30 & 0x40) {
@@ -538,7 +538,7 @@ u32 D_hd_code_802FDB24[3] = {
 };
 
 void func_hd_code_8028B240(void) {
-  char* sp24[3] = D_hd_code_802FDB18;
+  INIT_FROM_ARRAY(char* sp24[3], sp24, D_hd_code_802FDB18);
   char* sp20 = "CONTROL METHOD:";
   s32 found = 0;
   s32 sp18 = 0;

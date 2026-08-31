@@ -71,12 +71,14 @@ void func_hd_front_end_801F4E70(s32 arg0) {
       D_hd_front_end_802182C0 = &somelookup_ROM_START - &reflectlogo_ROM_START;
       break;
   }
-  InitiateDma(D_hd_front_end_802182C4, D_hd_code_80358070, &D_hd_front_end_802182C0, 0xCU, 0xAU, 1U);
-  sp34 = (S_DmaAssetHdr *) D_hd_code_80358070;
-  D_hd_code_80358070 = &D_hd_code_80358070[D_hd_front_end_802182C0];
+  INITIATE_DMA(D_hd_front_end_802182C4, g_heap, &D_hd_front_end_802182C0, 0xCU, 0xAU, 1U);
+  sp34 = (S_DmaAssetHdr *) g_heap;
+  g_heap = &g_heap[D_hd_front_end_802182C0];
+
   D_hd_front_end_802182C8 = sp34->unk1C + (u8 *) sp34;
   sp30 = sp34->unk20 + (u8 *) sp34;
   D_hd_front_end_802182CC = sp34->unk14 + (u8 *) sp34;
+
   func_hd_code_802A08B4(D_hd_front_end_802182C8, sp30);
 }
 

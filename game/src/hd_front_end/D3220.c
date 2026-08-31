@@ -21,8 +21,8 @@ extern Mtx  D_hd_front_end_802182D0[];
 // <bss>
 u16 D_hd_front_end_802159D0;
 u16 D_hd_front_end_802159D2;
-u8 *D_hd_front_end_802159D4;
-u8 *D_hd_front_end_802159D8;
+u8 *g_textureNink;
+u8 *g_texture64;
 s16 D_hd_front_end_802159DC;
 s16 D_hd_front_end_802159DE;
 f32 D_hd_front_end_802159E0;
@@ -41,12 +41,14 @@ void func_hd_front_end_801EF380(s32 arg0) {
   } else {
     D_hd_front_end_802159D0 = 0;
   }
-  InitiateDma(nink_ROM_START, D_hd_code_80358070, &assetNinkSize, 0xCU, 0U, 1U);
-  D_hd_front_end_802159D4 = D_hd_code_80358070;
-  D_hd_code_80358070 += assetNinkSize;
-  InitiateDma(_64k_ROM_START, D_hd_code_80358070, &asset64kSize, 0xCU, 0U, 1U);
-  D_hd_front_end_802159D8 = D_hd_code_80358070;
-  D_hd_code_80358070 += asset64kSize;
+  INITIATE_DMA(nink_ROM_START, g_heap, &assetNinkSize, 0xCU, 0U, 1U);
+  g_textureNink = g_heap;
+  g_heap += assetNinkSize;
+
+  INITIATE_DMA(_64k_ROM_START, g_heap, &asset64kSize, 0xCU, 0U, 1U);
+  g_texture64 = g_heap;
+  g_heap += asset64kSize;
+
   D_hd_front_end_802159DC = arg0;
   D_hd_front_end_802159E0 = 0.0f;
   D_hd_front_end_802159E4 = 3.0f;
@@ -151,7 +153,7 @@ void func_hd_front_end_801EF4AC(void) {
         sp120 = 0x1A,
         sp11C = 0x2A;
         for(sp124 = 0; sp124 < 0x100; sp124+=0x20) {
-            gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_8b, 256, (u32) D_hd_front_end_802159D4);
+            gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_8b, 256, (u32) g_textureNink);
             gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_8b, ((sp124 - sp124) + 0x27) >> 3, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
             gDPLoadSync(entry++);
             gDPLoadTile(entry++, G_TX_LOADTILE, (sp124 * 4), 0, ((sp124 + 0x1F) << 2), qu102(31));
@@ -167,24 +169,12 @@ void func_hd_front_end_801EF4AC(void) {
                                 (sp124 << 5),
                                 0,
                                 qs510(1), qs510(1));
-
-            /*
-            spA0->words.w0 = ((((sp124 + sp120 + 0x20) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((sp11C + 0x20) * 4) & 0xFFF);
-            spA0->words.w1 = ((((sp124 + sp120) * 4) & 0xFFF) << 0xC) | ((sp11C * 4) & 0xFFF);
-            sp9C = entry;
-            entry += 8;
-            sp9C->words.w0 = 0xB3000000;
-            sp9C->words.w1 = ((sp124 << 5) & 0xFFFF) << 0x10;
-            sp98 = entry;
-            entry += 8;
-            sp98->words.w0 = 0xB2000000;
-            sp98->words.w1 = 0x04000400;      */
         }
 
 
         gDPPipeSync(entry++);
         gDPSetPrimColor(entry++, 0, 0, 0xFF, 0x00, 0x28, MIN((D_hd_code_80358060 * 4) - 0x140, 0xFF));
-        gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, (u32) D_hd_front_end_802159D8);
+        gDPSetTextureImage(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, (u32) g_texture64);
         gDPSetTile(entry++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
         gDPLoadSync(entry++);
         gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 479, 410);

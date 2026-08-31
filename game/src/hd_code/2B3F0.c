@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "macros.h"
 #include "structs.h"
 #include "variables.h"
 
@@ -114,7 +115,7 @@ void LoadLevelRdus(struct vec3s* arg0, struct vec3s* arg1) {
   if (D_hd_code_80364A90 != 0x40) {
     D_hd_code_8036BED4 = *D_hd_code_8036BBB0 = 0;
   }
-  D_hd_code_8036BED8 = D_hd_code_80358070;
+  D_hd_code_8036BED8 = g_heap;
   D_hd_code_8036BEE0 = 0;
   D_hd_code_8036BEDC = 999999.0f;
   while (arg0 != arg1) {
@@ -129,7 +130,7 @@ void LoadLevelRdus(struct vec3s* arg0, struct vec3s* arg1) {
     D_hd_code_8036EB90++;
     arg0++;
   }
-  D_hd_code_80358070 += D_hd_code_8036EB90 * 0x88;
+  g_heap += D_hd_code_8036EB90 * 0x88;
 }
 
 // Get RDU arg0's found flag
