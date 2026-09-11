@@ -276,7 +276,7 @@ void func_hd_code_8025D0B0(u8 arg0) {
 // state; the name-entry and world-map states only set the state/alpha
 // Proposed name: InitTitleScreen
 void func_hd_code_8025D184(void) {
-  if ((D_hd_code_80364A98 & 2)) {
+  if ((g_nextGameState & 2)) {
     func_hd_code_8025D0B0(1);
     func_hd_code_8025D0B0(0);
     D_hd_code_80366A16 = 0xFF;
@@ -285,13 +285,13 @@ void func_hd_code_8025D184(void) {
     D_hd_code_80366A02 = 0xD;
     return;
   }
-  if ((D_hd_code_80364A98 & 0x40000)) {
+  if ((g_nextGameState & 0x40000)) {
     D_hd_code_80366A16 = 0;
     D_hd_code_80366A12 = 4;
     D_hd_code_80366A02 = 0x2A;
     return;
   }
-  if ((D_hd_code_80364A98 & 0x10000)) {
+  if ((g_nextGameState & 0x10000)) {
     D_hd_code_80366A16 = 0;
     D_hd_code_80366A12 = 3;
     return;
@@ -629,7 +629,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                         }
                     } else if ((u32) ((sp60 - D_hd_code_80366BB8) - 0x10E) >= 0x2EU) {
                         if ((D_hd_code_80364A90 == 0x100000000000)) {
-                            D_hd_code_80364A98 = 0x200000000000;
+                            g_nextGameState = 0x200000000000;
                         } else {
                             if ((((s32) players[playerNumber].unk18[g_currentLevel] > 0) && ((s32)  players[playerNumber].unk18[g_currentLevel] < 6))?1:0 != 0) {
                                 func_hd_code_80275390(0x08000000);

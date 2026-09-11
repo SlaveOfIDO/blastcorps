@@ -686,3 +686,4 @@ func_hd_code_802C6878 = 0x802C6878; // type:func size:0x654
 func_hd_code_802C61F0 = 0x802C61F0; // type:func size:0xcdc
 func_hd_code_802AE888 = 0x802AE888; // type:func size:0x314
 func_hd_code_802C5714 = 0x802C5714; // type:func size:0x14c
+D_hd_code_802D331C = 0x802D331C; // type:u32

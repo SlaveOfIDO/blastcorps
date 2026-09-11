@@ -512,5 +512,6 @@ typedef struct {
 } PakData;
 extern PakData D_hd_code_8039C4F8;
 extern struct S_8020C070* D_hd_code_8036BB24; // 21 elements
+extern ALCSPlayer* D_hd_code_80367734;
 
 #endif

@@ -5,7 +5,6 @@
 #include "structs.h"
 #include "symbol_data.h"
 #include "variables.h"
-#include "yoshi.h"
 
 // Proposed file name: missions.c
 //
@@ -130,7 +129,7 @@ struct S_802E8F74 D_hd_code_802E8F74[4] = {
 };
 
 
-// Per-level mission config table, indexed by levelno. Known fields:
+// Per-level mission config table, indexed by g_currentLevel. Known fields:
 // unk0 = game mode bitmask (see file header), unk2..unk10 = start/finish-line
 // and track rectangles (race mode), unk12[4] = checkpoint-box crossing order,
 // unk18 = goal count (laps / $ damage / RDU count), unk1C..unk2A = positions,
@@ -695,14 +694,14 @@ void func_hd_code_80262320(u8 arg0) {
     }
     if (D_hd_code_80364AA8 != 1) {
         sp2C = (s32)&controllertextures_ROM_START - (s32)&traffictextures_ROM_START;
-        if ((D_hd_code_80364AA8 != 0x80) && (D_hd_code_80364A98 == 0x2000)) {
+        if ((D_hd_code_80364AA8 != 0x80) && (g_nextGameState == 0x2000)) {
             INITIATE_DMA(&traffictextures_ROM_START, g_heap, &sp2C, 0xAU, 0, 1);
             for(sp34 = 0; sp34 < 5; sp34++) {
                 D_hd_code_80367BD0.unkC[sp34 + 1] = (sp34 << 0xF) + g_heap;
             }
             g_heap = &g_heap[sp2C];
         }
-        if (D_hd_code_80364A98 == 0x40) {
+        if ((g_nextGameState == 0x40)) {
             D_hd_code_80367BC8 = 0;
         } else {
             D_hd_code_80367BC8 = 1;
@@ -712,7 +711,7 @@ void func_hd_code_80262320(u8 arg0) {
     }
     D_hd_code_80367C01 = 0;
     D_hd_code_80367C00 = 0;
-    if (D_hd_code_80364A98 == 0x40) {
+    if ((g_nextGameState == 0x40)) {
         D_hd_code_80367BFF = 0;
     } else {
         D_hd_code_80367BFF = 0;
@@ -730,7 +729,7 @@ void func_hd_code_80262320(u8 arg0) {
             D_hd_code_80367BCC = NULL;
         }
     }
-    if (D_hd_code_80364A98 & 0x440) {
+    if ((g_nextGameState & 0x440)) {
         func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367C04->unk30[3] - D_hd_code_80367BF6, 0);
         return;
     }
@@ -808,7 +807,7 @@ void func_hd_code_80262840(void) {
     }
     D_hd_code_80367BC4 = sp34;
     if ((sp34 == 4) && (D_hd_code_8035805C == D_hd_code_803156F4)) {
-        D_hd_code_80364A98 = 4;
+        g_nextGameState = 4;
     }
 }
 
@@ -859,11 +858,11 @@ void func_hd_code_80262BF4(void) {
                 sndDeactivateAllSfxByFlag_11();
                 func_hd_code_8026AF6C(0xA00EU);
                 D_hd_code_8036BB1A = -1;
-                D_hd_code_80364A98 = 0x04000000;
+                g_nextGameState = 0x04000000;
                 break;
             }
             if (D_hd_code_803643D7 != 0) {
-                D_hd_code_80364A98 = 0x04000000;
+                g_nextGameState = 0x04000000;
                 break;
             }
             switch ((u32) D_hd_code_80364AA8) {             /* irregular */

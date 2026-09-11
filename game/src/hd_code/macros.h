@@ -73,4 +73,25 @@ adapted gSPScisTextureRectangle version for this match.
 
 #define	ABS(d)		((d) > 0) ? (d) : -(d)
 
+#define INITIATE_DMA(arg0, arg1, arg2, arg3, arg4, arg5)			\
+	InitiateDma((arg0), (arg1), (arg2), (arg3), (arg4), (arg5))
+
+#ifdef __GNUC__
+#define INIT_FROM_ARRAY(type, name, src) \
+    type; \
+    { \
+        s32 _init_i; \
+        for (_init_i = 0; \
+             _init_i < (s32)(sizeof(name) / sizeof(name[0])); \
+             _init_i++) \
+        { \
+            name[_init_i] = (src)[_init_i]; \
+        } \
+    }
+
+#else
+#define INIT_FROM_ARRAY(type, name, src) \
+    type = src
+#endif
+
 #endif

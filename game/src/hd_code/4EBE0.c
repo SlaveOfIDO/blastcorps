@@ -52,7 +52,7 @@ extern f32 D_hd_code_8030CD50;
 /* Proposed name: RoadJunction
  * Road junction table entry for movement type 4 (drive along roads). */
 struct S_802FEDA0 {
-  u8 unk0;  /* level number (compared against levelno) */
+  u8 unk0;  /* level number (compared against g_currentLevel) */
   u8 pad1;
   s16 unk2; /* grid x (world x >> 5) */
   s16 unk4; /* grid z (world z >> 5) */
@@ -283,7 +283,7 @@ void func_hd_code_802933A0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Mtx* arg4, s3
  * (D_hd_code_803643E0/E8 = player x/z) — or away from it at 1.5x speed when
  * D_hd_code_8036E4C8 is set, in which case it also blinks (parked at y=20000 except
  * when (frame & 0xF) >= 7). At each junction from D_hd_code_802FEDA0 (matched
- * by levelno and grid position +/-5) it picks an allowed exit direction biased
+ * by g_currentLevel and grid position +/-5) it picks an allowed exit direction biased
  * toward (or away from) the player; D_hd_code_8036E4CA reverses the current direction.
  * Heading (arg8->unk4) turns 10 deg/frame toward the cardinal target angle.
  * arg1/arg2 = origin grid x/z, arg3/arg4 = current grid x/z,

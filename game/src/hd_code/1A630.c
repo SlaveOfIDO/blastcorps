@@ -754,7 +754,7 @@ ALSoundState *sndPlaySfx(ALBank *soundBank, s16 sndId, ALSoundState *pendingStat
     eventSndId = 0;
     deltaTotal = 0;
 
-    if ((sndId == 0) || ((D_hd_code_80358060 == 0) && (sndId == 0xC)) || (((sndId == 0x14) || (sndId == 0x15)) && ((levelno == 0x26) || (levelno == 0x31)))) {
+    if ((sndId == 0) || ((D_hd_code_80358060 == 0) && (sndId == 0xC)) || (((sndId == 0x14) || (sndId == 0x15)) && ((g_currentLevel == 0x26) || (g_currentLevel == 0x31)))) {
         return 0;
     }
 

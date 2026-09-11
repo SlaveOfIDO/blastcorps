@@ -43,13 +43,13 @@ s32 maxCharacters;
 void func_hd_code_802592F0() {
   s32 sp1C;
 
-  if (D_hd_code_80364A98 & 0xC9FD8FE7DBFF8080 ||
-      D_hd_code_80364A98 == 0x100000000000 ||
-      D_hd_code_80364A98 == 2 ||
+  if (g_nextGameState & 0xC9FD8FE7DBFF8080 ||
+      g_nextGameState == 0x100000000000 ||
+      g_nextGameState == 2 ||
       g_currentLevel == 0x28 ||
       g_currentLevel == 0x32) {
     maxCharacters = 0x200;
-      } else if (D_hd_code_80364A98 == 0x40) {
+      } else if (g_nextGameState == 0x40) {
         maxCharacters = 0x9C;
       } else {
         maxCharacters = 0xAC;

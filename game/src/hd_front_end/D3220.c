@@ -101,9 +101,9 @@ void func_hd_front_end_801EF4AC(void) {
     func_hd_code_8028A3E4();
     if (D_hd_code_80358060 == 0xFA) {
         if (D_hd_code_80364A90 == 0x10) {
-            D_hd_code_80364A98 = 0x20;
+            g_nextGameState = 0x20;
         } else {
-            D_hd_code_80364A98 = 0x0400000000000000;
+            g_nextGameState = 0x0400000000000000;
             if (D_hd_code_802FA268 != 0) {
                 sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, 0x68, NULL);
             }

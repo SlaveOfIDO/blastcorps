@@ -99,7 +99,7 @@ void func_hd_code_8025BB50(void) {
 // Proposed name: RecordInputFrame
 void func_hd_code_8025BBE8(u16 arg0, s8 arg1, s8 arg2) {
   if (D_hd_code_803669A8 == 0) {
-    if (arg0 != D_hd_code_803669A4 || ((s8) arg1 != D_hd_code_803669A6) || ((s8) arg2 != D_hd_code_803669A7) || (D_hd_code_8036699C == 0xFF) || (D_hd_code_80364A98 != 0) ) {
+    if (arg0 != D_hd_code_803669A4 || ((s8) arg1 != D_hd_code_803669A6) || ((s8) arg2 != D_hd_code_803669A7) || (D_hd_code_8036699C == 0xFF) || (g_nextGameState != 0) ) {
       if (D_hd_code_80366990 < 0x400) {
         D_hd_code_80365588[D_hd_code_80366990].unk0 = D_hd_code_803669A4 >> 8;
         D_hd_code_80365588[D_hd_code_80366990].unk1 = D_hd_code_803669A4 & 0xFF;

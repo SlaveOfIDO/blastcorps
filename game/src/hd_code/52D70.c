@@ -49,7 +49,7 @@ void func_hd_code_80297530(u8 arg0) {
   u8 sp1E;
 
   sp1F = 0;
-  if (D_hd_code_80364A98 == 0x2000) {
+  if (g_nextGameState == 0x2000) {
     sp1F = func_hd_code_8029766C(arg0, &sp1E);
   } else {
     sp1F = 0;
@@ -123,7 +123,7 @@ void func_hd_code_80297804(s32 arg0, s32 arg1, s32 arg2) {
     } else if (func_hd_code_8026A6F0(arg0 >> 5, arg1 >> 5, arg2 >> 5, (s32) D_hd_code_8039CAB0, (s32) D_hd_code_8039CAB2, (s32) D_hd_code_8039CAB4) < 0x50) {
       D_hd_code_8039CAB8 = 1;
       D_hd_code_8039CAC8 |= 1 << D_hd_code_8039CAB6;
-      D_hd_code_80364A98 = 0x1000000000;
+      g_nextGameState = 0x1000000000;
     }
   }
 }

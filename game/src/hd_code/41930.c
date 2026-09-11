@@ -50,7 +50,7 @@ void func_hd_code_802860F0(void) {
   s32 sp28;
 
   if ((players[playerNumber].unk91 != 0xD) && (players[playerNumber].unk91 != 8) && (players[playerNumber].unk91 != 1)) {
-    D_hd_code_80364A98 = 0x800000000000;
+    g_nextGameState = 0x800000000000;
     hdPrepareStateTransition();
     func_hd_front_end_80200714(D_hd_code_802FDA60[players[playerNumber].unk91]);
     switch (players[playerNumber].unk91) {                          /* irregular */
@@ -94,12 +94,12 @@ void func_hd_code_80286330(void) {
     case 2:
     case 3:
     case 4:
-      D_hd_code_80364A98 = 0x4000;
+      g_nextGameState = 0x4000;
     default:
       break;
     case 5:
       func_hd_code_802995F0(0);
-      D_hd_code_80364A98 = 0x100000000000;
+      g_nextGameState = 0x100000000000;
       break;
     case 6:
       if (g_currentLevel != 0x32) {
@@ -111,26 +111,26 @@ void func_hd_code_80286330(void) {
       if (!frontEndPresent) {
         rmonPrintf(ASSERT_MESSAGE, "frontEndPresent", "academy.c", 0x8E);
       }
-      D_hd_code_80364A98 = 0x800;
+      g_nextGameState = 0x800;
       D_hd_code_803643D5 = 0;
       func_hd_front_end_801F8354(playerNumber);
       break;
     case 7:
       func_hd_code_802995F0(1);
-      D_hd_code_80364A98 = 0x100000000000;
+      g_nextGameState = 0x100000000000;
       break;
     case 9:
       func_hd_code_802995F0(3);
-      D_hd_code_80364A98 = 0x100000000000;
+      g_nextGameState = 0x100000000000;
       break;
     case 10:
-      D_hd_code_80364A98 = 0x4000000000000;
+      g_nextGameState = 0x4000000000000;
       break;
     case 11:
-      D_hd_code_80364A98 = 0x4000;
+      g_nextGameState = 0x4000;
       break;
     case 12:
-      D_hd_code_80364A98 = 0x4000;
+      g_nextGameState = 0x4000;
       break;
   }
 }

@@ -118,7 +118,7 @@ extern u8 D_hd_code_80364A6C;
 extern u8 D_hd_code_80364A84;
 extern u8 D_hd_code_80364A87;
 extern u64 D_hd_code_80364A90;
-extern u64 D_hd_code_80364A98;
+extern u64 g_nextGameState;
 extern u32 D_hd_code_80364AA8;
 extern u8 playerNumber;
 extern u8 D_hd_code_80364AEA;

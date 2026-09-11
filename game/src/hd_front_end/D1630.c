@@ -131,7 +131,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
             D_hd_front_end_80215976 -= 0x20;
         }
         if (D_hd_front_end_80215976 == 0) {
-            D_hd_code_80364A98 = 0x08000000;
+            g_nextGameState = 0x08000000;
         }
         break;
     }

@@ -30,7 +30,7 @@ extern u16 D_hd_code_803BE720;
 extern u16 D_hd_code_803BE722;
 
 // Data Begin
-// Per-level pair of sky texture layer descriptors, indexed by levelno:
+// Per-level pair of sky texture layer descriptors, indexed by g_currentLevel:
 // {unk0 = texture asset id (0 = no sky), unk2, unk4 = RAM pointer filled at
 // load time, unk8/unk9 = log2 horizontal/vertical texcoord scale,
 // unkA/unkB = S/T clamp-mirror flags}. Layer 0 is RGBA16, layer 1 IA16.
@@ -111,7 +111,7 @@ Vtx D_hd_code_802FA820[2][4] = {
 u16 D_hd_code_802FA8A0[2] = { 0, 3 }; // render formats of the two sky layers: G_IM_FMT_RGBA, G_IM_FMT_IA; proposed name: skyLayerFormats
 // Data End
 
-// Draw the sky backdrop. arg2 = levelno, arg3 = camera heading (0..4095),
+// Draw the sky backdrop. arg2 = g_currentLevel, arg3 = camera heading (0..4095),
 // arg4 = camera pitch, *arg5 receives the visible sky height in pixels so the
 // caller knows how much of the screen the sky covers. Computes the quad
 // height from pitch + horizon offset and the horizontal texture scroll from
@@ -203,7 +203,7 @@ Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s
 }
 
 // Sky init for a level. arg0 = the pending game state (passed as
-// D_hd_code_80364A98 from InitLevel in 00000.c), arg1 = levelno. Computes the
+// g_nextGameState from InitLevel in 00000.c), arg1 = g_currentLevel. Computes the
 // horizon offset from the map area ((D_hd_code_803BE720 * D_hd_code_803BE718 +
 // D_hd_code_803BE722 * D_hd_code_803BE71C) / 32): 1200000/area for one set of modes,
 // 600000/area for another, 0 otherwise, plus 32 extra for levels 0x34, 0x3B,
