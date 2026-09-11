@@ -2,11 +2,14 @@
 
 .set noat
 .set noreorder
+.set gp=64
 
 .text
 
 .globl bcopy
+.type bcopy, @function
 bcopy:
+    .ent bcopy
     beqz       a2, ret
      or        a3, a1, zero
     beq        a0, a1, ret
@@ -223,3 +226,5 @@ ret:
     addiu      a2, a2, -0x4
     b          .Lhd_code_802E2620
      sw        v0, 0x0(a1)
+.size bcopy, . - bcopy
+.end bcopy
