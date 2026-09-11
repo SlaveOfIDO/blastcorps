@@ -109,7 +109,7 @@ s16 D_hd_code_802E8D00[66] = {
 };
 u8 D_hd_code_802E8D84 = 0; // Can be either 0 or 1; double-buffer index into D_hd_code_80367518, toggled each tune start; proposed name: seqBufIdx
 f32 D_hd_code_802E8D88 = 1.0f; // master music volume multiplier; proposed name: musicMasterVol
-// Per-level default tune id, indexed by levelno
+// Per-level default tune id, indexed by g_currentLevel
 // Proposed name: levelTunes
 u8 D_hd_code_802E8D8C[60] = {
   0x08,
@@ -174,7 +174,7 @@ u8 D_hd_code_802E8D8C[60] = {
   0x22
 };
 
-// Per-level push/jingle tune id, indexed by levelno (0 = none)
+// Per-level push/jingle tune id, indexed by g_currentLevel (0 = none)
 // Proposed name: levelJingles
 u8 D_hd_code_802E8DC8[60] = {
   0x14,
@@ -239,7 +239,7 @@ u8 D_hd_code_802E8DC8[60] = {
   0x00
 };
 
-// Per-level tune id set (used by func_hd_code_80260E2C, likely results/end-of-level music), indexed by levelno
+// Per-level tune id set (used by func_hd_code_80260E2C, likely results/end-of-level music), indexed by g_currentLevel
 // Proposed name: levelResultsTunes
 u8 D_hd_code_802E8E04[60] = {
   0x2B,
@@ -304,7 +304,7 @@ u8 D_hd_code_802E8E04[60] = {
   0x2E
 };
 
-// Per-level alternate tune id set (used by func_hd_code_80260E80, overlaps with D_hd_code_802E8E04), indexed by levelno
+// Per-level alternate tune id set (used by func_hd_code_80260E80, overlaps with D_hd_code_802E8E04), indexed by g_currentLevel
 // Proposed name: levelResultsTunesAlt
 u8 D_hd_code_802E8E40[60] = {
   0x41,
@@ -425,13 +425,10 @@ void musicPlayTune(u8 sequenceId, f32 sequenceVolume) {
   D_hd_code_8036770C = sequenceVolume;
   D_hd_code_80367708 = sequenceId;
 
-
+  sp24 = D_hd_code_80367514->seqArray[sequenceId].offset;
 
   INITIATE_DMA(sp24, D_hd_code_80367510, &D_hd_code_80367408[sequenceId], 0U, 0, 0);
   alCSeqNew(&D_hd_code_80367518[D_hd_code_802E8D84], D_hd_code_80367510);
-  alCSPSetSeq(D_hd_code_80367734, &D_hd_code_80367518[D_hd_code_802E8D84]);
-  alCSPPlay(D_hd_code_80367734);
-  alCSPSetVol(D_hd_code_80367734, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
   alCSPSetSeq(g_musicPlayer, &D_hd_code_80367518[D_hd_code_802E8D84]);
   alCSPPlay(g_musicPlayer);
   alCSPSetVol(g_musicPlayer, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
@@ -713,7 +710,6 @@ void func_hd_code_80261588(void) {
     sp68.stopOsc = NULL;
     g_musicPlayer = alHeapAlloc(&D_hd_code_80367718, 1, sizeof(ALCSPlayer));
     alCSPNew(g_musicPlayer, &sp68);
-
     alCSPSetBank(g_musicPlayer, D_hd_code_8036773C);
     sp84.maxEvents = 0x40;
     sp84.maybeSndStateCount = 0x20;
@@ -744,11 +740,11 @@ void func_hd_code_802619D0(u32 effectId) {
   }
 }
 
-// Main music chooser. arg0 is a one-hot level bitmask (1 << levelno; u64 since
+// Main music chooser. arg0 is a one-hot level bitmask (1 << g_currentLevel; u64 since
 // there are 60 levels), which is why the cases are powers of two. Deactivates
 // certain SFX, applies per-level SFX ducking, then selects the tune for that
 // level: special-case levels get fixed tunes, some just fade the music out,
-// ordinary levels use D_hd_code_802E8D8C[levelno]. Returns the new tune id
+// ordinary levels use D_hd_code_802E8D8C[g_currentLevel]. Returns the new tune id
 // (after starting a fade-out) if it differs from the current one, else 0.
 // Proposed name: ChooseLevelMusic
 u8 func_hd_code_80261A44(u64 arg0) {

@@ -62,14 +62,6 @@ s32 D_hd_code_80306400[4] = {
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/create_status.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C4EEC.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C4EF8.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C4FA4.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C4FB0.s")
-
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5120.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C51E0.s")
@@ -82,8 +74,6 @@ s32 D_hd_code_80306400[4] = {
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5508.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5618.s")
-
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5688.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C56A8.s")
@@ -91,8 +81,6 @@ s32 D_hd_code_80306400[4] = {
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C56B4.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5714.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5738.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5860.s")
 
@@ -107,20 +95,6 @@ s32 D_hd_code_80306400[4] = {
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C617C.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C61F0.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C6870.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C6878.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C68B8.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C68C0.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C6900.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C6908.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C6DAC.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C6ECC.s")
 

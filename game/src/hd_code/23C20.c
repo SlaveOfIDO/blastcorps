@@ -559,7 +559,7 @@ void func_hd_code_80268F54(void) {
   f32 sp0;
 
   sp7 = 0;
-  if ((D_hd_code_80364A98 == 0x800)) {
+  if ((g_nextGameState == 0x800)) {
     D_hd_code_8036B966 = 0;
   } else {
     D_hd_code_8036B966 = 1;

@@ -165,7 +165,7 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
 
     sp60 = &players[playerNumber];
     sp5C = &D_hd_code_802E8F94[(u8) arg0];
-    if ((D_hd_code_80364A98 == 0x08000000) && (arg1 != 0) && (sp5C->unk0 == 2)) {
+    if ((g_nextGameState == 0x08000000) && (arg1 != 0) && (sp5C->unk0 == 2)) {
         func_hd_code_80295A20(func_hd_code_80286038(D_hd_code_8036EA74));
     }
     if ((arg2 != 0) && (arg1 != 0)) {
@@ -204,7 +204,7 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
         sp54->unk1A = func_hd_code_80272C5C(&sp58->unk6, 0, sp58->unk4, sp58->unk2C, sp58->unk2D | 4, 1.0f);
         if (playerNumber != D_hd_code_80364AEA) {
             sp64 = 3;
-        } else if (((D_hd_code_80364A98 == 0x80)) || (D_hd_code_803643D5 != 0)) {
+        } else if (((g_nextGameState == 0x80)) || (D_hd_code_803643D5 != 0)) {
             sp64 = 1;
         } else if ((u32) D_hd_code_8036EA74 < (u32) D_hd_code_8036EA64) {
             sp64 = 0;

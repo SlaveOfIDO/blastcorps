@@ -57,7 +57,7 @@ Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
     if ((D_hd_code_8036C778 != 0)) {
         D_hd_code_8036C784 = MIN(255.0f, ((D_hd_code_803156C4 - D_hd_code_8036C780) * D_hd_code_8036C774));
         if (D_hd_code_8036C784 == 0xFF) {
-            D_hd_code_80364A98 = D_hd_code_8036C778;
+            g_nextGameState = D_hd_code_8036C778;
             D_hd_code_8036C778 = 0;
         }
     } else if (D_hd_code_8036C784 != 0) {

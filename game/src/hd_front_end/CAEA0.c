@@ -272,10 +272,10 @@ void func_hd_front_end_801E7598(void) {
             switch(D_hd_code_80364A88) {
                 case 0x80:
                 case 0x08000000:
-                    D_hd_code_80364A98 = D_hd_code_80364A88;
+                    g_nextGameState = D_hd_code_80364A88;
                     break;
                 default:
-                    D_hd_code_80364A98 = 0x4000;
+                    g_nextGameState = 0x4000;
                 break;
             }
         }

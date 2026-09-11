@@ -247,7 +247,7 @@ void func_hd_front_end_801F58E8() {
             rmonPrintf("pak command %d returned %d\n", sp2F, sp38);
             switch (sp38) {
             case 0x6E382:
-                if (D_hd_code_80364A90 & 0x10E18000 || (D_hd_code_80364A98 & 0x20000000000000)) {
+                if (D_hd_code_80364A90 & 0x10E18000 || (g_nextGameState & 0x20000000000000)) {
                     sp2D = 1;
                     break;
                 }
@@ -307,7 +307,7 @@ void func_hd_front_end_801F58E8() {
                 }
                 break;
             case 0x1:
-                if ((D_hd_code_80364A98 & 0x20000000000000) != 0) {
+                if ((g_nextGameState & 0x20000000000000) != 0) {
                     sp2D = 1;
                 }
                 break;

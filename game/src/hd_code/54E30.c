@@ -212,10 +212,10 @@ void func_hd_code_80299E10(s32 arg0) {
   }
   if (arg0 != 0) {
     sndPlaySfx(D_hd_code_80367738, 0x1E, NULL);
-    D_hd_code_80364A98 = D_hd_code_803A6AF0;
+    g_nextGameState = D_hd_code_803A6AF0;
     g_currentLevel = D_hd_code_803A6B00;
   } else {
-    D_hd_code_80364A98 = D_hd_code_803A6AF8;
+    g_nextGameState = D_hd_code_803A6AF8;
     g_currentLevel = D_hd_code_803A6B01;
   }
   rmonPrintf("finishing sequence and going to level %d\n", g_currentLevel);

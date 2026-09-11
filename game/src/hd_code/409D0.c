@@ -137,7 +137,6 @@ u8 D_hd_code_8036EB9C[4];
 // Load the level's target stats for the current player at level start:
 // the par time (from the medal-tier table D_hd_code_80364EF0), the current
 // medal, and whether the level is already completed (D_hd_code_8036EB98)
-// Proposed name: LoadLevelStats
 void statsLoadLevelStats(void) {
   s32 sp4;
 
@@ -203,7 +202,7 @@ u32 func_hd_code_802852EC(void) {
         D_hd_front_end_8020C070[sp50].unk0 = 0x400;
     }
 
-    if ((D_hd_code_80364A98 == 0x40)) {
+    if ((g_nextGameState == 0x40)) {
         sp48 = 0x100;
     }
     if (D_hd_code_80364A90 & 0x30C) {

@@ -457,7 +457,7 @@ void func_hd_front_end_801F8980(void) {
             D_hd_front_end_8021AB2C -= 0x40;
         }
         if (D_hd_front_end_8021A918 <= 300.0) {
-            D_hd_code_80364A98 = func_hd_code_80299FE8(g_currentLevel);
+            g_nextGameState = func_hd_code_80299FE8(g_currentLevel);
         }
         break;
     default:

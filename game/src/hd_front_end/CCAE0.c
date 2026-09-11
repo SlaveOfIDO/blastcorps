@@ -326,7 +326,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
     if ((s32) arg0 < 4) {
         func_hd_front_end_801E93DC(arg0);
     }
-    if ((D_hd_code_80364A98 == 0x1000000000000)) {
+    if ((g_nextGameState == 0x1000000000000)) {
         D_hd_front_end_802158A0 = 0;
         sprintf(&D_hd_front_end_802155A0, "%s", sp34[arg0]);
     } else {
@@ -351,7 +351,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
                 }
                 D_hd_front_end_802154EC = func_hd_code_8025B300(&D_hd_front_end_802155A0);
                 sprintf(&D_hd_front_end_802155A0, "%s  %d", &D_hd_front_end_802155A0, sp48->unkC);
-                if ((D_hd_code_80364A98 & 0x0200040000000000) || D_hd_code_80364A90 & 0x0100000000000000) {
+                if ((g_nextGameState & 0x0200040000000000) || D_hd_code_80364A90 & 0x0100000000000000) {
                     sprintf(&D_hd_front_end_802155A0, "%s ..... %s", &D_hd_front_end_802155A0, "USE Z/R TO CHANGE PLAYER, THEN A TO SELECT!");
                 }
             } else {
@@ -834,7 +834,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
     }
     if ((D_hd_code_8036BB1C == 2) && (D_hd_code_80370C28 & 0x1000) && !(D_hd_code_80370C2A & 0x1000) && (areWeFading() == 0)) {
         if (D_hd_front_end_802154BC != 0) {
-            D_hd_code_80364A98 = 0x01000000;
+            g_nextGameState = 0x01000000;
             D_hd_code_80365060[playerNumber] = 1;
             func_hd_code_8026AF6C(0x4000U);
         } else {
@@ -853,7 +853,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
                         if (D_hd_code_802E8BF8 != 0) {
                             func_hd_code_80275270(0x0400000000000000, 0.5f);
                         } else {
-                            D_hd_code_80364A98 = 0x200000;
+                            g_nextGameState = 0x200000;
                         }
                         sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0xDE, NULL);
                         func_hd_code_8026AF6C(0x4000U);
@@ -1150,7 +1150,7 @@ void func_hd_front_end_801ECE9C(void) {
 
   for (sp4 = 0; sp4 < LEVEL_MAX; sp4++) {
     if (D_hd_code_802E8F94[sp4].unk0 & 0x81) {
-      if ((players[playerNumber].unk91 >= 0xB) && (D_hd_code_80364A98 == 0x4000)) {
+      if ((players[playerNumber].unk91 >= 0xB) && (g_nextGameState == 0x4000)) {
         D_hd_code_802E8F94[sp4].unk0 = 0x80;
       } else {
         D_hd_code_802E8F94[sp4].unk0 = 1;
