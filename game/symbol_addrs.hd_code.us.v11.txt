@@ -691,3 +691,4 @@ gfxWaitForTask = 0x80285110;
 g_currentRdpTask = 0x8036BF1C;
 g_nextRetrace = 0x8036BF14;
 func_hd_code_802C4108 = 0x802C4108; // type:func size:0xb8
+D_hd_code_802D331C = 0x802D331C; // type:u32
