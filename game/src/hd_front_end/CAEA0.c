@@ -16,7 +16,7 @@ extern struct S_80208044 D_hd_front_end_80208044;
 // <data>
 char *D_hd_front_end_80208040 = "SELECT VEHICLE!";
 struct S_80208044 D_hd_front_end_80208044 = {
-  (s32) D_hd_code_80304954, { 0xFFFF,  0x0000 }
+  D_hd_code_80304954, { 0xFFFF,  0x0000 }
 };
 u8 D_hd_front_end_8020804C[20] = {
   0x00, 0x01, 0x00, 0x00,
@@ -318,7 +318,7 @@ void func_hd_front_end_801E7598(void) {
         }
         D_hd_front_end_802153E6 = (u16) D_hd_front_end_802153E6 - 0x2EE;
     }
-    func_hd_code_80284E54(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1U, 1, 0x4D2, 0);
+    gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1U, 1, 0x4D2, 0);
 
     D_hd_code_8035805C ^= 1;
 

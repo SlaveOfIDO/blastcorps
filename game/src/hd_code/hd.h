@@ -68,7 +68,7 @@ extern u8 D_hd_code_802E8C44[];
 extern OSMesgQueue D_hd_code_803150A0;
 extern OSMesgQueue D_hd_code_803153D8;
 extern OSSched sc; // 0x80315440
-extern OSScClient D_hd_code_803156D8;
+extern OSScClient g_gfxClient;
 extern u8 D_hd_code_803156F4;
 extern struct Model1 D_hd_code_803156F8[2];
 extern u32 D_hd_code_80358058;

@@ -9,20 +9,23 @@
 #define RDP_DONE_MSG    2
 #define PRE_NMI_MSG     3
 
+
 #define RSP_STATE_SUSPENDED 3
 
+#define EXEC_IS_AUDIO 0
+#define EXEC_IS_GFX 1
 
-void func_hd_code_80271E88(OSSched*);                  /* extern */
-void func_hd_code_802712B4(OSSched*, void*);       /* extern */
-void func_hd_code_802712FC(OSSched*);              /* extern */
-void func_hd_code_80271358(OSSched*);              /* extern */
-void func_hd_code_802715DC(OSSched*);              /* extern */
-void func_hd_code_80271904(OSSched*);              /* extern */
+void __scYield(OSSched*);                  /* extern */
+void __scHandleGfxTask(OSSched*, OSScTask*);       /* extern */
+void __scExecAudioIfIdle(OSSched*);              /* extern */
+void __scRetraceDone(OSSched*);              /* extern */
+void __scRspDone(OSSched*);              /* extern */
+void __scRdpDone(OSSched*);              /* extern */
 s32 func_hd_code_802A1320();                        /* extern */
 void __scMain(void*);                               /* extern */
-void func_hd_code_80271C24(OSSched*, OSScTask*);           /* extern */
-void func_hd_code_80271CE4(OSSched*, s32);               /* extern */
-s32 func_hd_code_80271F48(OSMesgQueue* arg0, OSMesg arg1, s32 arg2);               /* extern */
+void __scAppendList(OSSched*, OSScTask*);           /* extern */
+void __scExec(OSSched*, s32);               /* extern */
+s32 __scSendMesg(OSMesgQueue* messageQueue, OSMesg message, s32 flags);               /* extern */
 s32 func_hd_code_80271A84(OSSched*, OSScTask*);     /* extern */
 
 extern OSViMode D_hd_code_80306E70[];
@@ -39,9 +42,9 @@ OSTime D_hd_code_8036BF00;
 s32 D_hd_code_8036BF08;
 s32 D_hd_code_8036BF0C;
 s32 D_hd_code_8036BF10;
-s32 D_hd_code_8036BF14;
+s32 g_nextRetrace;
 s32 D_hd_code_8036BF18;
-OSScTask* D_hd_code_8036BF1C;
+OSScTask* g_currentRdpTask;
 u32 D_hd_code_8036BF20;
 u32 D_hd_code_8036BF24;
 u32 bss_pad_8036BF28;
@@ -63,9 +66,10 @@ void osCreateScheduler(OSSched* s, void* stack, s32 priority, u8 mode, u8 numFie
   s->audioListTail = (OSScTask* ) &s->audioListHead;
   s->gfxListTail = (OSScTask* ) &s->gfxListHead;
   D_hd_code_8036BF10 = 0;
-  D_hd_code_8036BF1C = 0;
-  osCreateMesgQueue(&s->interruptQ, s->intBuf, 0x10);
-  osCreateMesgQueue(&s->cmdQ, s->cmdMsgBuf, 0x10);
+  g_currentRdpTask = 0;
+
+  osCreateMesgQueue(&s->interruptQ, s->intBuf, OS_SC_MAX_MESGS);
+  osCreateMesgQueue(&s->cmdQ, s->cmdMsgBuf, OS_SC_MAX_MESGS);
   osCreateViManager(0xFE);
   osViSetMode(&osViModeTable[mode]);
   osViBlack(1);
@@ -118,56 +122,56 @@ OSMesgQueue* osScGetCmdQ(OSSched* s) {
   return &s->cmdQ;
 }
 
-void __scMain(void* arg0) {
-    OSMesg sp34;
-    OSSched* sp30;
-    OSScClient* sp2C;
+void __scMain(void* params) {
+    OSMesg msg;
+    OSSched* scheduler;
+    OSScClient* client;
 
-    sp30 = arg0;
+    scheduler = params;
     while(1) {
-        osRecvMesg(&sp30->interruptQ, &sp34, OS_MESG_BLOCK);
-        if (!(func_hd_code_802A1320() & 0x1000)) {
+        osRecvMesg(&scheduler->interruptQ, &msg, OS_MESG_BLOCK);
 
-            for (sp2C = sp30->clientList; sp2C != NULL; sp2C = sp2C->next) {
-                osSendMesg(sp2C->msgQ, (void* )0x29D, 0);
+        if (!(func_hd_code_802A1320() & 0x1000)) {
+            for (client = scheduler->clientList; client != NULL; client = client->next) {
+                osSendMesg(client->msgQ, (void* )0x29D, 0);
             }
             D_hd_code_8036BF10 = 1;
             osViBlack(1U);
             rmonPrintf("GO %x\n", osDpGetStatus());
-            osDpSetStatus(4U);
+            osDpSetStatus(DPC_CLR_FREEZE);
             RCP_STAT_PRINT;
             rmonPrintf("GO %x\n", osDpGetStatus());
             while(1);
         }
-        switch ((s32)sp34 - 0x29A) {
+        switch ((s32)msg - 0x29A) {
         case VIDEO_MSG:
             D_hd_code_8036BFB8++;
             if ((D_hd_code_8036BFB8 % 480U) == 0) {
                 D_hd_code_8036BEF8 = D_hd_code_8036BF00;
                 D_hd_code_8036BF08 = D_hd_code_8036BF0C;
             }
-            func_hd_code_80271358(sp30);
+            __scRetraceDone(scheduler);
             break;
         case 4:
-            func_hd_code_802712FC(sp30);
+            __scExecAudioIfIdle(scheduler);
             break;
         case RSP_DONE_MSG:
-            func_hd_code_802715DC(sp30);
+            __scRspDone(scheduler);
             break;
         case RDP_DONE_MSG:
-            func_hd_code_80271904(sp30);
+            __scRdpDone(scheduler);
             break;
         case 5:
             osSendMesg(D_hd_code_8036BF78.mq, D_hd_code_8036BF78.msg, 1);
             break;
         case PRE_NMI_MSG:
-            for (sp2C = sp30->clientList; sp2C != NULL; sp2C = sp2C->next) {
-                osSendMesg(sp2C->msgQ, (void* )0x29D, 0);
+            for (client = scheduler->clientList; client != NULL; client = client->next) {
+                osSendMesg(client->msgQ, (void* )0x29D, 0);
             }
             D_hd_code_8036BF10 = 1;
             osViBlack(TRUE);
             rmonPrintf("%x\n", osDpGetStatus());
-            osDpSetStatus(4U);
+            osDpSetStatus(DPC_CLR_FREEZE);
             RCP_STAT_PRINT;
             rmonPrintf("%x\n", osDpGetStatus());
             while(1);
@@ -176,87 +180,87 @@ void __scMain(void* arg0) {
             while (osViGetCurrentFramebuffer() != osViGetNextFramebuffer()) {
 
             }
-            osDpSetStatus(4U);
+            osDpSetStatus(DPC_CLR_FREEZE);
             while(1);
         default:
-            func_hd_code_802712B4(sp30, sp34);
+            __scHandleGfxTask(scheduler, (OSScTask*)msg);
             break;
         }
     }
 }
 
-void func_hd_code_802712B4(OSSched* arg0, void* arg1) {
-  func_hd_code_80271C24(arg0, arg1);
-  if (arg0->curRSPTask == NULL) {
-    func_hd_code_80271CE4(arg0, 1);
+void __scHandleGfxTask(OSSched* scheduler, OSScTask* arg1) {
+  __scAppendList(scheduler, arg1);
+  if (scheduler->curRSPTask == NULL) {
+    __scExec(scheduler, EXEC_IS_GFX);
   }
 }
 
-void func_hd_code_802712FC(OSSched* arg0) {
-  if (arg0->curRSPTask != NULL) {
-    func_hd_code_80271E88(arg0);
+void __scExecAudioIfIdle(OSSched* scheduler) {
+  if (scheduler->curRSPTask != NULL) {
+    __scYield(scheduler);
     return;
   }
   D_hd_code_8036BF00 = 0;
-  func_hd_code_80271CE4(arg0, 0);
+  __scExec(scheduler, EXEC_IS_AUDIO);
 }
 
-void func_hd_code_80271358(OSSched* arg0) {
-  OSScTask* sp44;
-  OSScClient* sp40;
+void __scRetraceDone(OSSched* scheduler) {
+  OSScTask* rspTask;
+  OSScClient* client;
   s32 sp3C;
   s32 sp38;
 
-  arg0->unk803156C4 += 1;
+  scheduler->retraceCount += 1;
   if (D_hd_code_802E8BD0 == 0) {
-    arg0->unk803156C0 += 1;
+    scheduler->unk803156C0 += 1;
   }
   D_hd_code_8036BF38 = osGetTime();
-  if (D_hd_code_8036BF1C != NULL) {
-    osViSwapBuffer(D_hd_code_8036BF1C->framebuffer);
-    D_hd_code_8036BF18 = D_hd_code_8036BF14;
-    D_hd_code_8036BF14 = arg0->unk803156C4 + 1;
-    osDpSetStatus(8U);
-    if (D_hd_code_8036BF1C->msg != NULL) {
-      func_hd_code_80271F48(D_hd_code_8036BF1C->msg, D_hd_code_8036BF1C->unk58, 0);
+  if (g_currentRdpTask != NULL) {
+    osViSwapBuffer(g_currentRdpTask->framebuffer);
+    D_hd_code_8036BF18 = g_nextRetrace;
+    g_nextRetrace = scheduler->retraceCount + 1;
+    osDpSetStatus(DPC_SET_FREEZE);
+    if (g_currentRdpTask->msgQ != NULL) {
+      __scSendMesg(g_currentRdpTask->msgQ, g_currentRdpTask->msg, OS_MESG_NOBLOCK);
     }
-    D_hd_code_8036BF1C = NULL;
+    g_currentRdpTask = NULL;
   } else {
-    if ((osViGetCurrentFramebuffer() == osViGetNextFramebuffer()) && (osDpGetStatus() & 2)) {
-      arg0->unk803156C8 = osGetTime();
-      osDpSetStatus(4U);
+    if (osViGetCurrentFramebuffer() == osViGetNextFramebuffer() && (osDpGetStatus() & 2)) {
+      scheduler->unk803156C8 = osGetTime();
+      osDpSetStatus(DPC_CLR_FREEZE);
     }
   }
-  for(sp38 = arg0->cmdQ.validCount, sp3C = 0; sp3C < sp38; sp3C++) {
-    if (osRecvMesg(&arg0->cmdQ, (OSMesg*)&sp44, 0) == -1) {
+  for(sp38 = scheduler->cmdQ.validCount, sp3C = 0; sp3C < sp38; sp3C++) {
+    if (osRecvMesg(&scheduler->cmdQ, (OSMesg*)&rspTask, OS_MESG_NOBLOCK) == -1) {
       rmonPrintf(ASSERT_MESSAGE, "osRecvMesg(&sc->cmdQ, (OSMesg *)&rspTask, OS_MESG_NOBLOCK) != -1", "sched.c", 0x1BD);
     }
-    if (((u32) arg0->unk803156C4 % (u32) sp44->msgQ->validCount) == 0) {
-      func_hd_code_80271C24(arg0, sp44);
+    if (((u32) scheduler->retraceCount % (u32) rspTask->client->unk8) == 0) {
+      __scAppendList(scheduler, rspTask);
     } else {
-      osSendMesg(&arg0->cmdQ, (OSMesg*)sp44, 0);
+      osSendMesg(&scheduler->cmdQ, (OSMesg*)rspTask, 0);
     }
   }
-  if ((arg0->audioListHead != NULL) && !(arg0->unk803156C4 & 1)) {
-    osSetTimer(&D_hd_code_8036BF78, 0x445C0, 0, (OSMesgQueue* ) arg0->audioListHead->msgQ->fullqueue, (void* )5);
+  if ((scheduler->audioListHead != NULL) && !(scheduler->retraceCount & 1)) {
+    osSetTimer(&D_hd_code_8036BF78, 0x445C0, 0, (OSMesgQueue* ) scheduler->audioListHead->client->msgQ, (void* )5);
   }
-  for(sp40 = arg0->clientList; sp40 != NULL; sp40 = sp40->next) {
-    if (sp40->unkC == 3) {
-      osSendMesg(sp40->msgQ, (void* )0x29A, 0);
+  for(client = scheduler->clientList; client != NULL; client = client->next) {
+    if (client->unkC == 3) {
+      osSendMesg(client->msgQ, (void* )0x29A, 0);
     }
   }
 }
 
-void func_hd_code_802715DC(OSSched* arg0) {
-    OSScTask* sp2C;
+void __scRspDone(OSSched* scheduler) {
+    OSScTask* rspTask;
     OSTime sp20;
 
-    if (arg0->curRSPTask == NULL) {
+    if (scheduler->curRSPTask == NULL) {
         rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask", "sched.c", 0x1F2);
     }
-    sp2C = arg0->curRSPTask;
-    arg0->curRSPTask = NULL;
-    if (sp2C->state == 3) {
+    rspTask = scheduler->curRSPTask;
+    scheduler->curRSPTask = NULL;
+    if (rspTask->state == RSP_STATE_SUSPENDED) {
         D_hd_code_8036BF00 = osGetTime() - D_hd_code_8036BEF0;
         if (D_hd_code_8036BF00 >= 0x86471U) {
             rmonPrintf("Silly yield time of %llu ticks\n", D_hd_code_8036BF00);
@@ -264,97 +268,99 @@ void func_hd_code_802715DC(OSSched* arg0) {
         if (D_hd_code_8036BF00 > D_hd_code_8036BEF8) {
             D_hd_code_8036BEF8 = D_hd_code_8036BF00;
         }
-        if (osSpTaskYielded(&sp2C->list) == 0) {
-            sp2C->state = 2;
-            sp2C->flags |= 4;
-            func_hd_code_80271A84(arg0, sp2C);
+        if (osSpTaskYielded(&rspTask->list) == 0) {
+            rspTask->state = 2;
+            rspTask->flags |= OS_SC_NEEDS_RDP << 2;
+            func_hd_code_80271A84(scheduler, rspTask);
         }
-        if (arg0->audioListHead == NULL) {
+        if (scheduler->audioListHead == NULL) {
             rmonPrintf(ASSERT_MESSAGE, "sc->audioListHead", "sched.c", 0x21A);
         }
-        if (arg0->audioListHead == NULL) {
+        if (scheduler->audioListHead == NULL) {
             rmonPrintf("Yield took %llu, max %llu\n", D_hd_code_8036BF00, D_hd_code_8036BEF8);
         }
-        func_hd_code_80271CE4(arg0, 0);
+        __scExec(scheduler, EXEC_IS_AUDIO);
         return;
     }
-    if (sp2C->flags & 0x40) {
+    if (rspTask->flags & OS_SC_SWAPBUFFER) {
         sp20 = osGetTime();
-        D_hd_code_8036BF24 = (sp20 - arg0->unk803156D0) / 0x1E91;
+        D_hd_code_8036BF24 = (sp20 - scheduler->unk803156D0) / 0x1E91;
         D_hd_code_802FA270 = 1;
-    } else if (sp2C->list.t.type == 2) {
+    } else if (rspTask->list.t.type == M_AUDTASK) {
         D_hd_code_8036BF50 = osGetTime();
         D_hd_code_8036BF40 = D_hd_code_8036BF48;
     }
-    sp2C->state = 2;
-    sp2C->flags |= 4;
-    if (arg0->curRSPTask != NULL) {
+    rspTask->state = 2;
+    rspTask->flags |= OS_SC_DRAM_DLIST;
+    if (scheduler->curRSPTask != NULL) {
         rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask==0", "sched.c", 0x230);
     }
-    if (func_hd_code_80271A84(arg0, sp2C) != 0) {
-        if ((arg0->gfxListHead != NULL) && (arg0->gfxListHead->flags != 0x47)) {
-            func_hd_code_80271CE4(arg0, 1);
+    if (func_hd_code_80271A84(scheduler, rspTask) != 0) {
+        if (scheduler->gfxListHead != NULL && (scheduler->gfxListHead->flags != 0x47)) {
+            __scExec(scheduler, EXEC_IS_GFX);
         }
     }
 }
 
-void func_hd_code_80271904(OSSched* arg0) {
-  OSScTask* sp24;
-  OSTime sp18;
+void __scRdpDone(OSSched* scheduler) {
+  OSScTask* rdpTask;
+  OSTime currentTime;
 
-  if (arg0->curRDPTask == NULL) {
+  if (scheduler->curRDPTask == NULL) {
     rmonPrintf(ASSERT_MESSAGE, "sc->curRDPTask", "sched.c", 0x24A);
   }
-  sp24 = arg0->curRDPTask;
-  arg0->curRDPTask = NULL;
-  sp24->flags |= 8;
-  if ((arg0->unk803156C4 != D_hd_code_8036BF14) || (D_hd_code_80364A90 & 0xC9FD0FE79BFF80B0)) {
-    D_hd_code_8036BF1C = NULL;
-    osViSwapBuffer(sp24->framebuffer);
-    D_hd_code_8036BF18 = D_hd_code_8036BF14;
-    D_hd_code_8036BF14 = arg0->unk803156C4 + 1;
-    osDpSetStatus(8U);
+  rdpTask = scheduler->curRDPTask;
+  scheduler->curRDPTask = NULL;
+  rdpTask->flags |= OS_SC_NEEDS_RSP << 2;
+  // N64 logo is:  D_hd_code_80364A90 = 0x0000000000000010 is true
+  // Rare logo is: D_hd_code_80364A90 = 0x0000000000000020 is true
+  if (scheduler->retraceCount != g_nextRetrace || D_hd_code_80364A90 & 0xC9FD0FE79BFF80B0) {
+    g_currentRdpTask = NULL;
+    osViSwapBuffer(rdpTask->framebuffer);
+    D_hd_code_8036BF18 = g_nextRetrace;
+    g_nextRetrace = scheduler->retraceCount + 1;
+    osDpSetStatus(DPC_SET_FREEZE);
   } else {
-    D_hd_code_8036BF1C = sp24;
+    g_currentRdpTask = rdpTask;
   }
-  sp18 = osGetTime();
-  D_hd_code_8036BF20 = (sp18 - arg0->unk803156C8) / 0x1E91;
+  currentTime = osGetTime();
+  D_hd_code_8036BF20 = (currentTime - scheduler->unk803156C8) / 0x1E91;
   if (D_hd_code_80358060 == 3) {
     osViBlack(0U);
   }
-  func_hd_code_80271A84(arg0, sp24);
+  func_hd_code_80271A84(scheduler, rdpTask);
 }
 
-s32 func_hd_code_80271A84(OSSched* arg0, OSScTask* arg1) {
-  s32 sp24;
+s32 func_hd_code_80271A84(OSSched* scheduler, OSScTask* rspOrRdpTask) {
+  s32 rv;
   s32 sp20;
   s32 sp1C;
-  u32 sp18;
+  u32 taskType;
 
-  sp20 = arg1->flags & 3;
-  sp1C = ((u32) arg1->flags >> 2) & 3;
-  sp18 = arg1->list.t.type;
-  if (!(arg1->flags & 0x40)) {
-    sp20 = sp20 & 1;
-    sp1C = sp1C & 1;
+  sp20 = rspOrRdpTask->flags & OS_SC_RCP_MASK;
+  sp1C = ((u32) rspOrRdpTask->flags >> 2) & OS_SC_RCP_MASK;
+  taskType = rspOrRdpTask->list.t.type;
+  if (!(rspOrRdpTask->flags & OS_SC_SWAPBUFFER)) {
+    sp20 = sp20 & OS_SC_NEEDS_RDP;
+    sp1C = sp1C & OS_SC_NEEDS_RDP;
   }
   if (sp20 == sp1C) {
-    if (sp18 == 1) {
-      if (arg0->gfxListHead == NULL) {
+    if (taskType == M_GFXTASK) {
+      if (scheduler->gfxListHead == NULL) {
         rmonPrintf(ASSERT_MESSAGE, "sc->gfxListHead", "sched.c", 0x27C);
       }
-      arg0->gfxListHead = arg0->gfxListHead->next;
-      if (arg0->gfxListHead == NULL) {
-        arg0->gfxListTail = (OSScTask* ) &arg0->gfxListHead;
+      scheduler->gfxListHead = scheduler->gfxListHead->next;
+      if (scheduler->gfxListHead == NULL) {
+        scheduler->gfxListTail = (OSScTask* ) &scheduler->gfxListHead;
       }
     }
-    if ((arg1->msg != NULL) && ((D_hd_code_8036BF1C == NULL) || (sp18 != 1))) {
-      if (arg1->flags & 0x40) {
-        sp24 = func_hd_code_80271F48((s32) arg1->msg, arg1->unk58, 0);
+    if (rspOrRdpTask->msgQ != NULL && (g_currentRdpTask == NULL || taskType != M_GFXTASK)) {
+      if (rspOrRdpTask->flags & OS_SC_SWAPBUFFER) {
+        rv = __scSendMesg(rspOrRdpTask->msgQ, rspOrRdpTask->msg, OS_MESG_NOBLOCK);
       } else {
-        sp24 = osSendMesg((OSMesgQueue* ) arg1->msg, (void* ) arg1->unk58, 0);
+        rv = osSendMesg(rspOrRdpTask->msgQ, rspOrRdpTask->msg, OS_MESG_NOBLOCK);
       }
-      if (sp24 == -1) {
+      if (rv == -1) {
         rmonPrintf(ASSERT_MESSAGE, "rv!=-1", "sched.c", 0x289);
       }
     }
@@ -365,51 +371,49 @@ s32 func_hd_code_80271A84(OSSched* arg0, OSScTask* arg1) {
   return D_hd_code_8036BFBC;
 }
 
-// __scAppendList
-void func_hd_code_80271C24(OSSched* arg0, OSScTask* arg1) {
-  s32 sp1C;
+void __scAppendList(OSSched* scheduler, OSScTask* task) {
+  s32 taskType;
 
-  sp1C = arg1->list.t.type;
-  if (!(sp1C == M_AUDTASK || sp1C == M_GFXTASK)) {
+  taskType = task->list.t.type;
+  if (!(taskType == M_AUDTASK || taskType == M_GFXTASK)) {
     rmonPrintf(ASSERT_MESSAGE, "(type == M_AUDTASK) || (type == M_GFXTASK)", "sched.c", 0x29C);
   }
-  if (sp1C == M_AUDTASK) {
-    arg0->audioListTail->next = arg1;
-    arg0->audioListTail = arg1;
+  if (taskType == M_AUDTASK) {
+    scheduler->audioListTail->next = task;
+    scheduler->audioListTail = task;
   } else {
-    arg0->gfxListTail->next = arg1;
-    arg0->gfxListTail = arg1;
+    scheduler->gfxListTail->next = task;
+    scheduler->gfxListTail = task;
   }
-  arg1->next = NULL;
-  arg1->state = 2;
+  task->next = NULL;
+  task->state = 2;
 }
 
-// __scExec
-void func_hd_code_80271CE4(OSSched* arg0, s32 arg1) {
-  OSScTask* sp24;
+void __scExec(OSSched* scheduler, s32 type) {
+  OSScTask* task;
   OSTime sp18;
 
-  if (arg0->curRSPTask != NULL) {
+  if (scheduler->curRSPTask != NULL) {
     rmonPrintf(ASSERT_MESSAGE, "!sc->curRSPTask", "sched.c", 0x2B8);
   }
-  if (arg1 == NULL) {
-    sp24 = arg0->audioListHead;
-    if (!sp24) {
+  if (type == EXEC_IS_AUDIO) {
+    task = scheduler->audioListHead;
+    if (!task) {
       rmonPrintf(ASSERT_MESSAGE, "t", "sched.c", 0x2BD);
     }
-    if (sp24) {
-      arg0->audioListHead = arg0->audioListHead->next;
-      if (arg0->audioListHead == NULL) {
-        arg0->audioListTail = (OSScTask* ) &arg0->audioListHead;
+    if (task) {
+      scheduler->audioListHead = scheduler->audioListHead->next;
+      if (scheduler->audioListHead == NULL) {
+        scheduler->audioListTail = (OSScTask* ) &scheduler->audioListHead;
       }
       D_hd_code_8036BF48 = osGetTime();
     } else {
       return;
     }
   } else {
-    sp24 = arg0->gfxListHead;
+    task = scheduler->gfxListHead;
     if ((u8) D_hd_code_802FA270 != 0) {
-      arg0->unk803156D0 = osGetTime();
+      scheduler->unk803156D0 = osGetTime();
       sp18 = osGetTime();
 
       D_hd_code_8036BF2C = (sp18 - D_hd_code_8036BF38) / 0x1E91;
@@ -417,32 +421,31 @@ void func_hd_code_80271CE4(OSSched* arg0, s32 arg1) {
     }
   }
 
-  sp24->state = 1;
-  osSpTaskLoad(&sp24->list);
-  osSpTaskStartGo(&sp24->list);
-  arg0->curRSPTask = sp24;
-  if (sp24->flags & 0x40) {
-    arg0->curRDPTask = sp24;
+  task->state = 1;
+  osSpTaskLoad(&task->list);
+  osSpTaskStartGo(&task->list);
+  scheduler->curRSPTask = task;
+  if (task->flags & OS_SC_SWAPBUFFER) {
+    scheduler->curRDPTask = task;
   }
 }
 
-// __scYield
-void func_hd_code_80271E88(OSSched* sc) {
-  if (!(sc->curRSPTask->list.t.type != M_AUDTASK)) {
+void __scYield(OSSched* scheduler) {
+  if (!(scheduler->curRSPTask->list.t.type != M_AUDTASK)) {
     rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask->list.t.type != M_AUDTASK", "sched.c", 0x2DF);
   }
 
-  if (sc->curRSPTask->list.t.type == M_GFXTASK) {
-    if (!(sc->curRSPTask->state != RSP_STATE_SUSPENDED)) {
+  if (scheduler->curRSPTask->list.t.type == M_GFXTASK) {
+    if (!(scheduler->curRSPTask->state != RSP_STATE_SUSPENDED)) {
       rmonPrintf(ASSERT_MESSAGE, "sc->curRSPTask->state != RSP_STATE_SUSPENDED", "sched.c", 0x2E3);
     }
-    sc->curRSPTask->state = 3;
+    scheduler->curRSPTask->state = RSP_STATE_SUSPENDED;
     D_hd_code_8036BEF0 = osGetTime();
     osSpTaskYield();
   }
 }
 
-s32 func_hd_code_80271F48(OSMesgQueue* arg0, OSMesg arg1, s32 arg2) {
+s32 __scSendMesg(OSMesgQueue* messageQueue, OSMesg message, s32 flags) {
   OSTime sp28;
   OSTime sp20;
   s32 sp1C;
@@ -451,5 +454,5 @@ s32 func_hd_code_80271F48(OSMesgQueue* arg0, OSMesg arg1, s32 arg2) {
   sp20 = osGetTime();
   sp1C = 0;
 
-  return osSendMesg(arg0, arg1, arg2);
+  return osSendMesg(messageQueue, message, flags);
 }

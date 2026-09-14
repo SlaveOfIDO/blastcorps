@@ -3,6 +3,15 @@
 
 #include <PR/ultratypes.h>
 
+typedef struct {
+  u8 pad0[0x14];
+  s32 unk14;
+  u8 pad18[0x4];
+  s32 unk1C;
+  s32 unk20;
+} ModelHeader;
+
+
 struct LevelData {
   /* 0x00 */ s32 unk0;
   /* 0x04 */ char *name;

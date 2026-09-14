@@ -71,12 +71,11 @@ f32 D_hd_code_802FDAC0[20] = {
 // Populate the microcode entry-point table: slot 0 points at the front-end
 // menu's microcode (in the separate hd_front_end overlay), slots 1-3 at the
 // shared in-game microcode
-// Proposed name: InitMicrocodeTable
-void func_hd_code_80284DB0(void) {
+void gfxInitMicrocode(void) {
   D_hd_code_8036E660[0] = &__hd_front_end_menu_rsp_textbin;
   D_hd_code_8036E678[0] = &__hd_front_end_menu_rsp_databin;
-  D_hd_code_8036E660[1] = &D_hd_code_802E53F0;
-  D_hd_code_8036E678[1] = &D_hd_code_8030E390;
+  D_hd_code_8036E660[1] = &D_hd_code_802E53F0; // f3d
+  D_hd_code_8036E678[1] = &D_hd_code_8030E390; // f3d data
   D_hd_code_8036E660[2] = &D_hd_code_802E53F0;
   D_hd_code_8036E678[2] = &D_hd_code_8030E390;
   D_hd_code_8036E660[3] = &D_hd_code_802E53F0;
@@ -88,67 +87,65 @@ void func_hd_code_80284DB0(void) {
 // DRAM stack, output buffer, yield buffer, target framebuffer), marks the
 // slot in-flight, writes back the data cache (the whole cache if arg5,
 // otherwise just the task/list/graphics-context), and queues it to the
-// scheduler. arg3 enables a task flag (0x40), arg4 is a tag returned in the
+// scheduler. arg3 enables a task flag (0x40), gfxTaskId is a tag returned in the
 // completion message.
-// Proposed name: SubmitGfxTask
-void func_hd_code_80284E54(Gfx* arg0, s32 arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5) {
-  OSScTask* sp1C;
-  s32 sp18;
+void gfxSubmitTask(Gfx* displayList, s32 displayListEntries, u8 arg2, s32 arg3, s32 gfxTaskId, s32 arg5) {
+  OSScTask* gfxTask;
+  s32 displayListSize;
 
-  sp18 = arg1 * 8;
-  sp1C = &D_hd_code_8036E698[arg2][D_hd_code_8035805C];
+  displayListSize = displayListEntries * sizeof(Gfx);
+  gfxTask = &D_hd_code_8036E698[arg2][D_hd_code_8035805C];
   D_hd_code_8036E68C[(u8) arg2] = 1;
-  sp1C->list.t.type = M_GFXTASK;
+  gfxTask->list.t.type = M_GFXTASK;
   if ((u8) arg2 == 4) {
-    sp1C->list.t.flags = OS_TASK_DP_WAIT;
+    gfxTask->list.t.flags = OS_TASK_DP_WAIT;
   } else {
-    sp1C->list.t.flags = 0;
+    gfxTask->list.t.flags = 0;
   }
-  sp1C->list.t.ucode_boot = (u64* ) rspbootTextStart;
-  sp1C->list.t.ucode_boot_size = (u32)aspMainTextStart - (u32)rspbootTextStart;
-  sp1C->list.t.ucode = (u64* ) D_hd_code_8036E660[(u8) arg2];
-  sp1C->list.t.ucode_data = (u64* ) D_hd_code_8036E678[(u8) arg2];
-  sp1C->list.t.ucode_size = 0x1000;
-  sp1C->list.t.ucode_data_size = 0x800;
-  sp1C->list.t.dram_stack = &D_hd_code_80367750;
-  sp1C->list.t.dram_stack_size = 0x400;
-  sp1C->list.t.output_buff = (u64* ) g_gfxTaskOutputBuffer;
-  sp1C->list.t.output_buff_size = (u64* ) (g_gfxTaskOutputBuffer + 0x1400);
-  sp1C->list.t.data_ptr = (u64* ) arg0;
-  sp1C->list.t.data_size = (u32) sp18;
-  sp1C->list.t.yield_data_ptr = &D_hd_code_8036AFB0;
-  sp1C->list.t.yield_data_size = 0x900;
-  sp1C->next = NULL;
-  sp1C->msg = &D_hd_code_803153D8;
-  sp1C->unk58 = ((u8) arg2 << 0x10) | arg4;
-  sp1C->flags = 3;
+  gfxTask->list.t.ucode_boot = (u64* ) rspbootTextStart;
+  gfxTask->list.t.ucode_boot_size = (u32)aspMainTextStart - (u32)rspbootTextStart;
+  gfxTask->list.t.ucode = (u64* ) D_hd_code_8036E660[(u8) arg2];
+  gfxTask->list.t.ucode_data = (u64* ) D_hd_code_8036E678[(u8) arg2];
+  gfxTask->list.t.ucode_size = 0x1000;
+  gfxTask->list.t.ucode_data_size = 0x800;
+  gfxTask->list.t.dram_stack = &D_hd_code_80367750;
+  gfxTask->list.t.dram_stack_size = 0x400;
+  gfxTask->list.t.output_buff = (u64* ) g_gfxTaskOutputBuffer;
+  gfxTask->list.t.output_buff_size = (u64* ) (g_gfxTaskOutputBuffer + 0x1400);
+  gfxTask->list.t.data_ptr = (u64* ) displayList;
+  gfxTask->list.t.data_size = (u32) displayListSize;
+  gfxTask->list.t.yield_data_ptr = &D_hd_code_8036AFB0;
+  gfxTask->list.t.yield_data_size = 0x900;
+  gfxTask->next = NULL;
+  gfxTask->msgQ = &D_hd_code_803153D8;
+  gfxTask->msg = (OSMesg)((arg2 << 0x10) | gfxTaskId);
+  gfxTask->flags = OS_SC_NEEDS_RDP | OS_SC_NEEDS_RSP;
   if ((u8) arg3 != 0) {
-    sp1C->flags |= 0x40;
+    gfxTask->flags |= OS_SC_SWAPBUFFER;
   }
-  sp1C->framebuffer = D_80000400[D_hd_code_8035805C];
-  sp1C->msgQ = &D_hd_code_803156D8;
+  gfxTask->framebuffer = D_80000400[D_hd_code_8035805C];
+  gfxTask->client = &g_gfxClient;
   if ((u8) arg5 != 0) {
     osWritebackDCacheAll();
   } else {
-    osWritebackDCache(sp1C, 0x60);
-    osWritebackDCache(arg0, sp18);
+    osWritebackDCache(gfxTask, 0x60);
+    osWritebackDCache(displayList, displayListSize);
     osWritebackDCache(&D_hd_code_803156F8[D_hd_code_8035805C], 0x21498);
   }
-  osSendMesg(&sc.interruptQ, sp1C, 1);
+  osSendMesg(&sc.interruptQ, gfxTask, OS_MESG_BLOCK);
 }
 
 // Block until the task tagged arg0 reports completion, clearing each
 // finished slot's in-flight flag along the way (warns on unexpected tags)
-// Proposed name: WaitForGfxTask
-void func_hd_code_80285110(s32 arg0) {
+void gfxWaitForTask(u32 arg0) {
   u32 sp1C;
 
   do {
-    osRecvMesg((OSMesgQueue* ) &D_hd_code_803153D8, (OSMesg)&sp1C, 1);
+    osRecvMesg(&D_hd_code_803153D8, (OSMesg)&sp1C, 1);
     D_hd_code_8036E68C[sp1C >> 16] = 0;
     sp1C &= 0xFFFF;
-    if ((u32)sp1C != arg0) {
+    if (sp1C != arg0) {
       rmonPrintf("Task %d received message %d\n", arg0, sp1C);
     }
-  } while ((u32)sp1C != arg0);
+  } while (sp1C != arg0);
 }

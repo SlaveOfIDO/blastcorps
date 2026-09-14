@@ -95,7 +95,7 @@ u8 D_hd_code_803153F0;
 OSMesg D_hd_code_803153F8[0x10];
 u8 D_hd_code_80315438;
 OSSched sc; // 0x80315440
-OSScClient D_hd_code_803156D8;
+OSScClient g_gfxClient;
 s32 D_hd_code_803156E8;
 s32 D_hd_code_803156EC;
 s32 D_hd_code_803156F0;
@@ -326,21 +326,20 @@ void Thread3(void* arg0) {
         // MASTER SWITCH BEGIN
         switch (g_nextGameState)
         {
-          case 0x0000000000000020:
+          case INTRO_RARE_LOGO:
           {
             hdPrepareStateTransition();
             func_hd_front_end_801EF380(2);
             break;
           }
-          case 0x0000000000000010:
+          case INTRO_NINTENDO_LOGO:
           {
             hdPrepareStateTransition();
             func_hd_front_end_801EF380(1);
-            sp60 = sc.unk803156C4;
-            if ((u32) (sc.unk803156C4 - sc.unk803156C4) < 0xFU) {
+            sp60 = sc.retraceCount;
+            if ((u32) (sc.retraceCount - sc.retraceCount) < 0xFU) {
               do {
-
-              } while ((u32) (sc.unk803156C4 - sp60) < 0xFU);
+              } while ((u32) (sc.retraceCount - sp60) < 0xFU);
             }
             break;
           }
@@ -688,13 +687,12 @@ void Thread3(void* arg0) {
           case 0x0000000040000000:
           {
             hdPrepareStateTransition();
-            sp54 = sc.unk803156C4;
-            if ((u32)(sc.unk803156C4 - sc.unk803156C4) < 0xFU)
+            sp54 = sc.retraceCount;
+            if ((u32)(sc.retraceCount - sc.retraceCount) < 0xFU)
             {
               do
               {
-
-              } while ((u32)(sc.unk803156C4 - sp54) < 0xFU);
+              } while ((u32)(sc.retraceCount - sp54) < 0xFU);
             }
             func_hd_front_end_801ED790();
             func_hd_front_end_80200714(3);
@@ -917,7 +915,7 @@ void Thread3(void* arg0) {
               D_hd_code_802F8BDC[7].unk18 = 0x21;
             }
             D_hd_code_80364A50 = 0;
-            D_hd_code_80364A54 = sc.unk803156C4;
+            D_hd_code_80364A54 = sc.retraceCount;
             hdPrepareStateTransition();
             if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1 && ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_803643D5 == 0)) {
               hdInitLevel(&D_hd_code_8039C4F8);
@@ -1052,34 +1050,34 @@ void Thread3(void* arg0) {
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
 
           if (D_hd_code_8036E68C[2] != 0) {
-            func_hd_code_80285110(0x4D2);
+            gfxWaitForTask(0x4D2);
           }
           if (D_hd_code_8036E68C[0] != 0) {
-            func_hd_code_80285110(0x4D2);
+            gfxWaitForTask(0x4D2);
           }
-          func_hd_code_80285110(0x4D2);
+          gfxWaitForTask(0x4D2);
         } else if (D_hd_code_80364A90 & 0xC9FD8FE7DBFF8080) {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
           func_hd_front_end_801FE990();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
-          func_hd_code_80285110(0x4D2);
+          gfxWaitForTask(0x4D2);
         } else if (D_hd_code_80364A90 & 0x20000000) {
           func_hd_front_end_801E7598();
-          func_hd_code_80285110(0x4D2);
+          gfxWaitForTask(0x4D2);
         } else if (D_hd_code_80364A90 & 0x30) {
           func_hd_front_end_801EF4AC();
-          func_hd_code_80285110(0x4D2);
+          gfxWaitForTask(0x4D2);
         } else {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
           func_hd_code_802475D8();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
           if (D_hd_code_8036E68C[1] != 0) {
-            func_hd_code_80285110(0x61F);
+            gfxWaitForTask(0x61F);
           }
           if (D_hd_code_8036E68C[2] != 0) {
-            func_hd_code_80285110(0x54D);
+            gfxWaitForTask(0x54D);
           }
-          func_hd_code_80285110(0x4D2);
+          gfxWaitForTask(0x4D2);
         }
         func_hd_code_80255D34();
         D_hd_code_80358060 += 1;
@@ -1218,7 +1216,7 @@ void func_hd_code_802475D8(void) {
     }
     D_hd_code_803649D8 = osGetTime();
     func_hd_code_8028A3E4();
-    func_hd_code_80284E54(&D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 3, 1, 0x4D2, 1);
+    gfxSubmitTask(&D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 3, 1, 0x4D2, 1);
     func_hd_code_802A5720();
     D_hd_code_8035805C ^= 1;
     switch (D_hd_code_802E8BD0) {
@@ -1608,7 +1606,7 @@ block_275:
         }
     }
     sp5C = func_hd_code_8024C404(sp5C, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
-    if ((D_hd_code_80364A90 & 0x440) && ((u32) (sc.unk803156C4 - D_hd_code_80364A54) >= 0xA1U) && ((u8) D_hd_code_80364A50 == 0)) {
+    if ((D_hd_code_80364A90 & 0x440) && ((u32) (sc.retraceCount - D_hd_code_80364A54) >= 0xA1U) && ((u8) D_hd_code_80364A50 == 0)) {
         D_hd_code_80364A50 = 1;
         if (D_hd_code_8036BB1C == 1) {
             if ((((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) == 0) || (D_hd_code_80364AA8 == 1)) {
@@ -1618,7 +1616,7 @@ block_275:
             }
         }
     }
-    if (D_hd_code_80364A90 == 8 && (areWeFading() == 0) && ((alCSPGetState(g_musicPlayer) == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) >= 0x12DU))) {
+    if (D_hd_code_80364A90 == 8 && (areWeFading() == 0) && ((alCSPGetState(g_musicPlayer) == 0) || ((u32) (sc.retraceCount - D_hd_code_80367740) >= 0x12DU))) {
         func_hd_code_80275390(0x08000000);
     }
     if ((g_currentLevel == 0x31) && (D_hd_code_8036BB1C == 1)) {
@@ -2755,10 +2753,10 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
         func_hd_code_80275478(arg0, &entry, D_hd_code_80364A90 & 0x100 || D_hd_code_8036BB18 == 0x4D || D_hd_code_8036BB18 == 0x49);
     }
     if ((g_nextGameState == 0) && (areWeFading() == 0)) {
-        if (!(D_hd_code_80364A90 & 0x200000100400230C) && ((u32) ((u32) (((u32) sc.unk803156C4 % 50U) * 0x3C) / 60U) >= 0x15U) && (D_hd_code_8036BB1C == 1) && ((!(D_hd_code_80364A90 & 2)) || ((D_hd_code_802E8BEC != 0) && ((D_hd_code_80366A12 == 3) || (D_hd_code_802E8BEC == 1)))) && ((D_hd_code_80364A90 != 0x100000000000) || (D_hd_code_803A6B04 != 0)) && ((!(D_hd_code_80364A90 & 0x1801)) || (players[playerNumber].unk91 != 0)) && (g_currentLevel != 0x2F)) {
+        if (!(D_hd_code_80364A90 & 0x200000100400230C) && ((u32) ((u32) (((u32) sc.retraceCount % 50U) * 0x3C) / 60U) >= 0x15U) && (D_hd_code_8036BB1C == 1) && ((!(D_hd_code_80364A90 & 2)) || ((D_hd_code_802E8BEC != 0) && ((D_hd_code_80366A12 == 3) || (D_hd_code_802E8BEC == 1)))) && ((D_hd_code_80364A90 != 0x100000000000) || (D_hd_code_803A6B04 != 0)) && ((!(D_hd_code_80364A90 & 0x1801)) || (players[playerNumber].unk91 != 0)) && (g_currentLevel != 0x2F)) {
             func_hd_code_80259CCC(arg0, "PRESS START", NULL, 1, 0, 0x5C, 0xC4, 0x1A, 0x1A, 1, 0xFF, 0xFF, 0xFF, 0xFF);
         }
-        if ((u32) ((u32) (((u32) sc.unk803156C4 % 40U) * 60) / 60U) >= 16U) {
+        if ((u32) ((u32) (((u32) sc.retraceCount % 40U) * 60) / 60U) >= 16U) {
             if (D_hd_code_802E8BD0 != 0) {
                 if ((D_hd_code_80364A90 == 0x2000000000000000) && (D_hd_code_8036BB1C == 2)) {
                     func_hd_code_80259CCC(arg0, "USE Z/R TO TURN PAGES", D_hd_code_8030491C, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -4357,7 +4355,7 @@ void func_hd_code_80255AD0(void) {
     osCreateMesgQueue(&D_hd_code_80315180, D_hd_code_80315198, 0x90);
     osCreateScheduler(&sc, g_SchedulerStack + 0x800, 0xD, osTvType != OS_TV_NTSC ? OS_VI_PAL_LAN1 : OS_VI_NTSC_LAN1, 1);
     osCreateMesgQueue(&D_hd_code_803153D8, D_hd_code_803153F8, 0x10);
-    osScAddClient(&sc, &D_hd_code_803156D8, &D_hd_code_803153D8, 1, 1);
+    osScAddClient(&sc, &g_gfxClient, &D_hd_code_803153D8, 1, 1);
     sp2F = func_hd_code_8028A370();
     func_hd_code_80261588();
     rmonPrintf("audio inited\n");
@@ -4366,7 +4364,7 @@ void func_hd_code_80255AD0(void) {
     D_hd_code_80358050[0] = VIRTUAL_TO_PHYSICAL(D_80000400[0]);
     D_hd_code_80358050[1] = VIRTUAL_TO_PHYSICAL(D_80000400[1]);
     D_hd_code_80358058 = VIRTUAL_TO_PHYSICAL(&func_init_8021ED00);
-    func_hd_code_80284DB0();
+    gfxInitMicrocode();
     osWritebackDCacheAll();
     func_hd_code_8028FC10();
     if (!(sp2F & 1)) {
@@ -4459,7 +4457,7 @@ void hdPrepareStateTransition(void) {
     }
     func_hd_code_80297530(g_currentLevel);
     func_hd_code_80272C50();
-    if ((g_nextGameState == 0x40000000000)) {
+    if (g_nextGameState == 0x40000000000) {
         func_hd_front_end_801F7850();
     }
     sp20 = g_heap;
@@ -4909,7 +4907,7 @@ void hdInitLevel(s32* pakBuffer) {
             }
         }
         func_hd_code_80258544(sp44, sp44->unk1004, sp44->unk1010, sp44->unk100C, sp44->unk1000, D_hd_code_80364460[sp4C].unk54, D_hd_code_80364460[sp4C].unk0, D_hd_code_80364460[sp4C].unk4);
-        func_hd_code_80285110(0x61F);
+        gfxWaitForTask(0x61F);
         sp44++;
     }
     func_hd_code_802729F0((s32)g_nextGameState, g_currentLevel);

@@ -41,7 +41,7 @@ void func_hd_code_8028B3E0(void) {
   if (frontEndPresent == 0) {
     osInvalDCache((void* )VRAM_FRONT_END, 0x37D00);
     osInvalICache((void* )VRAM_FRONT_END, 0x37D00);
-    InitiateDma(*D_hd_code_802FDB30, (void* )VRAM_FRONT_END, &sp24, 0xDU, 0xA, 1);
+    INITIATE_DMA(*D_hd_code_802FDB30, (void* )VRAM_FRONT_END, &sp24, 0xDU, 0xA, 1);
     bzero(sp24 + VRAM_FRONT_END, 0x37D00 - sp24);
     frontEndPresent = 1;
     func_hd_front_end_801F57B0();

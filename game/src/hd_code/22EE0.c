@@ -418,13 +418,13 @@ void amHandleFrameMessage(AudioInfo* info, AudioInfo* lastInfo) {
     }
     task = &info->task;
     info->task.next = NULL;
-    task->msg = &g_AudioManager.replyMessageQueue;
-    task->unk58 = (s32) info;
-    task->flags = 1;
-    task->msgQ = (OSMesgQueue* ) &g_AudioClient;
+    task->msgQ = &g_AudioManager.replyMessageQueue;
+    task->msg = (OSMesg) info;
+    task->flags = OS_SC_NEEDS_RDP;
+    task->client = &g_AudioClient;
     task->list.t.data_ptr = (u64* ) g_AudioManager.cmdList[g_CurrentAcmdList];
     task->list.t.data_size = ((s32) ((s32)cmdlp - (s32)g_AudioManager.cmdList[g_CurrentAcmdList]) >> 3) * 8;
-    task->list.t.type = 2;
+    task->list.t.type = M_AUDTASK;
     task->list.t.ucode_boot = (u64*)rspbootTextStart;
     task->list.t.ucode_boot_size = (s32)aspMainTextStart - (s32)rspbootTextStart;
     task->list.t.flags = 0;

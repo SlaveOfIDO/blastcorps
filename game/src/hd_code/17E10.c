@@ -136,7 +136,7 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
     Gfx* entry;
     s32 sp60;
 
-    sp68 = sc.unk803156C4;
+    sp68 = sc.retraceCount;
     entry = arg0;
     if ((D_hd_code_802E8BF0 != 0) && D_hd_code_80364A90 & 2) {
         if (arg2 != 0) {
@@ -519,13 +519,13 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
         D_hd_code_80366BC0.unk0 = D_hd_code_803643D7;
         if (D_hd_code_80366BB8 == 0) {
             if ((D_hd_code_8036BB1C == 8) && (D_hd_code_8036BB18 == D_hd_code_80366BC0.unk2)) {
-                D_hd_code_80366BB8 = sc.unk803156C4;
+                D_hd_code_80366BB8 = sc.retraceCount;
                 func_hd_code_80278318();
                 func_hd_code_80277EDC(2, 1, 2, func_hd_code_8026205C(3));
             }
-        } else if ((alCSPGetState(g_musicPlayer) != 0) && ((D_hd_code_80366BC4.unk0 == 0) || ((u32) (sc.unk803156C4 - D_hd_code_80367740) < 0x1E1U))) {
+        } else if ((alCSPGetState(g_musicPlayer) != 0) && ((D_hd_code_80366BC4.unk0 == 0) || ((u32) (sc.retraceCount - D_hd_code_80367740) < 0x1E1U))) {
             if (D_hd_code_80366BC4.unk0 == 0) {
-                if (sc.unk803156C4 - D_hd_code_80366BB8 > D_hd_code_802E8CD0[(D_hd_code_80364AA8 & 0x81)?1:0]) {
+                if (sc.retraceCount - D_hd_code_80366BB8 > D_hd_code_802E8CD0[(D_hd_code_80364AA8 & 0x81)?1:0]) {
                     goto block_32;
                 }
             }
@@ -555,7 +555,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
     u32 sp50;
 
     entry = *arg0;
-    sp60 = sc.unk803156C4;
+    sp60 = sc.retraceCount;
     if (D_hd_code_803643D6 != 0) {
         if (D_hd_code_803643D8 == 0) {
             sndDeactivateAllSfxByFlag_1();

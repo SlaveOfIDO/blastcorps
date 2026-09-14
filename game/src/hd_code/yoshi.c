@@ -669,7 +669,6 @@ Gfx D_hd_code_802F98B0[] = {
 s32 D_hd_code_802F9930 = 1;
 
 // Destruction targets in certain levels
-// TODO: data pointers in unk10
 struct S_802F9934 D_hd_code_802F9934[7] = {
   { 0xBD, "RAFTS", D_hd_code_8030358C },
   { 0x68, "GAS PLANTS", D_hd_code_80303594 },

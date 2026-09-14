@@ -141,7 +141,7 @@ f32 sqrtf(f32);                     /* extern */
 u8 func_hd_code_80255628();                         /* extern */
 s32 func_hd_code_802AC4C4(s32, s32, s32, s32, s32, s32, s32, s32); /* extern */
 void func_hd_code_80261588();                          /* extern */
-void func_hd_code_80284DB0();                          /* extern */
+void gfxInitMicrocode();                          /* extern */
 u8 func_hd_code_8028A370();                         /* extern */
 void func_hd_code_8028FC10();                          /* extern */
 void InitiateDma(u8* arg0, u8* arg1, s32* arg2, u8 arg3, u8 arg4, u8 arg5);
@@ -177,7 +177,6 @@ void func_hd_code_802807D8(u8);                       /* extern */
 void func_hd_code_80281A70(s32);                       /* extern */
 void func_hd_code_802821D0();                          /* extern */
 void func_hd_code_80282728();                          /* extern */
-void func_hd_code_80285110(s32);                         /* extern */
 void statsLoadLevelStats();                          /* extern */
 void func_hd_code_80286A00();                          /* extern */
 void func_hd_code_802873AC();                          /* extern */
@@ -249,7 +248,7 @@ extern void guFrustum(Mtx *m, float l, float r, float b, float t,
 extern void guFrustumF(float mf[4][4], float l, float r, float b, float t,
                        float n, float f, float scale);
 
-void func_hd_code_80285110(s32);                         /* extern */
+void gfxWaitForTask(u32);                         /* extern */
 u8 func_hd_code_80285814();                         /* extern */
 void func_hd_code_80285A78(u8*, u8*);                /* extern */
 u16 func_hd_code_8028604C(s32);                     /* extern */
@@ -378,7 +377,7 @@ s32 areWeFading();                                /* extern */
 u8 func_hd_code_8027EED8(s16, s16, s16*);           /* extern */
 u8 func_hd_code_802ABEDC(s32, s32, s32);            /* extern */
 void guTranslate(Mtx*, f32, f32, f32);                    /* extern */
-void func_hd_code_80284E54(Gfx* arg0, s32 arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5);
+void gfxSubmitTask(Gfx* displayList, s32 displayListEntries, u8 arg2, s32 arg3, s32 gfxTaskId, s32 arg5);
 void func_hd_code_8025B070();
 void* func_hd_code_8025B0B8(u16);                     /* extern */
 s16 func_hd_code_8025B498(u16 arg0, u16 arg1, u8* arg2, s32 arg3);     /* extern */

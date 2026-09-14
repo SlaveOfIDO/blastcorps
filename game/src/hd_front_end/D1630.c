@@ -30,7 +30,7 @@ typedef struct {
     /* 0x4 */ s32 unk4;
 } UnknownData802081C0;  /* 0x8 */
 
-s32 func_hd_front_end_801F4FBC(struct Model1 *, s32);  /* extern */
+Gfx* func_hd_front_end_801F4FBC(struct Model1 *, s32);
 
 extern UnknownData802081C0 D_hd_front_end_802081C0[];
 extern u8   D_hd_front_end_802082B8[];

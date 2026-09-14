@@ -11,6 +11,7 @@ void func_hd_code_802A08B4(u8*, u8*);               /* extern */
 void func_hd_front_end_80202100(s32, u8**, s32*, s32*);                           /* extern */
 void func_hd_front_end_80202270(u8*, s32*, u8 (*)[0x300]);                   /* extern */
 void func_hd_front_end_802022EC(u8 (*)[0x300], s32, s32, s32, f32, s32, s32); /* extern */
+void func_hd_front_end_802021FC(u8 (*)[0x300], s32, s32); /* extern */
 
 extern u8 usa_star_ROM_START; // usa_star.raw
 extern u8 ninlogo_ROM_START; // ninlogo.raw
@@ -25,8 +26,8 @@ s32 D_hd_front_end_802182B8;
 s32 D_hd_front_end_802182BC;
 s32 D_hd_front_end_802182C0;
 u8* D_hd_front_end_802182C4;
-u8* D_hd_front_end_802182C8;
-u8* D_hd_front_end_802182CC;
+Gfx* D_hd_front_end_802182C8;
+Vtx* D_hd_front_end_802182CC;
 Mtx D_hd_front_end_802182D0[2];
 u8* D_hd_front_end_80218350;
 s32 D_hd_front_end_80218354;
@@ -44,20 +45,12 @@ s32 D_hd_front_end_80218738;
 s32 D_hd_front_end_8021873C;
 // </bss>
 
-typedef struct {
-  u8 pad0[0x14];
-  s32 unk14;
-  u8 pad18[0x4];
-  s32 unk1C;
-  s32 unk20;
-} S_DmaAssetHdr;  /* asset header: unk14/unk1C/unk20 are self-relative byte offsets */
-
 void func_hd_front_end_801F4E70(s32 arg0) {
-  S_DmaAssetHdr* sp34;
+  ModelHeader* sp34;
   u8* sp30;
 
   func_hd_code_802A0700();
-  switch ((u8) arg0) {                            /* irregular */
+  switch ((u8) arg0) {
     case 0:
       D_hd_front_end_802182C4 = &usa_star_ROM_START;
       D_hd_front_end_802182C0 = &ninlogo_ROM_START - &usa_star_ROM_START;
@@ -72,23 +65,25 @@ void func_hd_front_end_801F4E70(s32 arg0) {
       break;
   }
   INITIATE_DMA(D_hd_front_end_802182C4, g_heap, &D_hd_front_end_802182C0, 0xCU, 0xAU, 1U);
-  sp34 = (S_DmaAssetHdr *) g_heap;
+  sp34 = (ModelHeader*) g_heap;
   g_heap = &g_heap[D_hd_front_end_802182C0];
-
-  D_hd_front_end_802182C8 = sp34->unk1C + (u8 *) sp34;
+  // Start of displayList
+  D_hd_front_end_802182C8 = (Gfx*)(sp34->unk1C + (u8 *) sp34);
+  // End of displayList
   sp30 = sp34->unk20 + (u8 *) sp34;
-  D_hd_front_end_802182CC = sp34->unk14 + (u8 *) sp34;
+  D_hd_front_end_802182CC = (Vtx*)(sp34->unk14 + (u8 *) sp34);
 
-  func_hd_code_802A08B4(D_hd_front_end_802182C8, sp30);
+  // The following function replaces texture addresses with proper loaded textures
+  // It also loads and decodes textures
+  func_hd_code_802A08B4((u8*)D_hd_front_end_802182C8, sp30);
 }
 
 Gfx* func_hd_front_end_801F4FBC(struct Model1* arg0, Gfx* gfx) {
   Gfx* entry = gfx;
   gSPSegment(entry++, 6, D_hd_front_end_802182CC);
-  gSPSegment(entry++, 7, &D_hd_front_end_802182D0[D_hd_code_8035805C]);
+  gSPSegment(entry++, 7, &D_hd_front_end_802182D0[D_hd_code_8035805C]); // segment 7 is a modelview matrix
   gSPPerspNormalize(entry++, D_hd_code_8035807C);
-  gSPLookAtX(entry++, &arg0->lookAt);
-  gSPLookAtY(entry++, &arg0->lookAt.l[1]);
+  gSPLookAt(entry++, &arg0->lookAt);
   gSPMatrix(entry++, &arg0->unk1240, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
   gSPMatrix(entry++, &arg0->projection2, G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
   gSPMatrix(entry++, &arg0->unk12C0, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);

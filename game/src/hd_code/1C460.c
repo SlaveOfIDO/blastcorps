@@ -457,7 +457,7 @@ void func_hd_code_80260DFC(void) {
 // from D_hd_code_802E8E04 (likely results/end-of-level music)
 // Proposed name: PlayLevelResultsTune
 void func_hd_code_80260E2C(void) {
-  D_hd_code_80367740 = (s32) sc.unk803156C4;
+  D_hd_code_80367740 = (s32) sc.retraceCount;
   D_hd_code_8036772C = alCSPGetTempo(g_musicPlayer);
   func_hd_code_80261FB0(D_hd_code_802E8E04[g_currentLevel]);
 }
@@ -466,7 +466,7 @@ void func_hd_code_80260E2C(void) {
 // alternate set D_hd_code_802E8E40
 // Proposed name: PlayLevelResultsTuneAlt
 void func_hd_code_80260E80(void) {
-  D_hd_code_80367740 = (s32) sc.unk803156C4;
+  D_hd_code_80367740 = (s32) sc.retraceCount;
   func_hd_code_80261FB0(D_hd_code_802E8E40[g_currentLevel]);
 }
 

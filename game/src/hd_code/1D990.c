@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "symbol_data.h"
 #include "variables.h"
+#include "yoshi.h"
 
 // Proposed file name: missions.c
 //
@@ -665,7 +666,7 @@ void func_hd_code_80262320(u8 arg0) {
     D_hd_code_80364428 = D_hd_code_802E8F94[arg0].unk3C << 5;
     D_hd_code_8036442C = D_hd_code_802E8F94[arg0].unk40;
     D_hd_code_80364430 = D_hd_code_802E8F94[arg0].unk42 << 5;
-    D_hd_code_80367BC0 = sc.unk803156C4;
+    D_hd_code_80367BC0 = sc.retraceCount;
     D_hd_code_80367BC4 = -1;
     D_hd_code_80367BD0.unk8 = 0;
     switch (D_hd_code_80364AA8) {
@@ -701,7 +702,7 @@ void func_hd_code_80262320(u8 arg0) {
             }
             g_heap = &g_heap[sp2C];
         }
-        if ((g_nextGameState == 0x40)) {
+        if (g_nextGameState == 0x40) {
             D_hd_code_80367BC8 = 0;
         } else {
             D_hd_code_80367BC8 = 1;
@@ -711,7 +712,7 @@ void func_hd_code_80262320(u8 arg0) {
     }
     D_hd_code_80367C01 = 0;
     D_hd_code_80367C00 = 0;
-    if ((g_nextGameState == 0x40)) {
+    if (g_nextGameState == 0x40) {
         D_hd_code_80367BFF = 0;
     } else {
         D_hd_code_80367BFF = 0;
@@ -729,7 +730,7 @@ void func_hd_code_80262320(u8 arg0) {
             D_hd_code_80367BCC = NULL;
         }
     }
-    if ((g_nextGameState & 0x440)) {
+    if (g_nextGameState & 0x440) {
         func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367C04->unk30[3] - D_hd_code_80367BF6, 0);
         return;
     }
@@ -748,7 +749,7 @@ void func_hd_code_80262840(void) {
     u16 sp32;
     u16 sp30;
 
-    sp34 = (sc.unk803156C4 - D_hd_code_80367BC0) / 60U;
+    sp34 = (sc.retraceCount - D_hd_code_80367BC0) / 60U;
     if (sp34 != D_hd_code_80367BC4) {
         switch (sp34) {                             /* switch 1 */
         case 0:                                     /* switch 1 */
@@ -1126,7 +1127,7 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
     if (D_hd_code_80367BF4 == 0) {
         sp5D = 0;
     }
-    if ((sp5D == 0) || ((u32) ((u32) sc.unk803156C4 % 20U) < 0x10U)) {
+    if ((sp5D == 0) || ((u32) ((u32) sc.retraceCount % 20U) < 0x10U)) {
         if (D_hd_code_80364AA8 == 2) {
             func_hd_code_80259CCC(arg1, D_hd_code_80367BB0, NULL, 1U, 0, 0x18, (sp50 * 0x12) + 0x14, 0x10, 0x10, 1, (s32) sp5E, (s32) sp5F, 0, (s32) D_hd_code_80367BD0.unk6);
         } else {
@@ -1141,10 +1142,10 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
     }
     entry = func_hd_code_80274868(entry);
     if (D_hd_code_80367BCC != NULL) {
-        entry = func_hd_code_80272ED8(entry, D_hd_code_80367BCC->unk1B[(sc.unk803156C4 / D_hd_code_80367BCC->unk26) % D_hd_code_80367BCC->unk1A] + D_hd_code_80367BD0.unk4 - 1, 0x18, D_hd_code_80367BD0.unk8 + 0xC, (s32) sp5A, 1, 1.0f);
+        entry = func_hd_code_80272ED8(entry, D_hd_code_80367BCC->unk1B[(sc.retraceCount / D_hd_code_80367BCC->unk26) % D_hd_code_80367BCC->unk1A] + D_hd_code_80367BD0.unk4 - 1, 0x18, D_hd_code_80367BD0.unk8 + 0xC, (s32) sp5A, 1, 1.0f);
     }
     if (D_hd_code_80367BD0.unk0 != NULL) {
-        entry = func_hd_code_80272ED8(entry, D_hd_code_80367BD0.unk0->unk1B[(sc.unk803156C4 / D_hd_code_80367BD0.unk0->unk26) % D_hd_code_80367BD0.unk0->unk1A] + D_hd_code_80367BD0.unk5 - 1, 0x18, D_hd_code_80367BD0.unk8 + 0xC, (s32) sp5A, 1, 1.0f);
+        entry = func_hd_code_80272ED8(entry, D_hd_code_80367BD0.unk0->unk1B[(sc.retraceCount / D_hd_code_80367BD0.unk0->unk26) % D_hd_code_80367BD0.unk0->unk1A] + D_hd_code_80367BD0.unk5 - 1, 0x18, D_hd_code_80367BD0.unk8 + 0xC, (s32) sp5A, 1, 1.0f);
     }
     entry = func_hd_code_80274AA4(entry);
     arg2 += entry - arg0;
@@ -1181,7 +1182,7 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
         D_hd_code_80367BC8 = 2;
         break;
     case 2:
-        D_hd_code_80367D50 = ((u32) ((sc.unk803156C4 - D_hd_code_80367BC0) * 0x3C) / 60U) - 0x40;
+        D_hd_code_80367D50 = ((u32) ((sc.retraceCount - D_hd_code_80367BC0) * 0x3C) / 60U) - 0x40;
         D_hd_code_80367D52.unk0 = (u8) (3 - MAX(0, (s32) (D_hd_code_80367D50 * 2) / 10));
         if (D_hd_code_80367D50 >= 0xA) {
             D_hd_code_80367D52.unk0 = 1U;

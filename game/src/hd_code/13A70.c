@@ -197,7 +197,7 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
     gSPEndDisplayList(entry++);
 
     osWritebackDCache(&D_hd_code_803651F0, 0x140);
-    func_hd_code_80284E54(&D_hd_code_803650B0, entry - D_hd_code_803650B0, 1, 0, 0x61F, 0);
+    gfxSubmitTask(&D_hd_code_803650B0, entry - D_hd_code_803650B0, 1, 0, 0x61F, 0);
 }
 
 // Draw the shadow spots under falling objects: walks the world object list

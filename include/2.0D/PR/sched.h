@@ -40,12 +40,26 @@
 #define OS_SC_RDP_DONE_MSG      3
 #define OS_SC_PRE_NMI_MSG       4
 #define OS_SC_LAST_MSG          4	/* this should have highest number */
-#define OS_SC_MAX_MESGS         8
+#define OS_SC_MAX_MESGS         16
 
 typedef struct {
     short type;
     char  misc[30];
 } OSScMsg;
+
+/*
+ * OSScClient:
+ *
+ * Data structure used by threads that wish to communicate to the
+ * scheduling thread
+ *
+ */
+typedef struct SCClient_s {
+    struct SCClient_s   *next;  /* next client in the list      */
+    OSMesgQueue         *msgQ;  /* where to send the frame msg  */
+    s32 unk8;
+    s32 unkC;
+} OSScClient;
 
 typedef struct OSScTask_s {
     struct OSScTask_s   *next;          /* note: this must be first */
@@ -54,9 +68,9 @@ typedef struct OSScTask_s {
     void		*framebuffer;	/* used by graphics tasks */
 
     OSTask              list;
-    OSMesgQueue         *msgQ;
-    OSMesg              msg;
-    s32 unk58; // some flags
+    OSScClient         *client;
+    OSMesgQueue*        msgQ;
+    OSMesg msg;  // some flags
     s32 pad2; // TODO: this can be wrong
 #ifndef _FINALROM                       /* all #ifdef items should    */
     OSTime              startTime;      /* remain at the end!!, or    */
@@ -76,30 +90,14 @@ typedef struct OSScTask_s {
 
 #define OS_SC_RCP_MASK		0x0003	/* mask for needs bits */
 #define OS_SC_TYPE_MASK		0x0007	/* complete type mask */
-/*
- * OSScClient:
- *
- * Data structure used by threads that wish to communicate to the
- * scheduling thread
- *
- */
-typedef struct SCClient_s {
-    struct SCClient_s   *next;  /* next client in the list      */
-    OSMesgQueue         *msgQ;  /* where to send the frame msg  */
-    s32 unk8;
-    s32 unkC;
-} OSScClient;
+
 
 // TODO: This struct is in some way off. This should be fixed when we get to sched.c
 typedef struct {
     OSMesgQueue interruptQ;
     OSMesg      intBuf[OS_SC_MAX_MESGS];
-    OSScMsg     retraceMsg;
-
     OSMesgQueue cmdQ;
     OSMesg      cmdMsgBuf[OS_SC_MAX_MESGS];
-    OSScMsg     prenmiMsg;
-
     OSThread    thread;
     OSScClient  *clientList;
     OSScTask    *audioListHead;
@@ -110,7 +108,7 @@ typedef struct {
     OSScTask    *curRDPTask;
     u32         frameCount;
     s32         unk803156C0;
-    u32         unk803156C4; // safe type: u32
+    u32         retraceCount; // safe type: u32
     OSTime      unk803156C8;
     OSTime      unk803156D0;
 } OSSched;

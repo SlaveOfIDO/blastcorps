@@ -41,7 +41,7 @@ void func_hd_front_end_801EE398(s32 arg0) {
     osViBlack(0U);
   }
   func_hd_code_80259450();
-  func_hd_code_80284E54(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1U, 1, 0x4D2, 0);
+  gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1U, 1, 0x4D2, 0);
   D_hd_code_8035805C ^= 1;
 
   gSPSegment(entry++, 0x00, 0x00000000);
@@ -68,7 +68,7 @@ void func_hd_front_end_801EE398(s32 arg0) {
   for(sp54 = 0; sp54 < (nextdma - no_palette_dmas); sp54++) {
     func_hd_code_802A57AC();
   }
-  func_hd_code_80285110(0x4D2);
+  gfxWaitForTask(0x4D2);
   D_hd_front_end_802159C0 += 1;
 }
 
