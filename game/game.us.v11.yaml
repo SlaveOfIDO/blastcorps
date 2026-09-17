@@ -790,7 +790,7 @@ segments:
       - [0x817780, c, hd_code/1C460] # done
       - [0x818CB0, c, hd_code/1D990] # done
       - [0x81B780, c, hd_code/20460] # done
-      - [0x81E200, c, hd_code/22EE0] # done: audi.c
+      - [0x81E200, c, hd_code/audi] # done
       - [0x81EF40, c, hd_code/23C20] # done
       - [0x821890, c, hd_code/yoshi] # done
       - [0x826710, c, hd_code/2B3F0] # done

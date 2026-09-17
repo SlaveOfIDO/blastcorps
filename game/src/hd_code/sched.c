@@ -238,7 +238,7 @@ void __scRetraceDone(OSSched* scheduler) {
     if (((u32) scheduler->retraceCount % (u32) rspTask->client->unk8) == 0) {
       __scAppendList(scheduler, rspTask);
     } else {
-      osSendMesg(&scheduler->cmdQ, (OSMesg*)rspTask, 0);
+      osSendMesg(&scheduler->cmdQ, (OSMesg*)rspTask, OS_MESG_NOBLOCK);
     }
   }
   if ((scheduler->audioListHead != NULL) && !(scheduler->retraceCount & 1)) {
@@ -246,7 +246,7 @@ void __scRetraceDone(OSSched* scheduler) {
   }
   for(client = scheduler->clientList; client != NULL; client = client->next) {
     if (client->unkC == 3) {
-      osSendMesg(client->msgQ, (void* )0x29A, 0);
+      osSendMesg(client->msgQ, (void* )0x29A, OS_MESG_NOBLOCK);
     }
   }
 }

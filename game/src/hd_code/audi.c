@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "macros.h"
 #include "variables.h"
+#include "audi.h"
 #include <PR/libaudio.h>
 #include <PR/sched.h>
 
@@ -51,7 +52,6 @@ void func_hd_code_80261528();                          /* extern */
 #define AUDIO_FRAME_MESSAGE_QUEUE_SIZE      8
 #define AUDIO_REPLY_MESSAGE_QUEUE_SIZE      8
 
-#define MAIN_QUIT_MESSAGE                  10
 #define AUDIO_MANAGER_COUNT_INTERVAL     0xf0
 
 extern long long int rspbootTextStart[];
@@ -339,35 +339,37 @@ void amStartAudioThread(void)
 void amMain(void* arg) {
     s32 sp3C;
     s32 sp38;
-    AudioInfo* sp34;
-    s32 sp30;
+    AudioInfo* lastAudioInfo;
+    s32 firstFrame;
 
     sp3C = 0;
-    sp34 = NULL;
-    sp30 = 1;
+    lastAudioInfo = NULL;
+    firstFrame = 1;
     osScAddClient(&sc, &g_AudioClient, &g_AudioManager.frameMessageQueue, 2, 2);
 
-    osSendMesg(&g_AudioManager.frameMessageQueue, (void* )5, 0);
+    osSendMesg(&g_AudioManager.frameMessageQueue, (OSMesg)AUDIO_FRAME_MESG, OS_MESG_NOBLOCK);
 
     while (!sp3C) {
         osRecvMesg(&g_AudioManager.frameMessageQueue, (void*)&sp38, OS_MESG_BLOCK);
         switch (sp38) {                         /* irregular */
         case 4:
             break;
-        case 5:
+        case AUDIO_FRAME_MESG:
             if (sc.audioListHead != 0) {
-                osSendMesg((OSMesgQueue* ) &sc, (void* )0x29E, 1);
+                osSendMesg(&sc.interruptQ, (void* )0x29E, OS_MESG_BLOCK);
             }
             g_StartTime = osGetTime();
-            amHandleFrameMessage(g_AudioManager.audioInfo[g_AudioFrameCount % 3], sp34);
+            // Prepare audio data and send it to the schedulers command queue
+            amHandleFrameMessage(g_AudioManager.audioInfo[g_AudioFrameCount % 3], lastAudioInfo);
             g_EndTime = osGetTime();
             D_80368058 = g_StartTime;
 
-            if (!sp30) {
-                osRecvMesg(&g_AudioManager.replyMessageQueue, (void** ) &sp34, 1);
-                amHandleDoneMessage(sp34);
+            if (!firstFrame) {
+                // Wait for RSP to finish the audio task, it sends an AudioInfo struct via the replyMessageQueue if finished
+                osRecvMesg(&g_AudioManager.replyMessageQueue, (void** ) &lastAudioInfo, OS_MESG_BLOCK);
+                amHandleDoneMessage(lastAudioInfo);
             }
-            sp30 = 0;
+            firstFrame = 0;
             if (D_hd_code_8036772A != 0) {
                 func_hd_code_802613C8();
             }
@@ -384,7 +386,7 @@ void amMain(void* arg) {
                 func_hd_code_80261528();
             }
             break;
-        case MAIN_QUIT_MESSAGE:
+        case AUDIO_QUIT_MESG:
             sp3C = 1;
             break;
         case 6:
