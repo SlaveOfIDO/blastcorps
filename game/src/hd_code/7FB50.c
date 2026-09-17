@@ -64,21 +64,9 @@ s32 D_hd_code_80306400[4] = {
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5120.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C51E0.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C53DC.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C540C.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5418.s")
-
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5508.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5688.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C56A8.s")
-
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C56B4.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/7FB50/func_hd_code_802C5714.s")
 

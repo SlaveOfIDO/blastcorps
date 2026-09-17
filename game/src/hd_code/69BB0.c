@@ -48,8 +48,6 @@ u8 D_hd_code_80305CB0[48] = {
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/69BB0/func_hd_code_802AEC3C.s")
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/69BB0/func_hd_code_802AED6C.s")
-
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/69BB0/func_hd_code_802AEE84.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/69BB0/func_hd_code_802AEEC8.s")
