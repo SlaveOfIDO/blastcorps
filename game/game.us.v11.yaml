@@ -208,8 +208,7 @@ segments:
   - [0x6CF050, bin, attract4]
   - [0x6E3CA0, bin, usa_star]
   - [0x6E551E, bin, usa_star_dl]
-  - [0x6E5B70, bin, ninlogo]
-  - [0x6E5D45, bin, ninlogo_dl]
+  - [0x6E5B70, rzip, ninlogo]
   - [0x6E5EB0, bin, reflectlogo]
   - [0x6E70F4, bin, reflectlogo_dl]
   - [0x6E77E0, bin, somelookup]
@@ -1021,7 +1020,7 @@ segments:
       - [0x89F860, .data, hd_code/1C460] # done
       - [0x89FA90, .data, hd_code/1D990] # done
       - [0x8A0B10, .data, hd_code/20460] # done
-      - [0x8AA650, .data, hd_code/22EE0] # done
+      - [0x8AA650, .data, hd_code/audi] # done
       - [0x8AA770, .data, hd_code/23C20] # done
       - [0x8AB220, .data, hd_code/yoshi] # done
       - [0x8B0520, .data, hd_code/2B3F0] # done
@@ -1105,7 +1104,7 @@ segments:
       - [0x8BFD50, .rodata, hd_code/1C460] # done
       - [0x8BFE10, .rodata, hd_code/1D990] # done
       - [0x8C01A0, .rodata, hd_code/20460] # done
-      - [0x8C0260, .rodata, hd_code/22EE0] # done: audi.c
+      - [0x8C0260, .rodata, hd_code/audi] # done
       - [0x8C0390, .rodata, hd_code/23C20] # done
       - [0x8C0530, .rodata, hd_code/yoshi] # done
       - [0x8C2B20, .rodata, hd_code/2B3F0] # done
@@ -1184,7 +1183,7 @@ segments:
       - { start: 0x8C61C0, type: .bss, name: hd_code/1C460, vram: 0x80366C30 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/1D990, vram: 0x80367750 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/20460, vram: 0x80367D60 } # done
-      - { start: 0x8C61C0, type: .bss, name: hd_code/22EE0, vram: 0x80368050 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/audi, vram: 0x80368050 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/23C20, vram: 0x8036AFB0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/yoshi, vram: 0x8036B980 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/2B3F0, vram: 0x8036BBB0 } # done
