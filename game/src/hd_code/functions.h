@@ -211,8 +211,6 @@ void func_hd_front_end_801ECE9C();                                  /* extern */
 void func_hd_front_end_801ED790();                                  /* extern */
 u8 func_hd_front_end_801EE800(s8*, u8, u8);                        /* extern */
 s8 func_hd_front_end_801EF1E0();                                 /* extern */
-void func_hd_front_end_801EF380(s32);                                 /* extern */
-void func_hd_front_end_801EF4AC();                                  /* extern */
 void func_hd_front_end_801F55D8();                                  /* extern */
 s32 func_hd_front_end_801F6F18(void);                                  /* extern */
 void func_hd_front_end_801F8228();                                  /* extern */
@@ -223,7 +221,6 @@ void func_hd_front_end_801FE990();                                  /* extern */
 void func_hd_front_end_80200714(u8);                                 /* extern */
 void func_hd_front_end_80201240(s32);                               /* extern */
 void* func_hd_front_end_80201E80(void);                                /* extern */
-void func_hd_code_802475D8();                          /* extern */
 void func_hd_code_80255AD0();                          /* extern */
 void func_hd_code_80255D34();                          /* extern */
 void hdPrepareStateTransition();                          /* extern */
@@ -250,7 +247,6 @@ extern void guFrustumF(float mf[4][4], float l, float r, float b, float t,
 
 void gfxWaitForTask(u32);                         /* extern */
 u8 func_hd_code_80285814();                         /* extern */
-void func_hd_code_80285A78(u8*, u8*);                /* extern */
 u16 func_hd_code_8028604C(s32);                     /* extern */
 void func_hd_code_802860F0();                          /* extern */
 void func_hd_code_80286330();                          /* extern */
@@ -321,7 +317,7 @@ void func_hd_code_80281CE4();                          /* extern */
 void func_hd_code_80285AB0(u8);                         /* extern */
 void func_hd_code_802886A0();                          /* extern */
 void func_hd_code_8028A3E4();                          /* extern */
-void func_hd_code_8028A470();                          /* extern */
+void controllerUpdateInput();                          /* extern */
 void func_hd_code_8028C874(u8);                        /* extern */
 void func_hd_code_8028DF14(u8);                        /* extern */
 void func_hd_code_8028F794(u8);                        /* extern */

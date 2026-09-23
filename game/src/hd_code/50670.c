@@ -142,7 +142,7 @@ void func_hd_code_80294EB8(void) {
 // the elapsed race time (warns and stops on buffer overrun)
 // Proposed name: RecordGhostSample
 void func_hd_code_80294F00(void) {
-  if (D_hd_code_80364A90 & 0x104) {
+  if (g_currentGameState & 0x104) {
     if (D_hd_code_8039CA80 == -1) {
       D_hd_code_8039CA80 = D_hd_code_803156C0;
     }
@@ -206,7 +206,7 @@ void func_hd_code_80295394(s32* arg0, s32* arg1, s32* arg2, s16* arg3, s16* arg4
     f32 sp18;
 
     sp28 = D_hd_code_803156C0 - D_hd_code_8039CA84;
-    if (D_hd_code_80364A90 == 0x2000) {
+    if (g_currentGameState == 0x2000) {
         *arg0 = D_hd_code_8039CA68[0][0].unk0;
         *arg1 = D_hd_code_8039CA68[0][0].unk4;
         *arg2 = D_hd_code_8039CA68[0][0].unk8;

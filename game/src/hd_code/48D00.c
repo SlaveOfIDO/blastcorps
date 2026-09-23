@@ -106,7 +106,7 @@ s32 D_hd_code_8039B624;
 s32 D_hd_code_8039B628;
 s32 D_hd_code_8039B62C;
 OSPfs D_hd_code_8039B630;
-s32 D_hd_code_8039B698[902];
+struct S_8039B698 D_hd_code_8039B698;
 u8 g_pakBusy;
 u8 D_hd_code_8039C4B1;
 u16 D_hd_code_8039C4B2;
@@ -363,7 +363,7 @@ void func_hd_code_8028DF14(u8 arg0) {
                     if (func_hd_code_8028DE94() == 0) {
                         sndPlaySfx(D_hd_code_80367738, 0x73, (ALSoundState* ) &D_hd_code_8039B070[sp4C].unk40);
                     }
-                    D_hd_code_8039B070[sp4C].unk14 = D_hd_code_80358060;
+                    D_hd_code_8039B070[sp4C].unk14 = g_frameCount;
                 }
                 if ((u8) D_hd_code_8039B620 == arg0) {
                     sp44 = D_hd_code_803643E0 - D_hd_code_8039B614,

@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "stats_perm.h"
 
 // Proposed file name: rdu.c
 //
@@ -102,7 +103,7 @@ s32 D_hd_code_802FA26C = 0; // -C; proposed name: debugFlagBigC
 extern u16 D_hd_code_803C30A8[];
 
 // Build the RDU list for a level from an array of positions [arg0, arg1):
-// reset the total (D_hd_code_8036EB90) and found (D_hd_code_8036EA7C) counters and the
+// reset the total (D_hd_code_8036EB90) and found (g_statsNew.rdusFound) counters and the
 // pickup-order list (kept if the game state is 0x40), allocate the RDU array
 // from the level bump allocator, and for each RDU store its position, clear
 // the found flag (unk6), compute its world grid cell (unk7) and copy the base
@@ -111,8 +112,8 @@ void LoadLevelRdus(struct vec3s* arg0, struct vec3s* arg1) {
   s32 pad1;
 
   D_hd_code_8036EB90 = 0;
-  D_hd_code_8036EA7C = 0;
-  if (D_hd_code_80364A90 != 0x40) {
+  g_statsNew.rdusFound = 0;
+  if (g_currentGameState != 0x40) {
     D_hd_code_8036BED4 = *D_hd_code_8036BBB0 = 0;
   }
   D_hd_code_8036BED8 = g_heap;
@@ -144,7 +145,7 @@ u8 func_hd_code_8026FE6C(s32 arg0) {
 // Proposed name: MarkRduFound
 void func_hd_code_8026FE8C(s32 arg0) {
   D_hd_code_8036BED8[arg0].unk6 = 1;
-  D_hd_code_8036EA7C += 1;
+  g_statsNew.rdusFound += 1;
 }
 
 // Per-frame RDU pickup check: compute the player's grid cell, then for every
@@ -168,11 +169,11 @@ void func_hd_code_8026FEC4(void) {
     if (((u8) D_hd_code_8036BED8[sp34].unk7 == sp2B) && ((u8) D_hd_code_8036BED8[sp34].unk6 == 0)) {
       sp2C = func_hd_code_8026A6F0((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E4 >> 5, (s32) D_hd_code_803643E8 >> 5, (s32) D_hd_code_8036BED8[sp34].x, (s32) D_hd_code_8036BED8[sp34].y, (s32) D_hd_code_8036BED8[sp34].z);
       if (sp2C < D_hd_code_802FA200[D_hd_code_80364456]) {
-        D_hd_code_8036EA7C++;
-        if ((D_hd_code_8036EA7C >= 4) && D_hd_code_802E8BD0 == 0) {
+        g_statsNew.rdusFound++;
+        if ((g_statsNew.rdusFound >= 4) && D_hd_code_802E8BD0 == 0) {
           func_hd_code_8026AD30(0x46);
         }
-        if (D_hd_code_80364A90 != 0x40) {
+        if (g_currentGameState != 0x40) {
           D_hd_code_8036BBB0[D_hd_code_8036BED4] = D_hd_code_8036BBB0[D_hd_code_8036BED4+1] = sp34;
           D_hd_code_8036BED4++;
         }

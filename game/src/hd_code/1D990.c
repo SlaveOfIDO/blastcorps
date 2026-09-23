@@ -6,6 +6,7 @@
 #include "symbol_data.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "stats_perm.h"
 
 // Proposed file name: missions.c
 //
@@ -825,7 +826,7 @@ void func_hd_code_80262BF4(void) {
         D_hd_code_80367BF6 = D_hd_code_80367C04->unk30[3] - MIN(D_hd_code_80367C04->unk30[3], func_hd_code_8028604C(sc.unk803156C0 - D_hd_code_80364A58));
     }
     func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367BF6, 1);
-    switch(D_hd_code_80364A90) {
+    switch(g_currentGameState) {
         case 0x2000:
             func_hd_code_80262840();
             break;
@@ -893,10 +894,10 @@ void func_hd_code_80262BF4(void) {
 // found count >= goal; HUD shows "found/goal"
 // Proposed name: CheckRduObjective
 void func_hd_code_80262FD0(void) {
-  if ((u16) D_hd_code_8036EA7C >= (u32) D_hd_code_80367C04->unk18) {
+  if ((u16) g_statsNew.rdusFound >= (u32) D_hd_code_80367C04->unk18) {
     D_hd_code_803643DA = 1;
   }
-  sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA7C, D_hd_code_80367C04->unk18);
+  sprintf(D_hd_code_80367B60[0], "%d/%d", g_statsNew.rdusFound, D_hd_code_80367C04->unk18);
 }
 
 // Destroy-buildings mode (0x4) objective check: success once destroyed count
@@ -907,7 +908,7 @@ void func_hd_code_8026303C(void) {
   s16 sp1E;
 
   func_hd_code_802C1DD0(0);
-  if (D_hd_code_8036EA78 >= D_hd_code_80367C04->unk18) {
+  if (g_statsNew.buildingsDestroyed >= D_hd_code_80367C04->unk18) {
     D_hd_code_803643DA = 1;
   }
   if (D_hd_code_8036DCD4 != 0) {
@@ -918,7 +919,7 @@ void func_hd_code_8026303C(void) {
   } else if (D_hd_code_80367C04->unk24 > (D_hd_code_803643E4 >> 5)) {
     D_hd_code_803643D9 = 1;
   }
-  sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+  sprintf(D_hd_code_80367B60[0], "%d/%d", g_statsNew.buildingsDestroyed, D_hd_code_8036EB92);
 }
 
 // Target/path modes (0x20/0x80) objective check: mode 0x20 succeeds when all
@@ -932,12 +933,12 @@ void func_hd_code_80263140(void) {
   func_hd_code_802C1DD0(1);
   switch (D_hd_code_80364AA8) {                           /* switch 1; irregular */
     case 0x20:                                      /* switch 1 */
-      if (D_hd_code_8036EA78 >= D_hd_code_8036EB92) {
+      if (g_statsNew.buildingsDestroyed >= D_hd_code_8036EB92) {
         D_hd_code_803643DA = 1;
       }
       break;
     case 0x80:                                      /* switch 1 */
-      if ((D_hd_code_803F7806 != 0) || (g_currentLevel == 0x32 && D_hd_code_8036EA78 >= D_hd_code_8036EB92)) {
+      if ((D_hd_code_803F7806 != 0) || (g_currentLevel == 0x32 && g_statsNew.buildingsDestroyed >= D_hd_code_8036EB92)) {
         D_hd_code_803643DA = 1;
       }
       break;
@@ -952,11 +953,11 @@ void func_hd_code_80263140(void) {
   }
   switch (D_hd_code_80364AA8) {                           /* switch 2; irregular */
     case 0x20:                                      /* switch 2 */
-      sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+      sprintf(D_hd_code_80367B60[0], "%d/%d", g_statsNew.buildingsDestroyed, D_hd_code_8036EB92);
       return;
     case 0x80:                                      /* switch 2 */
       if (g_currentLevel == 0x32) {
-        sprintf(D_hd_code_80367B60[0], "%d/%d", D_hd_code_8036EA78, D_hd_code_8036EB92);
+        sprintf(D_hd_code_80367B60[0], "%d/%d", g_statsNew.buildingsDestroyed, D_hd_code_8036EB92);
         return;
       }
       sprintf(D_hd_code_80367B60[0], "%d/%d", func_hd_code_802C1B1C() , D_hd_code_8036EB92);
@@ -972,10 +973,10 @@ void func_hd_code_80263358(void) {
   s32 temp_t3;
 
   func_hd_code_802C1DD0(0);
-  if ((u32) D_hd_code_8036EA70 >= (u32) D_hd_code_80367C04->unk18) {
+  if (g_statsNew.money >= (u32) D_hd_code_80367C04->unk18) {
     D_hd_code_803643DA = 1;
   }
-  sp1C = (s32)D_hd_code_80367C04->unk18 - (s32)D_hd_code_8036EA70;
+  sp1C = (s32)D_hd_code_80367C04->unk18 - (s32)g_statsNew.money;
   if (sp1C < 0) {
     sp1C = 0;
   }
@@ -1013,7 +1014,7 @@ void func_hd_code_802633E0(void) {
                 D_hd_code_80367B58[D_hd_code_80367B54 - 1] = D_hd_code_80367B58[D_hd_code_80367B54 - 1] - D_hd_code_80367B58[sp34];
 
         }
-        if (D_hd_code_80370C28 & 0x2000) {
+        if (g_currentButtons & Z_TRIG) {
             rmonPrintf("box number=%d\n", D_hd_code_80367BFA);
         }
         if (D_hd_code_80367BF8 == 4) {
@@ -1082,14 +1083,14 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
 
 
     entry = arg0;
-    if (((D_hd_code_80364A90 & 0x04000200)) && (D_hd_code_8036BB18 != 0x1E)) {
+    if (((g_currentGameState & 0x04000200)) && (D_hd_code_8036BB18 != 0x1E)) {
         sp5A = 0xFF;
     } else {
         sp5A = D_hd_code_80367BD0.unk6;
     }
     switch ((u32) D_hd_code_80364AA8) {                     /* irregular */
     case 0x2:
-        for(sp50 = 0; (sp50 < (D_hd_code_80367B54 - ((D_hd_code_80364A90 & 0x440)?1:0))) && ((u32) sp50 < (u32) D_hd_code_80367C04->unk18); sp50++) {
+        for(sp50 = 0; (sp50 < (D_hd_code_80367B54 - ((g_currentGameState & 0x440)?1:0))) && ((u32) sp50 < (u32) D_hd_code_80367C04->unk18); sp50++) {
             if ((sp50 + 1 == D_hd_code_80367BFB) && (sp50 + 1 != D_hd_code_80367B54)) {
                 func_hd_code_80259CCC(arg1, D_hd_code_80367B60[sp50], NULL, 1U, 0, 0x18, (sp50 * 0x12) + 0x12, 0x14, 0x14, 1, 0xFF, 0, 0, (s32) D_hd_code_80367BD0.unk6);
             } else if ((sp50 + 1) == D_hd_code_80367B54) {
@@ -1114,7 +1115,7 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
     }
     sp5E = 0xFF;
     sp5F = 0;
-    if ((D_hd_code_80364A90 & 0x04000104)) {
+    if ((g_currentGameState & 0x04000104)) {
         sp5D = (s32) D_hd_code_80367BF4 < 0xA;
         if (!sp5D) {
             sp5F = 0xFF;
@@ -1134,7 +1135,7 @@ Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
             func_hd_code_80259CCC(arg1, D_hd_code_80367BB0, NULL, 1U, 0, 0x1C, D_hd_code_80367BD0.unk8 + 0x2A, 0x10, 0x10, 1, (s32) sp5E, (s32) sp5F, 0, (s32) sp5A);
         }
     }
-    if ((D_hd_code_803643D7 != 0) && (D_hd_code_80364A90 == 0x04000000)) {
+    if ((D_hd_code_803643D7 != 0) && (g_currentGameState == 0x04000000)) {
         func_hd_code_8025E2CC(&entry, arg1, D_hd_code_8035805C);
     }
     if (D_hd_code_80367BC8 != 0) {
@@ -1255,23 +1256,23 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
 // Format a time given in tenths of seconds as "MM:SS.T" into arg0
 // (arg2 is unused)
 // Proposed name: FormatTime
-void func_hd_code_80264A34(char* arg0, u16 arg1, u16 arg2) {
-  arg0[0] = '0' + (arg1 / 6000);
+void func_hd_code_80264A34(char* outputBuffer, u16 timeCode, u16 arg2) {
+  outputBuffer[0] = '0' + (timeCode / 6000);
 
-  arg1 %= 6000;
-  arg0[1] = '0' + (arg1 / 600);
-  arg0[2] = ':';
+  timeCode %= 6000;
+  outputBuffer[1] = '0' + (timeCode / 600);
+  outputBuffer[2] = ':';
 
-  arg1 %= 600;
-  arg0[3] = '0' + arg1 / 100;
+  timeCode %= 600;
+  outputBuffer[3] = '0' + timeCode / 100;
 
-  arg1 %= 100;
-  arg0[4] = '0' + arg1 / 10;
+  timeCode %= 100;
+  outputBuffer[4] = '0' + timeCode / 10;
 
-  arg1 %= 10;
-  arg0[5] = '.';
-  arg0[6] = '0' + arg1;
-  arg0[7] = 0;
+  timeCode %= 10;
+  outputBuffer[5] = '.';
+  outputBuffer[6] = '0' + timeCode;
+  outputBuffer[7] = 0;
 }
 
 // Race-mode timer correction: remaining time = limit - sum of completed lap

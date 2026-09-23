@@ -695,7 +695,7 @@ s32 func_hd_code_8026AD30(s16 arg0) {
   s32 sp18;
 
   sp2B = 0;
-  if (!(D_hd_code_80364A90 & 0x2104)) {
+  if (!(g_currentGameState & 0x2104)) {
     return 0;
   }
   if (players[playerNumber].unk91 >= 0xB) {
@@ -1017,7 +1017,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     sp12C[2] = (0xFF - D_hd_code_8036BB0C);
     sp12C[6] = (D_hd_code_8036BB0C);
 
-    if ((D_hd_code_80364A90 == 0x200) && (D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((D_hd_code_8036BB1A = -1, (D_hd_code_8036BB1C == 4)) || (D_hd_code_8036BB1C == 2))) {
+    if ((g_currentGameState == 0x200) && (D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((D_hd_code_8036BB1A = -1, (D_hd_code_8036BB1C == 4)) || (D_hd_code_8036BB1C == 2))) {
         rmonPrintf("putting off!\n");
         func_hd_code_8026AF6C(0x4000U);
     }
@@ -1059,7 +1059,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     sp14C = &D_hd_code_802F8BDC[D_hd_code_8036BB18];
     func_hd_code_8026FB50(sp14C);
     if ((sp14C->unk8 & 0x20) && (D_hd_code_8036BB1C == 2)) {
-        if ((((D_hd_code_80370C28 & 0x8000) && !(D_hd_code_80370C2A & 0x8000)) || ((sp14C->unk8 & 0x80000000) && (D_hd_code_80370C28 & 0x1000) && !(D_hd_code_80370C2A & 0x1000))) && (sp14C->unk1A != 0)) {
+        if ((((g_currentButtons & A_BUTTON) && !(g_previousButtons & A_BUTTON)) || ((sp14C->unk8 & 0x80000000) && (g_currentButtons & START_BUTTON) && !(g_previousButtons & START_BUTTON))) && (sp14C->unk1A != 0)) {
             sp13A = D_hd_code_8036BB10[sp14C->unk18].unk16;
             if (sp13A != 0) {
                 sndPlaySfx(D_hd_code_80367738, (s16) sp13A, NULL);
@@ -1070,7 +1070,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             D_hd_code_8036BB16 = sp14C->unk18;
             sp130 = 1;
         }
-        if ((D_hd_code_80370C28 & 0x4000) && !(D_hd_code_80370C2A & 0x4000)) {
+        if ((g_currentButtons & B_BUTTON) && !(g_previousButtons & B_BUTTON)) {
             if ((sp14C->unk8 & 0x20000000) && (sp14C->unk1A != 0)) {
                 sndPlaySfx(D_hd_code_80367738, 0xDE, NULL);
                 D_hd_code_8036BB16 = 0xFFFF;
@@ -1284,7 +1284,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             } else {
                 spD4 = 0;
             }
-            if (((D_hd_code_80370C28 & D_hd_code_8036BB3C) && !(D_hd_code_80370C2A & D_hd_code_8036BB3C)) || (spD8 != 0)) {
+            if (((g_currentButtons & D_hd_code_8036BB3C) && !(g_previousButtons & D_hd_code_8036BB3C)) || (spD8 != 0)) {
                 u16 spD2 = func_hd_code_8026F82C(sp14C->unkE, sp14C->unk18, 1);
                 sp13A = sp14C->unk16;
                 if (sp13A != 0) {
@@ -1296,7 +1296,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
                 }
                 D_hd_code_8036BB28 += D_hd_code_8036BB10[sp14C->unk18].unk4 - D_hd_code_8036BB10[spD2].unk4;
                 sp14C->unk18 = spD2;
-            } else if (((((sp14C->unk1A ? 0 : 0x8000) | D_hd_code_8036BB3E) & D_hd_code_80370C28) && !(((sp14C->unk1A ? 0 : 0x8000) | D_hd_code_8036BB3E) & D_hd_code_80370C2A)) || spD4) {
+            } else if (((((sp14C->unk1A ? 0 : A_BUTTON) | D_hd_code_8036BB3E) & g_currentButtons) && !(((sp14C->unk1A ? 0 : A_BUTTON) | D_hd_code_8036BB3E) & g_previousButtons)) || spD4) {
                 u16 spD0 = func_hd_code_8026F8A8(sp14C->unkE, sp14C->unk10, sp14C->unk18, 1);
                 if (func_hd_code_8026F8A8(sp14C->unkE, sp14C->unk10, spD0, 1) == spD0) {
                     sp14C->unk1A = 1U;
@@ -1335,7 +1335,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
                 } else {
                     spCA = 0x1C;
                 }
-                if ((!(D_hd_code_80364A90 & 0xC9FD0FE79BFF80B0)) || (D_hd_code_8035805C != 0)) {
+                if ((!(g_currentGameState & 0xC9FD0FE79BFF80B0)) || (D_hd_code_8035805C != 0)) {
                     D_hd_code_8036BB44 += D_hd_code_802F9930;
                 }
                 if (D_hd_code_802F9930 < 0) {
@@ -1424,7 +1424,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
 
             entry = (sp14C->unk8 & 0x20000) ? func_hd_code_80274AA4(entry) : func_hd_code_80274B08(entry);
         }
-        if ((D_hd_code_8036BB18 < 0x62) || (D_hd_code_8036BB18 >= 0x6C) || ((D_hd_code_80364A90 == 2))) {
+        if ((D_hd_code_8036BB18 < 0x62) || (D_hd_code_8036BB18 >= 0x6C) || ((g_currentGameState == 2))) {
             for(sp138 = sp14C->unkE; ((sp138) < (sp14C->unkE + sp14C->unk10)); sp138++) {
                 sp148 = &D_hd_code_8036BB10[sp138];
                 sp140 = 0;

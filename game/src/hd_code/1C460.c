@@ -758,7 +758,7 @@ u8 func_hd_code_80261A44(u64 arg0) {
     }
     sndDeactivateAllSfxByFlag_11();
     func_hd_code_80261E9C(arg0);
-    if ((D_hd_code_80364A90 & 0xC9FD8FE7FBFFC0B0)) {
+    if ((g_currentGameState & 0xC9FD8FE7FBFFC0B0)) {
         func_hd_code_80260A30(0);
         func_hd_code_80260A30(5);
     }

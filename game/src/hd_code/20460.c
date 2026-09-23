@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "stats_perm.h"
 
 struct S_80367D60 {
   s16 unk0;
@@ -94,7 +95,7 @@ Vtx D_hd_code_802E9FB0[4] = {
 #include "20460_textures.h"
 
 // Reset all survivors at level init; arg0 != 0 restores the saved rescue
-// counter (D_hd_code_8036EA79) instead of zeroing it
+// counter (g_statsNew.civiliansRescued) instead of zeroing it
 // Proposed name: InitSurvivors
 void func_hd_code_80264C20(s32 arg0) {
   s32 sp1C;
@@ -106,9 +107,9 @@ void func_hd_code_80264C20(s32 arg0) {
   D_hd_code_8036B968 = osGetCount();
   D_hd_code_80368038 = 0x05F5E0FF;
   if (arg0 != 0) {
-    D_hd_code_8036EA79 = (u8) D_hd_code_80368040;
+    g_statsNew.civiliansRescued = (u8) D_hd_code_80368040;
   } else {
-    D_hd_code_8036EA79 = 0;
+    g_statsNew.civiliansRescued = 0;
   }
 }
 
@@ -128,7 +129,7 @@ void func_hd_code_80264CB4(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, s32 
 
   sp1C = 0;
   sp20 = 0;
-  D_hd_code_8036EA79 += arg5;
+  g_statsNew.civiliansRescued += arg5;
   if ((arg5 != 0) && (D_hd_code_802E8BD0 == 0)) {
     func_hd_code_8026AD30(0x48U);
   }
@@ -137,7 +138,7 @@ void func_hd_code_80264CB4(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, s32 
   }
   while (sp20 < arg5 && sp1C < 0x14) {
     if (sp20 == 2) {
-      sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, 0x24, NULL);
+      sndPlaySfx(D_hd_code_80367738, 0x24, NULL);
     }
     sp1B = 0;
     while(sp1C < 0x14 && sp1B == 0) {
@@ -316,7 +317,7 @@ void func_hd_code_80265428(void) {
                 D_hd_code_80367D60[sp34].unk1A = 1;
             }
             if ((sp34 == 1) && D_hd_code_80367D60[sp34].unk15 != 4) {
-                sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, 0x24, NULL);
+                sndPlaySfx(D_hd_code_80367738, 0x24, NULL);
             }
             if (D_hd_code_80367D60[sp34].unk15 == 2) {
                 D_hd_code_803EF32C = 6;
@@ -500,7 +501,7 @@ void func_hd_code_80265E48(void) {
         sp28 = MIN(0x7FFF, 0x88B8 - (func_hd_code_8026A610(D_hd_code_803643E0, D_hd_code_803643E8, D_hd_code_803EF308, D_hd_code_803EF30C) * 2));
 
         if (sp28 >= 0xFA1) {
-            sndCreatePostEvent(sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, 0x25, NULL), 8, sp28);
+            sndCreatePostEvent(sndPlaySfx( D_hd_code_80367738, 0x25, NULL), 8, sp28);
         }
 
     }

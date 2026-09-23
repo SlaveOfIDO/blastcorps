@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "stats_perm.h"
 
 extern u16 D_hd_code_80303AF4[];
 extern u16 D_hd_code_80303B00[];
@@ -739,7 +740,7 @@ void func_hd_code_80269258(void) {
                 return;
             }
             func_hd_code_802C1DD0(0);
-            if ((s32) D_hd_code_8036EA78 < (s32) D_hd_code_8036EB92) {
+            if ((s32) g_statsNew.buildingsDestroyed < (s32) D_hd_code_8036EB92) {
                 D_hd_code_8036B964 = 1;
                 D_hd_code_8036B95C = 1;
             }
@@ -757,7 +758,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "LANDING ABORTED!";
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303AF4;
             D_hd_code_802F8BDC[0x17].unk12 = 0xDA;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 return;
             }
@@ -766,7 +767,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "DITCHING IN SEA!";
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B00;
             D_hd_code_802F8BDC[0x17].unk12 = 0x77;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 return;
             }
@@ -775,7 +776,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "ON FINAL APPROACH!";
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B10;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD7;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 return;
             }
@@ -784,7 +785,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "SUCCESSFUL LANDING!";
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B24;
             D_hd_code_802F8BDC[0x17].unk12 = 0x82;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 return;
             }
@@ -793,7 +794,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "3000 FT!";
             D_hd_code_802F5804[0x2A].unk10 = NULL;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD5;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 return;
             }
@@ -802,7 +803,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "2000 FT!";
             D_hd_code_802F5804[0x2A].unk10 = NULL;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD3;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 return;
             }
@@ -811,7 +812,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unkC = "1000 FT!";
             D_hd_code_802F5804[0x2A].unk10 = NULL;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD1;
-            if (D_hd_code_80364A90 & 0x104) {
+            if (g_currentGameState & 0x104) {
                 func_hd_code_8026AF6C(0x8017U);
                 func_hd_code_80260DFC();
             }

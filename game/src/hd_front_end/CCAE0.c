@@ -316,7 +316,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
       (s32) D_hd_code_803043B8, (s32) D_hd_code_80304474, (s32) D_hd_code_80304544, (s32) D_hd_code_80304614
     };
 
-    if (!(D_hd_code_80364A90 & 0x10E18000) && (arg0 != D_hd_code_80364AEA)) {
+    if (!(g_currentGameState & 0x10E18000) && (arg0 != D_hd_code_80364AEA)) {
         sp47 = 1;
     }
     D_hd_front_end_802154EC = -1;
@@ -351,7 +351,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
                 }
                 D_hd_front_end_802154EC = func_hd_code_8025B300(&D_hd_front_end_802155A0);
                 sprintf(&D_hd_front_end_802155A0, "%s  %d", &D_hd_front_end_802155A0, sp48->unkC);
-                if ((g_nextGameState & 0x0200040000000000) || D_hd_code_80364A90 & 0x0100000000000000) {
+                if ((g_nextGameState & 0x0200040000000000) || g_currentGameState & 0x0100000000000000) {
                     sprintf(&D_hd_front_end_802155A0, "%s ..... %s", &D_hd_front_end_802155A0, "USE Z/R TO CHANGE PLAYER, THEN A TO SELECT!");
                 }
             } else {
@@ -504,12 +504,12 @@ Gfx *func_hd_front_end_801E9718(Gfx *gfx, struct Model1 *arg1, s32 arg2) {
         s32 sp84;
         s32 sp80;
 
-        if ((D_hd_code_80364A90 & 0x5040008010080)) {
+        if ((g_currentGameState & 0x5040008010080)) {
             D_hd_front_end_8021593C += 0x10;
             if (D_hd_front_end_8021593C >= 0x100) {
                 D_hd_front_end_8021593C = 0xFF;
             }
-        } else if ((D_hd_code_80364A90 & 0x8000202020000)) {
+        } else if ((g_currentGameState & 0x8000202020000)) {
             D_hd_front_end_8021593C -= 0x10;
             if (D_hd_front_end_8021593C <= 0) {
                 D_hd_front_end_8021593C = 0;
@@ -745,8 +745,8 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
     spC8 = func_hd_code_8025B300(D_hd_front_end_80215928);
     spC4 = D_hd_code_802F47B0[16];
 
-    if ((D_hd_code_80370C28 & 0x300) && !(D_hd_code_80370C2A & 0x300)) {
-        sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0xC, NULL);
+    if ((g_currentButtons & (L_JPAD | R_JPAD)) && !(g_previousButtons & (L_JPAD | R_JPAD))) {
+        sndPlaySfx(D_hd_code_80367738, 0xC, NULL);
     }
     D_hd_front_end_8021546C = D_hd_front_end_8021591A;
     D_hd_front_end_8021591A = D_hd_code_80370C2C;
@@ -786,7 +786,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
         D_hd_front_end_802154D0 = 0;
     }
     if (D_hd_front_end_802154B6 != D_hd_front_end_802154B8) {
-        sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0x90, NULL);
+        sndPlaySfx(D_hd_code_80367738, 0x90, NULL);
     }
     D_hd_front_end_802154B8 = D_hd_front_end_802154B6;
     for(spEC = 0; spEC < 2; spEC++) {
@@ -832,38 +832,38 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
         func_hd_code_80259BD4(&entry, arg1);
         func_hd_code_80259DC8(arg1, (s32) D_hd_front_end_80208498, 0, 1, 0, spDC - 5, spD8 - 5, spD4 * 2, spD0 * 2, 1, spC4[0], spC4[1], spC4[2], spBB, spC4[4], spC4[5], spC4[6], spBB);
     }
-    if ((D_hd_code_8036BB1C == 2) && (D_hd_code_80370C28 & 0x1000) && !(D_hd_code_80370C2A & 0x1000) && (areWeFading() == 0)) {
+    if ((D_hd_code_8036BB1C == 2) && (g_currentButtons & START_BUTTON) && !(g_previousButtons & START_BUTTON) && (areWeFading() == 0)) {
         if (D_hd_front_end_802154BC != 0) {
             g_nextGameState = 0x01000000;
             D_hd_code_80365060[playerNumber] = 1;
             func_hd_code_8026AF6C(0x4000U);
         } else {
-            sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0x2B, NULL);
+            sndPlaySfx(D_hd_code_80367738, 0x2B, NULL);
         }
     }
     switch (D_hd_front_end_802154BE) {              /* switch 1; irregular */
     case 0:
-        if ((D_hd_code_8036BB1C == 2) && (D_hd_code_80370C28 & 0xC000) && !(D_hd_code_80370C2A & 0xC000) && (areWeFading() == 0)) {
-            if (D_hd_code_80370C28 & 0x4000) {
+        if ((D_hd_code_8036BB1C == 2) && (g_currentButtons & (A_BUTTON | B_BUTTON)) && !(g_previousButtons & (A_BUTTON | B_BUTTON)) && (areWeFading() == 0)) {
+            if (g_currentButtons & B_BUTTON) {
                 spF7 = 0x7F;
             }
             if (spF7 == 0x7F) {
                 if (D_hd_front_end_802154BC == 0) {
-                    if (D_hd_code_80370C28 & 0x4000) {
+                    if (g_currentButtons & B_BUTTON) {
                         if (D_hd_code_802E8BF8 != 0) {
                             func_hd_code_80275270(0x0400000000000000, 0.5f);
                         } else {
                             g_nextGameState = 0x200000;
                         }
-                        sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0xDE, NULL);
+                        sndPlaySfx(D_hd_code_80367738, 0xDE, NULL);
                         func_hd_code_8026AF6C(0x4000U);
                     } else {
-                        sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0x2B, NULL);
+                        sndPlaySfx(D_hd_code_80367738, 0x2B, NULL);
                     }
                 } else {
                     D_hd_front_end_802154BC--;
                     D_hd_front_end_80215928[D_hd_front_end_802154BC] = 0;
-                    sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0xE4, NULL);
+                    sndPlaySfx(D_hd_code_80367738, 0xE4, NULL);
                     D_hd_front_end_802154C0 = 0;
                     D_hd_front_end_80215464 = spF8->unk6;
                     D_hd_front_end_80215468 = D_hd_front_end_802154CC;
@@ -875,7 +875,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
                     D_hd_front_end_80215460 = ((((spC8 - 1) * (s32) spF0) / 2) - ((s32) spF0 / 2)) + 0xA0;
                 }
             } else if ((s32) D_hd_front_end_802154BC < (s32) D_hd_front_end_80215924) {
-                sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0x91, NULL);
+                sndPlaySfx(D_hd_code_80367738, 0x91, NULL);
                 D_hd_front_end_802154BE = 1;
                 D_hd_front_end_802154C0 = 0;
                 D_hd_front_end_802154BA = spF7;
@@ -896,7 +896,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
                 D_hd_front_end_80215448 = D_hd_front_end_802154CC;
                 D_hd_front_end_8021544C = D_hd_front_end_802154CC;
             } else {
-                sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0x2B, NULL);
+                sndPlaySfx(D_hd_code_80367738, 0x2B, NULL);
             }
         }
         break;
@@ -910,7 +910,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
         func_hd_code_80259DC8(arg1, (s32) &D_hd_front_end_80208498, 0, 0, 0, (s32) D_hd_front_end_80215944, (s32) D_hd_front_end_80215948, (s32) D_hd_front_end_80215440, (s32) D_hd_front_end_80215444, 1, spC4[0], spC4[1], spC4[2], (s32) D_hd_code_8036BB20, spC4[4], spC4[5], spC4[6], (s32) D_hd_code_8036BB20);
         if ((ABS((D_hd_front_end_80215944 - D_hd_front_end_8021594C))) < 0.15
             && (ABS((D_hd_front_end_80215948 - D_hd_front_end_80215950))) < 0.15) {
-            sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 1, NULL);
+            sndPlaySfx(D_hd_code_80367738, 1, NULL);
             D_hd_front_end_802154BE = 0,
             D_hd_front_end_802154C0 = 0;
 
@@ -1022,9 +1022,9 @@ Gfx* func_hd_front_end_801EC49C(Gfx* arg0, s32 arg1, s32 arg2, u8 arg3) {
       if (D_hd_front_end_80215908[arg3] == 0) {
         D_hd_front_end_80215900[arg3] = 1;
         if ((u8) D_hd_front_end_80215902[arg3] == 5) {
-          sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0xEA, NULL);
+          sndPlaySfx(D_hd_code_80367738, 0xEA, NULL);
         } else {
-          sndPlaySfx((struct ALBankAlt_s *) D_hd_code_80367738, 0xE6, NULL);
+          sndPlaySfx(D_hd_code_80367738, 0xE6, NULL);
         }
       }
       break;

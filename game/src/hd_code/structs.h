@@ -501,4 +501,10 @@ struct S_8036BB24 {
   u8 unk1A;
 }; // Size: 0x1C
 
+// Controller Pak data?
+struct S_8039B698 {
+  s32 fileNo[6];
+  u8 data[0xE00];
+}; // Size: 0xE18
+
 #endif

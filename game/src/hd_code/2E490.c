@@ -178,7 +178,7 @@ Gfx* func_hd_code_80272ED8(Gfx* arg0, u8 arg1, s16 arg2, s16 arg3, u8 arg4, u8 a
             gDPSetPrimColor(entry++, 0, 0, 0xFF, 0x00, 0x00, spFF);
 
 
-            if ((D_hd_code_8036C220[arg1] & 2) || (spFF != 0xFF) || (!(D_hd_code_80364A90 & 0xC9FD0FE79BFF80B0))) {
+            if ((D_hd_code_8036C220[arg1] & 2) || (spFF != 0xFF) || (!(g_currentGameState & 0xC9FD0FE79BFF80B0))) {
                 gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
             } else {
                 gDPSetRenderMode(entry++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);

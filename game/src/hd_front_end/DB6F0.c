@@ -173,7 +173,7 @@ void func_hd_front_end_801F803C(void) {
   s32 sp1C;
   s32 sp18;
 
-  if ((D_hd_code_80370C28 & 0x2010) && !(D_hd_code_80370C2A & 0x2010)) {
+  if ((g_currentButtons & (Z_TRIG | R_TRIG)) && !(g_previousButtons & (Z_TRIG | R_TRIG))) {
     for (sp1C = (playerNumber + 1) % 4, sp18 = 0; sp18 < 4 && (D_hd_code_80365060[sp1C % 4] != 1 || !func_hd_front_end_801F81B4(sp1C % 4)); sp18++, sp1C = (sp1C + 1) % 4) {
     }
     if (playerNumber != sp1C) {

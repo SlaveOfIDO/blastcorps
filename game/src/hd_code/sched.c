@@ -314,7 +314,7 @@ void __scRdpDone(OSSched* scheduler) {
   rdpTask->flags |= OS_SC_NEEDS_RSP << 2;
   // N64 logo is:  D_hd_code_80364A90 = 0x0000000000000010 is true
   // Rare logo is: D_hd_code_80364A90 = 0x0000000000000020 is true
-  if (scheduler->retraceCount != g_nextRetrace || D_hd_code_80364A90 & 0xC9FD0FE79BFF80B0) {
+  if (scheduler->retraceCount != g_nextRetrace || g_currentGameState & 0xC9FD0FE79BFF80B0) {
     g_currentRdpTask = NULL;
     osViSwapBuffer(rdpTask->framebuffer);
     D_hd_code_8036BF18 = g_nextRetrace;
@@ -325,7 +325,7 @@ void __scRdpDone(OSSched* scheduler) {
   }
   currentTime = osGetTime();
   D_hd_code_8036BF20 = (currentTime - scheduler->unk803156C8) / 0x1E91;
-  if (D_hd_code_80358060 == 3) {
+  if (g_frameCount == 3) {
     osViBlack(0U);
   }
   func_hd_code_80271A84(scheduler, rdpTask);

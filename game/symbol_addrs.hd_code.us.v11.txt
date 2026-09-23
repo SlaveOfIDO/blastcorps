@@ -199,15 +199,9 @@ no_palette_dmas = 0x80358084; // type:u32
 
 osTvType = 0x80000300;
 
-// 64 bit
-D_hd_code_80364A90 = 0x80364A90; // type:u64
-
-
-
 // Unknown
 D_hd_code_8030F664 = 0x8030F664;
 D_hd_code_8030F668 = 0x8030F668;
-D_hd_code_80358060 = 0x80358060;
 D_hd_code_803643D6 = 0x803643D6;
 D_hd_code_803643D7 = 0x803643D7;
 D_hd_code_803643DB = 0x803643DB;
@@ -695,3 +689,11 @@ D_hd_code_802D331C = 0x802D331C; // type:u32
 func_hd_code_802AEC3C = 0x802AEC3C; // type:func size:0x248
 func_hd_code_802C5120 = 0x802C5120; // type:func size:0x3e8
 func_hd_code_802C5688 = 0x802C5688; // type:func size:0x8c
+g_statsOld = 0x8036EA60; // size:0x10
+g_statsNew = 0x8036EA70; // size:0x10
+g_statsRes = 0x8036EA80; // size:0x10
+g_statsRes2 = 0x8036EA90; // size:0x10
+g_currentGameState = 0x80364A90; // type:u64
+g_currentButtons = 0x80370C28; // type:u16
+g_frameCount = 0x80358060; // type:u32
+g_previousButtons = 0x80370C2A;

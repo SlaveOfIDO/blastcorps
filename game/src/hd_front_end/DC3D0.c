@@ -379,7 +379,7 @@ void func_hd_front_end_801F8980(void) {
     no_palette_dmas = 0;
     func_hd_code_802A5720();
     func_hd_code_8028A3E4();
-    if (D_hd_code_80358060 != 0) {
+    if (g_frameCount != 0) {
         gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 2, 0, 0x4D2, 0);
         gfxSubmitTask(D_hd_front_end_8021AB68, D_hd_front_end_8021AB58, 0, 0, 0x4D2, 0);
         gfxSubmitTask(D_hd_front_end_8021AB6C, D_hd_front_end_8021AB5C, 1, 1, 0x4D2, 0);
@@ -388,10 +388,10 @@ void func_hd_front_end_801F8980(void) {
     }
     D_hd_code_8035805C ^= 1;
     sp38 = &D_hd_code_803156F8[D_hd_code_8035805C];
-    func_hd_code_8028A470();
+    controllerUpdateInput();
     if ((D_hd_front_end_8021AB2E != 0) ||
         ((areWeFading() == 0) && (D_hd_front_end_8021A924 == 1) &&
-         (D_hd_code_80370C28 & 0x9000) && !(D_hd_code_80370C2A & 0x9000))) {
+         (g_currentButtons & (A_BUTTON | START_BUTTON)) && !(g_previousButtons & (A_BUTTON | START_BUTTON)))) {
         if (D_hd_front_end_8021A926 == 0) {
             sndDeactivateAllSfxByFlag_3();
             sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0x1E, NULL);
@@ -404,7 +404,7 @@ void func_hd_front_end_801F8980(void) {
             D_hd_front_end_8021AB2E = 1;
         }
     }
-    if ((D_hd_code_80370C28 & 0x4000) && !(D_hd_code_80370C2A & 0x4000) &&
+    if ((g_currentButtons & B_BUTTON) && !(g_previousButtons & B_BUTTON) &&
         (areWeFading() == 0) && (D_hd_front_end_8021A924 == 1)) {
         D_hd_code_80364A87 = 0;
         sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0xDE, NULL);
@@ -624,31 +624,31 @@ Gfx* func_hd_front_end_801F9B84(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     gDPFullSync(entry++);
     gSPEndDisplayList(entry++);
     if (D_hd_code_802FA264 != 0) {
-        if (D_hd_code_80370C28 & 0x800) {
+        if (g_currentButtons & U_JPAD) {
             D_hd_front_end_8021AB40 = (f32) ((f64) D_hd_front_end_8021AB40 + 0.01);
         }
-        if (D_hd_code_80370C28 & 0x400) {
+        if (g_currentButtons & D_JPAD) {
             D_hd_front_end_8021AB40 = (f32) ((f64) D_hd_front_end_8021AB40 - 0.01);
         }
-        if (D_hd_code_80370C28 & 0xC00) {
+        if (g_currentButtons & (U_JPAD | D_JPAD)) {
             rmonPrintf("angd %f\n", D_hd_front_end_8021AB40);
         }
-        if (D_hd_code_80370C28 & 0x100) {
+        if (g_currentButtons & R_JPAD) {
             D_hd_front_end_8021AB44 = (f32) ((f64) D_hd_front_end_8021AB44 + 0.001);
         }
-        if (D_hd_code_80370C28 & 0x200) {
+        if (g_currentButtons & L_JPAD) {
             D_hd_front_end_8021AB44 = (f32) ((f64) D_hd_front_end_8021AB44 - 0.001);
         }
-        if (D_hd_code_80370C28 & 0x300) {
+        if (g_currentButtons & (L_JPAD | R_JPAD)) {
             rmonPrintf("dmm %f\n", D_hd_front_end_8021AB44);
         }
-        if (D_hd_code_80370C28 & 0x10) {
+        if (g_currentButtons & R_TRIG) {
             D_hd_front_end_8021AB48 += 100.0f;
         }
-        if (D_hd_code_80370C28 & 0x20) {
+        if (g_currentButtons & L_TRIG) {
             D_hd_front_end_8021AB48 -= 100.0f;
         }
-        if (D_hd_code_80370C28 & 0x30) {
+        if (g_currentButtons & (L_TRIG | R_TRIG)) {
             rmonPrintf("mmm %f\n", D_hd_front_end_8021AB48);
         }
     }

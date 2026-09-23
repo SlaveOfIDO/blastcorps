@@ -251,7 +251,7 @@ void func_hd_code_8027BE7C(u8 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4, s16 
         arg1 >>= 5;
 
         guMtxXFMF(sp50, arg9, 0.0f, 0.0f, &sp38, &sp3C, &sp34);
-        if (((D_hd_code_8036DC94 + 1) != D_hd_code_80358060) || (D_hd_code_8036DC94 == -1U)) {
+        if (((D_hd_code_8036DC94 + 1) != g_frameCount) || (D_hd_code_8036DC94 == -1U)) {
             D_hd_code_8036D3D0[D_hd_code_8036DC91].unk1A = 1;
 
             D_hd_code_8036DC91++;
@@ -298,7 +298,7 @@ void func_hd_code_8027BE7C(u8 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4, s16 
                 }
             }
         }
-        D_hd_code_8036DC94 = D_hd_code_80358060;
+        D_hd_code_8036DC94 = g_frameCount;
     }
 }
 

@@ -21,7 +21,6 @@ void func_hd_code_8028ADF0(u8, u8, OSContPad*, s8*, s8*); /* extern */
 void func_hd_code_8028B190(s8*, s8*);                  /* extern */
 void func_hd_code_8028B734(s8*, s8*, u8);              /* extern */
 
-extern OSContPad D_hd_code_80370BD8;
 extern u8 D_hd_code_80370C15;
 extern u8 D_hd_code_80370C16;
 extern u8 D_hd_code_80370C17;
@@ -87,8 +86,8 @@ u8 D_hd_code_80370C24;
 u8 D_hd_code_80370C25;
 u8 D_hd_code_80370C26;
 u8 D_hd_code_80370C27;
-u16 D_hd_code_80370C28;
-u16 D_hd_code_80370C2A;
+u16 g_currentButtons;
+u16 g_previousButtons;
 s8 D_hd_code_80370C2C;
 s8 D_hd_code_80370C2D;
 s8 D_hd_code_80370C2E;
@@ -167,7 +166,7 @@ void func_hd_code_8028A42C(void) {
 // button mask into the individual edge-detected button flags and the
 // deadzoned stick axes.
 // Proposed name: UpdateInput
-void func_hd_code_8028A470(void) {
+void controllerUpdateInput(void) {
     OSContPad* sp44;
     s32 pad;
     s32 sp3C;
@@ -183,8 +182,8 @@ void func_hd_code_8028A470(void) {
             }
             D_hd_code_80370C10 = 0;
         }
-        D_hd_code_80370C2A = D_hd_code_80370C28;
-        D_hd_code_80370C28 = sp44->button;
+        g_previousButtons = g_currentButtons;
+        g_currentButtons = sp44->button;
         if (D_hd_code_80370C38 != 0) {
             if (sp44->button & 0x4000) {
                 sp44->button = sp44->button & ~0x4000;
@@ -192,11 +191,11 @@ void func_hd_code_8028A470(void) {
                 D_hd_code_80370C38 = 0;
             }
         }
-        if ((u32) D_hd_code_80358060 < 6U) {
-            if (D_hd_code_80358060 == 5) {
-                D_hd_code_80370C2A |= 0xD000;
+        if ((u32) g_frameCount < 6U) {
+            if (g_frameCount == 5) {
+                g_previousButtons |= (A_BUTTON | B_BUTTON | START_BUTTON);
             } else {
-                D_hd_code_80370C28 &= 0xFFFF2FFF;
+                g_currentButtons &= ~(A_BUTTON | B_BUTTON | START_BUTTON);
             }
         }
         D_hd_code_80370C13 = D_hd_code_80370C11;
@@ -208,7 +207,7 @@ void func_hd_code_8028A470(void) {
         D_hd_code_80370C26 = D_hd_code_80370C20;
         D_hd_code_80370C27 = D_hd_code_80370C21;
 
-        switch(D_hd_code_80364A90) {
+        switch(g_currentGameState) {
             case 0x100000000000:
             case 0x400:
             case 0x40:
@@ -230,7 +229,7 @@ void func_hd_code_8028A470(void) {
                 break;
             case 0x100:
             case 0x4:
-                if ((D_hd_code_802E8BD0 == 0) || ((D_hd_code_80364A90 == 0x2000))) {
+                if ((D_hd_code_802E8BD0 == 0) || ((g_currentGameState == 0x2000))) {
                     func_hd_code_8025BBE8(sp44->button & ~0x1000, sp44->stick_x, sp44->stick_y);
                 }
                 break;
@@ -247,17 +246,17 @@ void func_hd_code_8028A470(void) {
         }
 
         D_hd_code_80370C34 = 0;
-        if ((D_hd_code_80364A90 & 0x2000100000002546)) {
+        if ((g_currentGameState & 0x2000100000002546)) {
             D_hd_code_803ED40A = 0;
             D_hd_code_803F7C34 = 0;
-            if ((D_hd_code_80364A90 & 0x440)) {
+            if ((g_currentGameState & 0x440)) {
                 sp3C = D_hd_code_80370C40;
             } else if (players[playerNumber].unkF0 & (1 << D_hd_code_80364456)) {
                 sp3C = 1;
             } else {
                 sp3C = 0;
             }
-            if (((D_hd_code_80364A90 == 2)) || ((D_hd_code_80364A90 == 0x100000000000))) {
+            if (((g_currentGameState == 2)) || ((g_currentGameState == 0x100000000000))) {
                 sp3C = 0;
             }
             D_hd_code_80370C35 = (u8) sp3C;
@@ -424,8 +423,8 @@ void func_hd_code_8028AE88(void) {
   D_hd_code_80370C17 = D_hd_code_80370C18;
   D_hd_code_80370C16 = D_hd_code_80370C17;
   D_hd_code_80370C15 = D_hd_code_80370C16;
-  D_hd_code_80370C2A = 0;
-  D_hd_code_80370C28 = 0;
+  g_previousButtons = 0;
+  g_currentButtons = 0;
   D_hd_code_80370BC0 = 0;
   D_hd_code_80370C38 = 0;
 }

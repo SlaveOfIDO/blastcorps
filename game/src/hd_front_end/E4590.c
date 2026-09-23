@@ -108,11 +108,11 @@ Gfx* func_hd_front_end_80200BE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     gDPPipeSync(entry++);
     gSPTexture(entry++, 0, 0, 0, 0, G_OFF);
     gDPSetTexturePersp(entry++, G_TP_NONE);
-    if (D_hd_code_80364A90 & 0xC000000000000ULL) {
+    if (g_currentGameState & 0xC000000000000ULL) {
         gDPSetCycleType(entry++, G_CYC_1CYCLE);
         gDPSetRenderMode(entry++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
         gDPSetCombineLERP(entry++, TEXEL0, 0, PRIMITIVE_ALPHA, 0, 0, 0, 0, 1, TEXEL0, 0, PRIMITIVE_ALPHA, 0, 0, 0, 0, 1);
-        switch(D_hd_code_80364A90) {
+        switch(g_currentGameState) {
             case 0x4000000000000ULL:
             case 0x8000000000000ULL:
                 sp6B = 0x60;
@@ -135,7 +135,7 @@ Gfx* func_hd_front_end_80200BE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
             gDPPipeSync(entry++);
             gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((sp70 - sp70) * 2 + 0x87) >> 3, 0, 0, 0, 2, 0, 0, 2, 0, 0);
             gDPSetTileSize(entry++, 0, (sp70 << 2), (sp6C << 2), ((sp70 + 0x3F) << 2), ((sp6C + 0xF) << 2));
-            if (D_hd_code_80364A90 & 0xC000000000000ULL) {
+            if (g_currentGameState & 0xC000000000000ULL) {
                 gSPTextureRectangle(entry++, (sp70 << 2), (sp6C << 2), ((sp70 + 0x40) << 2), ((sp6C + 0x10) << 2), 0, (sp70 << 5), (sp6C << 5), 0x400, 0x400);
             } else {
                 gSPTextureRectangle(entry++, (sp70 << 2), (sp6C << 2), ((sp70 + 0x3F) << 2), ((sp6C + 0xF) << 2), 0, (sp70 << 5), (sp6C << 5), 0x1000, 0x400);

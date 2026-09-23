@@ -25,7 +25,7 @@ struct UnknownStruct_803644BC {
   /* 0x3C */ s32 unused3C; // D_8036449C
   /* 0x40 */ u8 pad40[0x54 - 0x40];
   /* 0x54 */ s32 unk54;
-  /* 0x58 */ s32 pad58;
+  /* 0x58 */ s32 unk58;
   /* 0x5C */ s32 unk5C; // Texture Index?
   /* 0x60 */ s32 unk60; // Some kind of env color?
   /* 0x64 */ s32 unk64;
@@ -73,7 +73,7 @@ extern u8 D_hd_code_803156F4;
 extern struct Model1 D_hd_code_803156F8[2];
 extern u32 D_hd_code_80358058;
 extern u8 D_hd_code_8035805C;
-extern u32 D_hd_code_80358060;
+extern u32 g_frameCount;
 extern s32 D_hd_code_80358064;
 extern u8* g_heap;
 extern u16 D_hd_code_8035807C;
@@ -117,7 +117,7 @@ extern u8 D_hd_code_80364A6A;
 extern u8 D_hd_code_80364A6C;
 extern u8 D_hd_code_80364A84;
 extern u8 D_hd_code_80364A87;
-extern u64 D_hd_code_80364A90;
+extern u64 g_currentGameState;
 extern u64 g_nextGameState;
 extern u32 D_hd_code_80364AA8;
 extern u8 playerNumber;
@@ -127,4 +127,7 @@ extern s32 nextdma; // 0x80358080
 extern s32 no_palette_dmas; // 0x80358084
 extern u64 D_hd_code_80364A88; // previous game state; proposed name: prevGameState
 extern u16 *D_hd_code_80358050[2]; // Framebuffers; proposed name: framebuffers
+
+#define LEVEL_FINISHED(_lvl) ((players[playerNumber].unk18[_lvl] > 0 && players[playerNumber].unk18[_lvl] < 6)?1:0)
+
 #endif

@@ -367,7 +367,7 @@ s16 func_hd_code_80277E08(void) {
 void func_hd_code_80277EDC(u8 arg0, u8 arg1, s32 arg2, s32 arg3) {
     u8 sp27;
 
-    if (((D_hd_code_80364A90 & 0x200000000400220C)) && ((u8) D_hd_code_8036CB34 == 0)) {
+    if (((g_currentGameState & 0x200000000400220C)) && ((u8) D_hd_code_8036CB34 == 0)) {
         if ((u8) arg3 != 0) {
             sndPlaySfx(D_hd_code_80367738, (s16) (u8) arg3, NULL);
         }

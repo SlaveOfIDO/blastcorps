@@ -110,8 +110,8 @@ void func_hd_front_end_802025D0(u8, u32);              /* extern */
 extern OSMesgQueue D_hd_code_80315180;
 extern void* D_hd_code_8035806C;
 extern s32 D_hd_code_80358078;
-extern u16 D_hd_code_80370C28;
-extern u16 D_hd_code_80370C2A;
+extern u16 g_currentButtons;
+extern u16 g_previousButtons;
 extern s8 D_hd_code_80370C2C;
 extern s8 D_hd_code_80370C2E;
 extern Gfx* D_hd_front_end_80210F80[][4]; // Size: about 0x128
@@ -207,7 +207,7 @@ s32 func_hd_front_end_801E7000(void) {
     guAlign(&D_hd_front_end_80211A28, 20.0f, 1.0f, 0.0f, 0.0f);
     sp90 = (s32) (D_hd_front_end_80211A6A - 1) / 2;
     sp8C = -1;
-    switch(D_hd_code_80364A90) {
+    switch(g_currentGameState) {
         case 0x4000:
             break;
         case 0x80:
@@ -261,13 +261,13 @@ void func_hd_front_end_801E7598(void) {
     no_palette_dmas = 0;
     func_hd_code_802A5720();
     func_hd_code_8029E0AC();
-    func_hd_code_8028A470();
-    if (((u32) D_hd_code_80358060 >= 0xBU) && (areWeFading() == 0)) {
-        if ((D_hd_code_80370C28 & 0x9000) && !(D_hd_code_80370C2A & 0x9000)) {
+    controllerUpdateInput();
+    if (((u32) g_frameCount >= 0xBU) && (areWeFading() == 0)) {
+        if ((g_currentButtons & (A_BUTTON | START_BUTTON)) && !(g_previousButtons & (A_BUTTON | START_BUTTON))) {
             func_hd_code_80275390(0x2000);
-            sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, 0x1E, NULL);
-        } else if ((D_hd_code_80370C28 & 0x4000) && !(D_hd_code_80370C2A & 0x4000)) {
-            sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, 0xDE, NULL);
+            sndPlaySfx(D_hd_code_80367738, 0x1E, NULL);
+        } else if ((g_currentButtons & B_BUTTON) && !(g_previousButtons & B_BUTTON)) {
+            sndPlaySfx(D_hd_code_80367738, 0xDE, NULL);
             D_hd_code_803643D4 = (u8) D_hd_front_end_802153E8;
             switch(D_hd_code_80364A88) {
                 case 0x80:
@@ -289,7 +289,7 @@ void func_hd_front_end_801E7598(void) {
             D_hd_front_end_802153E4 = 0x2EE;
         }
     }
-    if ((D_hd_code_80370C28 & 0x200) && !(D_hd_code_80370C2A & 0x200) && (areWeFading() == 0)) {
+    if ((g_currentButtons & L_JPAD) && !(g_previousButtons & L_JPAD) && (areWeFading() == 0)) {
         D_hd_front_end_802153E4 = 0x2EE;
     }
     if ((D_hd_code_80370C2C >= 0xB) && (areWeFading() == 0)) {
@@ -301,18 +301,18 @@ void func_hd_front_end_801E7598(void) {
             D_hd_front_end_802153E6 = 0x2EE;
         }
     }
-    if ((D_hd_code_80370C28 & 0x100) && !(D_hd_code_80370C2A & 0x100) && (areWeFading() == 0)) {
+    if ((g_currentButtons & R_JPAD) && !(g_previousButtons & R_JPAD) && (areWeFading() == 0)) {
         D_hd_front_end_802153E6 = 0x2EE;
     }
     if ((D_hd_code_8035805C == 0) && ((s32) (u16) D_hd_front_end_802153E4 >= 0x2EE)) {
-        sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, (s16) sp14C.bytes[D_hd_front_end_80211A68 == 0], NULL);
+        sndPlaySfx(D_hd_code_80367738, (s16) sp14C.bytes[D_hd_front_end_80211A68 == 0], NULL);
         if (D_hd_front_end_80211A68 != 0) {
             func_hd_front_end_801E74E8(D_hd_front_end_80211A68 - 1);
         }
         D_hd_front_end_802153E4 = (u16) D_hd_front_end_802153E4 - 0x2EE;
     }
     if ((D_hd_code_8035805C == 0) && ((s32) (u16) D_hd_front_end_802153E6 >= 0x2EE)) {
-        sndPlaySfx((struct ALBankAlt_s* ) D_hd_code_80367738, (s16) sp14C.bytes[(D_hd_front_end_80211A68 + 1) == D_hd_front_end_80211A6A], NULL);
+        sndPlaySfx(D_hd_code_80367738, (s16) sp14C.bytes[(D_hd_front_end_80211A68 + 1) == D_hd_front_end_80211A6A], NULL);
         if (D_hd_front_end_80211A68 + 1 != D_hd_front_end_80211A6A) {
             func_hd_front_end_801E74E8(D_hd_front_end_80211A68 + 1);
         }
@@ -354,7 +354,7 @@ void func_hd_front_end_801E7598(void) {
         func_hd_code_80259DC8(sp140, (s32) D_hd_front_end_80208040, D_hd_front_end_80208044.unk0, 0, 0xA0, 0x54, 0x15, 0x15, 0x15, 1, 0xFF, 0xFF - D_hd_front_end_802081B0, 0, 0xFF, 0xFF, (s32) D_hd_front_end_802081B0, 0, 0xFF);
     }
     func_hd_code_80259C24(&entry, sp140);
-    if ((u32) D_hd_code_80358060 < 2U) {
+    if ((u32) g_frameCount < 2U) {
         guPerspective(&sp140->unk1240, &D_hd_code_8035807C, 45.0f, 1.3333334f, 40.0f, 4000.0f, 1.0f);
     }
 

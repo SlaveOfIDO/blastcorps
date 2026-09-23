@@ -180,13 +180,13 @@ void func_hd_code_8025BD98() {
 // Proposed name: PlaybackInputFrame
 void func_hd_code_8025BEF8(void) {
     u64 pad;
-    if (D_hd_code_80366994 > D_hd_code_80366998  || ((D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((D_hd_code_80364A90 & 0x440)))) {
-        if ((D_hd_code_8036BB1C != 1) || (((D_hd_code_80364A90 & 0x440)) && ((u8) D_hd_code_80364A50 == 0))) {
+    if (D_hd_code_80366994 > D_hd_code_80366998  || ((D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((g_currentGameState & 0x440)))) {
+        if ((D_hd_code_8036BB1C != 1) || (((g_currentGameState & 0x440)) && ((u8) D_hd_code_80364A50 == 0))) {
             if (D_hd_code_802E8BD0 == 0) {
                 D_hd_code_802E8BD8 = 1;
             }
         } else if (areWeFading() == 0) {
-            switch(D_hd_code_80364A90) {
+            switch(g_currentGameState) {
                 case 0x2:
                     func_hd_code_80275270(2, 0.25f);
                     break;
@@ -197,7 +197,7 @@ void func_hd_code_8025BEF8(void) {
                 case 0x40:
                 case 0x400:
                     D_hd_code_802E8BD8 = 1;
-                    if(D_hd_code_80364A90 == 0x400) {
+                    if(g_currentGameState == 0x400) {
                         func_hd_code_80275270(0x40, 1.25f);
                         break;
                     }
@@ -218,7 +218,7 @@ void func_hd_code_8025BEF8(void) {
             D_hd_code_80366994++;
             D_hd_code_803669A0 = D_hd_code_803669AC[D_hd_code_80366994].unk2;
         }
-        if (((D_hd_code_80364A90 & 0x100000000002)) && (D_hd_code_8036698C != 9)) {
+        if (((g_currentGameState & 0x100000000002)) && (D_hd_code_8036698C != 9)) {
             if ((D_hd_code_80370C30 & 0xC000) == 0x8000) {
                 D_hd_code_80370C30 = D_hd_code_80370C30 & 0xFFFF7FFF;
                 D_hd_code_80370C30 = D_hd_code_80370C30 | 0x4000;

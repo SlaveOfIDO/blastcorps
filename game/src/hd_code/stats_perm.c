@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "stats_perm.h"
 
 #define LEVEL_SAVE_SIZE 0x40
 
@@ -20,38 +21,10 @@ extern u8 D_hd_code_8036EB94[4];
 extern u8 D_hd_code_8036EB9C[4];
 
 // <bss>
-s32 D_hd_code_8036EA60;
-s32 D_hd_code_8036EA64;
-u8 D_hd_code_8036EA68;
-u8 D_hd_code_8036EA69;
-u8 D_hd_code_8036EA6A;
-u8 D_hd_code_8036EA6B;
-u16 D_hd_code_8036EA6C;
-u16 D_hd_code_8036EA6E;
-UnknownData8024C414* D_hd_code_8036EA70;
-s32 D_hd_code_8036EA74;
-u8 D_hd_code_8036EA78;
-u8 D_hd_code_8036EA79;
-u8 D_hd_code_8036EA7A;
-u8 D_hd_code_8036EA7B;
-u16 D_hd_code_8036EA7C;
-u16 D_hd_code_8036EA7E;
-s32 D_hd_code_8036EA80;
-s32 D_hd_code_8036EA84;
-u8 D_hd_code_8036EA88;
-u8 D_hd_code_8036EA89;
-u8 D_hd_code_8036EA8A;
-u8 D_hd_code_8036EA8B;
-u16 D_hd_code_8036EA8C;
-u16 D_hd_code_8036EA8E;
-s32 D_hd_code_8036EA90;
-s32 D_hd_code_8036EA94;
-u8 D_hd_code_8036EA98;
-u8 D_hd_code_8036EA99;
-u8 D_hd_code_8036EA9A;
-u8 D_hd_code_8036EA9B;
-u16 D_hd_code_8036EA9C;
-u16 D_hd_code_8036EA9E;
+struct LevelStats g_statsOld;
+struct LevelStats g_statsNew;
+struct LevelStats g_statsRes;
+struct LevelStats g_statsRes2;
 s32 D_hd_code_8036EAA0;
 s32 D_hd_code_8036EAA4;
 s32 D_hd_code_8036EAA8;
@@ -127,11 +100,11 @@ u8 D_hd_code_8036EB9C[4];
 // func_hd_code_80285814 reference "stats_perm.c")
 //
 // This file handles the per-level statistics: the four scored objectives -
-// buildings destroyed (D_hd_code_8036EA78 / target D_hd_code_8036EB92), RDUs found
-// (D_hd_code_8036EA7C / D_hd_code_8036EB90), points/communication points (D_hd_code_8036EA79 /
+// buildings destroyed (g_statsNew.buildingsDestroyed / target D_hd_code_8036EB92), RDUs found
+// (g_statsNew.rdusFound / D_hd_code_8036EB90), civilians rescued (g_statsNew.civiliansRescued /
 // D_hd_code_8036EB93), and the time/par - their percentages and the results-screen
 // text/highlights, the per-level medal save bits, and the controller-pak
-// save record. Mirror snapshots of the stats block (D_hd_code_8036EA60/80/90) hold
+// save record. Mirror snapshots of the stats block (g_statsOld/g_statsRes/g_statsRes2) hold
 // the values at level start / last checkpoint for comparison.
 
 // Load the level's target stats for the current player at level start:
@@ -140,9 +113,9 @@ u8 D_hd_code_8036EB9C[4];
 void statsLoadLevelStats(void) {
   s32 sp4;
 
-  D_hd_code_8036EA7B = players[playerNumber].unk92[g_currentLevel];
-  D_hd_code_8036EA74 = (s32) D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_802E8F94[g_currentLevel].unk0 == 1 ? 1 : D_hd_code_8036EA7B]];
-  D_hd_code_8036EA7A = (u8) ((s32) players[playerNumber].unk18[g_currentLevel] % 8);
+  g_statsNew.bdn = players[playerNumber].unk92[g_currentLevel];
+  g_statsNew.timeCode = (s32) D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_802E8F94[g_currentLevel].unk0 == 1 ? 1 : g_statsNew.bdn]];
+  g_statsNew.coin = (u8) ((s32) players[playerNumber].unk18[g_currentLevel] % 8);
 
   for(sp4 = 0; sp4 < 4; sp4++) {
     D_hd_code_8036EB94[sp4] = 0;
@@ -162,9 +135,9 @@ void statsLoadLevelStats(void) {
 // scored objectives; 2 of 3 when there's no controller pak).
 // Proposed name: BuildStatsScreen
 u32 func_hd_code_802852EC(void) {
-    s32 sp5C;
-    s32 sp58;
-    s32 sp54;
+    s32 buildingsDestroyedPercentage;
+    s32 civiliansRescuedPercentage;
+    s32 rdusFoundPercentage;
     u32 sp50;
     s32 sp4C;
     s32 sp48;
@@ -174,25 +147,25 @@ u32 func_hd_code_802852EC(void) {
     sp48 = 0;
     sp44 = 0;
     if (D_hd_code_8036EB92 != 0) {
-        sp5C = (D_hd_code_8036EA78 * 0x64) / D_hd_code_8036EB92;
+        buildingsDestroyedPercentage = (g_statsNew.buildingsDestroyed * 100) / D_hd_code_8036EB92;
     } else {
-        sp5C = 0x64;
+        buildingsDestroyedPercentage = 100;
     }
     if (D_hd_code_8036EB93 != 0) {
-        sp58 = (D_hd_code_8036EA79 * 0x64) / D_hd_code_8036EB93;
+        civiliansRescuedPercentage = (g_statsNew.civiliansRescued * 100) / D_hd_code_8036EB93;
     } else {
-        sp58 = 0x64;
+        civiliansRescuedPercentage = 100;
     }
     if (D_hd_code_8036EB90 != 0) {
-        sp54 = (D_hd_code_8036EA7C * 0x64) / D_hd_code_8036EB90;
+        rdusFoundPercentage = (g_statsNew.rdusFound * 100) / D_hd_code_8036EB90;
     } else {
-        sp54 = 0x64;
+        rdusFoundPercentage = 100;
     }
-    sprintf(D_hd_code_8036B9A8, "***%2d (%d%c)*", D_hd_code_8036EA78, sp5C, 0x25);
-    sprintf(D_hd_code_8036B9A8 + 0x20, "***$%d*", D_hd_code_8036EA70);
-    sprintf(D_hd_code_8036B9A8 + 0x40, "***%2d (%d%c)*", D_hd_code_8036EA79, sp58, 0x25);
-    sprintf(D_hd_code_8036B9A8 + 0x60, "***%2d (%d%c)*", D_hd_code_8036EA7C, sp54, 0x25);
-    func_hd_code_80264A34(sp24, D_hd_code_8036EA74, 0);
+    sprintf(D_hd_code_8036B9A8, "***%2d (%d%c)*", g_statsNew.buildingsDestroyed, buildingsDestroyedPercentage, '%');
+    sprintf(D_hd_code_8036B9A8 + 0x20, "***$%d*", g_statsNew.money);
+    sprintf(D_hd_code_8036B9A8 + 0x40, "***%2d (%d%c)*", g_statsNew.civiliansRescued, civiliansRescuedPercentage, '%');
+    sprintf(D_hd_code_8036B9A8 + 0x60, "***%2d (%d%c)*", g_statsNew.rdusFound, rdusFoundPercentage, '%');
+    func_hd_code_80264A34(sp24, g_statsNew.timeCode, 0);
     sprintf(D_hd_code_8036B9A8 + 0x80, "***%s*", &sp24);
     for(sp50 = 0x12; sp50 < 0x17;sp50++) {
         D_hd_code_802F5804[sp50].unk0 = 0x400;
@@ -205,31 +178,31 @@ u32 func_hd_code_802852EC(void) {
     if ((g_nextGameState == 0x40)) {
         sp48 = 0x100;
     }
-    if (D_hd_code_80364A90 & 0x30C) {
+    if (g_currentGameState & 0x30C) {
         sp44 = 0x100;
     }
-    if (D_hd_code_8036EA78 > D_hd_code_8036EA68) {
+    if (g_statsNew.buildingsDestroyed > g_statsOld.buildingsDestroyed) {
         sp4C = sp44 | 4;
     } else {
         sp4C = 0;
     }
     D_hd_front_end_8020C070[0xE].unk0 |= sp4C | 0x80;
     D_hd_code_802F5804[0x12].unk0 |= sp4C | sp48 | 0x80;
-    if ((u32) D_hd_code_8036EA70 > (u32) D_hd_code_8036EA60) {
+    if ( g_statsNew.money > (u32) g_statsOld.money) {
         sp4C = sp44 | 4;
     } else {
         sp4C = 0;
     }
     D_hd_front_end_8020C070[0xF].unk0 |= sp4C | 0x80;
     D_hd_code_802F5804[0x13].unk0 |= sp4C | sp48 | 0x80;
-    if (D_hd_code_8036EA79 > D_hd_code_8036EA69) {
+    if (g_statsNew.civiliansRescued > g_statsOld.civiliansRescued) {
         sp4C = sp44 | 4;
     } else {
         sp4C = 0;
     }
     D_hd_front_end_8020C070[0x10].unk0 |= sp4C | 0x80;
     D_hd_code_802F5804[0x14].unk0 |= sp4C | sp48 | 0x80;
-    if (D_hd_code_8036EA7C > D_hd_code_8036EA6C) {
+    if (g_statsNew.rdusFound > g_statsOld.rdusFound) {
         sp4C = sp44 | 4;
     } else {
         sp4C = 0;
@@ -238,9 +211,9 @@ u32 func_hd_code_802852EC(void) {
     D_hd_code_802F5804[0x15].unk0 |= sp4C | sp48 | 0x80;
     D_hd_code_802F5804[0x16].unk0 |= sp48 | 0x80;
     if (D_hd_code_802E8BF8 != 0) {
-        return (sp5C + sp54) / 2U;
+        return (buildingsDestroyedPercentage + rdusFoundPercentage) / 2U;
     }
-    return (sp5C + sp58 + sp54) / 3U;
+    return (buildingsDestroyedPercentage + civiliansRescuedPercentage + rdusFoundPercentage) / 3U;
 }
 
 // Switch to the player selected on the world map: re-init the level, and if
@@ -258,7 +231,7 @@ u8 func_hd_code_80285814(void) {
   }
   frontEndPresent = 1;
   hdPrepareStateTransition();
-  if ((D_hd_code_80364A90 == 0x4000)) {
+  if (g_currentGameState == 0x4000) {
     osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
   }
   if ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) {
@@ -286,19 +259,18 @@ u8 func_hd_code_80285814(void) {
   } else {
     hdInitLevel(NULL);
   }
-  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA60);
-  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA80);
-  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA90);
+  statsCopyTo(&g_statsNew, &g_statsOld);
+  statsCopyTo(&g_statsNew, &g_statsRes);
+  statsCopyTo(&g_statsNew, &g_statsRes2);
   return sp27;
 }
 
 // Copy a 16-byte stats block from arg0 to arg1 (snapshot/restore)
-// Proposed name: CopyStatsBlock
-void func_hd_code_80285A78(u8* src, u8* dst) {
+void statsCopyTo(struct LevelStats* src, struct LevelStats* dst) {
   u32 sp4;
 
   for(sp4 = 0; sp4 < 16; sp4++) {
-    dst[sp4] = src[sp4];
+    ((u8*)dst)[sp4] = ((u8*)src)[sp4];
   }
 }
 
@@ -321,7 +293,7 @@ s32 func_hd_code_80285B10(u8 arg0) {
 // done
 // Proposed name: TriggerLevelCheckpoint
 void func_hd_code_80285B68(s32 arg0) {
-  if (D_hd_code_80364A90 & 0x104) {
+  if (g_currentGameState & 0x104) {
     if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) && (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
       func_hd_code_802CF5B0();
       D_hd_code_802E8BD8 = 1;
@@ -355,18 +327,18 @@ void func_hd_code_80285CC0() {
       switch (sp2C) {                         /* irregular */
         case 0:
           ;
-          if (D_hd_code_8036EB94[sp2C] = (D_hd_code_8036EA7C == D_hd_code_8036EB90)) {
+          if (D_hd_code_8036EB94[sp2C] = (g_statsNew.rdusFound == D_hd_code_8036EB90)) {
             sp34 = 0x39;
           }
           break;
         case 1:
-          if (D_hd_code_8036EB94[sp2C] = (D_hd_code_8036EA79 == D_hd_code_8036EB93)) {
+          if (D_hd_code_8036EB94[sp2C] = (g_statsNew.civiliansRescued == D_hd_code_8036EB93)) {
             sp34 = 0x3A;
           }
           break;
         case 2:
           func_hd_code_802C1DD0(0);
-          if (D_hd_code_8036EB94[sp2C] = (D_hd_code_8036EA78 == D_hd_code_8036EB92)) {
+          if (D_hd_code_8036EB94[sp2C] = (g_statsNew.buildingsDestroyed == D_hd_code_8036EB92)) {
             sp34 = 0x3B;
           }
           break;
@@ -400,10 +372,10 @@ void func_hd_code_80285EF4(s32 arg0) {
 
   sp1C = func_hd_code_8028604C(D_hd_code_803156C0 - arg0);
   func_hd_code_802C1DD0(0);
-  D_hd_code_8036EA74 += sp1C;
+  g_statsNew.timeCode += sp1C;
   func_hd_code_802852EC();
-  D_hd_code_8036EA74 -= sp1C;
-  func_hd_code_80285A78((u8*) &D_hd_code_8036EA70, &D_hd_code_8036EA60);
+  g_statsNew.timeCode -= sp1C;
+  statsCopyTo(&g_statsNew, &g_statsOld);
   D_hd_code_802F5804[0x18].unk0 &= ~1;
   D_hd_code_802F5804[0x18].unk0 |= 0x800;
   D_hd_code_802F5804[0x17].unk0 &= ~1;
@@ -427,7 +399,7 @@ s32 func_hd_code_80286038(u16 arg0) {
 // timer/par calculations
 // Proposed name: FramesToTimeUnits
 u16 func_hd_code_8028604C(s32 arg0) {
-  return MIN(0xEA5F, arg0 / 6U);
+  return MIN(59999, arg0 / 6U);
 }
 
 // Has level lvl been completed (medal 1..5)?

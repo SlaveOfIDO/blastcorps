@@ -132,7 +132,7 @@ void func_hd_code_80297804(s32 arg0, s32 arg1, s32 arg2) {
 // "give all coins" debug flag + Z mark it passed)
 // Proposed name: SaveAcademyProgress
 void func_hd_code_80297960(void) {
-  if ((D_hd_code_802FA268 != 0) && (D_hd_code_80370C28 & 0x2000) && (D_hd_code_8039CAB7 != 0)) {
+  if ((D_hd_code_802FA268 != 0) && (g_currentButtons & Z_TRIG) && (D_hd_code_8039CAB7 != 0)) {
     D_hd_code_8039CAC8 |= 1 << D_hd_code_8039CAB6;
   }
   players[playerNumber].unk90 = D_hd_code_8039CAC8;

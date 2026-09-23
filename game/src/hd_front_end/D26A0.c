@@ -5,38 +5,12 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "../hd_code/stats_perm.h"
 #include "structs.h"
 
 u8 func_hd_front_end_801EEDB4(u8, u8, u8);         /* extern */
 
 extern s32 D_hd_code_803649F0;
-extern s32 D_hd_code_8036EA60;
-extern s32 D_hd_code_8036EA64;
-extern u8  D_hd_code_8036EA68;
-extern u8  D_hd_code_8036EA69;
-extern u8  D_hd_code_8036EA6A;
-extern u8  D_hd_code_8036EA6B;
-extern u16 D_hd_code_8036EA6C;
-extern s32 D_hd_code_8036EA74;
-extern u8  D_hd_code_8036EA78;
-extern u8  D_hd_code_8036EA79;
-extern u8  D_hd_code_8036EA7A;
-extern u8  D_hd_code_8036EA7B;
-extern u16 D_hd_code_8036EA7C;
-extern s32 D_hd_code_8036EA80;
-extern s32 D_hd_code_8036EA84;
-extern u8  D_hd_code_8036EA88;
-extern u8  D_hd_code_8036EA89;
-extern u8  D_hd_code_8036EA8A;
-extern u8  D_hd_code_8036EA8B;
-extern u16 D_hd_code_8036EA8C;
-extern s32 D_hd_code_8036EA90;
-extern s32 D_hd_code_8036EA94;
-extern u8  D_hd_code_8036EA98;
-extern u8  D_hd_code_8036EA99;
-extern u8  D_hd_code_8036EA9A;
-extern u8  D_hd_code_8036EA9B;
-extern u16 D_hd_code_8036EA9C;
 extern char D_hd_code_8036B9A8[0x20];
 
 
@@ -70,34 +44,34 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
 
     sp3C = &players[playerNumber];
     sp38 = &D_hd_code_802E8F94[g_currentLevel];
-    rmonPrintf("new ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA70, D_hd_code_8036EA74, D_hd_code_8036EA78, D_hd_code_8036EA79, D_hd_code_8036EA7C, D_hd_code_8036EA7A, D_hd_code_8036EA7B);
-    rmonPrintf("old ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA60, D_hd_code_8036EA64, D_hd_code_8036EA68, D_hd_code_8036EA69, D_hd_code_8036EA6C, D_hd_code_8036EA6A, D_hd_code_8036EA6B);
-    rmonPrintf("res ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA80, D_hd_code_8036EA84, D_hd_code_8036EA88, D_hd_code_8036EA89, D_hd_code_8036EA8C, D_hd_code_8036EA8A, D_hd_code_8036EA8B);
-    rmonPrintf("rs2 ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", D_hd_code_8036EA90, D_hd_code_8036EA94, D_hd_code_8036EA98, D_hd_code_8036EA99, D_hd_code_8036EA9C, D_hd_code_8036EA9A, D_hd_code_8036EA9B);
+    rmonPrintf("new ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", g_statsNew.money, g_statsNew.timeCode, g_statsNew.buildingsDestroyed, g_statsNew.civiliansRescued, g_statsNew.rdusFound, g_statsNew.coin, g_statsNew.bdn);
+    rmonPrintf("old ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", g_statsOld.money, g_statsOld.timeCode, g_statsOld.buildingsDestroyed, g_statsOld.civiliansRescued, g_statsOld.rdusFound, g_statsOld.coin, g_statsOld.bdn);
+    rmonPrintf("res ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", g_statsRes.money, g_statsRes.timeCode, g_statsRes.buildingsDestroyed, g_statsRes.civiliansRescued, g_statsRes.rdusFound, g_statsRes.coin, g_statsRes.bdn);
+    rmonPrintf("rs2 ip=%8d : tc=%5d : bd=%2d : cr=%2d : rt=%3d : coin=%1d : bdn=%1d\n", g_statsRes2.money, g_statsRes2.timeCode, g_statsRes2.buildingsDestroyed, g_statsRes2.civiliansRescued, g_statsRes2.rdusFound, g_statsRes2.coin, g_statsRes2.bdn);
     rmonPrintf("units %d\n", sp3C->unkA);
     if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
         sp34 = func_hd_code_802852EC();
         if (arg2 != 0) {
             if (arg1 != 0) {
                 if (sp34 >= 0x64U) {
-                    D_hd_code_8036EA7A = 3;
+                    g_statsNew.coin = 3;
                 } else if (sp34 >= 0x5AU) {
-                    D_hd_code_8036EA7A = 2;
+                    g_statsNew.coin = 2;
                 } else if (sp34 >= 0x46U) {
-                    D_hd_code_8036EA7A = 1;
+                    g_statsNew.coin = 1;
                 } else {
-                    D_hd_code_8036EA7A = 5;
+                    g_statsNew.coin = 5;
                 }
                 if (D_hd_code_803643D5 != 0) {
                     rmonPrintf("Units up 3\n");
                     sp3C->unkA += 3;
                 }
-                D_hd_code_8036EA7B = 1;
+                g_statsNew.bdn = 1;
             } else {
-                D_hd_code_8036EA7A = 0;
+                g_statsNew.coin = 0;
             }
         }
-        sp33 = D_hd_code_8036EA7A;
+        sp33 = g_statsNew.coin;
     } else {
         sp33 = func_hd_front_end_801EEDB4(g_currentLevel, arg1, arg2);
     }
@@ -111,8 +85,8 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
             sp3C->unk14 = D_hd_code_803649F0;
         }
         if (sp3C->unkA < 0x168) {
-            rmonPrintf("UNITS UP %d\n", (D_hd_code_8036EA7A % 5) - (D_hd_code_8036EA6A % 5));
-            sp3C->unkA += (D_hd_code_8036EA7A % 5) - (D_hd_code_8036EA6A % 5);
+            rmonPrintf("UNITS UP %d\n", (g_statsNew.coin % 5) - (g_statsOld.coin % 5));
+            sp3C->unkA += (g_statsNew.coin % 5) - (g_statsOld.coin % 5);
         }
         if (sp3C->unkA == 0x162) {
             sp3C->unkA += 6;
@@ -122,11 +96,11 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
             sp3C->unkC++;
         }
         if (!(D_hd_code_802E8F94[g_currentLevel].unk0 & 0x81)) {
-            sp3C->unk92[g_currentLevel] = D_hd_code_8036EA7B;
+            sp3C->unk92[g_currentLevel] = g_statsNew.bdn;
         }
-        D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_8036EA7B]] = D_hd_code_8036EA74;
+        D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[g_statsNew.bdn]] = g_statsNew.timeCode;
         if ((D_hd_code_803643D5 != 0) && (D_hd_code_802E8F94[g_currentLevel].unk0 == 1)) {
-            D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[0]] = D_hd_code_8036EA74;
+            D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[0]] = g_statsNew.timeCode;
         }
         sp3C->unk18[g_currentLevel] = sp33;
         func_hd_front_end_801E8DCC(playerNumber);
@@ -166,26 +140,26 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
     sp60 = &players[playerNumber];
     sp5C = &D_hd_code_802E8F94[(u8) arg0];
     if ((g_nextGameState == 0x08000000) && (arg1 != 0) && (sp5C->unk0 == 2)) {
-        func_hd_code_80295A20(func_hd_code_80286038(D_hd_code_8036EA74));
+        func_hd_code_80295A20(func_hd_code_80286038(g_statsNew.timeCode));
     }
     if ((arg2 != 0) && (arg1 != 0)) {
         if (D_hd_code_802E8F94[(u8) arg0].unk0 == 0x80) {
-            D_hd_code_8036EA7B = 0;
-        } else if ((u32) D_hd_code_8036EA74 <= (u32) D_hd_code_8036EA64) {
-            D_hd_code_8036EA7B = D_hd_code_803643D4;
-        } else if (D_hd_code_8036EA74 != 0xFFFF) {
+            g_statsNew.bdn = 0;
+        } else if ((u32) g_statsNew.timeCode <= (u32) g_statsOld.timeCode) {
+            g_statsNew.bdn = D_hd_code_803643D4;
+        } else if (g_statsNew.timeCode != 0xFFFF) {
             sp32 = D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_803643D4]];
-            if ((sp32 == 0) || ((u32) D_hd_code_8036EA74 < sp32)) {
-                D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_803643D4]] = D_hd_code_8036EA74;
+            if ((sp32 == 0) || ((u32) g_statsNew.timeCode < sp32)) {
+                D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[D_hd_code_803643D4]] = g_statsNew.timeCode;
             }
         }
     }
-    if (((u32) D_hd_code_8036EA74 <= (u32) D_hd_code_8036EA64) && (arg1 != 0)) {
-        D_hd_code_8036EA7A = func_hd_front_end_801EF2BC(D_hd_code_8036EA74, (u8) arg0, players[playerNumber].unk91);
+    if (((u32) g_statsNew.timeCode <= (u32) g_statsOld.timeCode) && (arg1 != 0)) {
+        g_statsNew.coin = func_hd_front_end_801EF2BC(g_statsNew.timeCode, (u8) arg0, players[playerNumber].unk91);
     } else {
-        D_hd_code_8036EA74 = D_hd_code_8036EA64;
+        g_statsNew.timeCode = g_statsOld.timeCode;
     }
-    if (((u32) D_hd_code_8036EA74 < (u32) D_hd_code_8036EA64) && (D_hd_code_803643D5 == 0)) {
+    if (((u32) g_statsNew.timeCode < (u32) g_statsOld.timeCode) && (D_hd_code_803643D5 == 0)) {
         sp6C = 0x484;
         if (arg2 != 0) {
             sp6C = 0x584;
@@ -193,20 +167,20 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
     } else {
         sp6C = 0x480;
     }
-    func_hd_code_80264A34(sp34, D_hd_code_8036EA74, 0);
+    func_hd_code_80264A34(sp34, g_statsNew.timeCode, 0);
     sprintf(D_hd_code_8036B9A8 + 0x80, "****%s*", &sp34);
     if (arg1 != 0) {
         sp54 = &D_hd_front_end_8020C070[0x19];
         D_hd_front_end_8020C070[0x19].unk0 = sp6C;
-        rmonPrintf("getting icon %d\n", D_hd_code_8036EA7B);
-        sp54->unk14 = D_hd_code_8036EA7B + 0x22;
+        rmonPrintf("getting icon %d\n", g_statsNew.bdn);
+        sp54->unk14 = g_statsNew.bdn + 0x22;
         sp58 = &D_hd_code_802F49F4[sp54->unk14];
         sp54->unk1A = func_hd_code_80272C5C(&sp58->unk6, 0, sp58->unk4, sp58->unk2C, sp58->unk2D | 4, 1.0f);
         if (playerNumber != D_hd_code_80364AEA) {
             sp64 = 3;
         } else if (((g_nextGameState == 0x80)) || (D_hd_code_803643D5 != 0)) {
             sp64 = 1;
-        } else if ((u32) D_hd_code_8036EA74 < (u32) D_hd_code_8036EA64) {
+        } else if ((u32) g_statsNew.timeCode < (u32) g_statsOld.timeCode) {
             sp64 = 0;
         } else {
             sp64 = 2;
@@ -214,7 +188,7 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
         D_hd_front_end_8020C070[0x18].unkC = D_hd_front_end_802084D0[sp64];
         D_hd_front_end_8020C070[0x18].unk10 = D_hd_front_end_802084E0[sp64];
     }
-    return D_hd_code_8036EA7A;
+    return g_statsNew.coin;
 }
 
 s8 func_hd_front_end_801EF1E0(void) {

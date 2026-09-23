@@ -42,10 +42,10 @@ Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
     Gfx* entry;
 
     entry = gfx;
-    if (D_hd_code_80358060 == 0) {
-        if ((D_hd_code_80364A90 & 0x4055800100040000) || (((D_hd_code_80364A90 & 0x1801)) && (g_currentLevel == 0x32))) {
+    if (g_frameCount == 0) {
+        if ((g_currentGameState & 0x4055800100040000) || (((g_currentGameState & 0x1801)) && (g_currentLevel == 0x32))) {
             D_hd_code_8036C784 = 0xFF;
-            if ((D_hd_code_80364A90 & 0x51800100040000)) {
+            if ((g_currentGameState & 0x51800100040000)) {
                 D_hd_code_8036C770 = func_hd_code_8026B10C();
                 func_hd_code_8026AF6C(0U);
             }
@@ -92,7 +92,7 @@ void func_hd_code_80275270(u64 arg0, f32 arg2) {
     D_hd_code_8036C778 = arg0;
     D_hd_code_8036C774 = 4.25 / arg2;
     D_hd_code_8036C780 = D_hd_code_803156C4;
-    if (!(arg0 & 0x40000000080004C2) && !(D_hd_code_80364A90 & 0x4000000000040000)) {
+    if (!(arg0 & 0x40000000080004C2) && !(g_currentGameState & 0x4000000000040000)) {
       func_hd_code_80261570(0.0f);
     }
   }

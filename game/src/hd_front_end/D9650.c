@@ -53,7 +53,7 @@ extern u8 D_hd_front_end_8020C014[];
 extern u8 D_hd_front_end_8020F128;
 extern u8 D_hd_front_end_8020F140;
 extern OSPfs D_hd_code_8039B630;
-extern s32 D_hd_code_8039B698[]; // Line no
+extern struct S_8039B698 D_hd_code_8039B698;
 extern s32 D_hd_code_802FA264;
 extern u16 D_hd_code_80364EF0[][16];
 extern u8 D_hd_front_end_8020C01C[];
@@ -247,7 +247,7 @@ void func_hd_front_end_801F58E8() {
             rmonPrintf("pak command %d returned %d\n", sp2F, sp38);
             switch (sp38) {
             case 0x6E382:
-                if (D_hd_code_80364A90 & 0x10E18000 || (g_nextGameState & 0x20000000000000)) {
+                if (g_currentGameState & 0x10E18000 || (g_nextGameState & 0x20000000000000)) {
                     sp2D = 1;
                     break;
                 }
@@ -276,7 +276,7 @@ void func_hd_front_end_801F58E8() {
                 sp2D = 1;
                 break;
             case 0x8:                                   /* switch 2 */
-                if (!((D_hd_code_80364A90 & 0x10E18000)) || (func_hd_front_end_801F5FE4() != 0)) {
+                if (!((g_currentGameState & 0x10E18000)) || (func_hd_front_end_801F5FE4() != 0)) {
                     break;
                 }
             case 0x7:                               /* switch 2 */
@@ -301,7 +301,7 @@ void func_hd_front_end_801F58E8() {
                 }
                 break;
             case 0x2:                                   /* switch 2 */
-                if ((sp34 == 8) && !(D_hd_code_80364A90 & 0x10E18000)) {
+                if ((sp34 == 8) && !(g_currentGameState & 0x10E18000)) {
                     rmonPrintf(ASSERT_MESSAGE, "1==0", "pfsHandler.c", 0x156);
                     sp2D = 1;
                 }
@@ -388,7 +388,7 @@ s32 func_hd_front_end_801F6160(u8 arg0) {
       D_hd_front_end_8020C000, // "BLASTCORPS GAME"
       D_hd_front_end_8020C014,
       0xE00,
-      &D_hd_code_8039B698[arg0]
+      &D_hd_code_8039B698.fileNo[arg0]
   );
 }
 
@@ -408,7 +408,7 @@ s32 func_hd_front_end_801F6210(u8 arg0) {
   return sp24;
 }
 
-s32 func_hd_front_end_801F6264(u8 arg0, u8 arg1) {
+s32 func_hd_front_end_801F6264(u8 arg0, u8 write) {
     s32 sp3C = 0;
     s32 pad38;
     u32 sp34;
@@ -419,7 +419,7 @@ s32 func_hd_front_end_801F6264(u8 arg0, u8 arg1) {
 
     sp28 = &players[arg0];
 
-    for (sp34 = 0; (sp34 < 0x100) && ((u8) arg1 == 1); sp34++) {
+    for (sp34 = 0; (sp34 < 0x100) && ((u8) write == 1); sp34++) {
         rmonPrintf("0x%x, ", ((u8*) sp28)[sp34]);
     }
     rmonPrintf("\n");
@@ -429,22 +429,22 @@ s32 func_hd_front_end_801F6264(u8 arg0, u8 arg1) {
       rmonPrintf(ASSERT_MESSAGE, "sizeof(playerInfo)<=512", "pfsHandler.c", 0x123);
     }
 
-    if (arg1 == 1) {
+    if (write == 1) {
         func_hd_front_end_801F75A4(sp28, 0x100);
     }
 
-    if ((D_hd_code_802E8BF8 != 0) || (D_hd_code_80364A90 == 0x0040000000000000)) {
+    if ((D_hd_code_802E8BF8 != 0) || (g_currentGameState == 0x0040000000000000)) {
         if ((D_hd_code_8039C4B4 == 0) || (D_hd_code_802FA264 != 0)) {
             for (sp34 = 0; sp34 < 0x100; sp34++) {
-                if ((u8) arg1 == 1) {
-                    ((u8*) D_hd_code_8039B698)[0x18 + sp34] = ((u8*) sp28)[sp34];
+                if ((u8) write == 1) {
+                    D_hd_code_8039B698.data[sp34] = ((u8*) sp28)[sp34];
                     D_hd_front_end_8020BEE0[sp34] = ((u8*) sp28)[sp34];
                 } else {
-                    ((u8*) D_hd_code_8039B698)[0x18 + sp34] = D_hd_front_end_8020BEE0[sp34];
-                    ((u8*) sp28)[sp34] = ((u8*) D_hd_code_8039B698)[0x18 + sp34];
+                    D_hd_code_8039B698.data[sp34] = D_hd_front_end_8020BEE0[sp34];
+                    ((u8*) sp28)[sp34] = D_hd_code_8039B698.data[sp34];
                 }
             }
-        } else if ((u8) arg1 == 1) {
+        } else if ((u8) write == 1) {
             osEepromLongWrite(&D_hd_code_80370BF8, 0U, (u8*) sp28, 0x100);
         } else {
             osEepromLongRead(&D_hd_code_80370BF8, 0U, (u8*) sp28, 0x100);
@@ -452,24 +452,24 @@ s32 func_hd_front_end_801F6264(u8 arg0, u8 arg1) {
     } else {
         sp2C = 0;
         do {
-            sp3C = osPfsFindFile(&D_hd_code_8039B630, 0x3031U, 0x4E424345U, D_hd_front_end_8020C000, D_hd_front_end_8020C014, &D_hd_code_8039B698[arg0]);
+            sp3C = osPfsFindFile(&D_hd_code_8039B630, 0x3031U, 0x4E424345U, D_hd_front_end_8020C000, D_hd_front_end_8020C014, &D_hd_code_8039B698.fileNo[arg0]);
             sp2C++;
         } while ((sp3C != 0) && (sp2C < 3));
 
         if (sp3C == 0) {
             sp2C = 0;
             do {
-                sp3C = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698[arg0], arg1, 0, 0x100, (u8*) sp28);
+                sp3C = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698.fileNo[arg0], write, 0, 0x100, (u8*) sp28);
                 sp2C++;
             } while ((sp3C != 0) && (sp2C < 3));
         }
     }
 
-    if ((sp3C == 0) && ((u8) arg1 == 0)) {
+    if ((sp3C == 0) && ((u8) write == 0)) {
         sp3C = func_hd_front_end_801F76E4(sp28, 0x100);
     }
 
-    if ((sp3C == 0) && ((u8) arg1 == 0) && ((func_hd_front_end_801F6BD0(arg0, &sp20), (sp20 != 0x87569AB6CD076AEC)))) {
+    if ((sp3C == 0) && ((u8) write == 0) && ((func_hd_front_end_801F6BD0(arg0, &sp20), (sp20 != 0x87569AB6CD076AEC)))) {
         sp3C = 0x6E382;
     }
 
@@ -494,15 +494,15 @@ s32 func_hd_front_end_801F65C4(u8 arg0, u8 arg1, u8 arg2) {
   if (D_hd_code_802E8BF8 != 0) {
     for (sp30 = sp28; sp30 < sp28 + 0x20; sp30++) {
       if ((u8) arg2 == 1) {
-        ((u8*) D_hd_code_8039B698)[0x18 + sp30] = sp24[sp30 - sp28];
+        D_hd_code_8039B698.data[sp30] = sp24[sp30 - sp28];
       } else {
-        sp24[sp30 - sp28] = ((u8*) D_hd_code_8039B698)[0x18 + sp30];
+        sp24[sp30 - sp28] = D_hd_code_8039B698.data[sp30];
       }
     }
   } else {
-    sp34 = osPfsFindFile(&D_hd_code_8039B630, 0x3031U, 0x4E424345U, D_hd_front_end_8020C000, D_hd_front_end_8020C014, &D_hd_code_8039B698[arg0]);
+    sp34 = osPfsFindFile(&D_hd_code_8039B630, 0x3031U, 0x4E424345U, D_hd_front_end_8020C000, D_hd_front_end_8020C014, &D_hd_code_8039B698.fileNo[arg0]);
     if (sp34 == 0) {
-      sp34 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698[arg0], (u8) arg2, (s32) sp28, 0x20, (u8*) sp24);
+      sp34 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698.fileNo[arg0], (u8) arg2, (s32) sp28, 0x20, (u8*) sp24);
     }
     for (sp30 = 0; sp30 < 0xE; sp30++) {
       rmonPrintf("%d TIME %d = %d\n", (u8) arg2, sp30, D_hd_code_80364EF0[arg0][D_hd_code_802E8C44[sp30]]);
@@ -557,11 +557,11 @@ s32 func_hd_front_end_801F6AF4(u8 arg0, u64 arg2) {
 
   sp24 = 0;
   sp20 = &players[arg0];
-  if ((D_hd_code_802E8BF8 != 0) || D_hd_code_80364A90 == 0x40000000000000) {
+  if ((D_hd_code_802E8BF8 != 0) || g_currentGameState == 0x40000000000000) {
     osEepromWrite(&D_hd_code_80370BF8, 0x3F, (u8*)&arg2);
   } else {
     rmonPrintf("PUTTING SEMAPHORE %llu\n", arg2);
-    sp24 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698[arg0], 1, 0xDE0, 0x20, (u8*)&arg2);
+    sp24 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698.fileNo[arg0], 1, 0xDE0, 0x20, (u8*)&arg2);
   }
   return sp24;
 }
@@ -574,7 +574,7 @@ s32 func_hd_front_end_801F6BD0(u8 arg0, u64* arg1) {
   if (D_hd_code_802E8BF8 != 0) {
     osEepromRead(&D_hd_code_80370BF8, 0x3FU, (u8* ) arg1);
   } else {
-    sp44 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698[arg0], 0U, 0xDE0, 0x20, &sp20);
+    sp44 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698.fileNo[arg0], 0U, 0xDE0, 0x20, &sp20);
     *arg1 = sp20[0];
     rmonPrintf("Getting SEMAPHORE %llu\n", *arg1);
   }
@@ -606,16 +606,16 @@ s32 func_hd_front_end_801F6CA4(u8 arg0, u8 arg1, u8 arg2) {
   if (D_hd_code_802E8BF8 != 0) {
     for (sp2C = sp24; sp2C < sp24 + 0x40; sp2C++) {
       if ((u8) arg2 == 1) {
-        ((u8*) D_hd_code_8039B698)[0x18 + sp2C] = pakBuffer[sp2C - sp24];
+        D_hd_code_8039B698.data[sp2C] = pakBuffer[sp2C - sp24];
       } else {
-        pakBuffer[sp2C - sp24] = ((u8*) D_hd_code_8039B698)[0x18 + sp2C];
+        pakBuffer[sp2C - sp24] = D_hd_code_8039B698.data[sp2C];
       }
     }
   } else {
-    sp30 = osPfsFindFile(&D_hd_code_8039B630, 0x3031U, 0x4E424345U, D_hd_front_end_8020C000, D_hd_front_end_8020C014, &D_hd_code_8039B698[arg0]);
+    sp30 = osPfsFindFile(&D_hd_code_8039B630, 0x3031U, 0x4E424345U, D_hd_front_end_8020C000, D_hd_front_end_8020C014, &D_hd_code_8039B698.fileNo[arg0]);
     sp34 = sp30;
     if (sp30 == 0) {
-      sp34 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698[arg0], (u8) arg2, sp24, 0x40, pakBuffer);
+      sp34 = osPfsReadWriteFile(&D_hd_code_8039B630, D_hd_code_8039B698.fileNo[arg0], (u8) arg2, sp24, 0x40, pakBuffer);
     }
   }
 

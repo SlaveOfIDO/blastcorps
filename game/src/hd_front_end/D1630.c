@@ -67,7 +67,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
     s32 pad60;
 
     sp74 = arg0;
-    if ((D_hd_code_80370C28 & 0x8000) && !(D_hd_code_80370C2A & 0x8000) && (D_hd_code_802FA268 != 0)) {
+    if ((g_currentButtons & A_BUTTON) && !(g_previousButtons & A_BUTTON) && (D_hd_code_802FA268 != 0)) {
         D_hd_front_end_80215960 = 2;
         D_hd_front_end_80215964 = 3;
     }
@@ -75,7 +75,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
     case 3:
         break;
     case 0:
-        D_hd_front_end_8021596C = (((f64) sins((u32) ((u32) 60U * (0x4000U * (D_hd_code_80358060)) / 60U) / 90U) * 2.85) / 32767.0);
+        D_hd_front_end_8021596C = (((f64) sins((u32) ((u32) 60U * (0x4000U * (g_frameCount)) / 60U) / 90U) * 2.85) / 32767.0);
         if ((f64) D_hd_front_end_8021596C >= 2.84) {
             D_hd_front_end_8021596C = 2.84f;
             D_hd_front_end_80215960 = 1;
@@ -93,7 +93,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
     }
     switch (D_hd_front_end_80215964) {              /* switch 2; irregular */
     case 0:
-        if (D_hd_code_80358060 == 0x32) {
+        if (g_frameCount == 0x32) {
             D_hd_front_end_80215964 = 1;
             D_hd_front_end_80215974 = 0;
             D_hd_front_end_80215976 = 0;
@@ -105,7 +105,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
         } else {
             D_hd_front_end_80215974 += 0x10;
         }
-        if (D_hd_code_80358060 == 0xC8) {
+        if (g_frameCount == 0xC8) {
             D_hd_front_end_80215964 = 2;
         }
         break;
@@ -120,7 +120,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
         } else {
             D_hd_front_end_80215976 += 0x10;
         }
-        if (D_hd_code_80358060 == 0x122) {
+        if (g_frameCount == 0x122) {
             D_hd_front_end_80215964 = 3;
         }
         break;
@@ -178,7 +178,7 @@ s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3
     if ((f64) D_hd_front_end_80215968 > 360.0) {
         D_hd_front_end_80215968 = (f32) ((f64) D_hd_front_end_80215968 - 360.0);
     }
-    if ((u32) D_hd_code_80358060 < 2U) {
+    if ((u32) g_frameCount < 2U) {
         guPerspective(&arg1->unk1240, &D_hd_code_8035807C, 45.0f, 1.3333334f, 40.0f, 4000.0f, 1.0f);
         guLookAtReflect(&arg1->projection2, &arg1->lookAt, 5.0f, 7.0f, 400.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         guMtxIdent(&arg1->unk1280);

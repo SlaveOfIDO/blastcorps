@@ -47,79 +47,79 @@ struct S_80366BC4 D_hd_code_80366BC4; // unk0 = results music playing, unk1 = fa
 void func_hd_code_8025C5D0(void) {
     switch (D_hd_code_802E8BEC) {
     case 0:
-        if ((D_hd_code_80364A90 == 2)) {
-            if (D_hd_code_80358060 == 0x96) {
+        if ((g_currentGameState == 2)) {
+            if (g_frameCount == 0x96) {
                 func_hd_code_8026AF6C(0x803EU);
             }
-            if (D_hd_code_80358060 == 0x190) {
+            if (g_frameCount == 0x190) {
                 func_hd_code_8026AF6C(0x8025U);
             }
-            if (D_hd_code_80358060 == 0x2BC) {
+            if (g_frameCount == 0x2BC) {
                 func_hd_code_8026AF6C(0x8026U);
             }
         } else {
-            if (D_hd_code_80358060 == 0x64) {
+            if (g_frameCount == 0x64) {
                 func_hd_code_8026AF6C(0x8027U);
             }
-            if (D_hd_code_80358060 == 0x12C) {
+            if (g_frameCount == 0x12C) {
                 func_hd_code_8026AF6C(0x8028U);
             }
-            if (D_hd_code_80358060 == 0x1F4) {
+            if (g_frameCount == 0x1F4) {
                 func_hd_code_8026AF6C(0x8029U);
             }
-            if (D_hd_code_80358060 == 0x2BC) {
+            if (g_frameCount == 0x2BC) {
                 func_hd_code_8026AF6C(0x802AU);
             }
         }
         break;
     case 1:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x802BU);
         }
-        if (D_hd_code_80358060 == 0x1D6) {
+        if (g_frameCount == 0x1D6) {
             func_hd_code_8026AF6C(0x802CU);
         }
         break;
     case 2:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x802DU);
         }
         break;
     case 3:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x802EU);
         }
         break;
     case 4:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x802FU);
         }
         break;
     case 5:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x8030U);
         }
         break;
     case 6:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x8031U);
         }
-        if (D_hd_code_80358060 == 0x1D6) {
+        if (g_frameCount == 0x1D6) {
             func_hd_code_8026AF6C(0x8032U);
         }
         break;
     case 7:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x8033U);
         }
         break;
     case 8:
-        if (D_hd_code_80358060 == 0xB4) {
+        if (g_frameCount == 0xB4) {
             func_hd_code_8026AF6C(0x8034U);
         }
         break;
     }
-    if (D_hd_code_80358060 == 0x82) {
+    if (g_frameCount == 0x82) {
         D_hd_code_80366A18 = 1;
     }
 }
@@ -138,18 +138,18 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
 
     sp68 = sc.retraceCount;
     entry = arg0;
-    if ((D_hd_code_802E8BF0 != 0) && D_hd_code_80364A90 & 2) {
+    if ((D_hd_code_802E8BF0 != 0) && g_currentGameState & 2) {
         if (arg2 != 0) {
             sp6C = D_hd_code_80366BA4;
         } else {
             sp6C = D_hd_code_80366BA4 + 0x3C0;
         }
         D_hd_code_80366BA8 = 0;
-        if (D_hd_code_80358060 == 0) {
+        if (g_frameCount == 0) {
             D_hd_code_80366A10 = 0;
             D_hd_code_80366A11 = 0;
         }
-        if (D_hd_code_80358060 > D_hd_code_80366A04) {
+        if (g_frameCount > D_hd_code_80366A04) {
             if (sp68 < (u32) (D_hd_code_80366BBC + 0x78)) {
                 gDPPipeSync(entry++);
                 gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
@@ -182,7 +182,7 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
                 func_hd_code_8025E1E0(&entry);
             }
         } else {
-            if (D_hd_code_80366A04 == D_hd_code_80358060) {
+            if (D_hd_code_80366A04 == g_frameCount) {
                 D_hd_code_80366BBC = sp68;
             }
             func_hd_code_8025E1E0(&entry);
@@ -316,12 +316,12 @@ Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
     s32 spB8;
     s16 spB6;
     entry = arg0;
-    if ((D_hd_code_80364A90 & 0x08040E2110418002)) {
+    if ((g_currentGameState & 0x08040E2110418002)) {
         D_hd_code_80366A14 = D_hd_code_80366A14 + 10;
         if (D_hd_code_80366A14 >= 0x100) {
             D_hd_code_80366A14 = 0xFF;
         }
-    } else if ((D_hd_code_80364A90 & 0x0188004203160000)) {
+    } else if ((g_currentGameState & 0x0188004203160000)) {
         D_hd_code_80366A14 = D_hd_code_80366A14 - 10;
         if (D_hd_code_80366A14 <= 0) {
             D_hd_code_80366A14 = 0;
@@ -329,7 +329,7 @@ Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
     }
     switch (D_hd_code_80366A12) {                           /* irregular */
     case 0:
-        if (D_hd_code_80358060 == 0x3C) {
+        if (g_frameCount == 0x3C) {
             D_hd_code_80366A12 = 1;
         }
         break;
@@ -354,7 +354,7 @@ Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
             } else {
                 D_hd_code_80366A16 += 4;
             }
-        } else if ((D_hd_code_80364A90 == 0x200000)) {
+        } else if ((g_currentGameState == 0x200000)) {
             if ((D_hd_code_80366A16 - 6) < 0) {
                 D_hd_code_80366A16 = 0;
             } else {
@@ -370,7 +370,7 @@ Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
     gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetCombineLERP(entry++, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0);
 
-    if ((D_hd_code_80364A90 == 2) && (D_hd_code_8036BB1C != 1)) {
+    if ((g_currentGameState == 2) && (D_hd_code_8036BB1C != 1)) {
         spB6 = D_hd_code_80366A00 - ((s32) (0xFF - D_hd_code_8039CAA0) / 4);
         if ((spB6 + 0x3F) == D_hd_code_80366A00) {
             spB6 = -0x64;
@@ -432,7 +432,7 @@ Gfx* func_hd_code_8025D2B4(Gfx* arg0, void* arg1, s32* arg2) {
             gSPTextureRectangle(entry++, MAX((spC0 + spB8) << 2, 0), MAX((spB6 + 6) << 2, 0), MAX((spC0 + spB8 + 0x1F) << 2, 0), MAX((spB6 + 0x45) << 2, 0), 0, ((spC0 << 5) - (MIN((((spC0 + spB8) << 2) << 10) >> 7, 0))), -MIN((((spB6 + 6) << 2) << 10) >> 7, 0), qs510(1), qs510(1));
             gDPPipeSync(entry++);
 
-            if ((D_hd_code_80366A14 == 0xFF) && ((D_hd_code_80364A90 & 0xC9FD0FE79BFF80B0))) {
+            if ((D_hd_code_80366A14 == 0xFF) && ((g_currentGameState & 0xC9FD0FE79BFF80B0))) {
                 gDPSetRenderMode(entry++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
             }
             gDPSetCombineLERP(entry++, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0);
@@ -628,7 +628,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                             }
                         }
                     } else if ((u32) ((sp60 - D_hd_code_80366BB8) - 0x10E) >= 0x2EU) {
-                        if ((D_hd_code_80364A90 == 0x100000000000)) {
+                        if ((g_currentGameState == 0x100000000000)) {
                             g_nextGameState = 0x200000000000;
                         } else {
                             if ((((s32) players[playerNumber].unk18[g_currentLevel] > 0) && ((s32)  players[playerNumber].unk18[g_currentLevel] < 6))?1:0 != 0) {

@@ -59,7 +59,7 @@ void func_hd_front_end_801FE990(void) {
     Gfx* entry;
     OSMesg spD4;
 
-    if (D_hd_code_80364A90 & 0x80010000000ULL) {
+    if (g_currentGameState & 0x80010000000ULL) {
         if (D_hd_front_end_8021AB7C.link.next == NULL) {
             sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0x73, &D_hd_front_end_8021AB7C);
         }
@@ -69,7 +69,7 @@ void func_hd_front_end_801FE990(void) {
                 rmonPrintf(ASSERT_MESSAGE, "MQ_IS_EMPTY(&pakToGameMessageQ)", "back_loop.c", 0x3E);
             }
             D_hd_front_end_8021AB70 = !(spD4);
-            if (D_hd_code_80364A90 == 0x10000000ULL) {
+            if (g_currentGameState == 0x10000000ULL) {
                 if (D_hd_front_end_8021AB70 != 0) {
                     func_hd_front_end_801EA278();
                 }
@@ -82,9 +82,9 @@ void func_hd_front_end_801FE990(void) {
         }
     }
     if (D_hd_code_8036BB16 != 0) {
-        rmonPrintf("yoshiSelection in back_loop is %d %d\n", D_hd_code_8036BB16, func_hd_code_8026F92C(D_hd_code_80364A90));
+        rmonPrintf("yoshiSelection in back_loop is %d %d\n", D_hd_code_8036BB16, func_hd_code_8026F92C(g_currentGameState));
 
-        switch (D_hd_code_80364A90) {
+        switch (g_currentGameState) {
         case 0x10000ULL:
             if (D_hd_code_8036BB16 == 0xFFFF) {
                 g_nextGameState = 0x8000000000000000;
@@ -146,7 +146,7 @@ void func_hd_front_end_801FE990(void) {
                     break;
                 case 2:
                     if (!(D_hd_code_80364AA8 & 0x81)) {
-                        if ((D_hd_code_80364AA8 == 2) && (D_hd_code_80364A90 == 0x8000000ULL)) {
+                        if ((D_hd_code_80364AA8 == 2) && (g_currentGameState == 0x8000000ULL)) {
                             D_hd_code_8039CA60 = 1;
                         }
                         g_nextGameState = 0x20000000;
@@ -220,12 +220,12 @@ void func_hd_front_end_801FE990(void) {
     gMoveWd(entry++, G_MW_CLIP, 0x0014, 0x0000fffd);
     gMoveWd(entry++, G_MW_CLIP, 0x001c, 0x0000fffd);
     gDPSetCycleType(entry++, G_CYC_FILL);
-    if (D_hd_code_80364A90 & (0x88000080ULL)) {
+    if (g_currentGameState & (0x88000080ULL)) {
         gDPSetDepthImage(entry++, D_hd_code_80358058);
         gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358058);
         gDPSetFillColor(entry++, 0xfffcfffc);
         gDPFillRectangle(entry++, 220, 110, 300, 160);
-    } else if (D_hd_code_80364A90 & (0x40000000ULL)) {
+    } else if (g_currentGameState & (0x40000000ULL)) {
         gDPSetDepthImage(entry++, D_hd_code_80358058);
         gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358058);
         gDPSetFillColor(entry++, 0xfffcfffc);
@@ -236,11 +236,11 @@ void func_hd_front_end_801FE990(void) {
     entry = func_hd_front_end_80200BE0(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     gDPPipeSync(entry++);
     gDPSetCycleType(entry++, G_CYC_1CYCLE);
-    if (D_hd_code_80364A90 & 0xC000000000000ULL) {
+    if (g_currentGameState & 0xC000000000000ULL) {
         entry = func_hd_code_8026BBD0(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     }
-    if (D_hd_code_80364A90 == 0x4000000000000ULL) {
-        if (D_hd_code_80358060 == 0) {
+    if (g_currentGameState == 0x4000000000000ULL) {
+        if (g_frameCount == 0) {
             func_hd_code_80262008(0x27, 0);
             func_hd_code_80260EE0(0xF);
         }
@@ -250,13 +250,13 @@ void func_hd_front_end_801FE990(void) {
             D_hd_code_802F8BDC[0x38].unk8 |= 0x20;
         }
     }
-    if (D_hd_code_80364A90 & ((0x818D04001AFB8080ULL))) {
+    if (g_currentGameState & ((0x818D04001AFB8080ULL))) {
         entry = func_hd_front_end_801E9718(entry, &D_hd_code_803156F8[D_hd_code_8035805C], 0xC2);
     }
-    if (D_hd_code_80364A90 & ((0x898C0FE313F78002ULL))) {
+    if (g_currentGameState & ((0x898C0FE313F78002ULL))) {
         entry = func_hd_code_8025C878(entry, &D_hd_code_803156F8[D_hd_code_8035805C], D_hd_code_8035805C, &D_hd_code_80358078);
     }
-    if (D_hd_code_80364A90 & 0x410000ULL) {
+    if (g_currentGameState & 0x410000ULL) {
         u8 sp7F = playerNumber;
         playerNumber = D_hd_code_802F8BDC[0xA].unk18 - 2;
         if (playerNumber != sp7F) {
@@ -268,21 +268,21 @@ void func_hd_front_end_801FE990(void) {
         }
     }
     func_hd_code_8028A3E4();
-    if (D_hd_code_80364A90 & (0x40000000ULL)) {
+    if (g_currentGameState & (0x40000000ULL)) {
         entry = func_hd_front_end_801ED800(entry, &D_hd_code_803156F8[D_hd_code_8035805C], D_hd_code_8035805C, &D_hd_code_80358078);
     }
-    if (D_hd_code_80364A90 == 0x1000000000000ULL) {
+    if (g_currentGameState == 0x1000000000000ULL) {
         entry = func_hd_front_end_80201364(D_hd_code_803156F8, entry);
     }
     entry = func_hd_code_8024C404(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
-    if (D_hd_code_80364A90 & (0x88000080ULL)) {
+    if (g_currentGameState & (0x88000080ULL)) {
         entry = func_hd_front_end_801EC770(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
         if ((D_hd_code_80364A71 != -1) && (D_hd_code_8036BB1C == 2)) {
             entry = func_hd_front_end_801F51C8(&D_hd_code_803156F8[D_hd_code_8035805C], entry);
             gSPClearGeometryMode(entry++, G_ZBUFFER);
         }
     }
-    if (D_hd_code_80364A90 == (0x80000000ULL)) {
+    if (g_currentGameState == (0x80000000ULL)) {
         if (D_hd_code_80364A64 != 0) {
             D_hd_code_80364A64 -= 1;
         } else if ((D_hd_code_8036BB1E != 2) && (D_hd_code_8036BB1C == 2)) {
@@ -290,11 +290,11 @@ void func_hd_front_end_801FE990(void) {
             sndPlaySfx((struct ALBankAlt_s*) D_hd_code_80367738, 0x1C, NULL);
         }
     }
-    func_hd_code_8028A470();
-    if (D_hd_code_80364A90 == 0x800000000000ULL) {
+    controllerUpdateInput();
+    if (g_currentGameState == 0x800000000000ULL) {
         func_hd_code_802862DC();
     }
-    if ((D_hd_code_80364A90 & (0x88000080ULL)) && ((D_hd_code_803156C4 % 20) >= 6) && (D_hd_code_80364A71 != -1) && (D_hd_code_8036BB1C == 2)) {
+    if ((g_currentGameState & (0x88000080ULL)) && ((D_hd_code_803156C4 % 20) >= 6) && (D_hd_code_80364A71 != -1) && (D_hd_code_8036BB1C == 2)) {
         s32 sp74;
         s32 sp70;
 
@@ -304,13 +304,13 @@ void func_hd_front_end_801FE990(void) {
         func_hd_code_80259CCC(&D_hd_code_803156F8[D_hd_code_8035805C], D_hd_front_end_8021AB72, NULL, 1, 0, sp74, sp70, 0x1A, 0x16, 1, 0, 0, 0, (s32) D_hd_code_8036BB20);
         func_hd_code_80259DC8(&D_hd_code_803156F8[D_hd_code_8035805C], D_hd_front_end_8021AB72, 0, 1, 0, sp74 + 2, sp70 + 2, 0x12, 0x12, 1, 0xFF, 0xFF, 0, (s32) D_hd_code_8036BB20, 0xFF, 0, 0, (s32) D_hd_code_8036BB20);
     }
-    if (D_hd_code_80364A90 & 0x40000000000ULL) {
+    if (g_currentGameState & 0x40000000000ULL) {
         func_hd_front_end_801F803C();
         entry = func_hd_front_end_801F8440(&D_hd_code_803156F8[D_hd_code_8035805C], entry);
     }
     func_hd_code_80259C24(&entry, &D_hd_code_803156F8[D_hd_code_8035805C]);
     entry = func_hd_code_80274BF0(&D_hd_code_803156F8[D_hd_code_8035805C], entry);
-    if (!(D_hd_code_80364A90 & 0xC000000000000ULL)) {
+    if (!(g_currentGameState & 0xC000000000000ULL)) {
         entry = func_hd_code_8026BBD0(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     }
     if ((D_hd_code_8036BB1C != 1) && (D_hd_code_8036BB18 == 0xB)) {
@@ -325,8 +325,8 @@ void func_hd_front_end_801FE990(void) {
     for (spDC = 0; spDC < (nextdma - no_palette_dmas); spDC++) {
         func_hd_code_802A57AC();
     }
-    if ((D_hd_code_80364A90 & ((0x81D9836583B28000ULL))) && (D_hd_code_8036BB1C == 1) && (func_hd_code_802753F8() == 0) && (areWeFading() == 0) && (g_nextGameState == 0) && (D_hd_code_8036BB1A == -1)) {
-        switch (D_hd_code_80364A90) {               /* irregular */
+    if ((g_currentGameState & ((0x81D9836583B28000ULL))) && (D_hd_code_8036BB1C == 1) && (func_hd_code_802753F8() == 0) && (areWeFading() == 0) && (g_nextGameState == 0) && (D_hd_code_8036BB1A == -1)) {
+        switch (g_currentGameState) {
         case 0x20000ULL:
             g_nextGameState = 0x40000;
             break;
@@ -424,7 +424,7 @@ void func_hd_front_end_801FE990(void) {
             func_hd_code_80275390(D_hd_front_end_8021A830); /* see note */
             return;
         default:
-            rmonPrintf("illegal yoshi wait game mode %d\n", func_hd_code_8026F92C(D_hd_code_80364A90));
+            rmonPrintf("illegal yoshi wait game mode %d\n", func_hd_code_8026F92C(g_currentGameState));
             break;
         }
     }

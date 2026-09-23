@@ -80,7 +80,7 @@ void func_hd_code_802860F0(void) {
 // D_hd_code_802FDA70)
 // Proposed name: StartStageCutsceneMusic
 void func_hd_code_802862DC(void) {
-  if (D_hd_code_80358060 == 0) {
+  if (g_frameCount == 0) {
     musicPlayTune(D_hd_code_802FDA70[players[playerNumber].unk91], 1.0f);
   }
 }
@@ -160,7 +160,7 @@ s32 func_hd_code_8028653C(void) {
         sp2F = 1;
         switch (players[playerNumber].unk91) {
         case 0:
-            if (D_hd_code_80364A90 == 0x100000000000) {
+            if (g_currentGameState == 0x100000000000) {
                 sp2F = 0;
             }
             break;
