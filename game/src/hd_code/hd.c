@@ -184,9 +184,8 @@ s32 D_hd_code_803649E8; // player is inside a vehicle flag; proposed name: inVeh
 u8 D_hd_code_803649EC;
 u8 D_hd_code_803649ED; // vehicle id requested to enter (0xFF = none); proposed name: requestedVehicle
 s8 D_hd_code_803649EE;
-// TODO: fix the type of these vars
-struct UnknownData8024C414* D_hd_code_803649F0; // money counter target value; proposed name: moneyTarget
-struct UnknownData8024C414* D_hd_code_803649F4; // money counter displayed value (animates toward target); proposed name: moneyDisplayed
+u32 D_hd_code_803649F0; // money counter target value; proposed name: moneyTarget
+u32 D_hd_code_803649F4; // money counter displayed value (animates toward target); proposed name: moneyDisplayed
 f32 D_hd_code_803649F8;
 UnknownStruct_80364A00 D_hd_code_80364A00[5]; // Is an array of structs of size 0xC; ring buffer of floating value popups (value, x, y, align, timer); proposed name: popupQueue
 u8 D_hd_code_80364A3C; // popup queue read index; proposed name: popupTail

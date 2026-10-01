@@ -31,7 +31,7 @@ void func_hd_front_end_801F36B0(void);
 extern u8 worldtextures_ROM_START[];
 extern u8 ambertextures_ROM_START[];
 extern struct S_8020BD30 D_hd_front_end_8020BE98;
-extern u8   D_hd_front_end_80217A10[];
+extern f32 D_hd_front_end_80217A10[5][4][4];
 extern s32  D_hd_front_end_80217B50;
 extern f32  D_hd_front_end_80217B54;
 extern f32  D_hd_front_end_80217B58;
@@ -52,7 +52,7 @@ u8 *D_hd_front_end_80215A84;
 Vtx D_hd_front_end_80215A88[384];
 u16 D_hd_front_end_80217288;
 u16 D_hd_front_end_8021728A;
-s32 D_hd_front_end_8021728C;
+u16* D_hd_front_end_8021728C;
 s32 D_hd_front_end_80217290[64];   /* grid X */
 s32 D_hd_front_end_80217390[64];   /* grid Y */
 s32 D_hd_front_end_80217490[64];   /* grid S */
@@ -768,7 +768,7 @@ Gfx *func_hd_front_end_801F1568(void) {
     spA8 = (s32) &ambertextures_ROM_START - (s32) &worldtextures_ROM_START;
     INITIATE_DMA(worldtextures_ROM_START, g_heap, &spA8, 0xDU, 0U, 1U);
     g_heap += spA8;
-    D_hd_front_end_8021728C = g_heap - 0x6600;
+    D_hd_front_end_8021728C = (u16*)(g_heap - 0x6600);
     for (sp9C = 0; sp9C < 3; sp9C++) {
         D_hd_front_end_80215A70[sp9C] = (g_heap - ((-sp9C * 0x800 + 0x1800) << 1)) - 0x3000;
     }
@@ -1092,7 +1092,7 @@ Gfx *func_hd_front_end_801F2E20(void) {
         gDPPipeSync(entry++);
         for (spB4 = 0; spB4 < 0x10; spB4 += 4) {
             if (((spB8 + spB4) >> 2) % 43 == 0) {
-                gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (spA0 << 8) * 2 + D_hd_front_end_8021728C);
+                gDPSetTextureImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (spA0 << 8) + D_hd_front_end_8021728C);
                 gDPSetTile(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, 7, 0, 2, 0, 0, 2, 0, 0);
                 gDPLoadSync(entry++);
                 gDPLoadBlock(entry++, 7, 0, 0, 255, 512);
@@ -1134,7 +1134,7 @@ Gfx *func_hd_front_end_801F3450(Gfx *gfx, struct Model1 *arg1) {
 
     gSPPerspNormalize(entry++, D_hd_code_8035807C);
     D_hd_front_end_80217B50 = 4;
-    guMtxIdentF((Mtx *) &D_hd_front_end_80217A10[0x100]);
+    guMtxIdentF(D_hd_front_end_80217A10[4]);
     func_hd_front_end_801F374C(&D_hd_front_end_8020BE98);
     if (D_hd_front_end_802182A8 != 1) {
         D_hd_front_end_80217B54 = sp44->unk2C;
