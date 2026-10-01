@@ -120,7 +120,7 @@ void func_hd_code_80275478(struct Model1* arg0, Gfx** arg1, s32 arg2) {
     sp54 = D_hd_code_8036C790;
     if ((D_hd_code_8036EB98 == 0) && (sp50 == 0) && (D_hd_code_80364AA8 == 1) && (D_hd_code_802E8BD0 == 0)) {
         if (func_hd_code_8026AD30(0x4B) == 0) {
-            func_hd_code_8026AF6C(0x803DU);
+            yoshiShow(0x803DU);
             func_hd_code_80277EDC(3, 1, 2, 0x82);
         }
         D_hd_code_8036EB98 = 1;

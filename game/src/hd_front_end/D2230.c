@@ -33,7 +33,7 @@ void func_hd_front_end_801EE398(s32 arg0) {
   func_hd_code_802A5720();
   func_hd_code_8025B2B8();
   if (D_hd_code_8036BB18 != arg0) {
-    func_hd_code_8026AF6C(arg0 | 0x8000 | 0x2000);
+    yoshiShow(arg0 | 0x8000 | 0x2000);
     sndDeactivateAllSfxByFlag_3();
     D_hd_front_end_802159C0 = 0;
   }

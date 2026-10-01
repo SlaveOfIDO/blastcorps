@@ -129,9 +129,9 @@ Lights1 D_hd_front_end_8020E3A8[2] = {
 f32 D_hd_front_end_8020E3D8 = 0.0f;
 // </data>
 
-s32 func_hd_front_end_801F1568(void);               /* extern */
-s32 func_hd_front_end_801F2000(void);               /* extern */
-s32 func_hd_front_end_801F2428(void);               /* extern */
+Gfx* func_hd_front_end_801F1568(void);               /* extern */
+Gfx* func_hd_front_end_801F2000(void);               /* extern */
+Gfx* func_hd_front_end_801F2428(void);               /* extern */
 Gfx* func_hd_front_end_801F2E20(void);               /* extern */
 void func_hd_front_end_801F885C(s32);               /* extern */
 f32 func_hd_front_end_801FD6B8(f32, f32, f32);      /* extern */
@@ -146,7 +146,7 @@ void func_hd_front_end_801FD748(void);              /* extern */
 void func_hd_code_80275390(u64);                      /* extern */
 f32 func_hd_code_8028BBF4(s16, s16, s16, s16);
 Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
-s32 func_hd_code_80272ED8(s32, s32, u8, s32, s32, s32, f32); /* extern */
+Gfx* func_hd_code_80272ED8(Gfx* arg0, u8 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, f32 arg6); /* extern */
 s32 func_hd_code_80274AA4(s32);                     /* extern */
 Gfx* func_hd_front_end_801FA180(Gfx*, struct Model1*, f32, s8*); /* extern */
 Gfx* func_hd_front_end_801FC5B8(struct Model1*, Gfx*, u8, u8); /* extern */
@@ -182,9 +182,6 @@ extern u8 D_hd_front_end_8021A930;
 extern u8 D_hd_front_end_8021AB21;
 extern u16 D_hd_front_end_8020E39C[];
 extern s32 D_hd_front_end_80217B6C;
-extern s32 D_hd_front_end_8021A8F4;
-extern s32 D_hd_front_end_8021A8FC;
-extern s32 D_hd_front_end_8021A900;
 extern s8 D_hd_front_end_8021A906;
 extern s8 D_hd_front_end_8021A907;
 extern u8 D_hd_front_end_8021A908;
@@ -236,10 +233,10 @@ f32 D_hd_front_end_8021A8E4;
 f32 D_hd_front_end_8021A8E8;
 f32 D_hd_front_end_8021A8EC;
 u8 D_hd_front_end_8021A8F0;
-s32 D_hd_front_end_8021A8F4;
-Gfx* D_hd_front_end_8021A8F8;
-s32 D_hd_front_end_8021A8FC;
-s32 D_hd_front_end_8021A900;
+Gfx* D_hd_front_end_8021A8F4; // Planet display list
+Gfx* D_hd_front_end_8021A8F8; // Stars display list
+Gfx* D_hd_front_end_8021A8FC; // Level markes on planet surface display list
+Gfx* D_hd_front_end_8021A900;
 u8 D_hd_front_end_8021A904;
 u8 D_hd_front_end_8021A905;
 s8 D_hd_front_end_8021A906;
@@ -1292,6 +1289,7 @@ void func_hd_front_end_801FE018(u8 arg0) {
   }
 }
 
+// Renders the planet surface
 Gfx* func_hd_front_end_801FE238(Gfx* gfx, struct Model1* arg1) {
   Gfx* entry;
 
@@ -1318,7 +1316,7 @@ Gfx* func_hd_front_end_801FE238(Gfx* gfx, struct Model1* arg1) {
   return entry;
 }
 
-
+// Renders stars
 Gfx* func_hd_front_end_801FE5D0(Gfx* gfx, struct Model1* arg1) {
   Gfx* entry = gfx;
   gDPPipeSync(entry++);

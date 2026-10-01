@@ -54,7 +54,6 @@ extern u8 D_hd_front_end_8020F128;
 extern u8 D_hd_front_end_8020F140;
 extern OSPfs D_hd_code_8039B630;
 extern struct S_8039B698 D_hd_code_8039B698;
-extern s32 D_hd_code_802FA264;
 extern u16 D_hd_code_80364EF0[][16];
 extern u8 D_hd_front_end_8020C01C[];
 
@@ -434,7 +433,7 @@ s32 func_hd_front_end_801F6264(u8 arg0, u8 write) {
     }
 
     if ((D_hd_code_802E8BF8 != 0) || (g_currentGameState == 0x0040000000000000)) {
-        if ((D_hd_code_8039C4B4 == 0) || (D_hd_code_802FA264 != 0)) {
+        if ((D_hd_code_8039C4B4 == 0) || D_hd_code_802FA264) {
             for (sp34 = 0; sp34 < 0x100; sp34++) {
                 if ((u8) write == 1) {
                     D_hd_code_8039B698.data[sp34] = ((u8*) sp28)[sp34];

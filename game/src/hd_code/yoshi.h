@@ -15,7 +15,7 @@ extern char D_hd_code_8036B9E8[0x20];
 extern char D_hd_code_8036BA08[0x20];
 extern char D_hd_code_8036BA28[0x20];
 
-void func_hd_code_8026AF6C(u16 yd);
+void yoshiShow(u16 yd);
 s32 func_hd_code_8026AD30(s16);
 u16 func_hd_code_8026B10C();
 void func_hd_code_8026B118(s32 arg0);

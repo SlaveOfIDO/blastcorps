@@ -25,7 +25,7 @@ s32 func_hd_front_end_801F1DA8(s32);
 void func_hd_front_end_801FDCA4(Vtx *, s32, s32);
 void func_hd_code_802595E0(S_80218270 *, s32, s32, void *);
 void func_hd_front_end_801F374C(struct S_8020BD30 *);
-void func_hd_front_end_801F4878(s32 *, struct Model1 *);
+void func_hd_front_end_801F4878(Gfx *, struct Model1 *);
 void func_hd_front_end_801F36B0(void);
 
 extern u8 worldtextures_ROM_START[];
@@ -742,6 +742,7 @@ void func_hd_front_end_801F0570(void) {
     }
 }
 
+// Generate planet's display list
 Gfx *func_hd_front_end_801F1568(void) {
     u16 (*spAC)[49][420];
     s32 spA8;
@@ -1123,6 +1124,7 @@ Gfx *func_hd_front_end_801F2E20(void) {
     return spBC;
 }
 
+// Renders the planet
 Gfx *func_hd_front_end_801F3450(Gfx *gfx, struct Model1 *arg1) {
     Gfx *entry = gfx;
     struct S_8020BD30 *sp48 = &D_hd_front_end_8020BD30;
@@ -1143,7 +1145,7 @@ Gfx *func_hd_front_end_801F3450(Gfx *gfx, struct Model1 *arg1) {
         D_hd_front_end_80217B68 = sp44->unk28;
     }
     guLookAt(&arg1->projection2, D_hd_front_end_80217B54 + 1.0f, D_hd_front_end_80217B58, D_hd_front_end_80217B5C, D_hd_front_end_80217B60, D_hd_front_end_80217B64, D_hd_front_end_80217B68, 0.0f, 1.0f, 0.0f);
-    func_hd_front_end_801F4878(&arg1->unkACB0, arg1);
+    func_hd_front_end_801F4878(&arg1->unkACB0[0], arg1);
     func_hd_code_802595E0(D_hd_front_end_80218270, 7, 8, &func_hd_front_end_801F36B0);
     for (sp3C = 0, sp43 = 0; sp3C < 7; sp3C++) {
         if ((sp43 == 0) || (D_hd_front_end_80217B6C != 3)) {

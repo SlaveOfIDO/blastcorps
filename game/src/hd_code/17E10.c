@@ -49,73 +49,73 @@ void func_hd_code_8025C5D0(void) {
     case 0:
         if ((g_currentGameState == 2)) {
             if (g_frameCount == 0x96) {
-                func_hd_code_8026AF6C(0x803EU);
+                yoshiShow(0x803EU); // EMERGENCY ...
             }
             if (g_frameCount == 0x190) {
-                func_hd_code_8026AF6C(0x8025U);
+                yoshiShow(0x8025U);
             }
             if (g_frameCount == 0x2BC) {
-                func_hd_code_8026AF6C(0x8026U);
+                yoshiShow(0x8026U);
             }
         } else {
             if (g_frameCount == 0x64) {
-                func_hd_code_8026AF6C(0x8027U);
+                yoshiShow(0x8027U);
             }
             if (g_frameCount == 0x12C) {
-                func_hd_code_8026AF6C(0x8028U);
+                yoshiShow(0x8028U);
             }
             if (g_frameCount == 0x1F4) {
-                func_hd_code_8026AF6C(0x8029U);
+                yoshiShow(0x8029U);
             }
             if (g_frameCount == 0x2BC) {
-                func_hd_code_8026AF6C(0x802AU);
+                yoshiShow(0x802AU);
             }
         }
         break;
     case 1:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x802BU);
+            yoshiShow(0x802BU);
         }
         if (g_frameCount == 0x1D6) {
-            func_hd_code_8026AF6C(0x802CU);
+            yoshiShow(0x802CU);
         }
         break;
     case 2:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x802DU);
+            yoshiShow(0x802DU);
         }
         break;
     case 3:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x802EU);
+            yoshiShow(0x802EU);
         }
         break;
     case 4:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x802FU);
+            yoshiShow(0x802FU);
         }
         break;
     case 5:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x8030U);
+            yoshiShow(0x8030U);
         }
         break;
     case 6:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x8031U);
+            yoshiShow(0x8031U);
         }
         if (g_frameCount == 0x1D6) {
-            func_hd_code_8026AF6C(0x8032U);
+            yoshiShow(0x8032U);
         }
         break;
     case 7:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x8033U);
+            yoshiShow(0x8033U);
         }
         break;
     case 8:
         if (g_frameCount == 0xB4) {
-            func_hd_code_8026AF6C(0x8034U);
+            yoshiShow(0x8034U);
         }
         break;
     }
@@ -510,7 +510,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                     break;
                 }
             }
-            func_hd_code_8026AF6C(D_hd_code_80366BC0.unk2 | 0x8000 | 0x2000);
+            yoshiShow(D_hd_code_80366BC0.unk2 | 0x8000 | 0x2000);
             D_hd_code_8036BB1A = -1;
             if (D_hd_code_80366BC0.unk2 == 5) {
                 sndPlaySfx(D_hd_code_80367738, func_hd_code_8026205C(2), NULL);
@@ -567,14 +567,14 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                 break;
             case 50:                                /* switch 1 */
                 D_hd_code_8036BB1A = -1;
-                func_hd_code_8026AF6C(0xA00EU);
+                yoshiShow(0xA00EU);
                 func_hd_code_80261570(0.0f);
                 break;
             default:                                /* switch 1 */
                 sndPlaySfx(D_hd_code_80367738, 0x31U, NULL);
                 D_hd_code_802E8BD8 = 1;
                 if ((D_hd_code_8036BB18 != -1) || (func_hd_code_8026B10C() != 0)) {
-                    func_hd_code_8026AF6C(0x4000U);
+                    yoshiShow(0x4000U);
                 }
                 D_hd_code_8036BB1A = -1;
                 func_hd_code_80261570(0.0f);

@@ -22,7 +22,7 @@ void func_hd_front_end_801ED790(void) {
   D_hd_front_end_80215968 = D_hd_front_end_8021596C = 0.0f;
   D_hd_front_end_80215976 = 0;
   D_hd_front_end_80215974 = 0;
-  D_hd_front_end_80215978 = players[playerNumber].unkC;
+  D_hd_front_end_80215978 = players[playerNumber].rankLevel;
 }
 
 typedef struct {

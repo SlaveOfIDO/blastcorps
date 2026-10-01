@@ -91,9 +91,9 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
         if (sp3C->unkA == 0x162) {
             sp3C->unkA += 6;
         }
-        if ((sp3C->unkA / 12) > sp3C->unkC) {
+        if ((sp3C->unkA / 12) > sp3C->rankLevel) {
             *arg0 = 1;
-            sp3C->unkC++;
+            sp3C->rankLevel++;
         }
         if (!(D_hd_code_802E8F94[g_currentLevel].unk0 & 0x81)) {
             sp3C->unk92[g_currentLevel] = g_statsNew.bdn;

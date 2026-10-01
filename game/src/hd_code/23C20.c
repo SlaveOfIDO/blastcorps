@@ -759,7 +759,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303AF4;
             D_hd_code_802F8BDC[0x17].unk12 = 0xDA;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 return;
             }
             break;
@@ -768,7 +768,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B00;
             D_hd_code_802F8BDC[0x17].unk12 = 0x77;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 return;
             }
             break;
@@ -777,7 +777,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B10;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD7;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 return;
             }
             break;
@@ -786,7 +786,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = D_hd_code_80303B24;
             D_hd_code_802F8BDC[0x17].unk12 = 0x82;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 return;
             }
             break;
@@ -795,7 +795,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = NULL;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD5;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 return;
             }
             break;
@@ -804,7 +804,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = NULL;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD3;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 return;
             }
             break;
@@ -813,7 +813,7 @@ void func_hd_code_80269258(void) {
             D_hd_code_802F5804[0x2A].unk10 = NULL;
             D_hd_code_802F8BDC[0x17].unk12 = 0xD1;
             if (g_currentGameState & 0x104) {
-                func_hd_code_8026AF6C(0x8017U);
+                yoshiShow(0x8017U);
                 func_hd_code_80260DFC();
             }
             break;

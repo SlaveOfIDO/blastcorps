@@ -58,7 +58,7 @@ struct Model1 {
   /* 0x03C00 */ LookAt lookAt;
   /* 0x03C20 */ u8 pad3C20[0x10];
   /* 0x03C30 */ Gfx unk3C30[(0x48B0 - 0x3C30) / 8];
-  /* 0x048B0 */ Gfx dp[0xA3A0 / 8 - 0x48B0 / 8];
+  /* 0x048B0 */ Gfx dp[TOPLEVEL_DL_SIZE];
   /* 0x0A3A0 */ s32 unkA3A0;
   /* 0x0A3A4 */ u8 padA3A4[0x0A4E0 - 0x0A3A4];
   /* 0x0A4E0 */ s32 unkA4E0;
@@ -67,8 +67,7 @@ struct Model1 {
   /* 0x0A584 */ u8 padA584[0x0A918 - 0x0A584];
   /* 0x0A918 */ s32 unkA918;
   /* 0x0A91C */ u8 padA91C[0x0ACB0 - 0x0A91C];
-  /* 0x0ACB0 */ s32 unkACB0;
-  /* 0x0ACB4 */ u8 padACB4[0x1B650 - 0x0ACB4];
+  /* 0x0ACB0 */ Gfx unkACB0[(0x1B650 - 0x0ACB0)/8];
   /* 0x1B650 */ s32 unk1B650;
   /* 0x1B654 */ u8 pad1B654[0x21410 - 0x1B654];
   /* 0x21410 */ s32 unk21410;

@@ -203,7 +203,7 @@ extern s32 D_hd_code_802E8C78;
 extern char D_hd_code_802E8CB0[];
 extern s32 D_hd_code_802E8CC0;
 extern s32 D_hd_code_802E8CC4;
-extern s32 D_hd_code_802FA254;
+extern s32 debugFlagD;
 extern s32 D_hd_code_802FA268;
 extern u8 D_hd_code_802FA940[32*32];
 extern u16 D_hd_code_80304904[];

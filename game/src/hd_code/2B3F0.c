@@ -88,12 +88,13 @@ u8 D_hd_code_802F9E00[16 * 16 * 4] = {
 // RDU pickup radius per vehicle, indexed by D_hd_code_80364456 (larger vehicles get a larger radius)
 // Proposed name: rduPickupRadiusByVehicle
 s32 D_hd_code_802FA200[20] = { 0x3C, 0x64, 0xC8, 0x32, 0x78, 0x78, 0, 0, 0x32, 0xC8, 0x78, 0, 0, 0x32, 0x32, 0x32, 0x64, 0, 0, 0 };
+
 // Debug option flags set by the command-line parser func_hd_code_80270AE0
-s32 D_hd_code_802FA250 = 0; // -v; proposed name: debugFlagV
-s32 D_hd_code_802FA254 = 0; // -d; proposed name: debugFlagD
-s32 D_hd_code_802FA258 = 0; // -s; proposed name: debugFlagS
-s32 D_hd_code_802FA25C = 0; // -j; proposed name: debugFlagJ
-s32 D_hd_code_802FA260 = 0; // -m; proposed name: debugFlagM
+s32 debugFlagV = 0; /// -v; unused flag
+s32 debugFlagD = 0; /// -d; prevents double start of Thread3
+s32 debugFlagS = 0; /// -s; unused flag
+s32 debugFlagJ = 0; /// -j; unused flag
+s32 debugFlagM = 0; // -m; unused flag
 s32 D_hd_code_802FA264 = 0; // -l; proposed name: debugFlagL
 s32 D_hd_code_802FA268 = 0; // -c (also set by -C); proposed name: debugFlagC
 s32 D_hd_code_802FA26C = 0; // -C; proposed name: debugFlagBigC
@@ -319,30 +320,30 @@ void func_hd_code_80270AE0(u8* arg0) {
       }
     }
 
-    while ((sp94 >= 2) && (spC[1][0] == 0x2D)) {
+    while (sp94 >= 2 && spC[1][0] == '-') {
       switch (spC[1][1]) {
-        case 0x64:
-          D_hd_code_802FA254 = 1;
+        case 'd':
+          debugFlagD = 1;
           break;
-        case 0x76:
-          D_hd_code_802FA250 = 1;
+        case 'v':
+          debugFlagV = 1;
           break;
-        case 0x73:
-          D_hd_code_802FA258 = 1;
+        case 's':
+          debugFlagS = 1;
           break;
-        case 0x6A:
-          D_hd_code_802FA25C = 1;
+        case 'j':
+          debugFlagJ = 1;
           break;
-        case 0x6D:
-          D_hd_code_802FA260 = 1;
+        case 'm':
+          debugFlagM = 1;
           break;
-        case 0x6C:
+        case 'l':
           D_hd_code_802FA264 = 1;
           break;
-        case 0x63:
+        case 'c':
           D_hd_code_802FA268 = 1;
           break;
-        case 0x43:
+        case 'C':
           D_hd_code_802FA26C = 1;
           D_hd_code_802FA268 = 1;
           break;

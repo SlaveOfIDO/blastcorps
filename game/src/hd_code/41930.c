@@ -72,7 +72,7 @@ void func_hd_code_802860F0(void) {
         func_hd_front_end_801ECC8C();
         break;
     }
-    func_hd_code_8026AF6C((players[playerNumber].unk91 + 0x16) | 0x8000);
+    yoshiShow((players[playerNumber].unk91 + 0x16) | 0x8000);
   }
 }
 
@@ -224,7 +224,7 @@ s32 func_hd_code_8028653C(void) {
         case 12:
             if (((s32) sp30->unkA >= 0x162) || (D_hd_code_802FA26C != 0)) {
                 sp30->unkA = 0x168;
-                sp30->unkC = 0x1E;
+                sp30->rankLevel = 0x1E;
                 rmonPrintf(" ***** YOU CAN STOP NOW!! ***** \n");
             } else {
                 sp2F = 0;

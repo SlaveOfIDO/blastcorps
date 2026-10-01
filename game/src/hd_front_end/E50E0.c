@@ -125,7 +125,7 @@ Gfx* func_hd_front_end_80201364(s32 arg0, Gfx* gfx) {
             break;
         }
         if (func_hd_front_end_801E96F8() != 0) {
-            func_hd_code_8026AF6C(0x4000);
+            yoshiShow(0x4000);
         }
         break;
     case 8:

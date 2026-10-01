@@ -562,5 +562,5 @@ void func_hd_code_8028B240(void) {
   } else {
     D_hd_code_802F8BDC[0x58].unk18 = 0x1A7;
   }
-  func_hd_code_8026AF6C(0x8058U);
+  yoshiShow(0x8058U);
 }

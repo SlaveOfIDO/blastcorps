@@ -333,7 +333,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
         D_hd_front_end_802158A0 = 0;
         if ((s32) arg0 < 4) {
             if (D_hd_code_80365060[arg0] == 1) {
-                sprintf(&D_hd_front_end_802155A0, " ..... %s%s (%s) ... ", D_hd_front_end_80208378[sp47], sp48, D_hd_front_end_802081C0[sp48->unkC].unk0);
+                sprintf(&D_hd_front_end_802155A0, " ..... %s%s (%s) ... ", D_hd_front_end_80208378[sp47], sp48, D_hd_front_end_802081C0[sp48->rankLevel].unk0);
                 if ((s32) players[arg0].unk91 >= 0xC) {
                     sp4C = 4;
                 } else {
@@ -350,7 +350,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
                     sprintf(&D_hd_front_end_802155A0, "%s$%d ... ", &D_hd_front_end_802155A0, sp48->unk14);
                 }
                 D_hd_front_end_802154EC = func_hd_code_8025B300(&D_hd_front_end_802155A0);
-                sprintf(&D_hd_front_end_802155A0, "%s  %d", &D_hd_front_end_802155A0, sp48->unkC);
+                sprintf(&D_hd_front_end_802155A0, "%s  %d", &D_hd_front_end_802155A0, sp48->rankLevel);
                 if ((g_nextGameState & 0x0200040000000000) || g_currentGameState & 0x0100000000000000) {
                     sprintf(&D_hd_front_end_802155A0, "%s ..... %s", &D_hd_front_end_802155A0, "USE Z/R TO CHANGE PLAYER, THEN A TO SELECT!");
                 }
@@ -836,7 +836,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
         if (D_hd_front_end_802154BC != 0) {
             g_nextGameState = 0x01000000;
             D_hd_code_80365060[playerNumber] = 1;
-            func_hd_code_8026AF6C(0x4000U);
+            yoshiShow(0x4000U);
         } else {
             sndPlaySfx(D_hd_code_80367738, 0x2B, NULL);
         }
@@ -856,7 +856,7 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
                             g_nextGameState = 0x200000;
                         }
                         sndPlaySfx(D_hd_code_80367738, 0xDE, NULL);
-                        func_hd_code_8026AF6C(0x4000U);
+                        yoshiShow(0x4000U);
                     } else {
                         sndPlaySfx(D_hd_code_80367738, 0x2B, NULL);
                     }
@@ -1200,7 +1200,7 @@ void func_hd_front_end_801ECF5C(void) {
     rmonPrintf(" %d %d %d %d %d\n", sp40[2] * 3, sp40[1] * 2, sp40[0], sp6C->unkA, sp3C);
     sp6C->unkA += (sp40[2] * 3) + (sp40[1] * 2) + sp40[0];
     sp3F = (sp6C->unkA / 12) - (sp3C / 12);
-    sp6C->unkC += sp3F;
+    sp6C->rankLevel += sp3F;
     rmonPrintf("%d stars\n", sp3F);
 
     sp34 = (0x140 - (sp3F << 5)) / 2 + 0x28;
@@ -1263,6 +1263,6 @@ void func_hd_front_end_801ED4B8(void) {
   func_hd_front_end_801ED480((u8*)sp34, (u8*)D_hd_code_80364EF0[playerNumber]);
   g_currentLevel = 0;
   sp2F = (sp54->unkA / 12) - (sp2C / 12);
-  sp54->unkC += sp2F;
+  sp54->rankLevel += sp2F;
   rmonPrintf("cmo destroy %d stars\n", sp2F);
 }

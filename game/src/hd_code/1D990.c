@@ -790,7 +790,7 @@ void func_hd_code_80262840(void) {
             D_hd_code_802F5804[0x25].unkC = D_hd_code_80367C40;
             D_hd_code_802F5804[0x24].unk10 = &D_hd_code_80367C68;
             D_hd_code_802F5804[0x25].unk10 = &D_hd_code_80367CB8;
-            func_hd_code_8026AF6C(0x8009U);
+            yoshiShow(0x8009U);
             sndPlaySfx(D_hd_code_80367738, func_hd_code_8026205C(0), 0);
             break;
         case 1:                                     /* switch 1 */
@@ -858,7 +858,7 @@ void func_hd_code_80262BF4(void) {
             if (D_hd_code_803643D6 != 0) {
                 sndDeactivateAllSfxByFlag_3();
                 sndDeactivateAllSfxByFlag_11();
-                func_hd_code_8026AF6C(0xA00EU);
+                yoshiShow(0xA00EU);
                 D_hd_code_8036BB1A = -1;
                 g_nextGameState = 0x04000000;
                 break;
@@ -1029,7 +1029,7 @@ void func_hd_code_802633E0(void) {
                 } else {
                     sp33 = D_hd_code_80367C04->unk18 - D_hd_code_80367B54;
                     if (D_hd_code_802E8BD0 == 0) {
-                        func_hd_code_8026AF6C(0x8008U);
+                        yoshiShow(0x8008U);
                     }
                     if (sp33 == 1) {
                         sprintf(D_hd_code_80367D10, "1 LAP LEFT!");

@@ -713,7 +713,7 @@ s32 func_hd_code_8026AD30(s16 arg0) {
               players[playerNumber].unk54[0x34 + arg0] += 1;
             }
             D_hd_code_8036BAA0[arg0+2] = 1;
-            func_hd_code_8026AF6C((s16) arg0 | 0x8000 | 0x2000);
+            yoshiShow((s16) arg0 | 0x8000 | 0x2000);
             sp2B = 1;
           }
         }
@@ -724,7 +724,7 @@ s32 func_hd_code_8026AD30(s16 arg0) {
   return (s32) sp2B;
 }
 
-void func_hd_code_8026AF6C(u16 yd) {
+void yoshiShow(u16 yd) {
   u16 sp1E;
   u16 sp1C;
 
@@ -1019,7 +1019,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
 
     if ((g_currentGameState == 0x200) && (D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) && ((D_hd_code_8036BB1A = -1, (D_hd_code_8036BB1C == 4)) || (D_hd_code_8036BB1C == 2))) {
         rmonPrintf("putting off!\n");
-        func_hd_code_8026AF6C(0x4000U);
+        yoshiShow(0x4000U);
     }
     if ((D_hd_code_8036BB18 == -1) && (D_hd_code_8036BB14 & 0x4000)) {
         rmonPrintf(ASSERT_MESSAGE, "1==0", "yoshi.c", 0x65B);

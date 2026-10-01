@@ -41,10 +41,10 @@ typedef struct UnknownData8024C414_s {
   /* 0x08 */ u8 levelno;
   /* 0x09 */ u8 unk9;
   /* 0x0A */ u16 unkA;
-  /* 0x0C */ u8 unkC;
+  /* 0x0C */ u8 rankLevel; // rank level. e.g. 0 for ROOKIE WRECKER
   /* 0x0D */ u8 padD;
   /* 0x0E */ s16 padE;
-  /* 0x10 */ s32 unk10;
+  /* 0x10 */ s32 unk10; // TODO: unlocked vehicles?
   /* 0x14 */ s32 unk14;
   /* 0x18 */ u8 unk18[0x3C]; // flags? often check >0 and <6
   /* 0x54 */ u8 unk54[0x3C];

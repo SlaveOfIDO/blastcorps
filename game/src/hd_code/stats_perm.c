@@ -355,7 +355,7 @@ void func_hd_code_80285CC0() {
 
   if (D_hd_code_80358064 != 0) {
     if ((sp34 != -1) && !(func_hd_code_8026B10C() & 0x8000)) {
-      func_hd_code_8026AF6C(sp34 | 0x8000);
+      yoshiShow(sp34 | 0x8000);
     }
     if (sp30 != 0) {
       sndPlaySfx(D_hd_code_80367738, (s16) sp30, NULL);
@@ -384,7 +384,7 @@ void func_hd_code_80285EF4(s32 arg0) {
   D_hd_code_802F5804[0x11].unk0 &= ~0x800;
   D_hd_code_802F8BDC[6].unk18 = 0x11;
   D_hd_code_802F8BDC[6].unk8 |= 0x80;
-  func_hd_code_8026AF6C(0x8006U);
+  yoshiShow(0x8006U);
   D_hd_code_802F8BDC[6].unkC = 0;
   D_hd_code_802E8BD8 = 1;
 }

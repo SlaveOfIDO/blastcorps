@@ -141,7 +141,7 @@ void func_hd_code_80299C20(void) {
       D_hd_code_802E8BF0 = 0;
       func_hd_code_8025B9D0(9, &g_currentLevel);
       D_hd_code_803643D4 = 5;
-      func_hd_code_8026AF6C(0x8041U);
+      yoshiShow(0x8041U);
       func_hd_code_80295E50();
       break;
     case 0x1C:
@@ -149,7 +149,7 @@ void func_hd_code_80299C20(void) {
       D_hd_code_802E8BF0 = 0;
       func_hd_code_8025B9D0(0xA, &g_currentLevel);
       D_hd_code_803643D4 = 1;
-      func_hd_code_8026AF6C(0x8042U);
+      yoshiShow(0x8042U);
       func_hd_code_80295E50();
       break;
     case 0x35:
@@ -157,7 +157,7 @@ void func_hd_code_80299C20(void) {
       D_hd_code_802E8BF0 = 0;
       func_hd_code_8025B9D0(0xB, &g_currentLevel);
       D_hd_code_803643D4 = 2;
-      func_hd_code_8026AF6C(0x8043U);
+      yoshiShow(0x8043U);
       func_hd_code_80295E50();
       break;
     case 0x7:
@@ -165,7 +165,7 @@ void func_hd_code_80299C20(void) {
       D_hd_code_802E8BF0 = 0;
       func_hd_code_8025B9D0(0xC, &g_currentLevel);
       D_hd_code_803643D4 = 3;
-      func_hd_code_8026AF6C(0x8044U);
+      yoshiShow(0x8044U);
       func_hd_code_80295E50();
       break;
     case 0x13:
@@ -173,7 +173,7 @@ void func_hd_code_80299C20(void) {
       D_hd_code_802E8BF0 = 0;
       func_hd_code_8025B9D0(0xD, &g_currentLevel);
       D_hd_code_803643D4 = 9;
-      func_hd_code_8026AF6C(0x8045U);
+      yoshiShow(0x8045U);
       func_hd_code_80295E50();
       break;
     case 0x31:

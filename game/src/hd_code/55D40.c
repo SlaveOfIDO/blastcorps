@@ -169,7 +169,7 @@ s32 func_hd_code_8029A518(struct Model1* arg0, s32 arg1) {
         }
     }
     if (g_frameCount == 0x64) {
-        func_hd_code_8026AF6C(0x8036U);
+        yoshiShow(0x8036U);
     }
     if ((u32) g_frameCount >= 0x18CU) {
         D_hd_code_803A6B20 += 1;
@@ -178,7 +178,7 @@ s32 func_hd_code_8029A518(struct Model1* arg0, s32 arg1) {
         D_hd_code_803A6B24 += 1;
     }
     if (D_hd_code_803A6B24 == 0x7D) {
-        func_hd_code_8026AF6C(0x8037U);
+        yoshiShow(0x8037U);
         func_hd_code_80260EE0(0x25);
     }
     if ((D_hd_code_803A6B24 >= 0x7E) && (D_hd_code_8036BB1C == 1) && (areWeFading() == 0)) {
