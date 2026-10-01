@@ -136,7 +136,7 @@ struct S_802E8F74 D_hd_code_802E8F74[4] = {
 // and track rectangles (race mode), unk12[4] = checkpoint-box crossing order,
 // unk18 = goal count (laps / $ damage / RDU count), unk1C..unk2A = positions,
 // unk30[3] = time limit in tenths of seconds, the 10-byte array is likely medal
-// time thresholds. 1C460.c reads unk0 when choosing music.
+// time thresholds. music.c reads unk0 when choosing music.
 // Proposed name: missionConfigs
 struct S_80367C04 D_hd_code_802E8F94[] = {
   {0x01, 0x01, 0x0000, 0x0190, 0x03E8,
@@ -1295,7 +1295,7 @@ void func_hd_code_80264AEC(void) {
 }
 
 // Map the special levels {40, 43, 44, 45, 46} to indices {0, 5, 4, 2, 1},
-// anything else to 3. Called from the music chooser in 1C460.c
+// anything else to 3. Called from the music chooser in music.c
 // (func_hd_code_80261A44) to pick between tunes for certain levels.
 // Proposed name: GetSpecialLevelIndex
 u8 func_hd_code_80264BA4(u8 arg0) {

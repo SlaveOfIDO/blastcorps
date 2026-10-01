@@ -5,8 +5,6 @@
 #include "snd.h"
 #include "structs.h"
 #include "variables.h"
-// Proposed file name: music.c
-//
 // This file is the music/sequence player module: it manages MIDI sequence
 // playback via the compressed sequence player (ALCSPlayer), a "tune stack"
 // for interrupting music with jingles and resuming where it left off

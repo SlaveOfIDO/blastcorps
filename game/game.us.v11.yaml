@@ -786,7 +786,7 @@ segments:
       - [0x812D90, c, hd_code/17A70] # done
       - [0x813130, c, hd_code/17E10] # done
       - [0x815950, c, hd_code/1A630] # done
-      - [0x817780, c, hd_code/1C460] # done
+      - [0x817780, c, hd_code/music] # done
       - [0x818CB0, c, hd_code/1D990] # done
       - [0x81B780, c, hd_code/20460] # done
       - [0x81E200, c, hd_code/audi] # done
@@ -1017,7 +1017,7 @@ segments:
       - [0x89F810, .data, hd_code/17210] # done
       - [0x89F830, .data, hd_code/17E10] # done
       - [0x89F840, .data, hd_code/1A630] # done
-      - [0x89F860, .data, hd_code/1C460] # done
+      - [0x89F860, .data, hd_code/music] # done
       - [0x89FA90, .data, hd_code/1D990] # done
       - [0x8A0B10, .data, hd_code/20460] # done
       - [0x8AA650, .data, hd_code/audi] # done
@@ -1101,7 +1101,7 @@ segments:
       - [0x8BFB90, .rodata, hd_code/17A70] # done
       - [0x8BFBD0, .rodata, hd_code/17E10] # done
       - [0x8BFC00, .rodata, hd_code/1A630] # done
-      - [0x8BFD50, .rodata, hd_code/1C460] # done
+      - [0x8BFD50, .rodata, hd_code/music] # done
       - [0x8BFE10, .rodata, hd_code/1D990] # done
       - [0x8C01A0, .rodata, hd_code/20460] # done
       - [0x8C0260, .rodata, hd_code/audi] # done
@@ -1180,7 +1180,7 @@ segments:
       - { start: 0x8C61C0, type: .bss, name: hd_code/17A70, vram: 0x803669C0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/17E10, vram: 0x80366A00 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/1A630, vram: 0x80366BD0 } # done
-      - { start: 0x8C61C0, type: .bss, name: hd_code/1C460, vram: 0x80366C30 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/music, vram: 0x80366C30 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/1D990, vram: 0x80367750 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/20460, vram: 0x80367D60 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/audi, vram: 0x80368050 } # done

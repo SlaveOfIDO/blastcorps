@@ -23,7 +23,7 @@ void func_hd_code_80261528();                          /* extern */
 // "audio.c"). All functions here are already named (am* audio manager).
 // Note: amMain also drives the music driver's per-frame state machines from
 // the audio thread - the fade, tune push/pop, auto-pop and tempo-restore
-// functions from 1C460.c run here, once per audio frame.
+// functions from music.c run here, once per audio frame.
 
 // 0x5622 = 22050
 #define OUTPUT_RATE                    0x5622
