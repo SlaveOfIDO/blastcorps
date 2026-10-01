@@ -1,10 +1,12 @@
+#include <PR/gbi.h>
+#include <PR/mbi.h>
+
 #include "common.h"
 #include "functions.h"
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
-#include <PR/gbi.h>
-#include <PR/mbi.h>
+#include "music.h"
 
 // Proposed file name: title.c
 //

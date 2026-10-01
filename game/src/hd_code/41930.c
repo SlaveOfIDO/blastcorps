@@ -7,6 +7,7 @@
 #include "yoshi.h"
 #include "../hd_front_end/structs.h"
 #include "../levels.h"
+#include "music.h"
 
 // Proposed file name: academy.c (the original name - the asserts in
 // func_hd_code_80286330 reference "academy.c")
@@ -18,7 +19,6 @@
 // cutscene, the vehicle academy, the bonus levels, or the ending. unk90 is a
 // bitmask of academy tests passed, unkA is the player's overall rank/score.
 
-void musicPlayTune(u8, f32);                     /* extern */
 void func_hd_front_end_801F8354(u8);                                /* extern */
 void func_hd_code_802995F0(s32);                         /* extern */
 void func_hd_front_end_801ECF5C();                                  /* extern */

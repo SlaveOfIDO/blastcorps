@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "music.h"
 
 // Proposed file name: comms.c
 //

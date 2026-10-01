@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "variables.h"
 #include "audi.h"
+#include "music.h"
 #include <PR/libaudio.h>
 #include <PR/sched.h>
 
@@ -240,7 +241,6 @@ struct AudioManager_s {
 
 extern s32 osViClock;
 extern s32 D_hd_code_803156A4;
-extern s32 D_hd_code_8036772C;
 
 // BSS Begin
 u64 pad_80368050;

@@ -3,6 +3,7 @@
 #include "hd.h"
 #include "structs.h"
 #include "variables.h"
+#include "music.h"
 
 struct S_802AC4C4 {
   s32 unk0;

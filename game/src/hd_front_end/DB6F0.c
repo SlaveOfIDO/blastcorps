@@ -5,6 +5,7 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "../hd_code/music.h"
 #include "../hd_code/io/controller.h"
 #include "structs.h"
 

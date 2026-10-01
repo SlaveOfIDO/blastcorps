@@ -6,6 +6,7 @@
 #include "game_states.h"
 #include "hd.h"
 #include "macros.h"
+#include "music.h"
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
@@ -2466,10 +2467,10 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 }
                 break;
             case 0x28:
-                func_hd_code_80260D7C(1.0f);
+                musicSetMasterVolume(1.0f);
                 break;
             case 0x27:
-                func_hd_code_80260D7C(0.7f);
+                musicSetMasterVolume(0.7f);
                 break;
             }
             break;

@@ -4,6 +4,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "stats_perm.h"
+#include "music.h"
 
 struct S_80367D60 {
   s16 unk0;

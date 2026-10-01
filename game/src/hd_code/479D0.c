@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "music.h"
 
 struct S_8039AF00 {
   s16 unk0;

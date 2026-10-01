@@ -6,6 +6,7 @@
 #include "structs.h"
 #include "symbol_data.h"
 #include "variables.h"
+#include "music.h"
 
 struct S_802F9934 {
   u8 unk0;

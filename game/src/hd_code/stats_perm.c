@@ -6,6 +6,7 @@
 #include "variables.h"
 #include "yoshi.h"
 #include "stats_perm.h"
+#include "music.h"
 
 #define LEVEL_SAVE_SIZE 0x40
 

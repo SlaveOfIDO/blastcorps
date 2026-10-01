@@ -6,6 +6,7 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "../hd_code/music.h"
 
 struct S_80208044 {
   s32 unk0;
@@ -140,7 +141,6 @@ extern ModelFile* D_hd_front_end_80210E90[20];   // up to 19 entries used
 
 
 extern u8 D_hd_code_802E8C44[28];
-extern ALBank* D_hd_code_80367738;
 extern s16 D_hd_front_end_80211A68;
 extern f32 D_hd_front_end_802153D4;
 extern f32 D_hd_front_end_802153DC;

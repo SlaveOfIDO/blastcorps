@@ -6,6 +6,7 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "../hd_code/music.h"
 #include "../levels.h"
 
 void func_hd_code_80259BD4(Gfx**, struct FrameContext*);     /* extern */

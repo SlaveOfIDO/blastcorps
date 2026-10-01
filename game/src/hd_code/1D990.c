@@ -7,6 +7,7 @@
 #include "variables.h"
 #include "yoshi.h"
 #include "stats_perm.h"
+#include "music.h"
 
 // Proposed file name: missions.c
 //

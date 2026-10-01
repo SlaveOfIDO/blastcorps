@@ -7,6 +7,7 @@
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
 #include "../hd_code/io/controller.h"
+#include "../hd_code/music.h"
 #include "structs.h"
 
 s32 func_hd_front_end_801E96F8(void);               /* extern */

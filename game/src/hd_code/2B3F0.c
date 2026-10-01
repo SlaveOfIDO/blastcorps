@@ -4,6 +4,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "stats_perm.h"
+#include "music.h"
 
 // Proposed file name: rdu.c
 //

@@ -79,7 +79,6 @@ void func_hd_code_802AB670(u8);                                /* extern */
 void func_hd_code_802A467C(u8*, void*, void*, s32);
 void* func_hd_code_802D4E20(s32);
 void func_hd_code_8025BBE8(u16 arg0, s8 arg1, s8 arg2);
-void func_hd_code_80260D7C(f32);                       /* extern */
 f32 func_hd_code_80260DF0();                        /* extern */
 void func_hd_code_80275270(u64, f32);                   /* extern */
 void func_hd_code_80285EF4(s32);                       /* extern */
@@ -438,7 +437,6 @@ void func_hd_code_80260A30(s32);                         /* extern */
 u8 func_hd_code_80264BA4(u8);
 void sndDeactivateAllSfxByFlag_11();                   /* extern */
 void sndDeactivateAllSfxByFlag_3();                    /* extern */
-void musicPlayTune(u8, f32);                   /* extern */
 f32 func_hd_code_80268D84(f32, f32, f32, f32, f32, f32, f32); /* extern */
 f32 func_hd_code_8026A184(f32, f32, f32, f32, f32, f32, f32); /* extern */
 void func_hd_code_8026A2E8(f32, f32*);                 /* extern */

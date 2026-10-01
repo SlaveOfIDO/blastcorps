@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "music.h"
 
 struct S_8039B070 {
   s32 unk0;

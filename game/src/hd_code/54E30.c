@@ -1,6 +1,7 @@
 #include "common.h"
 #include "functions.h"
 #include "macros.h"
+#include "music.h"
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"

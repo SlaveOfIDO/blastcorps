@@ -5,13 +5,9 @@
 #include "snd.h"
 #include "structs.h"
 #include "variables.h"
-// This file is the music/sequence player module: it manages MIDI sequence
-// playback via the compressed sequence player (ALCSPlayer), a "tune stack"
-// for interrupting music with jingles and resuming where it left off
-// (including seq position, tempo and channel state), volume fades,
-// per-level track selection, and SFX dispatch.
+#include "music.h"
 
-// BSS Begin
+// <bss>
 struct S_80367400 D_hd_code_80366C30[4]; // tune stack: saved seq location/tempo/channel state + tune id per frame; proposed name: tuneStack
 struct S_80367400* D_hd_code_80367400; // tune stack pointer (current frame); proposed name: tuneStackPtr
 s32 D_hd_code_80367408[0x42]; // per-sequence data length (rounded up to even), one per tune in seq file; proposed name: tuneDataLengths
@@ -32,9 +28,9 @@ ALCSPlayer* g_musicPlayer; // the compressed MIDI sequence player
 ALBank* D_hd_code_80367738; // SFX instrument bank; proposed name: sfxBank
 ALBank* D_hd_code_8036773C; // music instrument bank; proposed name: musicBank
 s32 D_hd_code_80367740; // saved timer/frame counter (set alongside results music); proposed name: resultsMusicStartFrame
-// BSS End
+// </bss>
 
-// Data
+// <data>
 // Per-tune base volume, one entry per sequence in the seq file
 // Proposed name: tuneVolumes
 s16 D_hd_code_802E8D00[66] = {
@@ -410,9 +406,6 @@ struct S_802E8EB4 D_hd_code_802E8EB4[5] = {
   {0x00000056, 0x000000DB, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000}
 };
 
-// Start playing a tune: toggles the sequence double-buffer, stops the player,
-// DMAs the sequence data into RAM, attaches it to the player and plays it.
-// Volume = per-tune base volume * arg1 * master volume.
 void musicPlayTune(u8 sequenceId, f32 sequenceVolume) {
   u8* sp24;
 
@@ -432,11 +425,9 @@ void musicPlayTune(u8 sequenceId, f32 sequenceVolume) {
   alCSPSetVol(g_musicPlayer, D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * D_hd_code_802E8D88);
 }
 
-// Set the master music volume multiplier and apply it immediately
-// Proposed name: SetMusicMasterVolume
-void func_hd_code_80260D7C(f32 arg0) {
-  D_hd_code_802E8D88 = arg0;
-  alCSPSetVol(g_musicPlayer, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * arg0));
+void musicSetMasterVolume(f32 volume) {
+  D_hd_code_802E8D88 = volume;
+  alCSPSetVol(g_musicPlayer, (s32) ((f32) D_hd_code_802E8D00[D_hd_code_80367708] * D_hd_code_8036770C * volume));
 }
 
 // Get the master music volume multiplier

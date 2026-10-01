@@ -5,6 +5,7 @@
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/variables.h"
+#include "../hd_code/music.h"
 #include "intro.h"
 
 void func_hd_front_end_801F4E70(s32);  /* extern */
