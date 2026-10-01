@@ -159,11 +159,21 @@ void func_hd_code_80278BF0(Gfx* arg0, Gfx* arg1, Gfx** arg2) {
 // allocator and reset all motion blur state
 // Proposed name: InitMotionBlur
 void func_hd_code_80278E3C(void) {
+#ifdef AVOID_UB
+  hdAlignPointer(&g_heap, 0x40);
+  D_hd_code_8036D170 = g_heap;
+
+  g_heap += 0x5460;
+  hdAlignPointer(&g_heap, 8);
+#else
+
   hdAlignPointer(g_heap, 0x40);
   D_hd_code_8036D170 = g_heap;
 
   g_heap += 0x5460;
   hdAlignPointer(g_heap, 8);
+
+#endif
   D_hd_code_8036D178 = 0;
   D_hd_code_8036CC68 = 0;
   D_hd_code_8036CC6C = 0;

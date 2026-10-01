@@ -704,6 +704,9 @@ void func_hd_code_80261588(void) {
     sp68.maxVoices = 0x18;
     sp68.maxEvents = 0x20;
     sp68.maxChannels = 0x10;
+#ifdef AVOID_UB
+    sp68.debugFlags = 0;
+#endif
     sp68.heap = &D_hd_code_80367718;
     sp68.initOsc = NULL;
     sp68.updateOsc = NULL;
