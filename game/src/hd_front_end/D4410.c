@@ -25,7 +25,7 @@ s32 func_hd_front_end_801F1DA8(s32);
 void func_hd_front_end_801FDCA4(Vtx *, s32, s32);
 void func_hd_code_802595E0(S_80218270 *, s32, s32, void *);
 void func_hd_front_end_801F374C(struct S_8020BD30 *);
-void func_hd_front_end_801F4878(Gfx *, struct Model1 *);
+void func_hd_front_end_801F4878(Gfx *, struct FrameContext *);
 void func_hd_front_end_801F36B0(void);
 
 extern u8 worldtextures_ROM_START[];
@@ -1125,7 +1125,7 @@ Gfx *func_hd_front_end_801F2E20(void) {
 }
 
 // Renders the planet
-Gfx *func_hd_front_end_801F3450(Gfx *gfx, struct Model1 *arg1) {
+Gfx *func_hd_front_end_801F3450(Gfx *gfx, struct FrameContext *arg1) {
     Gfx *entry = gfx;
     struct S_8020BD30 *sp48 = &D_hd_front_end_8020BD30;
     struct S_8020BD30 *sp44 = &D_hd_front_end_8020BD30 + (((s32)D_hd_front_end_80217B6C * 0x3C + (s32)sp48) - (s32)sp48)  / 0x3C;

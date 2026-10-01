@@ -152,7 +152,7 @@ Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3) {
         if (g_frameCount > D_hd_code_80366A04) {
             if (sp68 < (u32) (D_hd_code_80366BBC + 0x78)) {
                 gDPPipeSync(entry++);
-                gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+                gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
                 gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetRenderMode(entry++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
                 gDPSetCombineMode(entry++, G_CC_SHADE, G_CC_SHADE);
@@ -471,7 +471,7 @@ void func_hd_code_8025E1E0(Gfx** arg0) {
 // fire a second voice line; and when the jingle ends (or the hold timer
 // expires) fade to the results state 0x08000000.
 // Proposed name: UpdateMissionSuccess
-void func_hd_code_8025E2CC(Gfx** arg0, struct Model1* arg1, u8 arg2) {
+void func_hd_code_8025E2CC(Gfx** arg0, struct FrameContext* arg1, u8 arg2) {
     Gfx* sp24;
 
     sp24 = *arg0;
@@ -546,7 +546,7 @@ block_32:
 // vertex alpha to white-out over 90 frames, then transition to retry (0x40),
 // the results state, or the next attract demo.
 // Proposed name: UpdateMissionFailure
-void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
+void func_hd_code_8025E67C(Gfx** arg0, struct FrameContext* arg1, u8 arg2) {
     Gfx* entry;
     u32 sp60;
     u32 sp5C;
@@ -607,7 +607,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct Model1* arg1, u8 arg2) {
                     D_hd_code_80366BC4.unk1 = 1U;
                 }
 
-                gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+                gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
                 gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPPipeSync(entry++);
                 gDPSetRenderMode(entry++, G_RM_CLD_SURF, G_RM_CLD_SURF2);

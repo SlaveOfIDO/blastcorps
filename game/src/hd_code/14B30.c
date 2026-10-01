@@ -35,6 +35,8 @@ Vtx* D_hd_code_80365348[2]; // double-buffered character vertex buffers; propose
 s32 maxCharacters;
 // BSS end
 
+void func_hd_code_80259EC4(struct FrameContext* arg0, u8* sp44_a1, u16* sp48_a2, u8 arg3, s32 arg4, f32 arg5, s32 arg6, f32 arg7, s32 arg8, u8 sp67, u8 sp44_a10, u8 sp44_a11, u8 sp44_a12, u8 sp44_a13, u8 sp44_a14, u8 sp44_a15, u8 sp44_a16, u8 sp44_a17, u8 sp44_a18, u8 sp44_a19, u8 sp48_a20, u8 sp48_a21, u8 sp48_a22, u8 sp48_a23, u8 sp48_a24, u8 sp48_a25);
+
 // Allocate the per-frame text vertex buffers and character queue from the
 // level allocator - capacity depends on the pending game state (0x200 for
 // menu-heavy states, ~0xA0 in-game) - then init the font
@@ -56,7 +58,7 @@ void func_hd_code_802592F0() {
       }
 
   for(sp1C = 0; sp1C < 2; sp1C++) {
-    D_hd_code_80365348[sp1C] = g_heap;
+    D_hd_code_80365348[sp1C] = (Vtx*)g_heap;
     g_heap += (maxCharacters << 4) * sizeof(Gfx*);
   }
 
@@ -77,10 +79,8 @@ void func_hd_code_80259450(void) {
 // Set up the RDP for text drawing: translucent, texture alpha modulated,
 // bilinear
 // Proposed name: BeginTextDraw
-void func_hd_code_8025946C(Gfx** arg0, struct Model1* arg1) {
-  Gfx *entry;
-
-  entry = *arg0;
+void func_hd_code_8025946C(Gfx** gfx, struct FrameContext* ctx) {
+  Gfx *entry = *gfx;
 
   gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
   gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
@@ -91,7 +91,7 @@ void func_hd_code_8025946C(Gfx** arg0, struct Model1* arg1) {
   gDPSetTextureFilter(entry++, G_TF_BILERP);
   gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
 
-  *arg0 = entry;
+  *gfx = entry;
 }
 
 // probably shell sort
@@ -144,14 +144,13 @@ s32 func_hd_code_80259814(u16* arg0, u16* arg1) {
 // characters sharing a texture batch together, then for each character load
 // its glyph texture (only when it changes) and draw its quad
 // Proposed name: FlushTextQueue
-void func_hd_code_80259824(Gfx** arg0, struct Model1* arg1) {
-  s32 sp54;
-  Gfx* entry;
+void func_hd_code_80259824(Gfx** gfx, struct FrameContext* ctx) {
+  s32 sp54 = 0;
+  Gfx* entry = *gfx;
   s32 sp4C;
 
-  sp54 = 0;
-  entry = *arg0;
   func_hd_code_802595E0((u8* ) &D_hd_code_80365340.unk0[D_hd_code_802E8C70], characterIndex - D_hd_code_802E8C70, 0xC, func_hd_code_80259814);
+
   for(sp4C = D_hd_code_802E8C70; sp4C < characterIndex; sp4C++) {
     if (D_hd_code_80365340.unk0[sp4C].unk8 != sp54) {
       sp54 = D_hd_code_80365340.unk0[sp4C].unk8;
@@ -170,32 +169,32 @@ void func_hd_code_80259824(Gfx** arg0, struct Model1* arg1) {
 
   osWritebackDCache(&D_hd_code_80365348[D_hd_code_8035805C][D_hd_code_802E8C70 * 4], (characterIndex - D_hd_code_802E8C70) << 6);
   D_hd_code_802E8C70 = characterIndex;
-  *arg0 = entry;
+  *gfx = entry;
 }
 
 // Draw all queued text with the current matrices
 // Proposed name: DrawQueuedText
-void func_hd_code_80259BD4(Gfx** arg0, struct Model1* arg1) {
-  Gfx* sp1C;
+void func_hd_code_80259BD4(Gfx** gfx, struct FrameContext* ctx) {
+  Gfx* sp1C = *gfx;
 
-  sp1C = *arg0;
-  func_hd_code_8025946C(&sp1C, arg1);
-  func_hd_code_80259824(&sp1C, arg1);
-  *arg0 = sp1C;
+  func_hd_code_8025946C(&sp1C, ctx);
+  func_hd_code_80259824(&sp1C, ctx);
+
+  *gfx = sp1C;
 }
 
 // Load the screen-space ortho matrices, then draw all queued text
 // Proposed name: DrawQueuedTextOrtho
-void func_hd_code_80259C24(Gfx** arg0, struct Model1* arg1) {
-  Gfx* entry;
+void func_hd_code_80259C24(Gfx** gfx, struct FrameContext* ctx) {
+  Gfx* entry = *gfx;
 
-  entry = *arg0;
-  gSPMatrix(entry++, (u32) &arg1->mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-  gSPMatrix(entry++, (u32) &arg1->modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+  gSPMatrix(entry++, (u32) &ctx->mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, (u32) &ctx->modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-  func_hd_code_8025946C(&entry, arg1);
-  func_hd_code_80259824(&entry, arg1);
-  *arg0 = entry;
+  func_hd_code_8025946C(&entry, ctx);
+  func_hd_code_80259824(&entry, ctx);
+
+  *gfx = entry;
 }
 
 
@@ -204,14 +203,14 @@ void func_hd_code_80259C24(Gfx** arg0, struct Model1* arg1) {
 // arg5/arg6 = x/y, arg7/arg8 = char width/height, arg9 = direction,
 // arg10..13 = RGBA
 // Proposed name: DrawText
-void func_hd_code_80259CCC(struct Model1* arg0, const char* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11, s32 arg12, s32 arg13) {
-  func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13);
+void func_hd_code_80259CCC(struct FrameContext* ctx, const char* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10, s32 arg11, s32 arg12, s32 arg13) {
+  func_hd_code_80259EC4(ctx, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13, (s32) (u8) arg10, (s32) (u8) arg11, (s32) (u8) arg12, (s32) (u8) arg13);
 }
 
 // Queue a text string with a vertical color gradient (top RGBA arg10..13,
 // bottom RGBA arg14..17)
 // Proposed name: DrawTextGradient
-void func_hd_code_80259DC8(struct Model1* arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17) {
+void func_hd_code_80259DC8(struct FrameContext* arg0, u8* arg1, u16* arg2, u8 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17) {
   func_hd_code_80259EC4(arg0, arg1, arg2, arg3, arg4, (f32) arg5, arg6, (f32) arg7, arg8, (s32) arg9, (s32) arg10, (s32) arg11, (s32) arg12, (s32) arg13, (s32) arg10, (s32) arg11, (s32) arg12, (s32) arg13, (s32) arg14, (s32) arg15, (s32) arg16, (s32) arg17, (s32) arg14, (s32) arg15, (s32) arg16, (s32) arg17);
 }
 
@@ -225,7 +224,7 @@ void func_hd_code_80259DC8(struct Model1* arg0, u8* arg1, u16* arg2, u8 arg3, s3
 // with per-corner colors plus a queue entry (code, quad index, glyph texture
 // from func_hd_code_8025B0B8).
 // Proposed name: LayoutText
-void func_hd_code_80259EC4(s32 arg0, u8* sp44_a1, u16* sp48_a2, u8 arg3, s32 arg4, f32 arg5, s32 arg6, f32 arg7, s32 arg8, u8 sp67, u8 sp44_a10, u8 sp44_a11, u8 sp44_a12, u8 sp44_a13, u8 sp44_a14, u8 sp44_a15, u8 sp44_a16, u8 sp44_a17, u8 sp44_a18, u8 sp44_a19, u8 sp48_a20, u8 sp48_a21, u8 sp48_a22, u8 sp48_a23, u8 sp48_a24, u8 sp48_a25) {
+void func_hd_code_80259EC4(struct FrameContext* arg0, u8* sp44_a1, u16* sp48_a2, u8 arg3, s32 arg4, f32 arg5, s32 arg6, f32 arg7, s32 arg8, u8 sp67, u8 sp44_a10, u8 sp44_a11, u8 sp44_a12, u8 sp44_a13, u8 sp44_a14, u8 sp44_a15, u8 sp44_a16, u8 sp44_a17, u8 sp44_a18, u8 sp44_a19, u8 sp48_a20, u8 sp48_a21, u8 sp48_a22, u8 sp48_a23, u8 sp48_a24, u8 sp48_a25) {
     u16 sp3E;
     u8* sp38;
     u16* sp34;

@@ -314,7 +314,7 @@ void func_hd_code_80292DDC(s32 arg0) {
 // scaled, oriented to its pitch/yaw, tinted by its fade value, drawn from its
 // per-type display list
 // Proposed name: DrawProjectiles
-void func_hd_code_80292EB8(Gfx** gfx, struct Model1* arg1) {
+void func_hd_code_80292EB8(Gfx** gfx, struct FrameContext* arg1) {
   Gfx* entry;
   s32 spD8;
   f32 sp98[4][4];

@@ -547,7 +547,7 @@ void func_hd_code_80278324(Gfx** arg0, s32* arg1, u8 arg2) {
             D_hd_code_8036CB51 = 0;
         }
 
-        gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+        gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
         gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(entry++);
         gDPSetCycleType(entry++, G_CYC_2CYCLE);

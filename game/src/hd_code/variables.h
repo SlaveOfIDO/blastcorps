@@ -22,7 +22,7 @@ extern Mtx D_hd_code_803652F0;
 
 
 extern s32 D_hd_code_80315188; // Potentially a message queue for textures?
-extern struct Model1 D_hd_code_803156F8[];
+extern struct FrameContext D_hd_code_803156F8[];
 
 
 extern OSMesg D_hd_code_8039C4B4;
@@ -245,7 +245,7 @@ extern s8 D_hd_code_80308240;
 extern s8 D_hd_code_80308254;
 extern s8 D_hd_code_80308264;
 extern s8 D_hd_code_80308CE0;
-extern struct Model1 D_2000000;
+extern struct FrameContext D_2000000;
 extern struct S_80367BCC D_hd_code_802F49F4[];
 extern struct S_8020C070 D_hd_front_end_8020C070[];
 extern struct S_80367C04 D_hd_code_802E8F94[];

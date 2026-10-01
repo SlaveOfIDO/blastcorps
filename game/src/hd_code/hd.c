@@ -103,7 +103,7 @@ s32 D_hd_code_803156EC;
 s32 D_hd_code_803156F0;
 u8 D_hd_code_803156F4;
 u8 D_hd_code_803156F5;
-struct Model1 D_hd_code_803156F8[2]; // double-buffered per-frame graphics contexts (matrices, display lists, vertex space); proposed name: gfxContexts
+struct FrameContext D_hd_code_803156F8[2]; // double-buffered per-frame graphics contexts (matrices, display lists, vertex space); proposed name: gfxContexts
 s32 pad_80358028;
 s32 pad_8035802C;
 Gfx* D_hd_code_80358030[2]; // categorized world display list buffers per frame (see func_hd_code_80257234); proposed name: worldDlBufs0
@@ -2509,7 +2509,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
 
 // Stub: just zero the length counter
 // Proposed name: ResetDlLengthStub
-Gfx* func_hd_code_8024C404(Gfx* arg0, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_code_8024C404(Gfx* arg0, struct FrameContext* arg1, s32* arg2) {
   *arg2 = 0;
   return arg0;
 }
@@ -2523,7 +2523,7 @@ Gfx* func_hd_code_8024C404(Gfx* arg0, struct Model1* arg1, s32* arg2) {
 // arrow and radar, "PRESS START" / "MISSILE VIEW" / "SHUTTLE VIEW" labels
 // and the rest of the HUD.
 // Proposed name: BuildFrameDisplayList
-Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
+Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     Gfx* entry;
     u8 sp194[16];
     u8 sp184[16];
@@ -2544,8 +2544,8 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
     gDPFillRectangle(entry++, 0, 0, 319, 239);
 
     guTranslate(&arg0->modelview, 0.f, 0.f, 0.f);
-    guOrtho(&arg0->mtx1, 0, 319.f, 239.f, 0.0f, -20000.0f, 20000.0f, 1.0f);
-    guOrtho(&arg0->mtx2, 0, 1279.f, 959.f, 0.0f, -20000.0f, 20000.0f, 1.0f);
+    guOrtho(&arg0->mtxOrtho, 0, 319.f, 239.f, 0.0f, -20000.0f, 20000.0f, 1.0f);
+    guOrtho(&arg0->mtxOrthoLarge, 0, 1279.f, 959.f, 0.0f, -20000.0f, 20000.0f, 1.0f);
     func_hd_code_802507C8(&arg0->projection2, &arg0->lookAt, &arg0->unk180);
 
     gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358050[D_hd_code_8035805C]);
@@ -2826,7 +2826,7 @@ Gfx* func_hd_code_8024C414(struct Model1* arg0, s32* arg1) {
 // the object's yaw/pitch/roll at its ground position. The driven vehicle's
 // shadow also follows the failure spin matrix.
 // Proposed name: DrawObjectShadows
-void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2) {
+void func_hd_code_8024E4F4(Gfx** arg0, struct FrameContext *arg1, u8 arg2) {
     Gfx *entry; // sp144
     s32 sp140;
     s16 pad;
@@ -2926,7 +2926,7 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct Model1 *arg1, u8 arg2) {
 // Draw the train's shadow (the shadow list entry with owner id 0xFE):
 // a single 64x64 IA quad rotated by the train heading D_hd_code_803EF326
 // Proposed name: DrawTrainShadow
-void func_hd_code_8024F520(Gfx** arg0, struct Model1* arg1) {
+void func_hd_code_8024F520(Gfx** arg0, struct FrameContext* arg1) {
     Gfx* entry;
 
     s32 sp88;

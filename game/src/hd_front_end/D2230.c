@@ -23,7 +23,7 @@ void func_hd_front_end_801EE390(void) {
 }
 
 void func_hd_front_end_801EE398(s32 arg0) {
-  struct Model1* sp5C = &D_hd_code_803156F8[D_hd_code_8035805C ^ 1];
+  struct FrameContext* sp5C = &D_hd_code_803156F8[D_hd_code_8035805C ^ 1];
   Gfx* entry;
   s32 sp54;
 

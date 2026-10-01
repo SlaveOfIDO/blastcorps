@@ -310,7 +310,7 @@ void func_hd_code_8027BE7C(u8 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4, s16 
 // strip geometry goes into a sub-display list buffer called from the main
 // list.
 // Proposed name: DrawTireTracks
-void func_hd_code_8027C4C8(Gfx** gfx, struct Model1* arg1) {
+void func_hd_code_8027C4C8(Gfx** gfx, struct FrameContext* arg1) {
     Gfx* entry;
     u8 sp9B;
     u8 sp9A;

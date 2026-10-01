@@ -98,7 +98,7 @@ void func_hd_front_end_80200BD4(u8* arg0) {
   D_hd_front_end_8021AB80 = arg0;
 }
 
-Gfx* func_hd_front_end_80200BE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_front_end_80200BE0(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
     Gfx* entry;
     s32 sp70;
     s32 sp6C;

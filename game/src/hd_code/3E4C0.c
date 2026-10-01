@@ -223,7 +223,7 @@ Vtx D_hd_code_802FD9B8[10] = {
 // func_hd_code_802AD7D4 quadrant lookup) relative to the camera yaw
 // (D_hd_code_80364452). Not drawn when there is no carrier.
 // Proposed name: DrawCarrierArrow
-void func_hd_code_80282C80(Gfx** gfx, struct Model1* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+void func_hd_code_80282C80(Gfx** gfx, struct FrameContext* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     Gfx* entry = *gfx;
     f32 sp130;
     f32 sp12C;
@@ -338,7 +338,7 @@ void func_hd_code_80282C80(Gfx** gfx, struct Model1* arg1, s32 arg2, s32 arg3, s
 // and the carrier blip - then a needle quad rotated toward
 // (D_hd_code_803F767C, D_hd_code_803F7680), and finally the rotating sweep line.
 // Proposed name: DrawRadar
-void func_hd_code_8028376C(Gfx** gfx, struct Model1* arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+void func_hd_code_8028376C(Gfx** gfx, struct FrameContext* arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     Gfx* entry;
     s32 sp218;
     u8 sp217;
@@ -398,7 +398,7 @@ void func_hd_code_8028376C(Gfx** gfx, struct Model1* arg1, u8 arg2, s32 arg3, s3
     D_hd_code_802FD830[arg2][6].v.ob[1] = sp208 + 1;
     D_hd_code_802FD830[arg2][7].v.ob[0] = sp20A + 1;
     D_hd_code_802FD830[arg2][7].v.ob[1] = sp208 - 2;
-    gSPMatrix(entry++, (u32) &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(entry++, (u32) &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(entry++, (u32) &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
     gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);

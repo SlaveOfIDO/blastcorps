@@ -346,7 +346,7 @@ Gfx* func_hd_code_80274B08(Gfx* gfx) {
 // Draw a blinking HUD sprite: visible 28 of every 40 frames, drawn with drop
 // shadow at full alpha between the 2D begin/end setup
 // Proposed name: DrawBlinkingHudSprite
-void func_hd_code_80274B40(Gfx** gfx, struct Model1* arg1, u8 arg2, s16 arg3, s32 arg4) {
+void func_hd_code_80274B40(Gfx** gfx, struct FrameContext* arg1, u8 arg2, s16 arg3, s32 arg4) {
   Gfx* entry = *gfx;
 
   if (D_hd_code_803156C4 % 40U < 0x1CU) {

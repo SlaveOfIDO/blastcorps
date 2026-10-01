@@ -13,16 +13,15 @@ struct S_8036DCD8 {
 
 
 
-struct Model1 {
+struct FrameContext {
   // size: 0x21498
   /* 0x00000 */ u32 unk00000;
   /* 0x00004 */ u8 unk00004[0x80 - 0x4];
   /* 0x00080 */ Mtx projection;
-  /* 0x000C0 */ Mtx mtx1;
-  /* 0x00100 */ Mtx mtx2;
+  /* 0x000C0 */ Mtx mtxOrtho;
+  /* 0x00100 */ Mtx mtxOrthoLarge;
   /* 0x00140 */ Mtx projection2;
-  /* 0x00180 */ void* unk180;
-  /* 0x00184 */ u8 pad184[0x001C0 - 0x00184];
+  /* 0x00180 */ Mtx unk180;
   /* 0x001C0 */ Mtx modelview;
   /* 0x00200 */ Mtx unk200;
   /* 0x00240 */ Mtx unk240;

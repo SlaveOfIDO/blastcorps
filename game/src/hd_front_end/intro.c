@@ -8,7 +8,7 @@
 #include "intro.h"
 
 void func_hd_front_end_801F4E70(s32);  /* extern */
-Gfx* func_hd_front_end_801F4FBC(struct Model1 *, s32);
+Gfx* func_hd_front_end_801F4FBC(struct FrameContext *, s32);
 
 extern u8 nink_ROM_START[];
 extern u8 nink_ROM_END[];
@@ -56,7 +56,7 @@ void introInitialize(s32 introMode) {
 }
 
 void introRender(void) {
-    struct Model1* sp12C;
+    struct FrameContext* sp12C;
     Gfx* entry;
     s32 sp124;
     s32 sp120;

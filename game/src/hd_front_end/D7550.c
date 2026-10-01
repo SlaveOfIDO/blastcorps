@@ -15,9 +15,9 @@ typedef struct {
   /* 0x4 */ Gfx *unk4;
 } S_80218270;  /* stride 0x8, same layout as D4410.c's S_80218270 */
 
-Gfx* func_hd_front_end_801F3964(Gfx*, struct Model1*, struct S_8020BD30*, f32); /* extern */
-Gfx* func_hd_front_end_801F4110(Gfx*, struct Model1*, struct S_8020BD30*, f32); /* extern */
-Gfx* func_hd_front_end_801FE238(Gfx*, struct Model1*);                         /* extern */
+Gfx* func_hd_front_end_801F3964(Gfx*, struct FrameContext*, struct S_8020BD30*, f32); /* extern */
+Gfx* func_hd_front_end_801F4110(Gfx*, struct FrameContext*, struct S_8020BD30*, f32); /* extern */
+Gfx* func_hd_front_end_801FE238(Gfx*, struct FrameContext*);                         /* extern */
 
 extern f32 D_hd_front_end_8020BDEC;
 extern u8 *D_hd_front_end_80215A7C;
@@ -93,7 +93,7 @@ void func_hd_front_end_801F374C(struct S_8020BD30 *arg0) {
     }
 }
 
-Gfx* func_hd_front_end_801F3964(Gfx* gfx, struct Model1* arg1, struct S_8020BD30* arg2, f32 arg3) {
+Gfx* func_hd_front_end_801F3964(Gfx* gfx, struct FrameContext* arg1, struct S_8020BD30* arg2, f32 arg3) {
     Gfx* entry = gfx;
     f32 spA0;
     s16 sp9E;
@@ -168,7 +168,7 @@ Gfx* func_hd_front_end_801F3964(Gfx* gfx, struct Model1* arg1, struct S_8020BD30
     return entry;
 }
 
-Gfx* func_hd_front_end_801F4110(Gfx* gfx, struct Model1* arg1, struct S_8020BD30* arg2, f32 arg3) {
+Gfx* func_hd_front_end_801F4110(Gfx* gfx, struct FrameContext* arg1, struct S_8020BD30* arg2, f32 arg3) {
     Gfx* entry = gfx;
     f32 spA0;
     s16 sp9E;
@@ -232,7 +232,7 @@ Gfx* func_hd_front_end_801F4110(Gfx* gfx, struct Model1* arg1, struct S_8020BD30
     return entry;
 }
 
-void func_hd_front_end_801F4878(Gfx* gfx, struct Model1* arg1) {
+void func_hd_front_end_801F4878(Gfx* gfx, struct FrameContext* arg1) {
     Gfx* entry = gfx;
     s32 sp68;
     struct S_8020BD30* sp64;
@@ -264,12 +264,12 @@ void func_hd_front_end_801F4878(Gfx* gfx, struct Model1* arg1) {
             entry = func_hd_front_end_801FE238(entry, arg1);
             break;
         case 6:
-            gSPMatrix(entry++, &arg1->mtx2, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
+            gSPMatrix(entry++, &arg1->mtxOrthoLarge, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
             gSPMatrix(entry++, &arg1->modelview, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
             entry = func_hd_front_end_801F4110(entry, arg1, sp60, sp58);
             break;
         default:
-            gSPMatrix(entry++, &arg1->mtx2, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
+            gSPMatrix(entry++, &arg1->mtxOrthoLarge, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
             gSPMatrix(entry++, &arg1->modelview, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
             entry = func_hd_front_end_801F3964(entry, arg1, sp60, sp58);
             break;

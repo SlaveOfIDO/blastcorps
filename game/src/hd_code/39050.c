@@ -1202,7 +1202,7 @@ void func_hd_code_80282224(Gfx** gfx, u8 arg1) {
         D_hd_code_8036E4D2 = 0;
     }
     if (D_hd_code_8036E4D2 != 0) {
-        gSPMatrix(entry++, (u32) &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+        gSPMatrix(entry++, (u32) &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
         gSPMatrix(entry++, (u32) &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(entry++);
         gDPSetCycleType(entry++, G_CYC_1CYCLE);

@@ -70,7 +70,7 @@ extern OSMesgQueue D_hd_code_803153D8;
 extern OSSched sc; // 0x80315440
 extern OSScClient g_gfxClient;
 extern u8 D_hd_code_803156F4;
-extern struct Model1 D_hd_code_803156F8[2];
+extern struct FrameContext D_hd_code_803156F8[2];
 extern u32 D_hd_code_80358058;
 extern u8 D_hd_code_8035805C;
 extern u32 g_frameCount;

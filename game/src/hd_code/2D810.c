@@ -129,7 +129,7 @@ u16 D_hd_code_802FA8A0[2] = { 0, 3 }; // render formats of the two sky layers: G
 // the two 32x32 texture layers into separate TMEM halves, blends them with
 // the 2-cycle combine LERP and draws the quad as two triangles.
 // Proposed name: DrawSky
-Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s16 arg4, s32* arg5) {
+Gfx* func_hd_code_80271FD0(Gfx* arg0, struct FrameContext* arg1, u16 arg2, s16 arg3, s16 arg4, s32* arg5) {
     Gfx* entry = arg0;
     INIT_FROM_ARRAY(u16 sp78[2], sp78, D_hd_code_802FA8A0);
     s32 sp74;
@@ -177,7 +177,7 @@ Gfx* func_hd_code_80271FD0(Gfx* arg0, struct Model1* arg1, u16 arg2, s16 arg3, s
         gDPLoadBlock(entry++, G_TX_LOADTILE, 0, 0, 1023, 256);
     }
 
-    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->mtx2), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->mtxOrthoLarge), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&arg1->modelview), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPTileSync(entry++);
     gDPSetTextureLOD(entry++, G_TL_TILE);

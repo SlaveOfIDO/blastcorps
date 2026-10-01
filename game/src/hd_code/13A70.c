@@ -206,7 +206,7 @@ void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f
 // (size = 60 - heightAboveGround/800). One special object in level 0x10
 // draws z-buffered.
 // Proposed name: DrawFallingObjectShadows
-void func_hd_code_80258B78(Gfx** arg0, struct Model1* arg1) {
+void func_hd_code_80258B78(Gfx** arg0, struct FrameContext* arg1) {
     Gfx* entry;
     s32 sp70;
     s32 sp6C;

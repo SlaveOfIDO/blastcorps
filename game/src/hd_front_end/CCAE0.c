@@ -8,7 +8,7 @@
 #include "../hd_code/variables.h"
 #include "../levels.h"
 
-void func_hd_code_80259BD4(Gfx**, struct Model1*);     /* extern */
+void func_hd_code_80259BD4(Gfx**, struct FrameContext*);     /* extern */
 Gfx* func_hd_code_80274AA4(Gfx*);                     /* extern */
 s32 func_hd_code_8025B558(u16*);                    /* extern */
 Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
@@ -266,7 +266,7 @@ u32 D_hd_front_end_80208350[2] = {
 // </data>
 
 void func_hd_front_end_801E8C40(u8 arg0) {
-  struct Model1* sp34;
+  struct FrameContext* sp34;
   s32 sp30;
 
   playerNumber = arg0;
@@ -275,7 +275,7 @@ void func_hd_front_end_801E8C40(u8 arg0) {
   for(sp30 = 0; sp30 < 2; sp30++) {
     sp34 = &D_hd_code_803156F8[sp30];
     guPerspective(&sp34->projection, &D_hd_front_end_8021591C, 45.0f, 1.3333334f, 10.0f, 10000.0f, 1.0f);
-    guLookAt((Mtx* ) &sp34->unk180, 0.0f, 277.0f, 480.0f, 0.0f, 189.0f, 200.0f, 0.0f, 0.0f, 1.0f);
+    guLookAt(&sp34->unk180, 0.0f, 277.0f, 480.0f, 0.0f, 189.0f, 200.0f, 0.0f, 0.0f, 1.0f);
     guTranslate(&sp34->unk2C0[0xC], 0.0f, 88.0f, 0.0f);
   }
   D_hd_front_end_8021593C = 0;
@@ -475,7 +475,7 @@ s32 func_hd_front_end_801E96F8(void) {
   return D_hd_front_end_802154D2 == (D_hd_front_end_802154DC + 8);
 }
 
-Gfx *func_hd_front_end_801E9718(Gfx *gfx, struct Model1 *arg1, s32 arg2) {
+Gfx *func_hd_front_end_801E9718(Gfx *gfx, struct FrameContext *arg1, s32 arg2) {
     Gfx *entry;
 
 
@@ -721,7 +721,7 @@ void func_hd_front_end_801EA93C(char *arg0, void *arg1, u8 arg2, u8 arg3, s8 *ar
   D_hd_front_end_8021592C = 0;
 }
 
-Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
+Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct FrameContext *arg1, s32 *arg2) {
     Gfx *entry = gfx;
     struct S_8020C070 *spF8 = &D_hd_front_end_8020C070[7];
     u8 spF7;
@@ -1060,7 +1060,7 @@ Gfx* func_hd_front_end_801EC49C(Gfx* arg0, s32 arg1, s32 arg2, u8 arg3) {
   return sp34;
 }
 
-Gfx *func_hd_front_end_801EC770(Gfx *gfx, struct Model1 *arg1, s32 *arg2) {
+Gfx *func_hd_front_end_801EC770(Gfx *gfx, struct FrameContext *arg1, s32 *arg2) {
   Gfx *entry = gfx;
   u8 sp63;
 

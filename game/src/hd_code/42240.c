@@ -132,7 +132,7 @@ void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
             D_hd_code_8036EC10 = 0;
         }
     }
-    gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPPipeSync(entry++);
     gDPSetCycleType(entry++, G_CYC_1CYCLE);
@@ -204,7 +204,7 @@ void func_hd_code_802873AC(void) {
 // Draw the vehicle-0xA counter widget (fading in/out): the icon plus the
 // numeric value D_hd_code_803F8B72 rendered as gradient text
 // Proposed name: DrawCounterA
-void func_hd_code_80287530(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
+void func_hd_code_80287530(Gfx** gfx, struct FrameContext* arg1, u8 arg2, u8 arg3) {
   Gfx* entry = *gfx;
   s8 spB8[20];
 
@@ -224,7 +224,7 @@ void func_hd_code_80287530(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
       D_hd_code_8036EC1C = 0;
     }
   }
-  gSPMatrix(entry++, (u32) &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, (u32) &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
   gSPMatrix(entry++, (u32) &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
   gDPPipeSync(entry++);
   gDPSetCycleType(entry++, G_CYC_1CYCLE);
@@ -289,7 +289,7 @@ void func_hd_code_80287AE4(void) {
 // Draw the vehicle-1 counter widget (fading in/out): the icon plus the
 // numeric value D_hd_code_803EDC00 rendered as gradient text
 // Proposed name: DrawCounterB
-void func_hd_code_80287C68(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
+void func_hd_code_80287C68(Gfx** gfx, struct FrameContext* arg1, u8 arg2, u8 arg3) {
   Gfx* entry = *gfx;
   s8 spB8[20];
 
@@ -309,7 +309,7 @@ void func_hd_code_80287C68(Gfx** gfx, struct Model1* arg1, u8 arg2, u8 arg3) {
       D_hd_code_8036EC28 = 0;
     }
   }
-  gSPMatrix(entry++, (u32) &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, (u32) &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
   gSPMatrix(entry++, (u32) &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
   gDPPipeSync(entry++);
   gDPSetCycleType(entry++, G_CYC_1CYCLE);

@@ -78,7 +78,7 @@ void func_hd_front_end_801F4E70(s32 arg0) {
   func_hd_code_802A08B4((u8*)D_hd_front_end_802182C8, sp30);
 }
 
-Gfx* func_hd_front_end_801F4FBC(struct Model1* arg0, Gfx* gfx) {
+Gfx* func_hd_front_end_801F4FBC(struct FrameContext* arg0, Gfx* gfx) {
   Gfx* entry = gfx;
   gSPSegment(entry++, 6, D_hd_front_end_802182CC);
   gSPSegment(entry++, 7, &D_hd_front_end_802182D0[D_hd_code_8035805C]); // segment 7 is a modelview matrix
@@ -93,7 +93,7 @@ Gfx* func_hd_front_end_801F4FBC(struct Model1* arg0, Gfx* gfx) {
   return entry;
 }
 
-Gfx* func_hd_front_end_801F51C8(struct Model1* arg0, Gfx* gfx) {
+Gfx* func_hd_front_end_801F51C8(struct FrameContext* arg0, Gfx* gfx) {
     Gfx* entry = gfx;
     void* sp68;
 
@@ -127,7 +127,7 @@ Gfx* func_hd_front_end_801F51C8(struct Model1* arg0, Gfx* gfx) {
 
 void func_hd_front_end_801F55D8(void) {
   s32 sp3C;
-  struct Model1* sp38;
+  struct FrameContext* sp38;
 
   func_hd_front_end_80202100(0x96, &D_hd_front_end_80218350, D_hd_front_end_80218358, D_hd_front_end_80218360);
   guTranslate(&D_hd_front_end_80218370, 150.0f, -45.0f, 0.0f);

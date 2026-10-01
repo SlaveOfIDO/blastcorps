@@ -166,7 +166,7 @@ void func_hd_code_80294F00(void) {
 // race time (func_hd_code_80295394), build its matrix and draw the vehicle's
 // display list translucently (prim alpha 0x64)
 // Proposed name: DrawGhost
-void func_hd_code_80295120(Gfx** gfx, struct Model1* arg1) {
+void func_hd_code_80295120(Gfx** gfx, struct FrameContext* arg1) {
   Gfx* entry = *gfx;
   s32 sp60;
   s32 sp5C;

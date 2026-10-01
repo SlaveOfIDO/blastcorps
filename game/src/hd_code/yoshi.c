@@ -21,7 +21,7 @@ struct S_802F48D0 {
 
 Gfx* func_hd_code_80274AA4(s32);                     /* extern */
 s32 func_hd_code_80272ED8(s32, s32, u8, s32, u32, s32, f32); /* extern */
-void func_hd_code_80259BD4(Gfx**, struct Model1*);     /* extern */
+void func_hd_code_80259BD4(Gfx**, struct FrameContext*);     /* extern */
 void func_hd_code_8026EF70(struct S_802F8BDC*);        /* extern */
 u8* func_hd_code_8026F004(struct S_802F8BDC*, u16, s32); /* extern */
 u8 func_hd_code_8026F644(struct S_802F8BDC*, struct S_8020C070*, s16); /* extern */
@@ -34,7 +34,7 @@ Gfx* func_hd_code_80275DA4(Gfx*, u8);                /* extern */
 Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
 s32 func_hd_code_8025B558(u16*);                    /* extern */
 void func_hd_code_8026BA7C(struct S_802F8BDC*);        /* extern */
-Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2);
+Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct FrameContext* arg1, s32* arg2);
 
 extern u16 D_hd_code_802E8C98[];
 extern u16 D_hd_code_802E8C9C[];
@@ -944,7 +944,7 @@ void func_hd_code_8026BA7C(struct S_802F8BDC* arg0) {
   }
 }
 
-Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct FrameContext* arg1, s32* arg2) {
   Gfx* entry;                                       /* compiler-managed */
 
   entry = arg0;
@@ -961,7 +961,7 @@ Gfx* func_hd_code_8026BBD0(Gfx* arg0, struct Model1* arg1, s32* arg2) {
 }
 
 // @internal
-Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
     struct S_802F8BDC* sp14C;
     struct S_8020C070* sp148;
     s32 sp144;

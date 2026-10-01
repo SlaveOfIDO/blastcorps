@@ -139,21 +139,21 @@ void func_hd_front_end_801FDE50(void);              /* extern */
 void func_hd_front_end_801FD484(f32 *, f32 *, f32 *, f32 *, f32 *, f32);  /* extern */
 u64 func_hd_code_80299FE8(s32);                     /* extern */
 void func_hd_front_end_801ECB18(void);              /* extern */
-Gfx* func_hd_front_end_801F9258(Gfx*, struct Model1*, s32*); /* extern */
-Gfx* func_hd_front_end_801F9820(Gfx*, struct Model1*, s32*); /* extern */
-Gfx* func_hd_front_end_801F9B84(Gfx*, struct Model1*, s32*); /* extern */
+Gfx* func_hd_front_end_801F9258(Gfx*, struct FrameContext*, s32*); /* extern */
+Gfx* func_hd_front_end_801F9820(Gfx*, struct FrameContext*, s32*); /* extern */
+Gfx* func_hd_front_end_801F9B84(Gfx*, struct FrameContext*, s32*); /* extern */
 void func_hd_front_end_801FD748(void);              /* extern */
 void func_hd_code_80275390(u64);                      /* extern */
 f32 func_hd_code_8028BBF4(s16, s16, s16, s16);
 Gfx* func_hd_code_80274868(Gfx*);                     /* extern */
 Gfx* func_hd_code_80272ED8(Gfx* arg0, u8 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, f32 arg6); /* extern */
 s32 func_hd_code_80274AA4(s32);                     /* extern */
-Gfx* func_hd_front_end_801FA180(Gfx*, struct Model1*, f32, s8*); /* extern */
-Gfx* func_hd_front_end_801FC5B8(struct Model1*, Gfx*, u8, u8); /* extern */
+Gfx* func_hd_front_end_801FA180(Gfx*, struct FrameContext*, f32, s8*); /* extern */
+Gfx* func_hd_front_end_801FC5B8(struct FrameContext*, Gfx*, u8, u8); /* extern */
 void func_hd_front_end_801FDE98();                     /* extern */
-Gfx* func_hd_front_end_801F3450(Gfx*, struct Model1*); /* extern */
-Gfx* func_hd_front_end_801FE5D0(Gfx*, struct Model1*); /* extern */
-Gfx* func_hd_front_end_801FA74C(struct Model1* arg0, Gfx* gfx, u8 arg2, u8 arg3, s8* arg4, f32* arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12);
+Gfx* func_hd_front_end_801F3450(Gfx*, struct FrameContext*); /* extern */
+Gfx* func_hd_front_end_801FE5D0(Gfx*, struct FrameContext*); /* extern */
+Gfx* func_hd_front_end_801FA74C(struct FrameContext* arg0, Gfx* gfx, u8 arg2, u8 arg3, s8* arg4, f32* arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12);
 void func_hd_front_end_801FCF38(Vtx arg0[4], f32, f32, f32, u8, u8, f32, u8); /* extern */
 s32 func_hd_front_end_801FE760(u8);
 void func_hd_front_end_801FDCA4(Vtx *, s32, s32);
@@ -283,7 +283,7 @@ Gfx* D_hd_front_end_8021AB6C;
 // </bss>
 
 void func_hd_front_end_801F8530(s32 arg0) {
-    struct Model1* sp3C;
+    struct FrameContext* sp3C;
     u32 sp38;
     struct LevelData* sp34;
     f32 sp30;
@@ -370,7 +370,7 @@ void func_hd_front_end_801F8980(void) {
     s16 sp44;
     s32 sp40;
     u32 sp3C;
-    struct Model1* sp38;
+    struct FrameContext* sp38;
 
     nextdma = 0;
     no_palette_dmas = 0;
@@ -497,7 +497,7 @@ void func_hd_front_end_801F8980(void) {
     }
 }
 
-Gfx* func_hd_front_end_801F9258(Gfx* gfx, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_front_end_801F9258(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
     Gfx* entry;                                      /* compiler-managed */
     s32 padC0;
     s32 spBC;
@@ -573,7 +573,7 @@ Gfx* func_hd_front_end_801F9258(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     return entry;
 }
 
-Gfx* func_hd_front_end_801F9820(Gfx* gfx, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_front_end_801F9820(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
   Gfx* entry = gfx;
   gSPSegment(entry++, 0, 0x00000000);
   gSPSegment(entry++, 2, osVirtualToPhysical(arg1));
@@ -596,7 +596,7 @@ Gfx* func_hd_front_end_801F9820(Gfx* gfx, struct Model1* arg1, s32* arg2) {
   return entry;
 }
 
-Gfx* func_hd_front_end_801F9B84(Gfx* gfx, struct Model1* arg1, s32* arg2) {
+Gfx* func_hd_front_end_801F9B84(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
     Gfx* entry = gfx;
     gSPSegment(entry++, 0, 0x00000000);
     gSPSegment(entry++, 2, osVirtualToPhysical(arg1));
@@ -653,7 +653,7 @@ Gfx* func_hd_front_end_801F9B84(Gfx* gfx, struct Model1* arg1, s32* arg2) {
     return entry;
 }
 
-Gfx* func_hd_front_end_801FA180(Gfx* arg0, struct Model1* arg1, f32 arg2, s8* arg3) {
+Gfx* func_hd_front_end_801FA180(Gfx* arg0, struct FrameContext* arg1, f32 arg2, s8* arg3) {
     struct LevelData* sp74;
     Gfx* entry;
     f32 sp6C;
@@ -732,7 +732,7 @@ Gfx* func_hd_front_end_801FA180(Gfx* arg0, struct Model1* arg1, f32 arg2, s8* ar
     return entry;
 }
 
-Gfx* func_hd_front_end_801FA74C(struct Model1* arg0, Gfx* gfx, u8 arg2, u8 arg3, s8* arg4, f32* arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12) {
+Gfx* func_hd_front_end_801FA74C(struct FrameContext* arg0, Gfx* gfx, u8 arg2, u8 arg3, s8* arg4, f32* arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12) {
     Vtx* sp12C;
     Vtx* sp128;
     Gfx* entry;
@@ -929,7 +929,7 @@ Gfx* func_hd_front_end_801FA74C(struct Model1* arg0, Gfx* gfx, u8 arg2, u8 arg3,
     return entry;
 }
 
-Gfx* func_hd_front_end_801FC5B8(struct Model1* arg0, Gfx* gfx, u8 arg2, u8 arg3) {
+Gfx* func_hd_front_end_801FC5B8(struct FrameContext* arg0, Gfx* gfx, u8 arg2, u8 arg3) {
     f32 spAC;
     f32 spA8;
     Gfx* entry = gfx;
@@ -1290,7 +1290,7 @@ void func_hd_front_end_801FE018(u8 arg0) {
 }
 
 // Renders the planet surface
-Gfx* func_hd_front_end_801FE238(Gfx* gfx, struct Model1* arg1) {
+Gfx* func_hd_front_end_801FE238(Gfx* gfx, struct FrameContext* arg1) {
   Gfx* entry;
 
   entry = gfx;
@@ -1317,7 +1317,7 @@ Gfx* func_hd_front_end_801FE238(Gfx* gfx, struct Model1* arg1) {
 }
 
 // Renders stars
-Gfx* func_hd_front_end_801FE5D0(Gfx* gfx, struct Model1* arg1) {
+Gfx* func_hd_front_end_801FE5D0(Gfx* gfx, struct FrameContext* arg1) {
   Gfx* entry = gfx;
   gDPPipeSync(entry++);
   gDPSetCycleType(entry++, G_CYC_1CYCLE);

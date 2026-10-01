@@ -13,15 +13,15 @@ void func_hd_code_80262008(u8 arg0, f32 arg1);
 s32 func_hd_code_802753F8(void);
 void func_hd_code_802862DC(void);
 void func_hd_front_end_801E8C40(u8 arg0);
-Gfx *func_hd_front_end_801E9718(Gfx *gfx, struct Model1 *arg1, s32 arg2); /* extern */
-Gfx* func_hd_front_end_801EAA7C(Gfx*, struct Model1*, s32*); /* extern */
-Gfx* func_hd_front_end_801EC770(Gfx*, struct Model1*, s32*); /* extern */
-Gfx* func_hd_front_end_801ED800(s32, struct Model1*, u8, s32*); /* extern */
-Gfx* func_hd_front_end_801F51C8(struct Model1*, Gfx*); /* extern */
+Gfx *func_hd_front_end_801E9718(Gfx *gfx, struct FrameContext *arg1, s32 arg2); /* extern */
+Gfx* func_hd_front_end_801EAA7C(Gfx*, struct FrameContext*, s32*); /* extern */
+Gfx* func_hd_front_end_801EC770(Gfx*, struct FrameContext*, s32*); /* extern */
+Gfx* func_hd_front_end_801ED800(s32, struct FrameContext*, u8, s32*); /* extern */
+Gfx* func_hd_front_end_801F51C8(struct FrameContext*, Gfx*); /* extern */
 s32 func_hd_front_end_801F73FC();                   /* extern */
 void func_hd_front_end_801F803C(void);
-Gfx* func_hd_front_end_801F8440(struct Model1*, Gfx*); /* extern */
-Gfx* func_hd_front_end_80201364(struct Model1*, Gfx*); /* extern */
+Gfx* func_hd_front_end_801F8440(struct FrameContext*, Gfx*); /* extern */
+Gfx* func_hd_front_end_80201364(struct FrameContext*, Gfx*); /* extern */
 extern s32 D_hd_code_80364A64;
 extern s8 D_hd_code_80364A71;
 extern u8 D_hd_code_80364AE9;

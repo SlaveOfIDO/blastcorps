@@ -103,8 +103,8 @@ void func_hd_front_end_802022EC(void*, u8, u8, u8, f32, s32, s32); /* extern */
 void func_hd_front_end_80202380(s32);                  /* extern */
 
 
-Gfx* func_hd_code_8026BBD0(Gfx*, struct Model1*, s32*); /* extern */
-Gfx* func_hd_front_end_80200BE0(Gfx*, struct Model1*, s32*); /* extern */
+Gfx* func_hd_code_8026BBD0(Gfx*, struct FrameContext*, s32*); /* extern */
+Gfx* func_hd_front_end_80200BE0(Gfx*, struct FrameContext*, s32*); /* extern */
 void func_hd_front_end_802021FC(u8 (*)[0x300], s32, s32); /* extern */
 void func_hd_front_end_802025D0(u8, u32);              /* extern */
 extern OSMesgQueue D_hd_code_80315180;
@@ -249,7 +249,7 @@ void func_hd_front_end_801E7598(void) {
     } sp14C;
     s32 sp148;
     s32 sp144;
-    struct Model1* sp140;
+    struct FrameContext* sp140;
     Gfx* entry;
 
     sp144 = 0;

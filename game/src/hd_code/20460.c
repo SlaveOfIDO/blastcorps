@@ -526,7 +526,7 @@ void func_hd_code_802661EC(void) {
 // rescued one rendered at the carry position (D_hd_code_803EF310/314/318).
 // Skips survivors whose grid cell is not loaded.
 // Proposed name: DrawSurvivors
-void func_hd_code_80266248(Gfx** arg0, struct Model1* arg1) {
+void func_hd_code_80266248(Gfx** arg0, struct FrameContext* arg1) {
     Gfx* entry;
     s32 sp168;
     s32 sp164;

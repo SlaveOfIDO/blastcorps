@@ -90,7 +90,7 @@ void targetMarkersReset(void)
 // and out (5 half-cycles, then the marker is dismissed), and finally prunes
 // off-screen entries from the marked list.
 // Proposed name: UpdateDrawTargetMarkers
-void func_hd_code_80275478(struct Model1* arg0, Gfx** arg1, s32 arg2) {
+void func_hd_code_80275478(struct FrameContext* arg0, Gfx** arg1, s32 arg2) {
     s16 sp76;
     s16 sp74;
     s16 sp72;
@@ -272,7 +272,7 @@ Gfx* func_hd_code_80275DA4(Gfx* gfx, u8 arg1) {
 
   entry = gfx;
   if (!arg1) {
-    gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
   }
   gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
@@ -289,7 +289,7 @@ Gfx* func_hd_code_80275DA4(Gfx* gfx, u8 arg1) {
 
 // Append a flat-colored marker quad (single color for all corners)
 // Proposed name: AddMarkerQuad
-Gfx *func_hd_code_80276080(struct Model1* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10) {
+Gfx *func_hd_code_80276080(struct FrameContext* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 arg10) {
   return func_hd_code_80276130(arg0, (s32) (u8) arg1, arg2, arg3, arg4, arg5, arg6, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10, (s32) (u8) arg7, (s32) (u8) arg8, (s32) (u8) arg9, (s32) (u8) arg10);
 }
 
@@ -297,7 +297,7 @@ Gfx *func_hd_code_80276080(struct Model1* arg0, s32 arg1, s32 arg2, s32 arg3, s3
 // per-corner colors; arg1 (0..3) selects one of four texcoord orientations
 // so the same texture faces each screen edge. Returns the next vertex index.
 // Proposed name: FillMarkerQuad
-s32 func_hd_code_80276130(struct Model1* arg0, u8 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17, u8 arg18, u8 arg19, u8 arg20, u8 arg21, u8 arg22) {
+s32 func_hd_code_80276130(struct FrameContext* arg0, u8 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 arg10, u8 arg11, u8 arg12, u8 arg13, u8 arg14, u8 arg15, u8 arg16, u8 arg17, u8 arg18, u8 arg19, u8 arg20, u8 arg21, u8 arg22) {
 
     switch (arg1) {                              /* irregular */
     case 0:
@@ -400,7 +400,7 @@ s32 func_hd_code_80276130(struct Model1* arg0, u8 arg1, s32 arg2, s32 arg3, s32 
 // Drop entries from the marked-target list once their box is fully off
 // screen, allowing them to be marked again later
 // Proposed name: PruneMarkedTargets
-void func_hd_code_8027656C(struct Model1* arg0) {
+void func_hd_code_8027656C(struct FrameContext* arg0) {
     s32 sp5C;
     s32 sp58;
     struct vec3s* sp54;
@@ -508,7 +508,7 @@ s32 func_hd_code_802768A8(void) {
 // 1.0). Returns (0x4000, 0x4000) for points behind the camera; results are
 // clamped to +-16384.
 // Proposed name: WorldToScreen
-void func_hd_code_8027690C(struct Model1* arg0, f32 arg1, f32 arg2, f32 arg3, s16* arg4, s16* arg5, Mtx* arg6, Mtx* arg7, Mtx* arg8, f32 arg9) {
+void func_hd_code_8027690C(struct FrameContext* arg0, f32 arg1, f32 arg2, f32 arg3, s16* arg4, s16* arg5, Mtx* arg6, Mtx* arg7, Mtx* arg8, f32 arg9) {
   f32 sp4C = 1.0f;
   if (arg8 != 0) {
     func_hd_code_80276D1C(arg8, arg1, arg2, arg3, sp4C, &arg1, &arg2, &arg3, &sp4C);
@@ -568,7 +568,7 @@ void func_hd_code_80276D1C(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f3
 // the screen border and draw a marker quad rotated by the camera heading
 // (used in missile view to point back at the player's vehicle)
 // Proposed name: DrawOffscreenIndicator
-void func_hd_code_80276E50(Gfx** arg0, struct Model1* arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void func_hd_code_80276E50(Gfx** arg0, struct FrameContext* arg1, u8 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s16 sp10E;
     s16 sp10C;
     Gfx* entry;
@@ -619,7 +619,7 @@ void func_hd_code_80276E50(Gfx** arg0, struct Model1* arg1, u8 arg2, s32 arg3, s
         guMtxCatF(sp88, spC8, spC8);
         guMtxF2L(spC8, &D_hd_code_8036C850[arg2]);
 
-        gSPMatrix(entry++, &D_2000000.mtx1, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+        gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
         gSPMatrix(entry++, &D_hd_code_8036C850[arg2], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(entry++);
         gDPSetCycleType(entry++, G_CYC_1CYCLE);

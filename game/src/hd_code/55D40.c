@@ -111,7 +111,7 @@ void func_hd_code_8029A500(void) {
   D_hd_code_803A6B24 = 0;
 }
 
-s32 func_hd_code_8029A518(struct Model1* arg0, s32 arg1) {
+s32 func_hd_code_8029A518(struct FrameContext* arg0, s32 arg1) {
     s32 sp64;
     struct S_80304A90* sp60;
     s32 sp5C;

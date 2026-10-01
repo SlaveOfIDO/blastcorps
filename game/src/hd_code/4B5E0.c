@@ -562,7 +562,7 @@ void func_hd_code_80291724(s32 arg0) {
 // Draw the blocks: each block's per-type display list (D_hd_code_802FDC08)
 // translated to its position, decal-textured
 // Proposed name: DrawBlocks
-void func_hd_code_802917B0(Gfx** gfx, struct Model1* arg1) {
+void func_hd_code_802917B0(Gfx** gfx, struct FrameContext* arg1) {
   Gfx* entry = *gfx;
   s32 sp80;
 

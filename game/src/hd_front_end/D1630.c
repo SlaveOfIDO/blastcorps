@@ -30,7 +30,7 @@ typedef struct {
     /* 0x4 */ s32 unk4;
 } UnknownData802081C0;  /* 0x8 */
 
-Gfx* func_hd_front_end_801F4FBC(struct Model1 *, s32);
+Gfx* func_hd_front_end_801F4FBC(struct FrameContext *, s32);
 
 extern UnknownData802081C0 D_hd_front_end_802081C0[];
 extern u8   D_hd_front_end_802082B8[];
@@ -58,7 +58,7 @@ u16 *D_hd_front_end_802084BC = D_hd_code_80303B88;
 s8   D_hd_front_end_802084C0 = 1;
 // </data>
 
-s32 func_hd_front_end_801ED800(s32 arg0, struct Model1 *arg1, u8 arg2, s32 *arg3) {
+s32 func_hd_front_end_801ED800(s32 arg0, struct FrameContext *arg1, u8 arg2, s32 *arg3) {
     s32 sp74;
     s32 sp70;
     s32 sp6C;

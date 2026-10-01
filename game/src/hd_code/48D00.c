@@ -442,7 +442,7 @@ void func_hd_code_8028DF14(u8 arg0) {
 // per face pair, 2-cycle LOD-blended), positioned and spun by its yaw, with
 // the pulsing prim color for the glow
 // Proposed name: DrawTnt
-void func_hd_code_8028E9E4(Gfx** gfx, struct Model1* arg1) {
+void func_hd_code_8028E9E4(Gfx** gfx, struct FrameContext* arg1) {
     Gfx* entry;
     s32 sp1A0;
     f32 sp160[4][4];
