@@ -1070,7 +1070,7 @@ s32 func_hd_code_8026394C(s16 x, s16 y, s16 x1, s16 y1, s16 x2, s16 y2) {
 // frames) and turning red in the last 10 seconds; the countdown traffic
 // light; and the animated objective icon sprites.
 // Proposed name: DrawMissionHud
-Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, Gfx** arg2) {
+Gfx* func_hd_code_802639B4(Gfx* arg0, void* arg1, s32* arg2) {
     Gfx* entry; // sp64
     u32 sp60;
     u8 sp5F;

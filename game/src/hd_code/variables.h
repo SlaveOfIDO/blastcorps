@@ -292,7 +292,6 @@ extern u8 D_hd_code_80366A18;
 extern u8 D_hd_code_80367C00;
 extern u8 D_hd_code_8036B8B0;
 extern u8 D_hd_code_8036B965;
-extern u8 D_hd_code_8036E68C[4];
 extern u8 D_hd_code_8036EA78;
 extern u8 D_hd_code_8036EA79;
 extern u8 D_hd_code_8036EA7A;

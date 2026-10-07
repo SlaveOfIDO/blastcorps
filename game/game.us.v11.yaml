@@ -803,7 +803,7 @@ segments:
       - [0x832850, c, hd_code/37530] # done
       - [0x834370, c, hd_code/39050] # done
       - [0x8397E0, c, hd_code/3E4C0] # done
-      - [0x83B910, c, hd_code/405F0] # done, uses data from 00000
+      - [0x83B910, c, hd_code/gfx] # done, uses data from hd
       - [0x83BCF0, c, hd_code/stats_perm] # done
       - [0x83CC50, c, hd_code/41930] # done: academy.c
       - [0x83D560, c, hd_code/42240] # done
@@ -1033,7 +1033,7 @@ segments:
       - [0x8B2BE0, .data, hd_code/37530] # done
       - [0x8B2F50, .data, hd_code/39050] # done
       - [0x8B3110, .data, hd_code/3E4C0] # done
-      - [0x8B45C0, .data, hd_code/405F0] # done
+      - [0x8B45C0, .data, hd_code/gfx] # done
       - [0x8B4670, .data, hd_code/stats_perm] # done
       - [0x8B4690, .data, hd_code/46C20] # done
       - [0x8B46A0, .data, hd_code/479D0] # done
@@ -1117,7 +1117,7 @@ segments:
       - [0x8C3230, .rodata, hd_code/37530] # done
       - [0x8C3240, .rodata, hd_code/39050] # done
       - [0x8C3350, .rodata, hd_code/3E4C0] # done
-      - [0x8C33F0, .rodata, hd_code/405F0] # done
+      - [0x8C33F0, .rodata, hd_code/gfx] # done
       - [0x8C3410, .rodata, hd_code/stats_perm] # done
       - [0x8C3530, .rodata, hd_code/41930] # done: academy.c
       - [0x8C3700, .rodata, hd_code/42240] # done
@@ -1197,7 +1197,7 @@ segments:
       - { start: 0x8C61C0, type: .bss, name: hd_code/37530, vram: 0x8036D3D0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/39050, vram: 0x8036DCA0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/3E4C0, vram: 0x8036E5E0 } # done
-      - { start: 0x8C61C0, type: .bss, name: hd_code/405F0, vram: 0x8036E660 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/gfx, vram: 0x8036E660 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/stats_perm, vram: 0x8036EA60 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/41930, vram: 0x8036EBA0 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/42240, vram: 0x8036EC00 } # done
@@ -1296,7 +1296,7 @@ segments:
       - [0x8E5780, c, hd_front_end/io/contramread ]
       - [0x8E5B30, c, hd_front_end/io/contramwrite ]
       - [0x8E5EE0, c, hd_front_end/io/pfsisplug ]
-      - [0x8E6250, textbin, hd_front_end/menu_rsp ]
+      - [0x8E6250, textbin, hd_front_end/menu_rsp ] # this is l3d
       - [0x8E7200, .data, hd_front_end/CAEA0 ] # done
       - [0x8E7380, .data, hd_front_end/CCAE0 ] # done
       - [0x8E7670, .data, hd_front_end/D1630 ] # done

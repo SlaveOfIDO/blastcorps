@@ -5,6 +5,7 @@
 #include "../hd_code/hd.h"
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
+#include "../hd_code/gfx.h"
 #include "../hd_code/variables.h"
 #include "../hd_code/music.h"
 #include "../hd_code/io/controller.h"
@@ -378,11 +379,11 @@ void func_hd_front_end_801F8980(void) {
     func_hd_code_802A5720();
     func_hd_code_8028A3E4();
     if (g_frameCount != 0) {
-        gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 2, 0, 0x4D2, 0);
-        gfxSubmitTask(D_hd_front_end_8021AB68, D_hd_front_end_8021AB58, 0, 0, 0x4D2, 0);
-        gfxSubmitTask(D_hd_front_end_8021AB6C, D_hd_front_end_8021AB5C, 1, 1, 0x4D2, 0);
+        gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 2, 0, GFX_TASK_ID_MAIN, 0);
+        gfxSubmitTask(D_hd_front_end_8021AB68, D_hd_front_end_8021AB58, 0, 0, GFX_TASK_ID_MAIN, 0);
+        gfxSubmitTask(D_hd_front_end_8021AB6C, D_hd_front_end_8021AB5C, 1, 1, GFX_TASK_ID_MAIN, 0);
     } else {
-        gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1, 1, 0x4D2, 0);
+        gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1, 1, GFX_TASK_ID_MAIN, 0);
     }
     D_hd_code_8035805C ^= 1;
     sp38 = &D_hd_code_803156F8[D_hd_code_8035805C];

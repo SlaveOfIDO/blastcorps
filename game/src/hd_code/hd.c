@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "functions.h"
+#include "gfx.h"
 #include "game_states.h"
 #include "hd.h"
 #include "macros.h"
@@ -1053,35 +1054,35 @@ void Thread3(void* arg0) {
           func_hd_front_end_801F8980();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
 
-          if (D_hd_code_8036E68C[2] != 0) {
-            gfxWaitForTask(0x4D2);
+          if (g_gfxTaskSlotUsed[2]) {
+            gfxWaitForTask(GFX_TASK_ID_MAIN);
           }
-          if (D_hd_code_8036E68C[0] != 0) {
-            gfxWaitForTask(0x4D2);
+          if (g_gfxTaskSlotUsed[0]) {
+            gfxWaitForTask(GFX_TASK_ID_MAIN);
           }
-          gfxWaitForTask(0x4D2);
+          gfxWaitForTask(GFX_TASK_ID_MAIN);
         } else if (g_currentGameState & 0xC9FD8FE7DBFF8080) {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
           func_hd_front_end_801FE990();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
-          gfxWaitForTask(0x4D2);
+          gfxWaitForTask(GFX_TASK_ID_MAIN);
         } else if (g_currentGameState & 0x20000000) {
           func_hd_front_end_801E7598();
-          gfxWaitForTask(0x4D2);
+          gfxWaitForTask(GFX_TASK_ID_MAIN);
         } else if (g_currentGameState & 0x30) {
           introRender();
-          gfxWaitForTask(0x4D2);
+          gfxWaitForTask(GFX_TASK_ID_MAIN);
         } else {
           D_hd_code_80364ACC = (osGetTime() - D_hd_code_8036BF38) / 0x1E91U;
           hdGameFrame();
           D_hd_code_80364AC8 = (osGetTime() - D_hd_code_80364AD0) / 0x1E91U;
-          if (D_hd_code_8036E68C[1] != 0) {
-            gfxWaitForTask(0x61F);
+          if (g_gfxTaskSlotUsed[1]) {
+            gfxWaitForTask(GFX_TASK_ID_SHADOW);
           }
-          if (D_hd_code_8036E68C[2] != 0) {
-            gfxWaitForTask(0x54D);
+          if (g_gfxTaskSlotUsed[2]) {
+            gfxWaitForTask(GFX_TASK_ID_BLUR);
           }
-          gfxWaitForTask(0x4D2);
+          gfxWaitForTask(GFX_TASK_ID_MAIN);
         }
         func_hd_code_80255D34();
         g_frameCount += 1;
@@ -1216,7 +1217,7 @@ void hdGameFrame(void) {
     }
     D_hd_code_803649D8 = osGetTime();
     func_hd_code_8028A3E4();
-    gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 3, 1, 0x4D2, 1);
+    gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 3, 1, GFX_TASK_ID_MAIN, 1);
     func_hd_code_802A5720();
     D_hd_code_8035805C ^= 1;
     switch (D_hd_code_802E8BD0) {
@@ -2018,7 +2019,7 @@ u8 func_hd_code_8024AFA8(s32 arg0) {
     case 3:
       func_hd_code_802B2D7C();
       break;
-    case 4:
+    case 4: // BULLDOZER
       func_hd_code_802B448C();
       break;
     case 5:
@@ -2027,10 +2028,10 @@ u8 func_hd_code_8024AFA8(s32 arg0) {
     case 6:
       func_hd_code_802BB054();
       break;
-    case 7:
+    case 7: // TRAIN
       func_hd_code_802BBDC8();
       break;
-    case 8:
+    case 8: // AMERICAN MUSCLE CAR - BONUS VEHICLE
       func_hd_code_802B76AC();
       break;
     case 9:
@@ -4906,7 +4907,7 @@ void hdInitLevel(s32* pakBuffer) {
             }
         }
         func_hd_code_80258544(sp44, sp44->unk1004, sp44->unk1010, sp44->unk100C, sp44->unk1000, D_hd_code_80364460[sp4C].unk54, D_hd_code_80364460[sp4C].unk0, D_hd_code_80364460[sp4C].unk4);
-        gfxWaitForTask(0x61F);
+        gfxWaitForTask(GFX_TASK_ID_SHADOW);
         sp44++;
     }
     func_hd_code_802729F0((s32)g_nextGameState, g_currentLevel);

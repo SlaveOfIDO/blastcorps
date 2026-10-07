@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "gfx.h"
 #include "hd.h"
 #include "macros.h"
 #include "structs.h"
@@ -407,7 +408,7 @@ void func_hd_code_80279778(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32
         gDPSetEnvColor(entry++, 0, 0, 0, arg9);
         gSPDisplayList(entry++, VIRTUAL_TO_PHYSICAL(arg6));
         gSPEndDisplayList(entry++);
-        gfxSubmitTask(D_hd_code_8036D188, (s32) ((u32)entry - (u32)&D_hd_code_8036D188) >> 3, 2, 0, 0x54D, 0);
+        gfxSubmitTask(D_hd_code_8036D188, (s32) ((u32)entry - (u32)&D_hd_code_8036D188) >> 3, 2, 0, GFX_TASK_ID_BLUR, 0);
     }
 }
 

@@ -5,6 +5,7 @@
 #include "../hd_code/hd.h"
 #include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
+#include "../hd_code/gfx.h"
 #include "../hd_code/variables.h"
 #include "../hd_code/music.h"
 
@@ -318,7 +319,7 @@ void func_hd_front_end_801E7598(void) {
         }
         D_hd_front_end_802153E6 = (u16) D_hd_front_end_802153E6 - 0x2EE;
     }
-    gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1U, 1, 0x4D2, 0);
+    gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 1U, 1, GFX_TASK_ID_MAIN, 0);
 
     D_hd_code_8035805C ^= 1;
 
