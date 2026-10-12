@@ -47,7 +47,7 @@ typedef struct UnknownData8024C414_s {
   /* 0x10 */ s32 unk10; // TODO: unlocked vehicles?
   /* 0x14 */ s32 unk14;
   /* 0x18 */ u8 unk18[0x3C]; // flags? often check >0 and <6
-  /* 0x54 */ u8 unk54[0x3C];
+  /* 0x54 */ u8 unk54[0x3C]; // this is a bitfield
   /* 0x90 */ u8 unk90;
   /* 0x91 */ u8 unk91;
   /* 0x92 */ u8 unk92[0xF0 - 0x92]; // indexed by level
@@ -125,8 +125,8 @@ extern u8 D_hd_code_80364AEA;
 extern UnknownData8024C414 players[];
 extern s32 nextdma; // 0x80358080
 extern s32 no_palette_dmas; // 0x80358084
-extern u64 D_hd_code_80364A88; // previous game state; proposed name: prevGameState
-extern u16 *D_hd_code_80358050[2]; // Framebuffers; proposed name: framebuffers
+extern u64 D_hd_code_80364A88;
+extern u16 *D_hd_code_80358050[2];
 
 #define LEVEL_FINISHED(_lvl) ((players[playerNumber].unk18[_lvl] > 0 && players[playerNumber].unk18[_lvl] < 6)?1:0)
 

@@ -1,6 +1,8 @@
 #ifndef HD_CODE_STATS_PERM_H
 #define HD_CODE_STATS_PERM_H
 
+#include <ultratypes.h>
+
 struct LevelStats {
     /* 0x00 */ u32 money; /// destruction damage done in level; displayed as money :)
     /* 0x04 */ s32 timeCode; /// time in level; in tenths of seconds. 1313 is 1:13.3 (1 min, 13 seconds, 300ms)

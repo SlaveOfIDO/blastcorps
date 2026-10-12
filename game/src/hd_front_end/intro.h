@@ -1,6 +1,8 @@
 #ifndef BLASTCORPS_INTRO_H
 #define BLASTCORPS_INTRO_H
 
+#include <ultratypes.h>
+
 #define INTRO_MODE_NINTENDO 1
 #define INTRO_MODE_RARE     2
 

@@ -5,21 +5,11 @@
 #include "variables.h"
 #include "yoshi.h"
 
-// Proposed file name: controller.c (the original name - the assert in
-// func_hd_code_8028B240 references "controller.c")
-//
-// This file polls the N64 controller and turns it into the game's input
-// state. Each frame it reads the pad, applies the active control scheme
-// (per-vehicle, and the alternate "tank/digital" scheme some vehicles can
-// toggle), runs the playback/record hooks (17210.c) outside live play, then
-// fans the button bitmask out into individual current/previous button flags
-// (D_hd_code_80370C15..) and the stick into deadzoned/clamped axes. Button bits:
-// 0x200/0x100 = stick-derived left/right, 0x8000/0x4000 = stick up/down or
-// Z/R, 0x1000 = Start, 0x20/0x10 = L/R, 2/4/8/1 = C buttons, 0x2000 = Z.
-
 void func_hd_code_8028ADF0(u8, u8, OSContPad*, s8*, s8*); /* extern */
-void func_hd_code_8028B190(s8*, s8*);                  /* extern */
-void func_hd_code_8028B734(s8*, s8*, u8);              /* extern */
+void func_hd_code_8028B190(s8*, s8*);                     /* extern */
+void func_hd_code_8028B734(s8*, s8*, u8);                 /* extern */
+void func_hd_code_8028AFA4(u16, s8*, s8*);                /* extern */
+void func_hd_code_8028B0E8(OSContPad*, s8, s8);           /* extern */
 
 extern u8 D_hd_code_80370C15;
 extern u8 D_hd_code_80370C16;
@@ -119,13 +109,10 @@ s32 D_hd_code_80370C6C;
 // </bss>
 
 // <data>
-s32 D_hd_code_802FDB10 = 0; // unused
+s32 D_hd_code_802FDB10 = 0;  // unused
 s8 D_hd_code_802FDB14 = 0;
 // </data>
 
-// Initialize the controller subsystem (message queue, SI event, osContInit)
-// and return the connected-controller bitmask
-// Proposed name: InitController
 u8 func_hd_code_8028A370(void) {
   u32 pad;
   u8 sp1B;
@@ -139,8 +126,6 @@ u8 func_hd_code_8028A370(void) {
   return sp1B;
 }
 
-// Kick off an async controller read for this frame (unless the pak is busy)
-// Proposed name: StartControllerRead
 void func_hd_code_8028A3E4(void) {
   if (!g_pakBusy) {
     func_hd_code_8028A42C();
@@ -149,8 +134,6 @@ void func_hd_code_8028A3E4(void) {
   }
 }
 
-// Drain any pending controller-read completion message
-// Proposed name: FlushControllerRead
 void func_hd_code_8028A42C(void) {
   if (D_hd_code_80370C10 != 0) {
     osRecvMesg(&D_hd_code_80370BF8, NULL, 1);
@@ -158,234 +141,217 @@ void func_hd_code_8028A42C(void) {
   }
 }
 
-// Per-frame input update: collect the controller read (zeroing on error),
-// save previous button/stick state, suppress input during the level intro,
-// then route through the recording/playback system or the live control
-// scheme - menus feed the menu input, gameplay applies the per-vehicle
-// scheme (alternate scheme when the player toggled it). Finally explode the
-// button mask into the individual edge-detected button flags and the
-// deadzoned stick axes.
-// Proposed name: UpdateInput
 void controllerUpdateInput(void) {
-    OSContPad* sp44;
-    s32 pad;
-    s32 sp3C;
+  OSContPad* sp44;
+  s32 pad;
+  s32 sp3C;
 
-    sp44 = &D_hd_code_80370BD8;
-    if (D_hd_code_80358064 != 0) {
-        if ((g_pakBusy == 0) && (D_hd_code_80370C10 != 0)) {
-            osRecvMesg(&D_hd_code_80370BF8, NULL, 1);
-            osContGetReadData(sp44);
-            if (sp44->errno != 0) {
-                rmonPrintf("pad read error - zeroing data\n");
-                sp44->stick_x = sp44->stick_y = sp44->button = 0;
-            }
-            D_hd_code_80370C10 = 0;
-        }
-        g_previousButtons = g_currentButtons;
-        g_currentButtons = sp44->button;
-        if (D_hd_code_80370C38 != 0) {
-            if (sp44->button & 0x4000) {
-                sp44->button = sp44->button & ~0x4000;
-            } else {
-                D_hd_code_80370C38 = 0;
-            }
-        }
-        if ((u32) g_frameCount < 6U) {
-            if (g_frameCount == 5) {
-                g_previousButtons |= (A_BUTTON | B_BUTTON | START_BUTTON);
-            } else {
-                g_currentButtons &= ~(A_BUTTON | B_BUTTON | START_BUTTON);
-            }
-        }
-        D_hd_code_80370C13 = D_hd_code_80370C11;
-        D_hd_code_80370C14 = D_hd_code_80370C12;
-        D_hd_code_80370C11 = sp44->stick_x;
-        D_hd_code_80370C12 = sp44->stick_y;
-        D_hd_code_80370C24 = D_hd_code_80370C1E;
-        D_hd_code_80370C25 = D_hd_code_80370C1F;
-        D_hd_code_80370C26 = D_hd_code_80370C20;
-        D_hd_code_80370C27 = D_hd_code_80370C21;
+  sp44 = &D_hd_code_80370BD8;
+  if (D_hd_code_80358064 != 0) {
+    if ((g_pakBusy == 0) && (D_hd_code_80370C10 != 0)) {
+      osRecvMesg(&D_hd_code_80370BF8, NULL, 1);
+      osContGetReadData(sp44);
+      if (sp44->errno != 0) {
+        rmonPrintf("pad read error - zeroing data\n");
+        sp44->stick_x = sp44->stick_y = sp44->button = 0;
+      }
+      D_hd_code_80370C10 = 0;
+    }
+    g_previousButtons = g_currentButtons;
+    g_currentButtons = sp44->button;
+    if (D_hd_code_80370C38 != 0) {
+      if (sp44->button & 0x4000) {
+        sp44->button = sp44->button & ~0x4000;
+      } else {
+        D_hd_code_80370C38 = 0;
+      }
+    }
+    if ((u32)g_frameCount < 6U) {
+      if (g_frameCount == 5) {
+        g_previousButtons |= (A_BUTTON | B_BUTTON | START_BUTTON);
+      } else {
+        g_currentButtons &= ~(A_BUTTON | B_BUTTON | START_BUTTON);
+      }
+    }
+    D_hd_code_80370C13 = D_hd_code_80370C11;
+    D_hd_code_80370C14 = D_hd_code_80370C12;
+    D_hd_code_80370C11 = sp44->stick_x;
+    D_hd_code_80370C12 = sp44->stick_y;
+    D_hd_code_80370C24 = D_hd_code_80370C1E;
+    D_hd_code_80370C25 = D_hd_code_80370C1F;
+    D_hd_code_80370C26 = D_hd_code_80370C20;
+    D_hd_code_80370C27 = D_hd_code_80370C21;
 
-        switch(g_currentGameState) {
-            case 0x100000000000:
-            case 0x400:
-            case 0x40:
-            case 0x2:
-                if ((g_currentLevel != 0x26) && (g_currentLevel != 0x31)) {
-                    do {
-                        func_hd_code_8025BEF8();
-                        if (D_hd_code_80370C30 & 0x40) {
-                            D_hd_code_80370C40 = 0;
-                        } else if (D_hd_code_80370C30 & 0x80) {
-                            D_hd_code_80370C40 = 1;
-                        }
-                    } while (D_hd_code_80370C30 & 0xC0);
-                }
-                sp44->button = D_hd_code_80370C30;
-                sp44->stick_x = D_hd_code_80370C32;
-                sp44->stick_y = D_hd_code_80370C33;
-                sp44->button &= ~8;
-                break;
-            case 0x100:
-            case 0x4:
-                if ((D_hd_code_802E8BD0 == 0) || ((g_currentGameState == 0x2000))) {
-                    func_hd_code_8025BBE8(sp44->button & ~0x1000, sp44->stick_x, sp44->stick_y);
-                }
-                break;
-            case 0x800:
-            case 0x1000:
-            case 0x04000000:
-            case 0x200:
-            case 0x8:
-            case 0x1:
-                sp44->button = 0;
-                sp44->stick_x = 0;
-                sp44->stick_y = 0;
-                break;
+    switch (g_currentGameState) {
+      case 0x100000000000:
+      case 0x400:
+      case 0x40:
+      case 0x2:
+        if ((g_currentLevel != 0x26) && (g_currentLevel != 0x31)) {
+          do {
+            func_hd_code_8025BEF8();
+            if (D_hd_code_80370C30 & 0x40) {
+              D_hd_code_80370C40 = 0;
+            } else if (D_hd_code_80370C30 & 0x80) {
+              D_hd_code_80370C40 = 1;
+            }
+          } while (D_hd_code_80370C30 & 0xC0);
         }
-
-        D_hd_code_80370C34 = 0;
-        if ((g_currentGameState & 0x2000100000002546)) {
-            D_hd_code_803ED40A = 0;
-            D_hd_code_803F7C34 = 0;
-            if ((g_currentGameState & 0x440)) {
-                sp3C = D_hd_code_80370C40;
-            } else if (players[playerNumber].unkF0 & (1 << D_hd_code_80364456)) {
-                sp3C = 1;
-            } else {
-                sp3C = 0;
-            }
-            if (((g_currentGameState == 2)) || ((g_currentGameState == 0x100000000000))) {
-                sp3C = 0;
-            }
-            D_hd_code_80370C35 = (u8) sp3C;
-            if (D_hd_code_802E8BD0 != 0) {
-                func_hd_code_8028ADF0(1, 0, sp44, &sp44->stick_x, &sp44->stick_y);
-            } else {
-                switch (sp3C) {                     /* switch 1; irregular */
-                case 0:                             /* switch 1 */
-                    switch (D_hd_code_80364456) {   /* switch 2; irregular */
-                    case 9:                         /* switch 2 */
-                        if (D_hd_code_803F7C3F != 0) {
-                            D_hd_code_80370C34 = 1;
-                        }
-                        /* fallthrough */
-                    case 0:                         /* switch 2 */
-                    case 2:                         /* switch 2 */
-                    case 16:                        /* switch 2 */
-                        func_hd_code_8028B734(&sp44->stick_x, &sp44->stick_y, D_hd_code_80364456);
-                        func_hd_code_8028B190(&sp44->stick_x, &sp44->stick_y);
-                        break;
-                    default:                        /* switch 2 */
-                        D_hd_code_80370C75 = 0;
-                        func_hd_code_8028ADF0(0, 0, sp44, &sp44->stick_x, &sp44->stick_y);
-                        break;
-                    }
-                    break;
-                case 1:                             /* switch 1 */
-                    if (D_hd_code_80364456 == 9) {
-                        D_hd_code_80370C75 = 0;
-                        func_hd_code_8028ADF0(1, 1, sp44, &sp44->stick_x, &sp44->stick_y);
-                    } else {
-                        D_hd_code_80370C75 = 0;
-                        func_hd_code_8028ADF0(1, 0, sp44, &sp44->stick_x, &sp44->stick_y);
-                    }
-                    break;
-                }
-            }
+        sp44->button = D_hd_code_80370C30;
+        sp44->stick_x = D_hd_code_80370C32;
+        sp44->stick_y = D_hd_code_80370C33;
+        sp44->button &= ~8;
+        break;
+      case 0x100:
+      case 0x4:
+        if ((D_hd_code_802E8BD0 == 0) || ((g_currentGameState == 0x2000))) {
+          func_hd_code_8025BBE8(sp44->button & ~0x1000, sp44->stick_x, sp44->stick_y);
         }
-    } else {
+        break;
+      case 0x800:
+      case 0x1000:
+      case 0x04000000:
+      case 0x200:
+      case 0x8:
+      case 0x1:
         sp44->button = 0;
         sp44->stick_x = 0;
         sp44->stick_y = 0;
-    }
-    if (sp44->button & 0x200) {
-        D_hd_code_80370C15 = 1;
-    } else {
-        D_hd_code_80370C15 = 0;
-    }
-    if (sp44->button & 0x100) {
-        D_hd_code_80370C16 = 1;
-    } else {
-        D_hd_code_80370C16 = 0;
-    }
-    if (sp44->button & 0x800) {
-        D_hd_code_80370C17 = 1;
-    } else {
-        D_hd_code_80370C17 = 0;
-    }
-    if (sp44->button & 0x400) {
-        D_hd_code_80370C18 = 1;
-    } else {
-        D_hd_code_80370C18 = 0;
-    }
-    if (sp44->button & 0x1000) {
-        D_hd_code_80370C19 = 1;
-    } else {
-        D_hd_code_80370C19 = 0;
-    }
-    if (sp44->button & 0x20) {
-        D_hd_code_80370C1A = 1;
-    } else {
-        D_hd_code_80370C1A = 0;
-    }
-    if (sp44->button & 0x10) {
-        D_hd_code_80370C1B = 1;
-    } else {
-        D_hd_code_80370C1B = 0;
-    }
-    if (sp44->button & 0x8000) {
-        D_hd_code_80370C1C = 1;
-    } else {
-        D_hd_code_80370C1C = 0;
-    }
-    if (sp44->button & 0x4000) {
-        D_hd_code_80370C1D = 1;
-    } else {
-        D_hd_code_80370C1D = 0;
-    }
-    if (sp44->button & 2) {
-        D_hd_code_80370C1E = 1;
-    } else {
-        D_hd_code_80370C1E = 0;
-    }
-    if (sp44->button & 4) {
-        D_hd_code_80370C1F = 1;
-    } else {
-        D_hd_code_80370C1F = 0;
-    }
-    if (sp44->button & 8) {
-        D_hd_code_80370C20 = 1;
-    } else {
-        D_hd_code_80370C20 = 0;
-    }
-    if (sp44->button & 1) {
-        D_hd_code_80370C21 = 1;
-    } else {
-        D_hd_code_80370C21 = 0;
-    }
-    if (sp44->button & 0x2000) {
-        D_hd_code_80370C22 = 1;
-    } else {
-        D_hd_code_80370C22 = 0;
+        break;
     }
 
-    D_hd_code_80370C23 = D_hd_code_80370C1D != 0 || D_hd_code_80370C22 != 0;
-    D_hd_code_80370C2E = D_hd_code_80370C2C;
-    D_hd_code_80370C2F = D_hd_code_80370C2D;
-    D_hd_code_80370C2C = sp44->stick_x;
-    D_hd_code_80370C2D = sp44->stick_y;
+    D_hd_code_80370C34 = 0;
+    if ((g_currentGameState & 0x2000100000002546)) {
+      D_hd_code_803ED40A = 0;
+      D_hd_code_803F7C34 = 0;
+      if ((g_currentGameState & 0x440)) {
+        sp3C = D_hd_code_80370C40;
+      } else if (players[playerNumber].unkF0 & (1 << D_hd_code_80364456)) {
+        sp3C = 1;
+      } else {
+        sp3C = 0;
+      }
+      if (((g_currentGameState == 2)) || ((g_currentGameState == 0x100000000000))) {
+        sp3C = 0;
+      }
+      D_hd_code_80370C35 = (u8)sp3C;
+      if (D_hd_code_802E8BD0 != 0) {
+        func_hd_code_8028ADF0(1, 0, sp44, &sp44->stick_x, &sp44->stick_y);
+      } else {
+        switch (sp3C) {
+          case 0:
+            switch (D_hd_code_80364456) {
+              case 9:
+                if (D_hd_code_803F7C3F != 0) {
+                  D_hd_code_80370C34 = 1;
+                }
+              case 0:
+              case 2:
+              case 16:
+                func_hd_code_8028B734(&sp44->stick_x, &sp44->stick_y, D_hd_code_80364456);
+                func_hd_code_8028B190(&sp44->stick_x, &sp44->stick_y);
+                break;
+              default:
+                D_hd_code_80370C75 = 0;
+                func_hd_code_8028ADF0(0, 0, sp44, &sp44->stick_x, &sp44->stick_y);
+                break;
+            }
+            break;
+          case 1:
+            if (D_hd_code_80364456 == 9) {
+              D_hd_code_80370C75 = 0;
+              func_hd_code_8028ADF0(1, 1, sp44, &sp44->stick_x, &sp44->stick_y);
+            } else {
+              D_hd_code_80370C75 = 0;
+              func_hd_code_8028ADF0(1, 0, sp44, &sp44->stick_x, &sp44->stick_y);
+            }
+            break;
+        }
+      }
+    }
+  } else {
+    sp44->button = 0;
+    sp44->stick_x = 0;
+    sp44->stick_y = 0;
+  }
+  if (sp44->button & 0x200) {
+    D_hd_code_80370C15 = 1;
+  } else {
+    D_hd_code_80370C15 = 0;
+  }
+  if (sp44->button & 0x100) {
+    D_hd_code_80370C16 = 1;
+  } else {
+    D_hd_code_80370C16 = 0;
+  }
+  if (sp44->button & 0x800) {
+    D_hd_code_80370C17 = 1;
+  } else {
+    D_hd_code_80370C17 = 0;
+  }
+  if (sp44->button & 0x400) {
+    D_hd_code_80370C18 = 1;
+  } else {
+    D_hd_code_80370C18 = 0;
+  }
+  if (sp44->button & 0x1000) {
+    D_hd_code_80370C19 = 1;
+  } else {
+    D_hd_code_80370C19 = 0;
+  }
+  if (sp44->button & 0x20) {
+    D_hd_code_80370C1A = 1;
+  } else {
+    D_hd_code_80370C1A = 0;
+  }
+  if (sp44->button & 0x10) {
+    D_hd_code_80370C1B = 1;
+  } else {
+    D_hd_code_80370C1B = 0;
+  }
+  if (sp44->button & 0x8000) {
+    D_hd_code_80370C1C = 1;
+  } else {
+    D_hd_code_80370C1C = 0;
+  }
+  if (sp44->button & 0x4000) {
+    D_hd_code_80370C1D = 1;
+  } else {
+    D_hd_code_80370C1D = 0;
+  }
+  if (sp44->button & 2) {
+    D_hd_code_80370C1E = 1;
+  } else {
+    D_hd_code_80370C1E = 0;
+  }
+  if (sp44->button & 4) {
+    D_hd_code_80370C1F = 1;
+  } else {
+    D_hd_code_80370C1F = 0;
+  }
+  if (sp44->button & 8) {
+    D_hd_code_80370C20 = 1;
+  } else {
+    D_hd_code_80370C20 = 0;
+  }
+  if (sp44->button & 1) {
+    D_hd_code_80370C21 = 1;
+  } else {
+    D_hd_code_80370C21 = 0;
+  }
+  if (sp44->button & 0x2000) {
+    D_hd_code_80370C22 = 1;
+  } else {
+    D_hd_code_80370C22 = 0;
+  }
+
+  D_hd_code_80370C23 = D_hd_code_80370C1D != 0 || D_hd_code_80370C22 != 0;
+  D_hd_code_80370C2E = D_hd_code_80370C2C;
+  D_hd_code_80370C2F = D_hd_code_80370C2D;
+  D_hd_code_80370C2C = sp44->stick_x;
+  D_hd_code_80370C2D = sp44->stick_y;
 }
 
-void func_hd_code_8028AFA4(u16, s8*, s8*);             /* extern */
-void func_hd_code_8028B0E8(OSContPad*, s8, s8);        /* extern */
-
-// Apply the digital/"D-pad style" control scheme: turn the C/Z/R buttons
-// into a synthetic stick (func_hd_code_8028AFA4) unless arg1, deadzone-clamp
-// it, and feed it back as synthetic button presses (func_hd_code_8028B0E8).
-// arg0 = whether the y axis should be zeroed when not paused.
-// Proposed name: ApplyDigitalScheme
 void func_hd_code_8028ADF0(u8 arg0, u8 arg1, OSContPad* arg2, s8* arg3, s8* arg4) {
   if ((arg0 == 0) && (D_hd_code_802E8BD0 == 0)) {
     *arg4 = 0;
@@ -399,8 +365,6 @@ void func_hd_code_8028ADF0(u8 arg0, u8 arg1, OSContPad* arg2, s8* arg3, s8* arg4
   }
 }
 
-// Zero all current/previous button and stick input state
-// Proposed name: ClearInputState
 void func_hd_code_8028AE88(void) {
   D_hd_code_80370C27 = 0;
   D_hd_code_80370C26 = 0;
@@ -429,8 +393,6 @@ void func_hd_code_8028AE88(void) {
   D_hd_code_80370C38 = 0;
 }
 
-// Synthesize stick axes (+-0x50) from the directional button bits
-// Proposed name: ButtonsToStick
 void func_hd_code_8028AFA4(u16 arg0, s8* arg1, s8* arg2) {
   if (arg0 & 0x200) {
     *arg1 = -0x50;
@@ -446,9 +408,6 @@ void func_hd_code_8028AFA4(u16 arg0, s8* arg1, s8* arg2) {
   }
 }
 
-// Quantize the stick to 8 directions (-0x50/0/+0x50 per axis) for certain
-// vehicles, with a deadzone
-// Proposed name: SnapStick8Way
 void func_hd_code_8028B000(s8* arg0, s8* arg1) {
   switch (D_hd_code_80364456) {
     case 1:
@@ -481,8 +440,6 @@ void func_hd_code_8028B000(s8* arg0, s8* arg1) {
   }
 }
 
-// Set the directional button bits from a (synthetic) stick position
-// Proposed name: StickToButtons
 void func_hd_code_8028B0E8(OSContPad* arg0, s8 arg1, s8 arg2) {
   if (!(arg0->button & 0x200) && (arg1 < -0x32)) {
     arg0->button |= 0x200;
@@ -498,9 +455,6 @@ void func_hd_code_8028B0E8(OSContPad* arg0, s8 arg1, s8 arg2) {
   }
 }
 
-
-// Apply the stick deadzone (+-9 -> 0) and clamp to +-0x50
-// Proposed name: DeadzoneClampStick
 void func_hd_code_8028B190(s8* arg0, s8* arg1) {
   if ((*arg0 < 0xA) && (*arg0 >= -9)) {
     *arg0 = 0;
@@ -522,19 +476,9 @@ void func_hd_code_8028B190(s8* arg0, s8* arg1) {
   }
 }
 
-// Open the "CONTROL METHOD:" selection window for the current vehicle,
-// showing its available scheme name and the current choice
-// Proposed name: ShowControlMethodMenu
-
 // Location needed here for matching:
-char* D_hd_code_802FDB18[3] = {
-  "SPEED ON 3D STICK?",
-  "360 DEGREE MODE?",
-  "AIRBORNE 360' MODE?"
-};
-u32 D_hd_code_802FDB24[3] = {
-  0x0000EDBA, 0x00010005, 0x00000200
-};
+char* D_hd_code_802FDB18[3] = { "SPEED ON 3D STICK?", "360 DEGREE MODE?", "AIRBORNE 360' MODE?" };
+u32 D_hd_code_802FDB24[3] = { 0x0000EDBA, 0x00010005, 0x00000200 };
 
 void func_hd_code_8028B240(void) {
   INIT_FROM_ARRAY(char* sp24[3], sp24, D_hd_code_802FDB18);
@@ -542,13 +486,12 @@ void func_hd_code_8028B240(void) {
   s32 found = 0;
   s32 sp18 = 0;
 
-  while(sp18 < 3 && !found) {
+  while (sp18 < 3 && !found) {
     if (D_hd_code_802FDB24[sp18] & (1 << D_hd_code_80364456)) {
       found = 1;
     } else {
       sp18 += 1;
     }
-
   }
   if (!found) {
     rmonPrintf(ASSERT_MESSAGE, "found", "controller.c", 0x203);

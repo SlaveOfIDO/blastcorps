@@ -20,11 +20,6 @@ void func_hd_code_80261528();                          /* extern */
  *
  * This is heavily borrowed from the 007 decomp audi.c
  */
-// Proposed file name: audio.c (the assert strings in this file reference
-// "audio.c"). All functions here are already named (am* audio manager).
-// Note: amMain also drives the music driver's per-frame state machines from
-// the audio thread - the fade, tune push/pop, auto-pop and tempo-restore
-// functions from music.c run here, once per audio frame.
 
 // 0x5622 = 22050
 #define OUTPUT_RATE                    0x5622
@@ -242,7 +237,7 @@ struct AudioManager_s {
 extern s32 osViClock;
 extern s32 D_hd_code_803156A4;
 
-// BSS Begin
+// <bss>
 u64 pad_80368050;
 u64 D_80368058;
 OSTime g_StartTime;
@@ -260,7 +255,7 @@ OSIoMesg g_DmaIOMessageBuffer[AUDIO_DMA_IO_QUEUE_SIZE];
 OSMesgQueue g_DmaMessageQueue;
 OSMesg g_DmaMessageBuffer[AUDIO_DMA_QUEUE_SIZE];
 s32 D_hd_code_8036AFA0;
-// BSS End
+// </bss>
 
 // Forward declarations
 s32 amDmaCallback(s32 addr, s32 len, void* state);

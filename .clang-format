@@ -1,3 +1,7 @@
-BasedOnStyle: Mozilla
-BreakBeforeBraces: Allman
-ColumnLimit: 80
+BasedOnStyle: Google
+ColumnLimit: 120
+AllowShortFunctionsOnASingleLine: None
+LineEnding: LF
+InsertNewlineAtEOF: true
+AlignArrayOfStructures: Left
+Cpp11BracedListStyle: false

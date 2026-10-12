@@ -5,19 +5,8 @@
 #include "structs.h"
 #include "variables.h"
 
-s32 func_hd_code_802A0CC8(s16, s32);
-
-// Proposed file name: vehicle_gauges.c
-//
-// This file draws the vehicle-specific HUD gauges that only appear while
-// driving a particular vehicle, each fading in/out (alpha ramp of 10/frame)
-// as you enter/leave that vehicle: a dial gauge with a rotating needle for
-// vehicle 3 (the Skyfall - the dial shows D_hd_code_803EE3B1 as a percentage), and
-// two icon + numeric-counter widgets for vehicles 0xA and 1. The current
-// vehicle id is passed in as arg3.
-
 extern u8 D_hd_code_803EE3B1;
-extern u8 *D_hd_code_8036EC00; // Texture
+extern u8* D_hd_code_8036EC00;  // Texture
 extern Vtx* D_hd_code_8036EC04;
 extern Mtx* D_hd_code_8036EC08;
 extern Mtx* D_hd_code_8036EC0C;
@@ -30,7 +19,7 @@ extern Vtx* D_hd_code_8036EC24;
 extern s16 D_hd_code_8036EC28;
 
 // <bss>
-u8 *D_hd_code_8036EC00;
+u8* D_hd_code_8036EC00;
 Vtx* D_hd_code_8036EC04;
 Mtx* D_hd_code_8036EC08;
 Mtx* D_hd_code_8036EC0C;
@@ -47,9 +36,6 @@ u16 D_hd_code_8036EC2A;
 s32 D_hd_code_8036EC2C;
 // </bss>
 
-// Init the vehicle-3 dial gauge: load its 40x40 face texture (0x760),
-// allocate matrices, and set up the face quad plus the small needle quad
-// Proposed name: InitDialGauge
 void func_hd_code_80286A00(void) {
   D_hd_code_80364A68 = 1;
 
@@ -108,70 +94,66 @@ void func_hd_code_80286A00(void) {
   D_hd_code_8036EC10 = 0;
 }
 
-// Draw the dial gauge (visible only in vehicle 3, fading in/out): the
-// textured face, then the needle rotated to (D_hd_code_803EE3B1/100 * 180 + 270)
-// degrees
-// Proposed name: DrawDialGauge
 void func_hd_code_80286C60(Gfx** gfx, s32* arg1, u8 arg2, u8 arg3) {
-    Gfx* entry = *gfx;
+  Gfx* entry = *gfx;
 
-    if (arg3 != 3 && D_hd_code_8036EC10 == 0) {
-        return;
+  if (arg3 != 3 && D_hd_code_8036EC10 == 0) {
+    return;
+  }
+
+  if (arg3 == 3 && D_hd_code_8036EC10 < 0xFF) {
+    D_hd_code_8036EC10 += 0xA;
+    if (D_hd_code_8036EC10 > 0xFF) {
+      D_hd_code_8036EC10 = 0xFF;
     }
+  }
 
-    if (arg3 == 3 && D_hd_code_8036EC10 < 0xFF) {
-        D_hd_code_8036EC10 += 0xA;
-        if (D_hd_code_8036EC10 > 0xFF) {
-            D_hd_code_8036EC10 = 0xFF;
-        }
+  if (arg3 != 3 && D_hd_code_8036EC10 != 0) {
+    D_hd_code_8036EC10 -= 0xA;
+    if (D_hd_code_8036EC10 < 0) {
+      D_hd_code_8036EC10 = 0;
     }
+  }
+  gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+  gDPPipeSync(entry++);
+  gDPSetCycleType(entry++, G_CYC_1CYCLE);
+  gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+  gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING |
+                                    G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
+  gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
+  gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
+  gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC10, D_hd_code_80367BD6));
+  gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC00), G_IM_FMT_RGBA, G_IM_SIZ_16b, 40, 40, 0,
+                      G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                      G_TX_NOLOD);
+  gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC04), 4, 0);
+  gSP1Triangle(entry++, 0, 1, 2, 0);
+  gSP1Triangle(entry++, 0, 2, 3, 0);
+  gDPPipeSync(entry++);
+  gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_OFF);
+  gDPSetRenderMode(entry++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
+  gDPSetCombineMode(entry++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
 
-    if (arg3 != 3 && D_hd_code_8036EC10 != 0) {
-        D_hd_code_8036EC10 -= 0xA;
-        if (D_hd_code_8036EC10 < 0) {
-            D_hd_code_8036EC10 = 0;
-        }
-    }
-    gSPMatrix(entry++, &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPMatrix(entry++, &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPPipeSync(entry++);
-    gDPSetCycleType(entry++, G_CYC_1CYCLE);
-    gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-    gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
-    gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
-    gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
-    gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC10, D_hd_code_80367BD6));
-    gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC00), G_IM_FMT_RGBA, G_IM_SIZ_16b, 40, 40, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC04), 4, 0);
-    gSP1Triangle(entry++, 0, 1, 2, 0);
-    gSP1Triangle(entry++, 0, 2, 3, 0);
-    gDPPipeSync(entry++);
-    gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_OFF);
-    gDPSetRenderMode(entry++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
-    gDPSetCombineMode(entry++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
+  guTranslate(&D_hd_code_8036EC0C[arg2], 56.0f, 151.0f, 0.0f);
+  gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC0C[arg2]), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+  guAlign(&D_hd_code_8036EC08[arg2], ((D_hd_code_803EE3B1 / 100.0f) * 180.0) + 270.0, 0.0f, 0.0f, 1.0f);
+  gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC08[arg2]), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+  gSPVertex(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC04[4]), 4, 0);
+  gSP1Triangle(entry++, 0, 1, 2, 0);
+  gSP1Triangle(entry++, 1, 2, 3, 0);
+  gSPPopMatrix(entry++, G_MTX_MODELVIEW);
+  gDPPipeSync(entry++);
 
-    guTranslate(&D_hd_code_8036EC0C[arg2], 56.0f, 151.0f, 0.0f);
-    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC0C[arg2]), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    guAlign(&D_hd_code_8036EC08[arg2], ((D_hd_code_803EE3B1 / 100.0f) * 180.0) + 270.0, 0.0f, 0.0f, 1.0f);
-    gSPMatrix(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC08[arg2]), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(entry++, OS_PHYSICAL_TO_K0(&D_hd_code_8036EC04[4]), 4, 0);
-    gSP1Triangle(entry++, 0, 1, 2, 0);
-    gSP1Triangle(entry++, 1, 2, 3, 0);
-    gSPPopMatrix(entry++, G_MTX_MODELVIEW);
-    gDPPipeSync(entry++);
-
-    *gfx = entry;
+  *gfx = entry;
 }
 
-// Init the vehicle-0xA counter widget: load its 32x32 icon texture (0x996)
-// and set up the icon quad
-// Proposed name: InitCounterA
 void func_hd_code_802873AC(void) {
   D_hd_code_80364A6A = 1;
   D_hd_code_8036EC14 = g_heap;
   func_hd_code_802A0CC8(0x996, 0);
-  D_hd_code_8036EC18 = (Vtx* ) g_heap;
+  D_hd_code_8036EC18 = (Vtx*)g_heap;
   g_heap += 4 * sizeof(Vtx);
 
   D_hd_code_8036EC18[0].v.ob[0] = 0x22;
@@ -201,9 +183,6 @@ void func_hd_code_802873AC(void) {
   D_hd_code_8036EC1C = 0;
 }
 
-// Draw the vehicle-0xA counter widget (fading in/out): the icon plus the
-// numeric value D_hd_code_803F8B72 rendered as gradient text
-// Proposed name: DrawCounterA
 void func_hd_code_80287530(Gfx** gfx, struct FrameContext* arg1, u8 arg2, u8 arg3) {
   Gfx* entry = *gfx;
   s8 spB8[20];
@@ -224,39 +203,41 @@ void func_hd_code_80287530(Gfx** gfx, struct FrameContext* arg1, u8 arg2, u8 arg
       D_hd_code_8036EC1C = 0;
     }
   }
-  gSPMatrix(entry++, (u32) &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-  gSPMatrix(entry++, (u32) &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+  gSPMatrix(entry++, (u32)&D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, (u32)&D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
   gDPPipeSync(entry++);
   gDPSetCycleType(entry++, G_CYC_1CYCLE);
   gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-  gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
+  gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING |
+                                    G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
   gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
   gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
   gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC1C, D_hd_code_80367BD6));
 
   gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC14), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC14), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                      G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                      G_TX_NOLOD);
   gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC18), 4, 0);
   gSP1Triangle(entry++, 0, 1, 2, 0);
   gSP1Triangle(entry++, 0, 2, 3, 0);
   gDPPipeSync(entry++);
 
   func_hd_code_8026A378(D_hd_code_803F8B72, spB8);
-  func_hd_code_80259DC8(arg1, (s32) &spB8, 0, 1, 0, 0x40, 0x91, 0xF, 0xF, 1, 0xFF, 0xFF, 0, MIN(D_hd_code_8036EC1C, D_hd_code_80367BD6), 0xFF, 0, 0, MIN(D_hd_code_8036EC1C, D_hd_code_80367BD6));
+  func_hd_code_80259DC8(arg1, (s32)&spB8, 0, 1, 0, 0x40, 0x91, 0xF, 0xF, 1, 0xFF, 0xFF, 0,
+                        MIN(D_hd_code_8036EC1C, D_hd_code_80367BD6), 0xFF, 0, 0,
+                        MIN(D_hd_code_8036EC1C, D_hd_code_80367BD6));
   gDPPipeSync(entry++);
 
   *gfx = entry;
 }
 
-// Init the vehicle-1 counter widget: load its 32x32 icon texture (0x998)
-// and set up the icon quad
-// Proposed name: InitCounterB
 void func_hd_code_80287AE4(void) {
   D_hd_code_80364A6C = 1;
 
   D_hd_code_8036EC20 = g_heap;
   func_hd_code_802A0CC8(0x998, 0);
-  D_hd_code_8036EC24 = (Vtx* ) g_heap;
+  D_hd_code_8036EC24 = (Vtx*)g_heap;
   g_heap += 4 * sizeof(Vtx);
 
   D_hd_code_8036EC24[0].v.ob[0] = 0x22;
@@ -286,9 +267,6 @@ void func_hd_code_80287AE4(void) {
   D_hd_code_8036EC28 = 0;
 }
 
-// Draw the vehicle-1 counter widget (fading in/out): the icon plus the
-// numeric value D_hd_code_803EDC00 rendered as gradient text
-// Proposed name: DrawCounterB
 void func_hd_code_80287C68(Gfx** gfx, struct FrameContext* arg1, u8 arg2, u8 arg3) {
   Gfx* entry = *gfx;
   s8 spB8[20];
@@ -309,25 +287,30 @@ void func_hd_code_80287C68(Gfx** gfx, struct FrameContext* arg1, u8 arg2, u8 arg
       D_hd_code_8036EC28 = 0;
     }
   }
-  gSPMatrix(entry++, (u32) &D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-  gSPMatrix(entry++, (u32) &D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+  gSPMatrix(entry++, (u32)&D_2000000.mtxOrtho, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+  gSPMatrix(entry++, (u32)&D_2000000.modelview, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
   gDPPipeSync(entry++);
   gDPSetCycleType(entry++, G_CYC_1CYCLE);
   gDPSetRenderMode(entry++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-  gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
+  gSPClearGeometryMode(entry++, G_ZBUFFER | G_TEXTURE_ENABLE | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING |
+                                    G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH | 0xFFE0CDF8);
   gSPSetGeometryMode(entry++, G_SHADE | G_SHADING_SMOOTH);
   gSPTexture(entry++, qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON);
   gDPSetPrimColor(entry++, 0, 0, 255, 255, 255, MIN(D_hd_code_8036EC28, D_hd_code_80367BD6));
 
   gDPSetCombineMode(entry++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC20), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+  gDPLoadTextureBlock(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC20), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                      G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                      G_TX_NOLOD);
   gSPVertex(entry++, OS_PHYSICAL_TO_K0(D_hd_code_8036EC24), 4, 0);
   gSP1Triangle(entry++, 0, 1, 2, 0);
   gSP1Triangle(entry++, 0, 2, 3, 0);
   gDPPipeSync(entry++);
 
-  func_hd_code_8026A378((s32) D_hd_code_803EDC00, spB8);
-  func_hd_code_80259DC8(arg1, (s32) &spB8, 0, 1, 0, 0x44, 0x97, 0xF, 0xF, 1, 0xFF, 0xFF, 0, MIN(D_hd_code_8036EC28, D_hd_code_80367BD6), 0xFF, 0, 0, MIN(D_hd_code_8036EC28, D_hd_code_80367BD6));
+  func_hd_code_8026A378((s32)D_hd_code_803EDC00, spB8);
+  func_hd_code_80259DC8(arg1, (s32)&spB8, 0, 1, 0, 0x44, 0x97, 0xF, 0xF, 1, 0xFF, 0xFF, 0,
+                        MIN(D_hd_code_8036EC28, D_hd_code_80367BD6), 0xFF, 0, 0,
+                        MIN(D_hd_code_8036EC28, D_hd_code_80367BD6));
   gDPPipeSync(entry++);
 
   *gfx = entry;

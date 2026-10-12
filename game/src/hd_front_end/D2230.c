@@ -1,16 +1,15 @@
-#include "common.h"
-#include "../hd_code/macros.h"
-#include "../hd_code/structs.h"
-#include "../hd_code/hd.h"
-#include "../hd_code/yoshi.h"
 #include "../hd_code/functions.h"
 #include "../hd_code/gfx.h"
+#include "../hd_code/hd.h"
+#include "../hd_code/macros.h"
+#include "../hd_code/structs.h"
 #include "../hd_code/variables.h"
-
+#include "../hd_code/yoshi.h"
+#include "common.h"
 
 extern s16 D_hd_code_8036BB18;
-extern s32 D_hd_code_80358078; // current top-level display list length; proposed name: topLevelDlLen
-extern void* D_hd_code_8035806C; // static data segment pointer (segment 1); proposed name: staticSegment
+extern s32 D_hd_code_80358078;
+extern void* D_hd_code_8035806C;
 extern OSMesgQueue D_hd_code_80315180;
 
 // <bss>
@@ -21,6 +20,7 @@ s32 D_hd_front_end_802159CC;
 // </bss>
 
 void func_hd_front_end_801EE390(void) {
+  // stub
 }
 
 void func_hd_front_end_801EE398(s32 arg0) {
@@ -48,8 +48,8 @@ void func_hd_front_end_801EE398(s32 arg0) {
   gSPSegment(entry++, 0x00, 0x00000000);
   gSPSegment(entry++, 0x02, osVirtualToPhysical(sp5C));
   gSPSegment(entry++, 0x01, osVirtualToPhysical(D_hd_code_8035806C));
-  gSPDisplayList(entry++, (u32) D_1000038);
-  gSPDisplayList(entry++, (u32) D_1000010);
+  gSPDisplayList(entry++, (u32)D_1000038);
+  gSPDisplayList(entry++, (u32)D_1000010);
   gDPSetCycleType(entry++, G_CYC_FILL);
   gDPSetColorImage(entry++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_hd_code_80358050[D_hd_code_8035805C]);
   gDPPipeSync(entry++);
@@ -61,15 +61,14 @@ void func_hd_front_end_801EE398(s32 arg0) {
   gDPFullSync(entry++);
   gSPEndDisplayList(entry++);
 
-  D_hd_code_80358078 = (s32) (((u32)entry - (u32)sp5C) - 0x48B0) >> 3;
+  D_hd_code_80358078 = (s32)(((u32)entry - (u32)sp5C) - 0x48B0) >> 3;
 
-  for(sp54 = 0; sp54 < nextdma; sp54++) {
+  for (sp54 = 0; sp54 < nextdma; sp54++) {
     osRecvMesg(&D_hd_code_80315180, NULL, 1);
   }
-  for(sp54 = 0; sp54 < (nextdma - no_palette_dmas); sp54++) {
+  for (sp54 = 0; sp54 < (nextdma - no_palette_dmas); sp54++) {
     func_hd_code_802A57AC();
   }
   gfxWaitForTask(GFX_TASK_ID_MAIN);
   D_hd_front_end_802159C0 += 1;
 }
-

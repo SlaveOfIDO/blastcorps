@@ -780,7 +780,7 @@ segments:
       - [0x7FB320, c, hd_code/hd] # done
       - [0x80E0A0, c, hd_code/12D80] # done
       - [0x80ED90, c, hd_code/13A70] # done
-      - [0x80FE50, c, hd_code/14B30] # done
+      - [0x80FE50, c, hd_code/drawtext] # done
       - [0x811BD0, c, hd_code/168B0] # done
       - [0x812530, c, hd_code/17210] # done
       - [0x812D90, c, hd_code/17A70] # done
@@ -1013,7 +1013,7 @@ segments:
       - [0x89E310, data, hd_code/A2FF0_data]
       - [0x89F730, .data, hd_code/hd] # done
       - [0x89F7C0, .data, hd_code/13A70] # done
-      - [0x89F7D0, .data, hd_code/14B30] # done
+      - [0x89F7D0, .data, hd_code/drawtext] # done
       - [0x89F810, .data, hd_code/17210] # done
       - [0x89F830, .data, hd_code/17E10] # done
       - [0x89F840, .data, hd_code/1A630] # done
@@ -1095,7 +1095,7 @@ segments:
       - [0x8BE6F0, .rodata, hd_code/hd] # done
       - [0x8BF840, .rodata, hd_code/12D80] # done
       - [0x8BF840, .rodata, hd_code/13A70] # done
-      - [0x8BF840, .rodata, hd_code/14B30] # done
+      - [0x8BF840, .rodata, hd_code/drawtext] # done
       - [0x8BFA40, .rodata, hd_code/168B0] # done
       - [0x8BFAF0, .rodata, hd_code/17210] # done
       - [0x8BFB90, .rodata, hd_code/17A70] # done
@@ -1174,7 +1174,7 @@ segments:
       - [0x8C56F0, databin, hd_code/asp]
       - { start: 0x8C61C0, type: .bss, name: hd_code/hd, vram: 0x8030F660 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/13A70, vram: 0x803650B0 } # done
-      - { start: 0x8C61C0, type: .bss, name: hd_code/14B30, vram: 0x80365340 } # done
+      - { start: 0x8C61C0, type: .bss, name: hd_code/drawtext, vram: 0x80365340 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/168B0, vram: 0x80365360 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/17210, vram: 0x80365580 } # done
       - { start: 0x8C61C0, type: .bss, name: hd_code/17A70, vram: 0x803669C0 } # done

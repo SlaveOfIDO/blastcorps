@@ -698,3 +698,4 @@ g_currentButtons = 0x80370C28; // type:u16
 g_frameCount = 0x80358060; // type:u32
 g_previousButtons = 0x80370C2A;
 yoshiShow = 0x8026AF6C;
+fadeToFast = 0x80275390;

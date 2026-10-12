@@ -20,110 +20,120 @@ u8 D_hd_code_803A6B04;
 // </bss>
 
 void func_hd_code_802995F0(s32 arg0) {
-    D_hd_code_803A6B03 = (u8) arg0;
-    rmonPrintf("prepare sequence %d\n", arg0);
-    switch (D_hd_code_803A6B03) {
+  D_hd_code_803A6B03 = (u8)arg0;
+  rmonPrintf("prepare sequence %d\n", arg0);
+  switch (D_hd_code_803A6B03) {
     case 1:
-        D_hd_code_803A6B02 = 0x26;
-        D_hd_code_803A6B01 = 0x28;
-        D_hd_code_803A6B00 = 0x28;
-        D_hd_code_803A6AF0 = 0x4000;
-        D_hd_code_803A6AF8 = 0x4000;
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x26;
+      D_hd_code_803A6B01 = 0x28;
+      D_hd_code_803A6B00 = 0x28;
+      D_hd_code_803A6AF0 = 0x4000;
+      D_hd_code_803A6AF8 = 0x4000;
+      D_hd_code_803A6B04 = 1;
+      return;
     case 3:
-        D_hd_code_803A6B02 = 0x26;
-        D_hd_code_803A6B01 = 0x2B;
-        D_hd_code_803A6B00 = 0x2B;
-        D_hd_code_803A6AF0 = 0x4000;
-        D_hd_code_803A6AF8 = 0x4000;
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x26;
+      D_hd_code_803A6B01 = 0x2B;
+      D_hd_code_803A6B00 = 0x2B;
+      D_hd_code_803A6AF0 = 0x4000;
+      D_hd_code_803A6AF8 = 0x4000;
+      D_hd_code_803A6B04 = 1;
+      return;
     case 0:
-        D_hd_code_803A6B02 = 0x31;
-        D_hd_code_803A6B01 = 0x32;
-        D_hd_code_803A6B00 = 0x32;
-        D_hd_code_803A6AF0 = 0x4000;
-        D_hd_code_803A6AF8 = 0x4000;
-        D_hd_code_803A6B04 = 0;
-        return;
+      D_hd_code_803A6B02 = 0x31;
+      D_hd_code_803A6B01 = 0x32;
+      D_hd_code_803A6B00 = 0x32;
+      D_hd_code_803A6AF0 = 0x4000;
+      D_hd_code_803A6AF8 = 0x4000;
+      D_hd_code_803A6B04 = 0;
+      return;
     case 4:
-        D_hd_code_803A6B02 = 0x2F;
-        D_hd_code_803A6B01 = 0;
-        D_hd_code_803A6B00 = 0;
-        D_hd_code_803A6AF0 = 0x4000;
-        D_hd_code_803A6AF8 = 0x4000;
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x2F;
+      D_hd_code_803A6B01 = 0;
+      D_hd_code_803A6B00 = 0;
+      D_hd_code_803A6AF0 = 0x4000;
+      D_hd_code_803A6AF8 = 0x4000;
+      D_hd_code_803A6B04 = 1;
+      return;
     case 5:
-        D_hd_code_803A6B02 = 0x37;
-        D_hd_code_803A6B01 = 0x37;
-        D_hd_code_803A6B00 = 0x37;
-        if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)?1:0) {
-            D_hd_code_803A6AF0 = 0x80;
-            D_hd_code_803A6AF8 = 0x80;
-        } else {
-            D_hd_code_803A6AF0 = 0x2000;
-            D_hd_code_803A6AF8 = 0x2000;
-        }
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x37;
+      D_hd_code_803A6B01 = 0x37;
+      D_hd_code_803A6B00 = 0x37;
+      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
+              ? 1
+              : 0) {
+        D_hd_code_803A6AF0 = 0x80;
+        D_hd_code_803A6AF8 = 0x80;
+      } else {
+        D_hd_code_803A6AF0 = 0x2000;
+        D_hd_code_803A6AF8 = 0x2000;
+      }
+      D_hd_code_803A6B04 = 1;
+      return;
     case 6:
-        D_hd_code_803A6B02 = 0x1C;
-        D_hd_code_803A6B01 = 0x1C;
-        D_hd_code_803A6B00 = 0x1C;
-        if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)?1:0) {
-            D_hd_code_803A6AF0 = 0x80;
-            D_hd_code_803A6AF8 = 0x80;
-        } else {
-            D_hd_code_803A6AF0 = 0x2000;
-            D_hd_code_803A6AF8 = 0x2000;
-        }
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x1C;
+      D_hd_code_803A6B01 = 0x1C;
+      D_hd_code_803A6B00 = 0x1C;
+      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
+              ? 1
+              : 0) {
+        D_hd_code_803A6AF0 = 0x80;
+        D_hd_code_803A6AF8 = 0x80;
+      } else {
+        D_hd_code_803A6AF0 = 0x2000;
+        D_hd_code_803A6AF8 = 0x2000;
+      }
+      D_hd_code_803A6B04 = 1;
+      return;
     case 7:
-        D_hd_code_803A6B02 = 0x35;
-        D_hd_code_803A6B01 = 0x35;
-        D_hd_code_803A6B00 = 0x35;
-        if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)?1:0) {
-            D_hd_code_803A6AF0 = 0x80;
-            D_hd_code_803A6AF8 = 0x80;
-        } else {
-            D_hd_code_803A6AF0 = 0x2000;
-            D_hd_code_803A6AF8 = 0x2000;
-        }
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x35;
+      D_hd_code_803A6B01 = 0x35;
+      D_hd_code_803A6B00 = 0x35;
+      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
+              ? 1
+              : 0) {
+        D_hd_code_803A6AF0 = 0x80;
+        D_hd_code_803A6AF8 = 0x80;
+      } else {
+        D_hd_code_803A6AF0 = 0x2000;
+        D_hd_code_803A6AF8 = 0x2000;
+      }
+      D_hd_code_803A6B04 = 1;
+      return;
     case 8:
-        D_hd_code_803A6B02 = 7;
-        D_hd_code_803A6B01 = 7;
-        D_hd_code_803A6B00 = 7;
-        if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)?1:0) {
-            D_hd_code_803A6AF0 = 0x80;
-            D_hd_code_803A6AF8 = 0x80;
-        } else {
-            D_hd_code_803A6AF0 = 0x2000;
-            D_hd_code_803A6AF8 = 0x2000;
-        }
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 7;
+      D_hd_code_803A6B01 = 7;
+      D_hd_code_803A6B00 = 7;
+      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
+              ? 1
+              : 0) {
+        D_hd_code_803A6AF0 = 0x80;
+        D_hd_code_803A6AF8 = 0x80;
+      } else {
+        D_hd_code_803A6AF0 = 0x2000;
+        D_hd_code_803A6AF8 = 0x2000;
+      }
+      D_hd_code_803A6B04 = 1;
+      return;
     case 9:
-        D_hd_code_803A6B02 = 0x13;
-        D_hd_code_803A6B01 = 0x13;
-        D_hd_code_803A6B00 = 0x13;
-        if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)?1:0) {
-            D_hd_code_803A6AF0 = 0x80;
-            D_hd_code_803A6AF8 = 0x80;
-        } else {
-            D_hd_code_803A6AF0 = 0x2000;
-            D_hd_code_803A6AF8 = 0x2000;
-        }
-        D_hd_code_803A6B04 = 1;
-        return;
+      D_hd_code_803A6B02 = 0x13;
+      D_hd_code_803A6B01 = 0x13;
+      D_hd_code_803A6B00 = 0x13;
+      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
+              ? 1
+              : 0) {
+        D_hd_code_803A6AF0 = 0x80;
+        D_hd_code_803A6AF8 = 0x80;
+      } else {
+        D_hd_code_803A6AF0 = 0x2000;
+        D_hd_code_803A6AF8 = 0x2000;
+      }
+      D_hd_code_803A6B04 = 1;
+      return;
     default:
-        rmonPrintf("unknown sequence number %d\n", D_hd_code_803A6B03);
-        return;
-    }
+      rmonPrintf("unknown sequence number %d\n", D_hd_code_803A6B03);
+      return;
+  }
 }
 
 void func_hd_code_80299C0C(void) {
@@ -254,6 +264,6 @@ u64 func_hd_code_80299FE8(u8 arg0) {
       sp28 = func_hd_front_end_801ECA50(arg0);
       break;
   }
-  rmonPrintf("get loop done for world %d\n", func_hd_code_8026F92C(sp28));
+  rmonPrintf("get loop done for world %d\n", yoshiFFS(sp28));
   return sp28;
 }

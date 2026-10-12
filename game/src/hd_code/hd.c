@@ -15,23 +15,6 @@
 #include "../vram.h"
 #include "../hd_front_end/intro.h"
 
-// Proposed file name: hd.c (the original name - the assert strings in this
-// file reference "hd.c" and "./master_switch.c")
-//
-// This file is the game core: the boot entry point and threads, the "master
-// switch" game state machine, the per-frame in-level game update, the camera
-// system, vehicle enter/exit dispatch, the frame display list builder and
-// level loading. Game states are u64 one-hot bits held in a pipeline:
-// D_hd_code_80364A88 = previous, ...A90 = current, ...A98 = requested next,
-// ...AA0 = queued follow-up. Thread3 loops: while a transition is pending it
-// runs the master switch case for the new state (level/menu setup, music
-// selection etc.), then runs per-frame updates until the next transition is
-// requested. The mission result flags flow: D_hd_code_803643D9 (fail
-// request, "cmo_hit_request" in the asserts - CMO is the missile carrier) /
-// ...DA (success request) are latched at the end of each frame into ...D6
-// (mission failed) / ...D7 (mission complete). Vehicles ("diggers" in the
-// debug prints) are identified by id; 0 = on foot.
-
 // size: 0x4
 struct UnknownStruct8030F668 {
   /* 0x01 */ u8 flag1;
@@ -47,6 +30,196 @@ typedef struct {
   u8 unk9;
   s16 pad;
 } UnknownStruct_80364A00;
+
+// <bss>
+u8 D_hd_code_8030F660;
+s32 D_hd_code_8030F664;
+struct UnknownStruct8030F668 D_hd_code_8030F668;
+u8 bss_pad_1[0x11AC];
+OSThread g_Thread1;
+u8 g_Thread1Stack[0x200];
+OSThread g_Thread3;
+s64 g_Thread3Stack[0x400]; // size 0x2000
+s32 g_SchedulerStack[0x800]; // bss, size 0x2000
+OSMesgQueue D_hd_code_80314D80; // bss
+OSMesg D_hd_code_80314D98[0xC2]; // bss
+OSMesgQueue D_hd_code_803150A0; // bss
+OSMesg D_hd_code_803150B8[0x32]; // bss
+OSMesgQueue D_hd_code_80315180; // bss
+OSMesg D_hd_code_80315198[0x90]; // bss
+OSMesgQueue D_hd_code_803153D8;
+u8 D_hd_code_803153F0;
+OSMesg D_hd_code_803153F8[0x10];
+u8 D_hd_code_80315438;
+OSSched sc; // 0x80315440
+OSScClient g_gfxClient;
+s32 D_hd_code_803156E8;
+s32 D_hd_code_803156EC;
+s32 D_hd_code_803156F0;
+u8 D_hd_code_803156F4;
+u8 D_hd_code_803156F5;
+struct FrameContext D_hd_code_803156F8[2];
+s32 pad_80358028;
+s32 pad_8035802C;
+Gfx* D_hd_code_80358030[2];
+Gfx* D_hd_code_80358038[2];
+Gfx* D_hd_code_80358040[2];
+Gfx* D_hd_code_80358048[2];
+u16 *D_hd_code_80358050[2];
+u32 D_hd_code_80358058;
+u8 D_hd_code_8035805C;
+u32 g_frameCount; // frames since the state started
+s32 D_hd_code_80358064;
+s32 D_hd_code_80358068;
+void* D_hd_code_8035806C;
+u8* g_heap;
+Gfx* D_hd_code_80358074;
+s32 D_hd_code_80358078;
+u16 D_hd_code_8035807C;
+s32 nextdma; // 0x80358080
+s32 no_palette_dmas; // 0x80358084
+u8 D_hd_code_80358088[0xC340];
+struct Textures D_hd_code_803643C8;
+s32 bss_pad_5;
+u8 D_hd_code_803643D4;
+u8 D_hd_code_803643D5;
+u8 D_hd_code_803643D6;
+u8 D_hd_code_803643D7;
+u8 D_hd_code_803643D8;
+u8 D_hd_code_803643D9;
+u8 D_hd_code_803643DA;
+u8 D_hd_code_803643DB;
+u8 D_hd_code_803643DC;
+s32 D_hd_code_803643E0;
+s32 D_hd_code_803643E4;
+s32 D_hd_code_803643E8;
+s32 D_hd_code_803643EC;
+s32 D_hd_code_803643F0;
+s32 D_hd_code_803643F4;
+s32 D_hd_code_803643F8;
+s32 D_hd_code_803643FC;
+s32 D_hd_code_80364400;
+s32 D_hd_code_80364404;
+s32 D_hd_code_80364408;
+s32 D_hd_code_8036440C;
+u8 D_hd_code_80364410;
+u8 D_hd_code_80364411;
+u8 D_hd_code_80364412;
+f32 D_hd_code_80364414;
+f32 D_hd_code_80364418;
+u8 D_hd_code_8036441C;
+u8 D_hd_code_8036441D;
+u32 D_hd_code_80364420;
+u8 D_hd_code_80364424;
+u32 D_hd_code_80364428;
+u16 D_hd_code_8036442C;
+s32 D_hd_code_80364430;
+u8 D_hd_code_80364434;
+f32 D_hd_code_80364438;
+s16 D_hd_code_8036443C;
+s16 D_hd_code_8036443E;
+s16 D_hd_code_80364440;
+f32 D_hd_code_80364444;
+f32 D_hd_code_80364448;
+s16 D_hd_code_8036444C;
+s16 D_hd_code_8036444E;
+s16 D_hd_code_80364450;
+s16 D_hd_code_80364452;
+s16 D_hd_code_80364454;
+u8 D_hd_code_80364456;
+s32 D_hd_code_80364458;
+s32 pad_8036445C;
+struct UnknownStruct_803644BC D_hd_code_80364460[12];
+struct UnknownStruct_803644BC *D_hd_code_803649D0;
+u64 D_hd_code_803649D8;
+s16 D_hd_code_803649E0;
+s16 D_hd_code_803649E2;
+s16 D_hd_code_803649E4;
+s32 D_hd_code_803649E8;
+u8 D_hd_code_803649EC;
+u8 D_hd_code_803649ED;
+s8 D_hd_code_803649EE;
+u32 D_hd_code_803649F0;
+u32 D_hd_code_803649F4;
+f32 D_hd_code_803649F8;
+UnknownStruct_80364A00 D_hd_code_80364A00[5];
+u8 D_hd_code_80364A3C;
+u8 D_hd_code_80364A3D;
+s32 D_hd_code_80364A40;
+s32 D_hd_code_80364A44;
+u8 D_hd_code_80364A48;
+s16 D_hd_code_80364A4A;
+s16 D_hd_code_80364A4C;
+u8 D_hd_code_80364A4E;
+u8 pad_80364A4F;
+s8 D_hd_code_80364A50;
+s32 D_hd_code_80364A54;
+s32 D_hd_code_80364A58;
+s32 D_hd_code_80364A5C;
+u8 D_hd_code_80364A60;
+s32 D_hd_code_80364A64;
+u8 D_hd_code_80364A68;
+u8 D_hd_code_80364A69;
+u8 D_hd_code_80364A6A;
+u8 D_hd_code_80364A6B;
+u8 D_hd_code_80364A6C;
+u8 D_hd_code_80364A6D;
+u8 pad_80364A6E;
+u8 D_hd_code_80364A6F;
+u8 D_hd_code_80364A70;
+s8 D_hd_code_80364A71;
+s16 D_hd_code_80364A72;
+s16 D_hd_code_80364A74;
+s32 D_hd_code_80364A78;
+u8 D_hd_code_80364A7C;
+s32 D_hd_code_80364A80;
+u8 D_hd_code_80364A84;
+u8 D_hd_code_80364A85;
+u8 D_hd_code_80364A86;
+u8 D_hd_code_80364A87;
+u64 D_hd_code_80364A88;
+u64 g_currentGameState;
+u64 g_nextGameState;
+u64 D_hd_code_80364AA0;
+u32 D_hd_code_80364AA8;
+u32 pad_80364AAC;
+u32 D_hd_code_80364AB0;
+f32 D_hd_code_80364AB4;
+f32 D_hd_code_80364AB8;
+f32 D_hd_code_80364ABC;
+u8 D_hd_code_80364AC0;
+u8 D_hd_code_80364AC1;
+s32 D_hd_code_80364AC4;
+u32 D_hd_code_80364AC8;
+u32 D_hd_code_80364ACC;
+u64 D_hd_code_80364AD0;
+s32 pad_80364AD8;
+s32 pad_80364ADC;
+s32 pad_80364AE0;
+s32 pad_80364AE4;
+u8 playerNumber; // 0x80364AE8
+u8 D_hd_code_80364AE9; // nextPlayerNumber?
+u8 D_hd_code_80364AEA;
+UnknownData8024C414 players[5]; // size 0xFF
+u8 bss_pad[0x70];
+u8 D_hd_code_80365060[5];
+u8 D_hd_code_80365065;
+u8 D_hd_code_80365066;
+s32 pad_80365068;
+s32 D_hd_code_8036506C; // This is a vertex index
+s32 pad_80365070;
+s32 pad_80365074;
+f32 D_hd_code_80365078;
+f32 D_hd_code_8036507C;
+f32 D_hd_code_80365080;
+f32 D_hd_code_80365084;
+f32 D_hd_code_80365088;
+f32 D_hd_code_8036508C;
+struct vec3 D_hd_code_80365090; // some 3d vec
+u16 D_hd_code_8036509C;
+s16 D_hd_code_8036509E;
+s16 D_hd_code_803650A0;
+// </bss>
 
 // <data>
 u8 D_hd_code_802E8BD0 = 0;
@@ -78,201 +251,8 @@ u8 D_hd_code_802E8C44[28] = {
 };
 // </data>
 
-// <bss>
-u8 D_hd_code_8030F660;
-s32 D_hd_code_8030F664;
-struct UnknownStruct8030F668 D_hd_code_8030F668;
-u8 bss_pad_1[0x11AC];
-OSThread g_Thread1;
-u8 g_Thread1Stack[0x200];
-OSThread g_Thread3;
-s64 g_Thread3Stack[0x400]; // size 0x2000
-s32 g_SchedulerStack[0x800]; // bss, size 0x2000
-OSMesgQueue D_hd_code_80314D80; // bss
-OSMesg D_hd_code_80314D98[0xC2]; // bss
-OSMesgQueue D_hd_code_803150A0; // bss
-OSMesg D_hd_code_803150B8[0x32]; // bss
-OSMesgQueue D_hd_code_80315180; // bss
-OSMesg D_hd_code_80315198[0x90]; // bss
-OSMesgQueue D_hd_code_803153D8;
-u8 D_hd_code_803153F0;
-OSMesg D_hd_code_803153F8[0x10];
-u8 D_hd_code_80315438;
-OSSched sc; // 0x80315440
-OSScClient g_gfxClient;
-s32 D_hd_code_803156E8;
-s32 D_hd_code_803156EC;
-s32 D_hd_code_803156F0;
-u8 D_hd_code_803156F4;
-u8 D_hd_code_803156F5;
-struct FrameContext D_hd_code_803156F8[2]; // double-buffered per-frame graphics contexts (matrices, display lists, vertex space); proposed name: gfxContexts
-s32 pad_80358028;
-s32 pad_8035802C;
-Gfx* D_hd_code_80358030[2]; // categorized world display list buffers per frame (see func_hd_code_80257234); proposed name: worldDlBufs0
-Gfx* D_hd_code_80358038[2]; // proposed name: worldDlBufs1
-Gfx* D_hd_code_80358040[2]; // proposed name: worldDlBufs2
-Gfx* D_hd_code_80358048[2]; // proposed name: worldDlBufs3
-u16 *D_hd_code_80358050[2]; // Framebuffers; proposed name: framebuffers
-u32 D_hd_code_80358058; // z-buffer physical address; proposed name: zbufferPhys
-u8 D_hd_code_8035805C; // frame double-buffer index (0/1); proposed name: frameBufIdx
-u32 g_frameCount; // frames since the state started
-s32 D_hd_code_80358064; // replay-relevant frame counter (reset on unpause sync); proposed name: replayFrameCount
-s32 D_hd_code_80358068; // unpaused frame counter; proposed name: unpausedFrameCount
-void* D_hd_code_8035806C; // static data segment pointer (segment 1); proposed name: staticSegment
-u8* g_heap; // level memory bump allocator pointer (reset to 0x8004B400 each level); proposed name: levelAllocPtr
-Gfx* D_hd_code_80358074; // loaded level data base; proposed name: levelData
-s32 D_hd_code_80358078; // current top-level display list length; proposed name: topLevelDlLen
-u16 D_hd_code_8035807C; // perspective normalization scale from guPerspective; proposed name: perspNorm
-s32 nextdma; // 0x80358080
-s32 no_palette_dmas; // 0x80358084
-u8 D_hd_code_80358088[0xC340]; // object shadow texture space; proposed name: shadowTexSpace
-struct Textures D_hd_code_803643C8; // object blob-shadow texture list (unk1022 = owner vehicle id); proposed name: shadowTextures
-s32 bss_pad_5;
-u8 D_hd_code_803643D4;
-u8 D_hd_code_803643D5; // set when the player has NOT yet earned a medal on this level; proposed name: notYetCompleted
-u8 D_hd_code_803643D6; // mission failed (latched); proposed name: missionFailed
-u8 D_hd_code_803643D7; // mission complete (latched); proposed name: missionComplete
-u8 D_hd_code_803643D8; // missionFailed as of last frame; proposed name: prevMissionFailed
-u8 D_hd_code_803643D9; // failure request, latched into missionFailed at end of frame ("cmo_hit_request"); proposed name: failRequest
-u8 D_hd_code_803643DA; // success request, latched into missionComplete at end of frame; proposed name: successRequest
-u8 D_hd_code_803643DB; // level has a missile carrier; proposed name: carrierPresent
-u8 D_hd_code_803643DC; // level has a train (object id 0xFE, see func_hd_code_8024F520); proposed name: trainPresent
-s32 D_hd_code_803643E0; // player world x (<< 5 fixed point); proposed name: playerX
-s32 D_hd_code_803643E4; // player world y; proposed name: playerY
-s32 D_hd_code_803643E8; // player world z; proposed name: playerZ
-s32 D_hd_code_803643EC;
-s32 D_hd_code_803643F0;
-s32 D_hd_code_803643F4;
-s32 D_hd_code_803643F8; // secondary position x/y/z passed with the player position to the world renderer (likely camera focus); proposed name: focusX
-s32 D_hd_code_803643FC; // proposed name: focusY
-s32 D_hd_code_80364400; // proposed name: focusZ
-s32 D_hd_code_80364404;
-s32 D_hd_code_80364408;
-s32 D_hd_code_8036440C;
-u8 D_hd_code_80364410; // special-position marker active for this level (see 1D990.c func_hd_code_80262320); proposed name: specialMarkerActive
-u8 D_hd_code_80364411;
-u8 D_hd_code_80364412; // camera snap/force-update flag; proposed name: cameraSnap
-f32 D_hd_code_80364414; // camera yaw in degrees (default 135); proposed name: cameraYawDeg
-f32 D_hd_code_80364418; // camera yaw rotation target in degrees; proposed name: cameraYawTargetDeg
-u8 D_hd_code_8036441C; // camera rotating counterclockwise (R pressed); proposed name: cameraRotatingCCW
-u8 D_hd_code_8036441D; // camera rotating clockwise (Z/L pressed); proposed name: cameraRotatingCW
-u32 D_hd_code_80364420;
-u8 D_hd_code_80364424;
-u32 D_hd_code_80364428;
-u16 D_hd_code_8036442C;
-s32 D_hd_code_80364430;
-u8 D_hd_code_80364434;
-f32 D_hd_code_80364438; // camera field of view in degrees (45 default, 80 on special levels); proposed name: cameraFov
-s16 D_hd_code_8036443C; // camera pitch input (vehicle-dependent, clamped per camera type); proposed name: cameraPitchInput
-s16 D_hd_code_8036443E; // camera target heading (0..4095); proposed name: cameraHeading
-s16 D_hd_code_80364440; // current vehicle visual heading (0..4095, used for shadow rotation); proposed name: vehicleHeading
-f32 D_hd_code_80364444; // smoothed camera pitch; proposed name: cameraPitchSmoothed
-f32 D_hd_code_80364448; // smoothed camera heading; proposed name: cameraHeadingSmoothed
-s16 D_hd_code_8036444C;
-s16 D_hd_code_8036444E;
-s16 D_hd_code_80364450; // Used in LoadLevelTodo40 and func_hd_code_802A56C4
-s16 D_hd_code_80364452; // camera yaw, 0..4095 (passed to sky/HUD); proposed name: cameraYaw
-s16 D_hd_code_80364454; // camera pitch, 0..4095; proposed name: cameraPitch
-u8 D_hd_code_80364456; // current vehicle id (0 = on foot); proposed name: currentVehicle
-s32 D_hd_code_80364458;
-s32 pad_8036445C;
-struct UnknownStruct_803644BC D_hd_code_80364460[12]; // loaded vehicle/object model slots (unk5C = vehicle id, display lists, skins); proposed name: modelSlots
-struct UnknownStruct_803644BC *D_hd_code_803649D0; // end pointer of the used model slots; proposed name: modelSlotsEnd
-u64 D_hd_code_803649D8; // os time captured at frame start (used for a wobble effect seed); proposed name: frameStartTime
-s16 D_hd_code_803649E0;
-s16 D_hd_code_803649E2;
-s16 D_hd_code_803649E4;
-s32 D_hd_code_803649E8; // player is inside a vehicle flag; proposed name: inVehicle
-u8 D_hd_code_803649EC;
-u8 D_hd_code_803649ED; // vehicle id requested to enter (0xFF = none); proposed name: requestedVehicle
-s8 D_hd_code_803649EE;
-u32 D_hd_code_803649F0; // money counter target value; proposed name: moneyTarget
-u32 D_hd_code_803649F4; // money counter displayed value (animates toward target); proposed name: moneyDisplayed
-f32 D_hd_code_803649F8;
-UnknownStruct_80364A00 D_hd_code_80364A00[5]; // Is an array of structs of size 0xC; ring buffer of floating value popups (value, x, y, align, timer); proposed name: popupQueue
-u8 D_hd_code_80364A3C; // popup queue read index; proposed name: popupTail
-u8 D_hd_code_80364A3D; // popup queue write index; proposed name: popupHead
-s32 D_hd_code_80364A40; // pending popup value to enqueue; proposed name: popupPending
-s32 D_hd_code_80364A44; // currently displayed popup value; proposed name: popupValue
-u8 D_hd_code_80364A48; // popup alpha (fades in/out over the 30-frame timer); proposed name: popupAlpha
-s16 D_hd_code_80364A4A; // popup screen x; proposed name: popupX
-s16 D_hd_code_80364A4C; // popup screen y; proposed name: popupY
-u8 D_hd_code_80364A4E; // popup alignment flag; proposed name: popupAlign
-u8 pad_80364A4F;
-s8 D_hd_code_80364A50;
-s32 D_hd_code_80364A54;
-s32 D_hd_code_80364A58; // scheduler frame when the mission started; proposed name: levelStartFrame
-s32 D_hd_code_80364A5C; // time spent in the level (frames, latched at mission end); proposed name: timeInLevel
-u8 D_hd_code_80364A60;
-s32 D_hd_code_80364A64;
-u8 D_hd_code_80364A68;
-u8 D_hd_code_80364A69;
-u8 D_hd_code_80364A6A;
-u8 D_hd_code_80364A6B;
-u8 D_hd_code_80364A6C;
-u8 D_hd_code_80364A6D;
-u8 pad_80364A6E;
-u8 D_hd_code_80364A6F; // carrier proximity zone: 0 = far, 1 = medium, 2 = near (see func_hd_code_8024A92C); proposed name: carrierZone
-u8 D_hd_code_80364A70;
-s8 D_hd_code_80364A71;
-s16 D_hd_code_80364A72;
-s16 D_hd_code_80364A74;
-s32 D_hd_code_80364A78;
-u8 D_hd_code_80364A7C;
-s32 D_hd_code_80364A80;
-u8 D_hd_code_80364A84;
-u8 D_hd_code_80364A85;
-u8 D_hd_code_80364A86;
-u8 D_hd_code_80364A87;
-u64 D_hd_code_80364A88; // previous game state; proposed name: prevGameState
-u64 g_currentGameState; // current game state (one-hot u64); proposed name: gameState
-u64 g_nextGameState; // requested next game state (0 = no transition pending); proposed name: nextGameState
-u64 D_hd_code_80364AA0; // queued follow-up game state set inside the master switch; proposed name: queuedGameState
-u32 D_hd_code_80364AA8; // current game mode from the mission config table (1 = demolition, 2 = race, ...); proposed name: gameMode
-u32 pad_80364AAC;
-u32 D_hd_code_80364AB0;
-f32 D_hd_code_80364AB4; // failure spin effect: current rotation angle; proposed name: failSpinAngle
-f32 D_hd_code_80364AB8; // failure spin effect: rotation speed (accelerates 3 deg/frame^2); proposed name: failSpinSpeed
-f32 D_hd_code_80364ABC; // failure spin effect: vehicle scale (shrinks to 0, then explosion); proposed name: failSpinScale
-u8 D_hd_code_80364AC0; // failure spin effect finished flag; proposed name: failSpinDone
-u8 D_hd_code_80364AC1; // shuttle present/shuttle view available flag; proposed name: shuttlePresent
-s32 D_hd_code_80364AC4;
-u32 D_hd_code_80364AC8; // frame update time in ~ms (profiling); proposed name: frameUpdateMs
-u32 D_hd_code_80364ACC; // full frame time in ~ms (profiling); proposed name: frameTotalMs
-u64 D_hd_code_80364AD0; // os time at frame start (profiling); proposed name: frameProfileStart
-s32 pad_80364AD8;
-s32 pad_80364ADC;
-s32 pad_80364AE0;
-s32 pad_80364AE4;
-u8 playerNumber; // 0x80364AE8
-u8 D_hd_code_80364AE9; // nextPlayerNumber?
-u8 D_hd_code_80364AEA; // player selected on the world map / primary player; proposed name: selectedPlayer
-UnknownData8024C414 players[5]; // size 0xFF
-u8 bss_pad[0x70];
-u8 D_hd_code_80365060[5];
-u8 D_hd_code_80365065;
-u8 D_hd_code_80365066;
-s32 pad_80365068;
-s32 D_hd_code_8036506C; // This is a vertex index
-s32 pad_80365070;
-s32 pad_80365074;
-f32 D_hd_code_80365078; // smoothed camera eye position x/y/z; proposed name: cameraEyeX
-f32 D_hd_code_8036507C; // proposed name: cameraEyeY
-f32 D_hd_code_80365080; // proposed name: cameraEyeZ
-f32 D_hd_code_80365084; // smoothed camera look-at point x/y/z; proposed name: cameraLookX
-f32 D_hd_code_80365088; // proposed name: cameraLookY
-f32 D_hd_code_8036508C; // proposed name: cameraLookZ
-struct vec3 D_hd_code_80365090; // some 3d vec
-u16 D_hd_code_8036509C;
-s16 D_hd_code_8036509E; // camera target type: vehicle id, or 0xFF/0xFE/0xFD for train/carrier/shuttle views; proposed name: cameraTargetType
-s16 D_hd_code_803650A0;
-// </bss>
-
 void hdGameFrame(void);
 
-// Boot entry point: osInitialize, read 16 words of boot arguments from the
-// cart via raw PI reads, parse the debug command-line flags
-// (func_hd_code_80270AE0 in 2B3F0.c), then create and start Thread1
 void MainJump() {
   u32 sp74;
   s32 pad[2];
@@ -289,8 +269,6 @@ void MainJump() {
   osStartThread(&g_Thread1);
 }
 
-// Init thread: unfreeze the RDP, create the PI manager, start the main game
-// thread (Thread3), then idle forever at priority 0
 void Thread1(void* arg0) {
   u8 pad[2];
   osDpSetStatus(DPC_CLR_FREEZE);
@@ -304,14 +282,6 @@ void Thread1(void* arg0) {
   while(1);
 }
 
-// The main game thread. After init it loops forever: the "master switch"
-// processes pending game state transitions (each case does the setup work
-// for the new state - level loading, menu setup, music selection via
-// func_hd_code_80261A44, save handling...), shifting the state pipeline
-// prev <- current <- next <- queued until no transition is pending. Then the
-// per-frame loop dispatches the frame update for the current state class
-// (world map, front-end menus, intro, or the in-level frame
-// func_hd_code_802475D8) and waits for the frame via func_hd_code_80285110.
 void Thread3(void* arg0) {
     s32 sp64;
     s32 sp60;
@@ -324,7 +294,7 @@ void Thread3(void* arg0) {
     {
       D_hd_code_80364A70 = 0;
       do {
-        rmonPrintf("game mode switch from %d to %d\n", func_hd_code_8026F92C(g_currentGameState), func_hd_code_8026F92C(g_nextGameState));
+        rmonPrintf("game mode switch from %d to %d\n", yoshiFFS(g_currentGameState), yoshiFFS(g_nextGameState));
 
         D_hd_code_80364AA0 = 0ULL;
 
@@ -521,7 +491,7 @@ void Thread3(void* arg0) {
             func_hd_front_end_801F8530(g_currentLevel);
             break;
           }
-          case 0x0000800000000000:
+          case LEVELS_COMPLETED:
           {
             D_hd_code_80364A70 = func_hd_code_80261A44(g_nextGameState);
             break;
@@ -622,7 +592,7 @@ void Thread3(void* arg0) {
             D_hd_code_80364412 = 1;
             break;
           }
-          case 0x0000000000000080:
+          case BEFORE_LEVEL_STATS:
           {
             sp5B = 0;
             switch (g_currentGameState)
@@ -652,16 +622,16 @@ void Thread3(void* arg0) {
               osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((g_currentLevel << 8) | 0xD | (playerNumber << 0x10)), OS_MESG_BLOCK);
             }
 
-            D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~1;
-            D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 |= 0x800;
+            D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~1;
+            D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 2].unk0 |= 0x800;
 
             func_hd_code_8026B8F8();
-            yoshiShow(D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)] | 0x8000);
+            yoshiShow(D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)] | 0x8000);
 
-            D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk18 =
-              D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 3;
+            D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk18 =
+              D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 3;
 
-            D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk8 &= ~8;
+            D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk8 &= ~8;
 
             statsCopyTo(&g_statsNew, &g_statsOld);
             D_hd_code_80315438 = func_hd_front_end_801EE800(&D_hd_code_80364A60, 1, 0),
@@ -689,7 +659,7 @@ void Thread3(void* arg0) {
             }
             break;
           }
-          case 0x0000000040000000:
+          case PROMOTION_SCREEN:
           {
             hdPrepareStateTransition();
             sp54 = sc.retraceCount;
@@ -872,29 +842,29 @@ void Thread3(void* arg0) {
                   func_hd_front_end_801E8C40(playerNumber);
                 }
 
-                D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 |= 1;
-                D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~0x800;
+                D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 2].unk0 |= 1;
+                D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~0x800;
                 break;
               }
             }
 
             if ((D_hd_code_803643D5 != 0) && (playerNumber == D_hd_code_80364AEA))
             {
-              D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk18 = D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 1;
+              D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk18 = D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 1;
             }
             else
             {
-              D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk18 = D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk10 - 3;
+              D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk18 = D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 3;
             }
 
-            D_hd_code_802F8BDC[D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)]].unk8 |= 8;
+            D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk8 |= 8;
 
             func_hd_code_8026B8F8();
             if (D_hd_code_802E8BF8 != 0)
             {
               D_hd_front_end_8020C070[0x1D].unk0 &= ~1;
             }
-            yoshiShow(D_hd_code_802F4868[func_hd_code_8026F92C(D_hd_code_80364AA8)] | 0x8000);
+            yoshiShow(D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)] | 0x8000);
             break;
           }
           case 0x0000000000000040:
@@ -1123,21 +1093,12 @@ void Thread3(void* arg0) {
     }
 }
 
-// The per-frame in-level game update - the heart of gameplay. Handles the
-// debug instant-win cheat, per-frame texture/shadow refresh, pause and
-// unpause logic (D_hd_code_802E8BD0/BD4/BD8), camera zoom in/out via C
-// buttons, map scrolling in missile view, vehicle enter/exit, all subsystem
-// updates (carrier, train, buildings, RDU pickups, explosions, objectives
-// via func_hd_code_80262BF4...), builds the frame display list
-// (func_hd_code_8024C414 plus HUD overlays), start-button and menu
-// transitions, waits for outstanding texture DMAs, and finally latches the
-// success/failure request flags into the mission result.
 void hdGameFrame(void) {
     s32 sp6C;
     s32 sp68;
     s32 sp64;
     u8 sp63;
-    Gfx *sp5C;
+    Gfx *entry;
     u8 sp5B;
     s32 sp54;
     s32 sp50;
@@ -1145,7 +1106,7 @@ void hdGameFrame(void) {
     s16 sp4A;
     s16 pad48;
 
-    if (D_hd_code_802FA268 != 0 && (g_currentButtons & R_CBUTTONS) && !(g_previousButtons & R_CBUTTONS) && (g_currentGameState & 0x104)) {
+    if (D_hd_code_802FA268 != 0 && ((g_currentButtons & R_CBUTTONS) && !(g_previousButtons & R_CBUTTONS)) && (g_currentGameState & 0x104)) {
         D_hd_code_803643DA = 1;
         D_hd_code_803643D9 = 0;
         if (g_currentButtons & U_CBUTTONS) {
@@ -1164,7 +1125,7 @@ void hdGameFrame(void) {
         }
         if (LEVEL_FINISHED(g_currentLevel) && D_hd_code_80364AA8 == 1 && D_hd_code_803643DA != 0) {
             D_hd_code_802E8BD8 = 1;
-            func_hd_code_80275390(0x08000000);
+            fadeToFast(0x08000000);
         }
     }
 
@@ -1422,7 +1383,7 @@ void hdGameFrame(void) {
 
         }
     }
-    if ((D_hd_code_803643DC != 0) && ((D_hd_code_802E8BD0 == 0) || (0 != 0) || (g_currentGameState & 0x1801))) {
+    if ((D_hd_code_803643DC != 0) && ((D_hd_code_802E8BD0 == 0) || (g_currentGameState & 0x1801))) {
         func_hd_code_802B899C();
         if ((g_currentGameState & 0x1801)) {
             if (areWeFading() == 0) {
@@ -1452,7 +1413,7 @@ void hdGameFrame(void) {
     if ((D_hd_code_80364AC1 != 0) && (D_hd_code_802E8BD0 == 0)) {
         func_hd_code_802D291C();
         if ((g_currentLevel == 0x32) && (D_hd_code_8036BB1C == 1) && ((u32) g_frameCount >= 0x33U) && ((0 != 0) || (g_currentGameState & 0x1801)) && (areWeFading() == 0)) {
-            func_hd_code_80275390(0x2000);
+            fadeToFast(0x2000);
         }
     }
     func_hd_code_8029DDC8();
@@ -1488,6 +1449,7 @@ void hdGameFrame(void) {
             }
         }
     } else {
+      // TODO: block label
 block_275:
         if ((D_hd_code_80364AA8 == 1) && (D_hd_code_80364A5C == 0)) {
             rmonPrintf("TIME IN LEVEL=%d\n", D_hd_code_80364A5C = sc.unk803156C0 - D_hd_code_80364A58);
@@ -1545,9 +1507,9 @@ block_275:
             D_hd_code_803643DA = 1;
             sndPlaySfx(D_hd_code_80367738, 0x2BU, NULL);
             if ((g_currentGameState == 0x40)) {
-                func_hd_code_80275390(0x40);
+                fadeToFast(0x40);
             } else {
-                func_hd_code_80275390(0x08000000);
+                fadeToFast(0x08000000);
             }
         }
     }
@@ -1563,13 +1525,13 @@ block_275:
     if (D_hd_code_802E8BD0 == 0) {
         func_hd_code_8026A9B4();
     }
-    sp5C = func_hd_code_8024C414(&D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
+    entry = func_hd_code_8024C414(&D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     if (g_currentGameState & 0x04002444 && D_hd_code_80364AA8 != 1) {
-        sp5C = func_hd_code_802639B4(sp5C, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
+        entry = func_hd_code_802639B4(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     }
     if ((g_currentGameState & 0x100000000002)) {
         if((g_currentGameState == 0x2)) {
-            sp5C = func_hd_code_8025C878(sp5C, &D_hd_code_803156F8[D_hd_code_8035805C], D_hd_code_8035805C, &D_hd_code_80358078);
+            entry = func_hd_code_8025C878(entry, &D_hd_code_803156F8[D_hd_code_8035805C], D_hd_code_8035805C, &D_hd_code_80358078);
         }
         if ((D_hd_code_802E8BF0 != 0) || (D_hd_code_80366A12 == 3) || (D_hd_code_802E8BEC >= 9)) {
             if (((D_hd_code_8036BB1C == 1) || (D_hd_code_8036BB1C == 8) || (D_hd_code_802E8BEC >= 9)) && ((D_hd_code_802E8BF0 == 0) || (g_frameCount <= D_hd_code_80366A04))) {
@@ -1585,14 +1547,14 @@ block_275:
             }
         }
         if ((D_hd_code_8039CAA0 != 0) && (D_hd_code_802E8BEC != 0) && (D_hd_code_8039CAA2 != 0)) {
-            sp5C = func_hd_code_80295EFC(&D_hd_code_803156F8[D_hd_code_8035805C],
-                                         sp5C,
+            entry = func_hd_code_80295EFC(&D_hd_code_803156F8[D_hd_code_8035805C],
+                                         entry,
                                          (D_hd_code_8039CAA0 / 2) - 0x67,
                                          0x55 - ((g_currentGameState == 0x100000000000) << 5),
                                          (s32) D_hd_code_8039CAA0);
         }
         if ((D_hd_code_802E8BEC == 0) && (D_hd_code_80366A12 == 3) && (g_currentGameState == 2)) {
-            sp5C = func_hd_code_8029A1A8(&D_hd_code_803156F8, sp5C);
+            entry = func_hd_code_8029A1A8(&D_hd_code_803156F8, entry);
         }
         if (g_currentGameState == 2 || g_currentLevel == 0x2F) {
             func_hd_code_8025C5D0();
@@ -1606,26 +1568,26 @@ block_275:
             yoshiShow(0x803F);
         }
     }
-    sp5C = func_hd_code_8024C404(sp5C, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
+    entry = func_hd_code_8024C404(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     if ((g_currentGameState & 0x440) && ((u32) (sc.retraceCount - D_hd_code_80364A54) >= 0xA1U) && ((u8) D_hd_code_80364A50 == 0)) {
         D_hd_code_80364A50 = 1;
         if (D_hd_code_8036BB1C == 1) {
             if ((((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)?1:0) == 0) || (D_hd_code_80364AA8 == 1)) {
                 yoshiShow(
-                     D_hd_code_802F4870[func_hd_code_8026F92C(D_hd_code_80364AA8)] | 0x8000
+                     D_hd_code_802F4870[yoshiFFS(D_hd_code_80364AA8)] | 0x8000
                 );
             }
         }
     }
     if (g_currentGameState == 8 && (areWeFading() == 0) && ((alCSPGetState(g_musicPlayer) == 0) || ((u32) (sc.retraceCount - D_hd_code_80367740) >= 0x12DU))) {
-        func_hd_code_80275390(0x08000000);
+        fadeToFast(0x08000000);
     }
     if ((g_currentLevel == 0x31) && (D_hd_code_8036BB1C == 1)) {
-        sp5C = func_hd_code_8029A518(&D_hd_code_803156F8[D_hd_code_8035805C], sp5C);
+        entry = func_hd_code_8029A518(&D_hd_code_803156F8[D_hd_code_8035805C], entry);
     }
-    func_hd_code_80259C24(&sp5C, &D_hd_code_803156F8[D_hd_code_8035805C]);
+    drawTextOrtho(&entry, &D_hd_code_803156F8[D_hd_code_8035805C]);
     if (g_currentGameState != 2) {
-        sp5C = func_hd_code_80274BF0(&D_hd_code_803156F8[D_hd_code_8035805C], sp5C);
+        entry = func_hd_code_80274BF0(&D_hd_code_803156F8[D_hd_code_8035805C], entry);
     }
     if (g_currentGameState == 0x2000000000000000) {
         if ((g_currentButtons & R_TRIG) && !(g_previousButtons & R_TRIG)) {
@@ -1668,7 +1630,7 @@ block_275:
                     g_nextGameState = 0x08000000;
                     sndPlaySfx(D_hd_code_80367738, 0x1EU, NULL);
                 } else if (D_hd_code_8036BB1C == 1) {
-                    yoshiShow(D_hd_code_802F4870[func_hd_code_8026F92C(D_hd_code_80364AA8)] | 0x8000);
+                    yoshiShow(D_hd_code_802F4870[yoshiFFS(D_hd_code_80364AA8)] | 0x8000);
                 }
                 break;
             case 0x2:
@@ -1676,7 +1638,7 @@ block_275:
                     sndPlaySfx(D_hd_code_80367738, 0x1EU, NULL);
                     sndSetSfxSlotVolume(0, 0);
                     sndSetSfxSlotVolume(5, 0);
-                    func_hd_code_80275390(0x20000000000000);
+                    fadeToFast(0x20000000000000);
                 }
                 break;
             case 0x100000000000:
@@ -1697,12 +1659,9 @@ block_275:
                     yoshiShow(0x8000);
                 }
                 break;
-
-
-
         }
     }
-    sp5C = func_hd_code_8026BBD0(sp5C, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
+    entry = func_hd_code_8026BBD0(entry, &D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
     if ((D_hd_code_8036BB16 != 0) && (D_hd_code_803643D9 == 0) && (D_hd_code_803643DA == 0)) {
         func_hd_code_8024BDA4(&D_hd_code_8036BB16);
     }
@@ -1718,9 +1677,9 @@ block_275:
         D_hd_code_80367BD0.unk6 = (D_hd_code_80367BD0.unk6 >= 0) ? (((D_hd_code_80367BD0.unk6 - 0x10) < 0) ? (0) : (D_hd_code_80367BD0.unk6 - 0x10)) : (0);
     }
     if (g_currentGameState == 2) {
-        sp5C = func_hd_code_80274BF0(&D_hd_code_803156F8[D_hd_code_8035805C], sp5C);
+        entry = func_hd_code_80274BF0(&D_hd_code_803156F8[D_hd_code_8035805C], entry);
     }
-    func_hd_code_802559F8(sp5C, &D_hd_code_80358078);
+    func_hd_code_802559F8(entry, &D_hd_code_80358078);
     for(sp68 = 0; sp68 < nextdma; sp68++) {
         osRecvMesg(&D_hd_code_80315180, NULL, OS_MESG_BLOCK);
     }
@@ -1753,11 +1712,6 @@ block_275:
     }
 }
 
-// Floating value popup queue update: enqueue a pending popup value
-// (positioned by camera quadrant and game mode), then animate the current
-// one - 30-frame lifetime with alpha fade in/out - advancing the ring
-// buffer when it expires.
-// Proposed name: UpdatePopupQueue
 void func_hd_code_8024A348(void) {
     if (D_hd_code_80364A40 != 0) {
         if (((D_hd_code_80364A3D + 1) != D_hd_code_80364A3C) && ((D_hd_code_80364A3D != 4) || (D_hd_code_80364A3C != 0))) {
@@ -1816,18 +1770,11 @@ void func_hd_code_8024A348(void) {
     }
 }
 
-// Carrier proximity warning: arg0 = distance to the missile carrier. Maps it
-// to 3 zones using per-level thresholds (a few levels have custom, even
-// progress-dependent ones). On zone change: pushes the danger jingle when
-// entering range, starts/stops the looping alarm SFX 0x26 when very close,
-// pops the music back when leaving range, and shows/hides the warning
-// message windows (0x8002/0x8003).
-// Proposed name: UpdateCarrierProximity
 void func_hd_code_8024A92C(u32 arg0) {
     u32 sp2C;
     u32 sp28;
 
-    switch (g_currentLevel) {                              /* irregular */
+    switch (g_currentLevel) {
     case 0x1D:
         sp2C = 0x55F0;
         sp28 = 0x36B0;
@@ -1897,28 +1844,28 @@ void func_hd_code_8024A92C(u32 arg0) {
             func_hd_code_80277EDC(1, 1, 7, 0x6C);
             rmonPrintf("TOO FAR AWAY FROM CMO\n");
         }
-        switch (D_hd_code_80364A6F) {                       /* switch 1; irregular */
-        case 1:                                     /* switch 1 */
-            switch (D_hd_code_803153F0) {                   /* switch 2; irregular */
-            case 0:                                 /* switch 2 */
+        switch (D_hd_code_80364A6F) {
+          case 1:
+            switch (D_hd_code_803153F0) {
+            case 0:
                 func_hd_code_80260DFC();
                 /* fallthrough */
-            case 2:                                 /* switch 2 */
+            case 2:
                 sndDeactivate(D_hd_code_803156E8);
                 break;
             }
             break;
-        case 2:                                     /* switch 1 */
-            switch (D_hd_code_803153F0) {                   /* switch 3; irregular */
-            case 0:                                 /* switch 3 */
+          case 2:
+            switch (D_hd_code_803153F0) {
+            case 0:
                 func_hd_code_80260DFC();
                 /* fallthrough */
-            case 1:                                 /* switch 3 */
+            case 1:
                 sndPlaySfx(D_hd_code_80367738, 0x26U, &D_hd_code_803156E8);
                 break;
             }
             break;
-        case 0:                                     /* switch 1 */
+          case 0:
             sndDeactivate(D_hd_code_803156E8);
             if ((D_hd_code_802E8F94[g_currentLevel].unk0 != 0x80) || (func_hd_code_802C1AA0() == 0)) {
                 rmonPrintf("popTuneImmediate();\n");
@@ -1932,20 +1879,20 @@ void func_hd_code_8024A92C(u32 arg0) {
             break;
         }
     }
-    switch (D_hd_code_80364A6F) {                           /* switch 4; irregular */
-    case 1:                                         /* switch 4 */
+    switch (D_hd_code_80364A6F) {
+    case 1:
         if ((func_hd_code_8026AD30(0x49) == 0) && (D_hd_code_8036BB18 != 3)) {
             yoshiShow(0x8003);
             return;
         }
         return;
-    case 2:                                         /* switch 4 */
+    case 2:
         if (D_hd_code_8036BB18 != 2) {
             yoshiShow(0x8002);
             return;
         }
         break;
-    case 0:                                         /* switch 4 */
+    case 0:
         if (((D_hd_code_8036BB1C == 2) || (D_hd_code_8036BB1C == 4)) && (func_hd_code_8026B10C() == 0) && ((D_hd_code_8036BB18 == 3) || (D_hd_code_8036BB18 == 2) || (D_hd_code_8036BB18 == 0x49))) {
             yoshiShow(0x4000);
         }
@@ -1953,9 +1900,6 @@ void func_hd_code_8024A92C(u32 arg0) {
     }
 }
 
-// Animate the displayed money counter toward the real value (10% of the
-// difference + 10 per frame, clamped)
-// Proposed name: UpdateMoneyCounter
 void func_hd_code_8024ADD8(void) {
   u32 sp4;
 
@@ -1967,12 +1911,6 @@ void func_hd_code_8024ADD8(void) {
   }
 }
 
-// Vehicle entry: if a vehicle entry was requested (D_hd_code_803649ED) and
-// the vehicle is free, swap the on-foot model out, run the per-vehicle init
-// (func_hd_code_8024AFA8), record it as driven in the player's save bits,
-// and play the "first time in this vehicle" hint; otherwise play the locked
-// sound (0x2B).
-// Proposed name: TryEnterVehicle
 void func_hd_code_8024AE2C(void) {
     UnknownData8024C414* temp_t4;
 
@@ -2002,9 +1940,6 @@ void func_hd_code_8024AE2C(void) {
     }
 }
 
-// Per-vehicle entry init dispatch ("changing to digger %d"). Returns 1 for a
-// valid vehicle id. Also flashes the controller-config indicator.
-// Proposed name: InitVehicleById
 u8 func_hd_code_8024AFA8(s32 arg0) {
   u8 sp27;
 
@@ -2070,11 +2005,6 @@ u8 func_hd_code_8024AFA8(s32 arg0) {
   return sp27;
 }
 
-// Vehicle exit: check the per-vehicle "can exit here" handler
-// (func_hd_code_8024B4B8) and a clear spot for the human
-// (func_hd_code_802AE888); if ok, run the per-vehicle exit handler and
-// switch to on-foot (vehicle 0), else play the blocked sound.
-// Proposed name: TryExitVehicle
 void func_hd_code_8024B188(void) {
     u8 sp27;
     u8 sp26;
@@ -2157,8 +2087,6 @@ void func_hd_code_8024B188(void) {
     }
 }
 
-// Return 1 if a model slot is loaded for vehicle id arg0
-// Proposed name: IsVehicleModelLoaded
 s32 func_hd_code_8024B418(u8 arg0) {
   u32 sp4;
   sp4 = 0;
@@ -2171,8 +2099,6 @@ s32 func_hd_code_8024B418(u8 arg0) {
   return 0;
 }
 
-// Per-vehicle "may the player exit right now?" dispatch
-// Proposed name: CanExitVehicle
 u8 func_hd_code_8024B4B8(void) {
   switch (D_hd_code_80364456) {
     case 4:
@@ -2210,18 +2136,11 @@ u8 func_hd_code_8024B4B8(void) {
   }
 }
 
-// Pre-update for the current vehicle (sets D_hd_code_803ED3F5 around the
-// frame; cleared again in func_hd_code_8024B7AC)
-// Proposed name: PreUpdateCurrentVehicle
 void func_hd_code_8024B5E8() {
   D_hd_code_803ED3F5 = 1;
   func_hd_code_802AB670(D_hd_code_80364456);
 }
 
-// Update parked/idle vehicle models that were displaced ("MOVEABLE GEOMETRY
-// MOVE ROUTINE NOT WRITTEN YET" for the rest) - lets vehicles the player
-// isn't driving settle physically
-// Proposed name: UpdateIdleVehicles
 void func_hd_code_8024B618(void) {
 
     s32 sp1C;
@@ -2272,9 +2191,6 @@ void func_hd_code_8024B618(void) {
     }
 }
 
-// Per-vehicle control/physics update dispatch for the vehicle being driven
-// (case 0 = on foot)
-// Proposed name: UpdateVehicleControls
 void func_hd_code_8024B7AC(void) {
     D_hd_code_803ED3F5 = 0;
     switch (D_hd_code_80364456) {
@@ -2334,10 +2250,6 @@ void func_hd_code_8024B7AC(void) {
     }
 }
 
-// Build and submit a small dummy display list (degenerate all-zero vertices,
-// given projection/modelview) to the RSP via func_hd_code_802A467C - likely
-// a microcode warm-up/priming task run early in a level
-// Proposed name: SubmitDummyDisplayList
 void func_hd_code_8024B8F4(void* arg0, void* arg1) {
   Gfx gfx[50];
   Gfx* entry;
@@ -2384,16 +2296,11 @@ void func_hd_code_8024B8F4(void* arg0, void* arg1) {
   func_hd_code_802A467C(D_hd_code_80358074, gfx, vertices, (((s32) entry - (s32)gfx) >> 3) * 8);
 }
 
-// Handle a selection made in the pause/yoshi menu (*arg0 = menu item id,
-// cleared on exit): toggles submenus, restart/continue/quit transitions,
-// camera-mode and controller-mode selections, music volume toggle
-// (items 0x27/0x28 -> 0.7/1.0), and unpause (0xFFFF).
-// Proposed name: HandleMenuSelection
 void func_hd_code_8024BDA4(u16* arg0) {
     switch(g_currentGameState) {
         case 0x4:
         case 0x100:
-            switch (*arg0) {                    /* irregular */
+            switch (*arg0) {
             case 0x1:
                 if ((D_hd_code_80364456 == 6) || (D_hd_code_80364456 == 0xB) || (D_hd_code_80364456 == 0x11) || (D_hd_code_80364456 == 0x12)) {
                     D_hd_code_802F5804[0x07].unk0 = (u16) (D_hd_code_802F5804[0x07].unk0 & ~1);
@@ -2413,9 +2320,9 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 break;
             case 0x3:
                 if (D_hd_code_802E8F94[g_currentLevel].unk0 & 0x81) {
-                    func_hd_code_80275270(0x2000, 0.5f);
+                    fadeTo(0x2000, 0.5f);
                 } else {
-                    func_hd_code_80275270(0x20000000, 0.5f);
+                    fadeTo(0x20000000, 0.5f);
                 }
                 break;
             case 0x8:
@@ -2424,7 +2331,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 D_hd_code_80364412 = 1;
                 break;
             case 0x4:
-                func_hd_code_80275270(0x4000, 0.5f);
+                fadeTo(0x4000, 0.5f);
                 break;
             case 0x9:
                 if ((f64) func_hd_code_80260DF0() == 1.0) {
@@ -2450,9 +2357,9 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 D_hd_code_802F8BDC[0x06].unk8 = (s32) (D_hd_code_802F8BDC[0x06].unk8 | 0x80);
                 break;
             case 0xFFFF:
-                switch (D_hd_code_8036BB18) {                   /* switch 1; irregular */
-                case 0x1:                               /* switch 1 */
-                case 0x6:                               /* switch 1 */
+                switch (D_hd_code_8036BB18) {
+                case 0x1:
+                case 0x6:
                     rmonPrintf("TESTING PAUSE2 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                     yoshiShow(0x8000);
                     if ((D_hd_code_803643DB != 0) || (D_hd_code_80364AC1 != 0)) {
@@ -2460,8 +2367,8 @@ void func_hd_code_8024BDA4(u16* arg0) {
                         func_hd_code_802A45D4(0xA);
                     }
                     break;
-                case 0xD:                               /* switch 1 */
-                case 0x58:                              /* switch 1 */
+                case 0xD:
+                case 0x58:
                     rmonPrintf("TESTING PAUSE3 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                     yoshiShow(0x8001);
                     break;
@@ -2509,22 +2416,11 @@ void func_hd_code_8024BDA4(u16* arg0) {
     *arg0 = 0;
 }
 
-// Stub: just zero the length counter
-// Proposed name: ResetDlLengthStub
 Gfx* func_hd_code_8024C404(Gfx* arg0, struct FrameContext* arg1, s32* arg2) {
   *arg2 = 0;
   return arg0;
 }
 
-// Build the master frame display list: set up segments, clear the z-buffer,
-// draw the sky (func_hd_code_80271FD0) and the ground-color fill below the
-// horizon (per-level fill colors), set up the perspective projection (FOV
-// D_hd_code_80364438), then chain all the world geometry display list
-// buffers, object shadows, vehicle models, RDUs, particle/effect systems,
-// the mission failure spin effect, the floating money popups, the carrier
-// arrow and radar, "PRESS START" / "MISSILE VIEW" / "SHUTTLE VIEW" labels
-// and the rest of the HUD.
-// Proposed name: BuildFrameDisplayList
 Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     Gfx* entry;
     u8 sp194[16];
@@ -2619,7 +2515,7 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
         gSPDisplayList(entry++, &D_2000000.unk21410);
         gDPPipeSync(entry++);
     }
-    switch (D_hd_code_8035805C) {                           /* irregular */
+    switch (D_hd_code_8035805C) {
     case 0:
         gSPSegment(entry++, 0x0A, osVirtualToPhysical(D_hd_code_803F7820));
         break;
@@ -2659,11 +2555,11 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     func_hd_code_802917B0(&entry, arg0);
     func_hd_code_80292EB8(&entry, arg0);
     func_hd_code_8028CB30(&entry, arg0);
-    switch (D_hd_code_8035805C) {                           /* switch 1; irregular */
-    case 0:                                         /* switch 1 */
+    switch (D_hd_code_8035805C) {
+    case 0:
         gSPDisplayList(entry++, osVirtualToPhysical(&D_hd_code_803C5770));
         break;
-    case 1:                                         /* switch 1 */
+    case 1:
         gSPDisplayList(entry++, osVirtualToPhysical(&D_hd_code_803C6370));
         break;
     }
@@ -2709,11 +2605,11 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     if (D_hd_code_803643DC != 0) {
         func_hd_code_80266248(&entry, arg0);
     }
-    switch (D_hd_code_8035805C) {                           /* switch 2; irregular */
-    case 0:                                         /* switch 2 */
+    switch (D_hd_code_8035805C) {
+    case 0:
         gSPDisplayList(entry++, osVirtualToPhysical(&D_hd_code_803C6F70));
         break;
-    case 1:                                         /* switch 2 */
+    case 1:
         gSPDisplayList(entry++, osVirtualToPhysical(&D_hd_code_803C7B70));
         break;
     }
@@ -2742,11 +2638,11 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     if ((D_hd_code_80364AA8 & 1) && ((g_currentGameState & 0x0400030C))) {
         func_hd_code_8026A378(D_hd_code_803649F4, &sp194[1]);
         sp194[0] = 0x24;
-        func_hd_code_80259CCC(arg0, &sp194, NULL, 1, 0, 0x118, 0x12, 0x14, 0x14, 0, 0xFF, 0xFF, 0xFF, (s32) D_hd_code_80367BD0.unk6);
+        drawTextSimple(arg0, &sp194, NULL, 1, 0, 0x118, 0x12, 0x14, 0x14, 0, 0xFF, 0xFF, 0xFF, (s32) D_hd_code_80367BD0.unk6);
         if ((D_hd_code_80364A44 != 0) && (D_hd_code_802E8BD0 == 0)) {
             func_hd_code_8026A378(D_hd_code_80364A44, &sp184[1]);
             sp184[0] = 0x24;
-            func_hd_code_80259CCC(arg0, &sp184, NULL, 1, 0, (s32) D_hd_code_80364A4A, (s32) D_hd_code_80364A4C, 0x23, 0x23, (s32) D_hd_code_80364A4E, 0xFF, 0xFF, 0xFF, D_hd_code_80364A48);
+            drawTextSimple(arg0, &sp184, NULL, 1, 0, (s32) D_hd_code_80364A4A, (s32) D_hd_code_80364A4C, 0x23, 0x23, (s32) D_hd_code_80364A4E, 0xFF, 0xFF, 0xFF, D_hd_code_80364A48);
         }
     }
    if ((g_currentGameState & 0x2000000000000104) && (!(D_hd_code_80364AA8 & 0x81) || (D_hd_code_803643DB != 0) || (D_hd_code_80364AC1 != 0))) {
@@ -2754,20 +2650,20 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     }
     if ((g_nextGameState == 0) && (areWeFading() == 0)) {
         if (!(g_currentGameState & 0x200000100400230C) && ((u32) ((u32) (((u32) sc.retraceCount % 50U) * 0x3C) / 60U) >= 0x15U) && (D_hd_code_8036BB1C == 1) && ((!(g_currentGameState & 2)) || ((D_hd_code_802E8BEC != 0) && ((D_hd_code_80366A12 == 3) || (D_hd_code_802E8BEC == 1)))) && ((g_currentGameState != 0x100000000000) || (D_hd_code_803A6B04 != 0)) && ((!(g_currentGameState & 0x1801)) || (players[playerNumber].unk91 != 0)) && (g_currentLevel != 0x2F)) {
-            func_hd_code_80259CCC(arg0, "PRESS START", NULL, 1, 0, 0x5C, 0xC4, 0x1A, 0x1A, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+            drawTextSimple(arg0, "PRESS START", NULL, 1, 0, 0x5C, 0xC4, 0x1A, 0x1A, 1, 0xFF, 0xFF, 0xFF, 0xFF);
         }
         if ((u32) ((u32) (((u32) sc.retraceCount % 40U) * 60) / 60U) >= 16U) {
             if (D_hd_code_802E8BD0 != 0) {
                 if ((g_currentGameState == 0x2000000000000000) && (D_hd_code_8036BB1C == 2)) {
-                    func_hd_code_80259CCC(arg0, "USE Z/R TO TURN PAGES", D_hd_code_8030491C, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    drawTextSimple(arg0, "USE Z/R TO TURN PAGES", D_hd_code_8030491C, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 } else if ((g_currentGameState == 0x100) && (D_hd_code_8036BB18 == 0) && (D_hd_code_8036BB1C == 2) && (D_hd_code_803643DB != 0) && !(g_currentButtons & (Z_TRIG | R_TRIG))) {
-                    func_hd_code_80259CCC(arg0, "USE Z/R TO MOVE MAP", D_hd_code_80304938, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    drawTextSimple(arg0, "USE Z/R TO MOVE MAP", D_hd_code_80304938, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 }
             } else if ((g_currentGameState == 0x100)) {
                 if (D_hd_code_80364AC1 != 0) {
-                    func_hd_code_80259CCC(arg0, "SHUTTLE VIEW", D_hd_code_80304904, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    drawTextSimple(arg0, "SHUTTLE VIEW", D_hd_code_80304904, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 } else {
-                    func_hd_code_80259CCC(arg0, "MISSILE VIEW", D_hd_code_80304910, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
+                    drawTextSimple(arg0, "MISSILE VIEW", D_hd_code_80304910, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 }
             }
         }
@@ -2815,21 +2711,14 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
         }
 
     }
-    func_hd_code_80259C24(&entry, arg0);
+    drawTextOrtho(&entry, arg0);
     *arg1 = (s32) (((s32)entry - (s32)arg0) - 0x48B0) >> 3;
     return entry;
 }
 
 
-// arg2 can only be 0,1 and 2
-// Draw the blob shadows under vehicles/objects for render pass arg2: each
-// entry in the shadow texture list is a 64x64 IA8 texture (32x32
-// D_hd_code_802FA940 for the on-foot human) drawn as a dark quad rotated by
-// the object's yaw/pitch/roll at its ground position. The driven vehicle's
-// shadow also follows the failure spin matrix.
-// Proposed name: DrawObjectShadows
 void func_hd_code_8024E4F4(Gfx** arg0, struct FrameContext *arg1, u8 arg2) {
-    Gfx *entry; // sp144
+    Gfx *entry;
     s32 sp140;
     s16 pad;
     s16 sp13C;
@@ -2925,9 +2814,6 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct FrameContext *arg1, u8 arg2) {
     *arg0 = entry;
 }
 
-// Draw the train's shadow (the shadow list entry with owner id 0xFE):
-// a single 64x64 IA quad rotated by the train heading D_hd_code_803EF326
-// Proposed name: DrawTrainShadow
 void func_hd_code_8024F520(Gfx** arg0, struct FrameContext* arg1) {
     Gfx* entry;
 
@@ -3027,12 +2913,6 @@ void func_hd_code_8024F520(Gfx** arg0, struct FrameContext* arg1) {
     *arg0 = entry;
 }
 
-// Draw the loaded vehicle/object models for render pass arg1 (0..2): for
-// each model slot set segment 6 to its data and segment 7 to one of two
-// per-frame vertex/skin buffers, set the env alpha, and run the pass's
-// display list. The driven vehicle gets the failure spin matrix when the
-// mission has failed.
-// Proposed name: DrawVehicleModels
 void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
     Gfx* entry;
     s32 sp60;
@@ -3064,19 +2944,19 @@ void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
                 gSPMatrix(entry++, &D_2000000.unk1500, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             }
             if (sp5E != 0) {
-                switch (arg1) {                 /* switch 1; irregular */
-                case 0:                         /* switch 1 */
+                switch (arg1) {
+                case 0:
                     gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_80364460[sp60].unkC));
                     break;
-                case 1:                         /* switch 1 */
+                case 1:
                     gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_80364460[sp60].unk10));
                     break;
-                case 2:                         /* switch 1 */
+                case 2:
                     gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_80364460[sp60].unk14));
                     break;
                 }
             } else {
-                switch (arg1) {                 /* irregular */
+                switch (arg1) {
                 case 0:
                     gSPDisplayList(entry++, osVirtualToPhysical(D_hd_code_80364460[sp60].unk30));
                     break;
@@ -3095,11 +2975,6 @@ void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
     *arg0 = entry;
 }
 
-// Mission-failure spin effect: while the mission is failed, build matrices
-// that spin the player's vehicle around its position with accelerating
-// speed while shrinking it to nothing, then trigger the final explosion
-// (func_hd_code_802AC61C) once fully shrunk.
-// Proposed name: UpdateFailureSpinEffect
 void func_hd_code_802502EC(void) {
     f32 sp70[4][4];
     f32 sp30[4][4];
@@ -3147,14 +3022,6 @@ void func_hd_code_802502EC(void) {
     }
 }
 
-// The camera system. Selects per-target parameters (orbit distance, height,
-// pitch limits, smoothing rates) from the camera target type - each vehicle
-// has its own, plus 0xFF/0xFE/0xFD for train/carrier/shuttle views - applies
-// the L/R 45-degree rotation (func_hd_code_80255190), accelerate/brake pitch
-// tilt, position smoothing toward the target, terrain collision, cutscene
-// camera positions from the menu system, and finally builds the projection
-// matrix and guLookAt.
-// Proposed name: UpdateCamera
 void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     f32 spFC;
     f32 spF8;
@@ -3204,7 +3071,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     s8 sp67;
     s8 _sp66;
     s16 sp64;
-    s16 sp62; // 0x5e
+    s16 sp62;
 
     sp8B = 0;
     func_hd_code_80255190();
@@ -3329,8 +3196,8 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         spC8 = 0.0f;
         spC4 = 0.0f;
     } else {
-        switch (D_hd_code_8036509E) {                       /* switch 3; irregular */
-        case 0x7:                                   /* switch 3 */
+        switch (D_hd_code_8036509E) {
+        case 0x7:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3338,7 +3205,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xEB;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0xA:                                   /* switch 3 */
+        case 0xA:
             spCC = 9;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3346,9 +3213,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xF5;
             D_hd_code_80364A74 = -0x87;
             break;
-        case 0xB:                                   /* switch 3 */
-        case 0x11:                                  /* switch 3 */
-        case 0x12:                                  /* switch 3 */
+        case 0xB:
+        case 0x11:
+        case 0x12:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3356,7 +3223,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xEB;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0x8:                                   /* switch 3 */
+        case 0x8:
             spCC = 7;
             spC8 = 3.0f;
             spC4 = 30.0f;
@@ -3364,7 +3231,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x14F;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0xF:                                   /* switch 3 */
+        case 0xF:
             spCC = 7;
             spC8 = 3.0f;
             spC4 = 30.0f;
@@ -3372,7 +3239,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x131;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0xD:                                   /* switch 3 */
+        case 0xD:
             spCC = 7;
             spC8 = 3.0f;
             spC4 = 30.0f;
@@ -3380,7 +3247,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x145;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0xE:                                   /* switch 3 */
+        case 0xE:
             spCC = 7;
             spC8 = 3.0f;
             spC4 = 30.0f;
@@ -3388,7 +3255,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x13B;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0x9:                                   /* switch 3 */
+        case 0x9:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3396,7 +3263,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x87;
             D_hd_code_80364A74 = -0x55;
             break;
-        case 0x6:                                   /* switch 3 */
+        case 0x6:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3404,7 +3271,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0;
             D_hd_code_80364A74 = 0;
             break;
-        case 0x5:                                   /* switch 3 */
+        case 0x5:
             spCC = 9;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3412,7 +3279,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xCD;
             D_hd_code_80364A74 = -0x69;
             break;
-        case 0x4:                                   /* switch 3 */
+        case 0x4:
             spCC = 9;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3420,7 +3287,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xEB;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0x3:                                   /* switch 3 */
+        case 0x3:
             spCC = 7;
             spC8 = 3.0f;
             spC4 = 30.0f;
@@ -3428,7 +3295,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xEB;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0x2:                                   /* switch 3 */
+        case 0x2:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3436,7 +3303,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x91;
             D_hd_code_80364A74 = -0x55;
             break;
-        case 0x10:                                  /* switch 3 */
+        case 0x10:
             spCC = 2;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3444,7 +3311,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x91;
             D_hd_code_80364A74 = -0x55;
             break;
-        case 0x1:                                   /* switch 3 */
+        case 0x1:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3452,7 +3319,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0xCD;
             D_hd_code_80364A74 = -0xA5;
             break;
-        case 0x0:                                   /* switch 3 */
+        case 0x0:
             spCC = 0x14;
             spC8 = 0.25f;
             spC4 = 15.0f;
@@ -3460,7 +3327,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0x55;
             D_hd_code_80364A74 = -0x19;
             break;
-        case 0xFF:                                  /* switch 3 */
+        case 0xFF:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3468,7 +3335,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0;
             D_hd_code_80364A74 = 0;
             break;
-        case 0xFE:                                  /* switch 3 */
+        case 0xFE:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3478,7 +3345,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_80364A72 = 0;
             D_hd_code_80364A74 = 0;
             break;
-        case 0xFD:                                  /* switch 3 */
+        case 0xFD:
             spCC = 11;
             spC8 = 0.75f;
             spC4 = 30.0f;
@@ -3490,7 +3357,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             break;
         }
     }
-    if ( (g_currentGameState == 0x40)) {
+    if (g_currentGameState == 0x40) {
         spCC = spCC / 2;
     }
     if (sp96 > D_hd_code_80364A72 ) {
@@ -3557,8 +3424,8 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         }
     }
     spE2 = (s16) (s16) (s32) D_hd_code_80364448 % 1024;
-    spDE = (s16) (s32) (func_hd_code_80257514((f32) ((f64) ((f32) (s16) spE2 / 1024.0f) * 1.5708)) * ((f32) spCC * D_hd_code_80364444));
-    spE0 = (s16) (s32) (func_hd_code_802574F0((f32) ((f64) ((f32) spE2 / 1024.0f) * 1.5708)) * ((f32) spCC * D_hd_code_80364444));
+    spDE = (s16) (s32) (hdCos((f32) ((f64) ((f32) (s16) spE2 / 1024.0f) * 1.5708)) * ((f32) spCC * D_hd_code_80364444));
+    spE0 = (s16) (s32) (hdSin((f32) ((f64) ((f32) spE2 / 1024.0f) * 1.5708)) * ((f32) spCC * D_hd_code_80364444));
     if ((D_hd_code_80364448 >= 0.0f) && (D_hd_code_80364448 < 1024.0f)) {
         spD8 = (s32) (s16) spE0;
         spD4 = (s32) spDE;
@@ -3584,9 +3451,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                 } else {
                     D_hd_code_8036509C = ((s16) (((u16) D_hd_code_803FCD68 * 0x10) - D_hd_code_8036509C) / 10) + (s16) D_hd_code_8036509C;
                 }
-                D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (func_hd_code_802574F0((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
+                D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
                 D_hd_code_803643F0 = (D_hd_code_803FCD4C + 0xDAC) << 11;
-                D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803FCD50 - (func_hd_code_80257514((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
+                D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803FCD50 - (hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
             } else {
                 D_hd_code_803643EC = (D_hd_code_803EF6DC + 0xFA0) << 11;
                 D_hd_code_803643F0 = (D_hd_code_803EF6E0 + 0x61A8) << 11;
@@ -3609,9 +3476,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                     } else {
                         D_hd_code_8036509C = ((s16) (((u16) D_hd_code_803FCD68 * 0x10) - D_hd_code_8036509C) / 10) + (s16) D_hd_code_8036509C;
                     }
-                    D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (func_hd_code_802574F0((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
+                    D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
                     D_hd_code_803643F0 = (D_hd_code_803FCD4C + 0xDAC) << 11;
-                    D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803FCD50 - (func_hd_code_80257514((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
+                    D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803FCD50 - (hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
                 }
                 if ((D_hd_code_803643DB == 0) && (D_hd_code_80364AC1 == 0)) {
                 case 0x4:                           /* switch 4 */
@@ -3621,9 +3488,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                     } else {
                         D_hd_code_8036509C = D_hd_code_8036443E * 0x10;
                     }
-                    D_hd_code_803643EC = (s32) (((f32) D_hd_code_803643E0 - (func_hd_code_802574F0((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f))) + (f32) spD8) << 11;
+                    D_hd_code_803643EC = (s32) (((f32) D_hd_code_803643E0 - (hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f))) + (f32) spD8) << 11;
                     D_hd_code_803643F0 = (D_hd_code_8036444E + D_hd_code_803643E4) << 11;
-                    D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803643E8 - (func_hd_code_80257514((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f))) + (f32) spD4) << 11;
+                    D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803643E8 - (hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f))) + (f32) spD4) << 11;
                 }
                 break;
             case 0x2:                               /* switch 4 */
@@ -3633,9 +3500,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                 } else {
                     D_hd_code_8036509C = D_hd_code_8036443E * 0x10;
                 }
-                D_hd_code_803643EC = (s32) ((func_hd_code_802574F0((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f)) + (f32) D_hd_code_803643E0 + (f32) spD8) << 11;
+                D_hd_code_803643EC = (s32) ((hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f)) + (f32) D_hd_code_803643E0 + (f32) spD8) << 11;
                 D_hd_code_803643F0 = (D_hd_code_8036444E + D_hd_code_803643E4 + (D_hd_code_80370C2D * 0x32)) << 11;
-                D_hd_code_803643F4 = (s32) ((func_hd_code_80257514((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f)) + (f32) D_hd_code_803643E8 + (f32) spD4) << 11;
+                D_hd_code_803643F4 = (s32) ((hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f)) + (f32) D_hd_code_803643E8 + (f32) spD4) << 11;
                 break;
             case 0x10:                              /* switch 4 */
             case 0x40:                              /* switch 4 */
@@ -3694,9 +3561,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                 } else {
                     D_hd_code_8036509C = ((s16) (((u16) D_hd_code_803FCD68 * 0x10) - D_hd_code_8036509C) / 10) + (s16) D_hd_code_8036509C;
                 }
-                D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (func_hd_code_802574F0((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
+                D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
                 D_hd_code_803643F0 = (D_hd_code_803FCD4C + 0xDAC) << 11;
-                D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803FCD50 - (func_hd_code_80257514((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
+                D_hd_code_803643F4 = (s32) (((f32) D_hd_code_803FCD50 - (hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
             } else {
                 D_hd_code_803643EC = ((D_hd_code_803643E0 + spD8) - 0x1F4) << 11;
                 D_hd_code_803643F0 = (D_hd_code_803643E4 + 0x1770) << 11;
@@ -3882,9 +3749,9 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         } else {
             D_hd_code_8036509C = ((s16) (((u16) D_hd_code_803FCD68 * 0x10) - D_hd_code_8036509C) / 10) + (s16) D_hd_code_8036509C;
         }
-        D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (func_hd_code_802574F0((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
+        D_hd_code_803643EC = (s32) (((f32) D_hd_code_803FCD48 - (hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD8) << 11;
         D_hd_code_803643F0 = (D_hd_code_803FCD4C + 0xDAC) << 11;
-        D_hd_code_803643F4 = (s32) ((D_hd_code_803FCD50 - (func_hd_code_80257514((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
+        D_hd_code_803643F4 = (s32) ((D_hd_code_803FCD50 - (hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * 8000.0f)) + (f32) spD4) << 11;
         D_hd_code_80365078 = (f32) D_hd_code_803FCD48 / 32.0f;
         D_hd_code_8036507C = (f32) (D_hd_code_803FCD4C + 0x7D0) / 32.0f;
         D_hd_code_80365080 = D_hd_code_803FCD50 / 32.0f;
@@ -3988,8 +3855,6 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
         D_hd_code_802E8BE8 = 1;
     }
     if ((D_hd_code_802E8BE4 != 0) && ((g_currentGameState & 0x2000100000000206))) {
-        // 802D4B7C = ull_rem
-        // 802D4BB8 = ull_div
         spC0 = (D_hd_code_803649D8 % D_hd_code_802E8BE8) - (D_hd_code_802E8BE8 >> 1);
         spBC = (D_hd_code_803649D8 / 100) % D_hd_code_802E8BE8 - (D_hd_code_802E8BE8 >> 1);
         spB8 = (D_hd_code_803649D8 / 10000) % D_hd_code_802E8BE8 - (D_hd_code_802E8BE8 >> 1);
@@ -4076,9 +3941,6 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     D_hd_code_80364412 = 0;
 }
 
-// Per-vehicle camera distance scale between two 3D points, reduced so that
-// distance * scale never exceeds 10000
-// Proposed name: GetCameraDistScale
 f32 func_hd_code_80254E54(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5) {
   f32 sp2C;
   f32 sp28;
@@ -4155,9 +4017,6 @@ f32 func_hd_code_80254E54(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
   return sp2C;
 }
 
-// Convert an orbit radius and angle in degrees to x/z offsets (camera orbit
-// position), snapping near-zero z to 0
-// Proposed name: PolarToXZ
 void func_hd_code_80255034(s32 arg0, f32 arg1, s32* arg2, s32* arg3) {
   f32 sp2C;
   f32 sp28;
@@ -4182,10 +4041,6 @@ void func_hd_code_80255034(s32 arg0, f32 arg1, s32* arg2, s32* arg3) {
   *arg3 = sp20;
 }
 
-// Camera 45-degree rotation on the L/Z and R triggers: sets a new target
-// yaw, rotates toward it at 3 degrees per frame with a whoosh sound, unless
-// rotation is locked for this area (func_hd_code_80255628)
-// Proposed name: UpdateCameraRotation
 void func_hd_code_80255190(void) {
     u8 sp1F;
 
@@ -4256,10 +4111,6 @@ void func_hd_code_80255190(void) {
     }
 }
 
-// Return 1 if camera rotation is locked here (race mode, the world map,
-// level 0x3B always, and specific regions of levels 4, 13 and 16), forcing
-// the camera back to the default 135-degree yaw via the shorter direction
-// Proposed name: IsCameraRotationLocked
 u8 func_hd_code_80255628(void) {
   u8 sp37;
 
@@ -4267,7 +4118,7 @@ u8 func_hd_code_80255628(void) {
   if (((g_currentGameState == 0x100000000000) ) || ((g_currentGameState == 2) )) {
     sp37 = 1;
   } else {
-    switch (g_currentLevel) {                   /* irregular */
+    switch (g_currentLevel) {
       case 0x4:
         if ((func_hd_code_802AC4C4((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, 0xE56, 0x8EC, 0xBB8, 0x6A4, 0x1068, 0x1F4) != 0) || (func_hd_code_802AC4C4((s32) D_hd_code_803643E0 >> 5, (s32) D_hd_code_803643E8 >> 5, 0xE56, 0x8EC, 0x1068, 0x1F4, 0x1324, 0x4B0) != 0)) {
           sp37 = 1;
@@ -4306,8 +4157,6 @@ u8 func_hd_code_80255628(void) {
   return sp37;
 }
 
-// Append a display list that clears the current framebuffer to black
-// Proposed name: ClearFramebufferDL
 void func_hd_code_802558C8(Gfx* gfx, s32* arg1) {
   Gfx *entry = gfx;
 
@@ -4321,9 +4170,6 @@ void func_hd_code_802558C8(Gfx* gfx, s32* arg1) {
   *arg1 += entry - gfx;
 }
 
-// Terminate the frame display list (full sync + end) and compute its final
-// length, asserting it fits in the buffer
-// Proposed name: EndFrameDisplayList
 void func_hd_code_802559F8(Gfx* gfx, s32* length) {
   Gfx *entry = gfx;
 
@@ -4336,12 +4182,6 @@ void func_hd_code_802559F8(Gfx* gfx, s32* length) {
   }
 }
 
-// Game init (called once from Thread3): create the message queues and the
-// OS scheduler (NTSC/PAL VI mode), register as a scheduler client, init
-// audio (func_hd_code_80261588), set up framebuffer/z-buffer pointers, pick
-// the initial game state (controller pak menus or the intro), and fill the
-// thread stack with a sentinel pattern for usage measurement.
-// Proposed name: InitGame
 void func_hd_code_80255AD0(void) {
     s32 sp44;
     f32 sp40;
@@ -4381,9 +4221,6 @@ void func_hd_code_80255AD0(void) {
     }
 }
 
-// Report the main thread's stack high-water mark by scanning for the
-// sentinel pattern
-// Proposed name: CheckThreadStackUsage
 void func_hd_code_80255D34(void) {
   u8 sp1F;
   s32 sp18;
@@ -4397,11 +4234,6 @@ void func_hd_code_80255D34(void) {
   }
 }
 
-// Common state-transition teardown: blank the screen, choose the new music,
-// flush caches, reset frame counters and HUD alpha, DMA the static data
-// block to its home, reset the level bump allocator (to 0x8004B400) and
-// reserve the controller-input/ghost buffers, reset the shadow texture list,
-// clear all mission flags, reset HUD sprites and menu windows.
 void hdPrepareStateTransition(void) {
     s32 sp2C;
     s32 pad;
@@ -4533,8 +4365,6 @@ extern u8 level59_ROM_START;
 extern u8 worldtextures_ROM_START;
 //endregion
 
-// DMA the level data blob for level arg0 into arg1, returning its size in
-// *arg2 (the per-level ROM address ranges come from the extern table above)
 void LoadLevel(u32 level, void* arg1, s32* arg2) {
     u8* levelRomPosition;
 
@@ -4782,15 +4612,6 @@ void LoadLevel(u32 level, void* arg1, s32* arg2) {
     INITIATE_DMA(levelRomPosition, arg1, arg2, 0xCU, 0xA, 1);
 }
 
-// Level init ("enter initlevel"). arg0 = optional saved level state buffer
-// (restores destroyed buildings on completed levels). Resets all per-level
-// state, sets the game mode from the mission config table, defaults the
-// camera (135 degrees), kills the front-end thread, sets up race ghost
-// recording, loads and parses the level data (LoadLevel +
-// func_hd_code_802A1674), allocates the frame display list buffers, runs
-// mission init (func_hd_code_80262320 in 1D990.c), builds all object
-// shadows, initializes the sky (func_hd_code_802729F0 - note its first
-// argument is the pending game state), and resets camera/popup/money state.
 void hdInitLevel(s32* pakBuffer) {
     s32 sp4C;
     s32 sp48;
@@ -4857,7 +4678,7 @@ void hdInitLevel(s32* pakBuffer) {
     func_hd_code_80262150(g_currentLevel);
     D_hd_code_80367BFF = 0;
     func_hd_code_802CE840();
-    rmonPrintf("enter initlevel game_mode=%d loop_done=%d\n", func_hd_code_8026F92C(g_currentGameState), func_hd_code_8026F92C(g_nextGameState));
+    rmonPrintf("enter initlevel game_mode=%d loop_done=%d\n", yoshiFFS(g_currentGameState), yoshiFFS(g_nextGameState));
     sp3C = g_heap;
     func_hd_code_802A1674(D_hd_code_80358074, pakBuffer);
     rmonPrintf("exit initlevel allocated %d bytes, %x\n", (u32)g_heap - (u32)sp3C, g_heap);
@@ -4952,9 +4773,6 @@ void hdInitLevel(s32* pakBuffer) {
     func_hd_code_802A5FA8();
 }
 
-// Allocate the four categorized world display list buffers, double-buffered,
-// from the level allocator; a few levels get custom sizes
-// Proposed name: AllocFrameDlBuffers
 void func_hd_code_80257234(void) {
   s32 sp14;
   s32 sp10;
@@ -4988,14 +4806,14 @@ void func_hd_code_80257234(void) {
       sp8 = 0x7D0;
       break;
     default:
-      switch (D_hd_code_803BE739) {                       /* switch 1; irregular */
-      case 0:                                     /* switch 1 */
+      switch (D_hd_code_803BE739) {
+        case 0:
           sp14 = 0x1770;
           sp10 = 0x1388;
           spC = 0x64;
           sp8 = 0x7D0;
           break;
-      case 1:                                     /* switch 1 */
+        case 1:
           sp14 = 0x3E8;
           sp10 = 0x3E8;
           spC = 0x64;
@@ -5033,12 +4851,10 @@ void hdAlignPointer(u8** arg0, s32 arg1) {
   *arg0 += sp4;
 }
 
-// sinf wrapper; proposed name: Sinf
-f32 func_hd_code_802574F0(f32 arg0) {
-  return sinf(arg0);
+f32 hdSin(f32 value) {
+  return sinf(value);
 }
 
-// cosf wrapper; proposed name: Cosf
-f32 func_hd_code_80257514(f32 arg0) {
-  return cosf(arg0);
+f32 hdCos(f32 value) {
+  return cosf(value);
 }

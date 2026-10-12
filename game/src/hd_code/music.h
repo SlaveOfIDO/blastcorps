@@ -1,6 +1,10 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
+#include <PR/ultratypes.h>
+#include "snd.h"
+
+
 extern s32 D_hd_code_8036772C;
 extern u8 D_hd_code_80367728;
 extern u8 D_hd_code_80367729;
