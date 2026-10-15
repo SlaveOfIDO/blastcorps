@@ -1,5 +1,6 @@
 #include "common.h"
 #include "functions.h"
+#include "hd.h"
 #include "macros.h"
 #include "music.h"
 #include "structs.h"
@@ -59,9 +60,7 @@ void func_hd_code_802995F0(s32 arg0) {
       D_hd_code_803A6B02 = 0x37;
       D_hd_code_803A6B01 = 0x37;
       D_hd_code_803A6B00 = 0x37;
-      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
-              ? 1
-              : 0) {
+      if (LEVEL_FINISHED(D_hd_code_803A6B00)) {
         D_hd_code_803A6AF0 = 0x80;
         D_hd_code_803A6AF8 = 0x80;
       } else {
@@ -74,9 +73,7 @@ void func_hd_code_802995F0(s32 arg0) {
       D_hd_code_803A6B02 = 0x1C;
       D_hd_code_803A6B01 = 0x1C;
       D_hd_code_803A6B00 = 0x1C;
-      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
-              ? 1
-              : 0) {
+      if (LEVEL_FINISHED(D_hd_code_803A6B00)) {
         D_hd_code_803A6AF0 = 0x80;
         D_hd_code_803A6AF8 = 0x80;
       } else {
@@ -89,9 +86,7 @@ void func_hd_code_802995F0(s32 arg0) {
       D_hd_code_803A6B02 = 0x35;
       D_hd_code_803A6B01 = 0x35;
       D_hd_code_803A6B00 = 0x35;
-      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
-              ? 1
-              : 0) {
+      if (LEVEL_FINISHED(D_hd_code_803A6B00)) {
         D_hd_code_803A6AF0 = 0x80;
         D_hd_code_803A6AF8 = 0x80;
       } else {
@@ -104,9 +99,7 @@ void func_hd_code_802995F0(s32 arg0) {
       D_hd_code_803A6B02 = 7;
       D_hd_code_803A6B01 = 7;
       D_hd_code_803A6B00 = 7;
-      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
-              ? 1
-              : 0) {
+      if (LEVEL_FINISHED(D_hd_code_803A6B00)) {
         D_hd_code_803A6AF0 = 0x80;
         D_hd_code_803A6AF8 = 0x80;
       } else {
@@ -119,9 +112,7 @@ void func_hd_code_802995F0(s32 arg0) {
       D_hd_code_803A6B02 = 0x13;
       D_hd_code_803A6B01 = 0x13;
       D_hd_code_803A6B00 = 0x13;
-      if ((players[playerNumber].unk18[D_hd_code_803A6B00] > 0 && players[playerNumber].unk18[D_hd_code_803A6B00] < 6)
-              ? 1
-              : 0) {
+      if (LEVEL_FINISHED(D_hd_code_803A6B00)) {
         D_hd_code_803A6AF0 = 0x80;
         D_hd_code_803A6AF8 = 0x80;
       } else {

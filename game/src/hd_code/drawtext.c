@@ -5,6 +5,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "../levels.h"
 
 // <bss>
 struct S_80365340_Wrapper D_hd_code_80365340;
@@ -35,7 +36,7 @@ void func_hd_code_802592F0() {
   s32 sp1C;
 
   if (g_nextGameState & 0xC9FD8FE7DBFF8080 || g_nextGameState == 0x100000000000 || g_nextGameState == 2 ||
-      g_currentLevel == 0x28 || g_currentLevel == 0x32) {
+      g_currentLevel == LEVEL_MOON || g_currentLevel == LEVEL_SHUTTLE_CLEAR) {
     maxCharacters = 0x200;
   } else if (g_nextGameState == 0x40) {
     maxCharacters = 0x9C;

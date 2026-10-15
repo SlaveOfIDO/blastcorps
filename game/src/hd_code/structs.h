@@ -219,9 +219,9 @@ struct S_80367C04
   s16 unk1E;
   u32 pad20;
   s16 unk24;
-  s16 unk26;
-  s16 unk28;
-  s16 unk2A;
+  s16 unk26; // x
+  s16 unk28; // y
+  s16 unk2A; // z
   s32 unk2C;
   u16 unk30[4];
   u8 unk38;
@@ -245,7 +245,7 @@ struct S_80367D52
 };
 
 struct S_802E8F74 {
-  u8 unk0;
+  u8 level;
   u8 pad1;
   s16 unk2;
   s16 unk4;

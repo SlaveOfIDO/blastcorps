@@ -146,7 +146,7 @@ u32 func_hd_code_802852EC(void) {
   sprintf(D_hd_code_8036B9A8 + 0x20, "***$%d*", g_statsNew.money);
   sprintf(D_hd_code_8036B9A8 + 0x40, "***%2d (%d%c)*", g_statsNew.civiliansRescued, civiliansRescuedPercentage, '%');
   sprintf(D_hd_code_8036B9A8 + 0x60, "***%2d (%d%c)*", g_statsNew.rdusFound, rdusFoundPercentage, '%');
-  func_hd_code_80264A34(sp24, g_statsNew.timeCode, 0);
+  missionsFormatTime(sp24, g_statsNew.timeCode, 0);
   sprintf(D_hd_code_8036B9A8 + 0x80, "***%s*", &sp24);
   for (sp50 = 0x12; sp50 < 0x17; sp50++) {
     D_hd_code_802F5804[sp50].unk0 = 0x400;
@@ -210,7 +210,7 @@ u8 func_hd_code_80285814(void) {
   if (g_currentGameState == 0x4000) {
     osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
   }
-  if ((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6) ? 1 : 0) {
+  if (LEVEL_FINISHED(g_currentLevel)) {
     if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
       if (*(u64*)pakBuffer == 0x1234567887654321) {
         hdInitLevel(NULL);
@@ -260,8 +260,7 @@ s32 func_hd_code_80285B10(u8 arg0) {
 
 void func_hd_code_80285B68(s32 arg0) {
   if (g_currentGameState & 0x104) {
-    if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6) ? 1
-                                                                                                              : 0) &&
+    if ((LEVEL_FINISHED(g_currentLevel)) &&
         (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
       func_hd_code_802CF5B0();
       D_hd_code_802E8BD8 = 1;
@@ -354,6 +353,6 @@ u16 func_hd_code_8028604C(s32 arg0) {
   return MIN(59999, arg0 / 6U);
 }
 
-u8 func_hd_code_80286090(s32 lvl) {
-  return (players[playerNumber].unk18[lvl] > 0 && players[playerNumber].unk18[lvl] < 6) ? 1 : 0;
+u8 statsLevelFinished(s32 level) {
+  return LEVEL_FINISHED(level);
 }

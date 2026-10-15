@@ -3,11 +3,13 @@
 #include "common.h"
 #include "functions.h"
 #include "gu/guint.h"
+#include "hd.h"
 #include "macros.h"
 #include "music.h"
 #include "structs.h"
 #include "symbol_data.h"
 #include "variables.h"
+#include "../levels.h"
 
 struct S_802F9934 {
   u8 unk0;
@@ -2005,7 +2007,7 @@ s32 func_hd_code_8026AD30(s16 arg0) {
       for (sp20 = 0; sp20 < 16 && (sp2B == 0) && (sp2C->unk2[sp20] != -1); sp20++) {
         if (sp2C->unk2[sp20] == arg0) {
           sp1C = players[playerNumber].unk54[0x34 + arg0] < (s32)D_hd_code_802F499A[arg0];
-          sp18 = g_currentLevel == 0;
+          sp18 = g_currentLevel == LEVEL_SIMIAN_ACRES;
           if (!D_hd_code_8036BAA0[arg0 + 2] && ((sp18 != 0) || (sp1C != 0))) {
             if ((sp1C != 0) && (sp18 == 0)) {
               players[playerNumber].unk54[0x34 + arg0] += 1;
@@ -2145,9 +2147,7 @@ void func_hd_code_8026B118(s32 arg0) {
       break;
 
     case 0x2000:
-      if ((((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)
-                ? 1
-                : 0) != 0) &&
+      if (LEVEL_FINISHED(g_currentLevel) &&
           (D_hd_code_802E8F94[g_currentLevel].unk0 == 1)) {
         sp44 = &D_hd_code_802F8BDC[6];
       } else {

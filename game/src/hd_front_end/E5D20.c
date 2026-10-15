@@ -24,7 +24,7 @@ void* func_hd_front_end_80201E80(void) {
       osSendMesg(&D_hd_front_end_80219EF8, (void*) ((sp2F << 8) | 0xA | (playerNumber << 0x10) | 0x01000000), 1);
       osRecvMesg(&D_hd_front_end_80219F50, &sp28, 1);
     }
-    if (((players[playerNumber].unk18[sp2F] > 0) && (players[playerNumber].unk18[sp2F] < 6)?1:0) &&
+    if ((LEVEL_FINISHED(sp2F)) &&
         (sp2F != 0x31) && (sp2F != 0x2F) && (sp2F != 0x26) && (sp28 == NULL)) {
       if (D_hd_code_802E8F94[sp2F].unk0 == 1) {
         *((u64*)pakBuffer) = 0x1234567887654321;

@@ -3,6 +3,7 @@
 #include "common.h"
 #include "snd.h"
 #include "variables.h"
+#include "../levels.h"
 
 ALMicroTime sndPlayerVoiceHandler(void *node);
 void sndDisposeSound(ALSoundState *);
@@ -637,7 +638,7 @@ ALSoundState *sndPlaySfx(ALBank *soundBank, s16 sndId, ALSoundState *pendingStat
   deltaTotal = 0;
 
   if (sndId == 0 || (g_frameCount == 0 && sndId == 0xC) ||
-      ((sndId == 0x14 || sndId == 0x15) && (g_currentLevel == 0x26 || g_currentLevel == 0x31))) {
+      ((sndId == 0x14 || sndId == 0x15) && (g_currentLevel == LEVEL_SHUTTLE_ISLAND || g_currentLevel == LEVEL_END_SEQUENCE))) {
     return 0;
   }
 

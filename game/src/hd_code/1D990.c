@@ -8,6 +8,7 @@
 #include "symbol_data.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "../levels.h"
 
 void func_hd_code_80262840();
 void func_hd_code_80262FD0();
@@ -19,7 +20,7 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1);
 s32 func_hd_code_80272ED8(s32, s32, u8, s32, s32, s32, f32);
 s32 func_hd_code_80274868(s32);
 s32 func_hd_code_80274AA4(s32);
-extern u8 D_hd_code_80367BB0[];
+extern char D_hd_code_80367BB0[];
 extern struct S_80367BCC* D_hd_code_80367BCC;
 extern u16 D_hd_code_80367BF4;
 extern u16 D_hd_code_80367D08;
@@ -42,7 +43,7 @@ s32 D_hd_code_80367B50;
 u8 D_hd_code_80367B54;
 u16 D_hd_code_80367B58[4];
 u8 D_hd_code_80367B60[4][0x14];
-u8 D_hd_code_80367BB0[0xC];
+char D_hd_code_80367BB0[0xC];
 s32 D_hd_code_80367BBC;
 u32 D_hd_code_80367BC0;
 u32 D_hd_code_80367BC4;
@@ -78,7 +79,7 @@ struct S_80367D52 D_hd_code_80367D52;
 // </bss>
 
 // <data>
-u8 D_hd_code_802E8F30[5] = { 0x28, 0x2B, 0x2C, 0x2D, 0x2E };
+u8 g_levelsWithIncreasedFOV[5] = { 0x28, 0x2B, 0x2C, 0x2D, 0x2E };
 
 struct S_802E8F38 D_hd_code_802E8F38[6] = {
   { 0x0A, 0x00, 0x0F84, 0x002C, 0x09AE },
@@ -1070,46 +1071,45 @@ void* D_hd_code_802E9F9C = (void*)D_hd_code_8030480C;
 u8 D_hd_code_802E9FA0[2] = { 0x20, 0x53 };
 // </data>
 
-void func_hd_code_80262150(u8 arg0) {
-  s32 sp4;
+void missionsSetLevelFOV(u8 level) {
+  s32 i;
 
-  D_hd_code_80364438 = 45.0f;
-  sp4 = 0;
+  g_levelFOV = 45.0f;
+  i = 0;
   D_hd_code_80367C10 = 0;
-  while (sp4 < 5 && !D_hd_code_80367C10) {
-    if (D_hd_code_802E8F30[sp4] == arg0) {
-      D_hd_code_80364438 = 80.0f;
+  while (i < 5 && !D_hd_code_80367C10) {
+    if (g_levelsWithIncreasedFOV[i] == level) {
+      g_levelFOV = 80.0f;
       D_hd_code_80367C10 = 1;
     } else {
-      sp4 += 1;
+      i += 1;
     }
   }
 }
 
-void func_hd_code_802621DC(u8 arg0) {
-  struct S_80367C04* sp4;
+void func_hd_code_802621DC(u8 level) {
+  struct S_80367C04* sp4 = &D_hd_code_802E8F94[level];
 
-  sp4 = &D_hd_code_802E8F94[arg0];
   D_hd_code_803EF2EC = sp4->unk26 << 5;
   D_hd_code_803EF2F0 = sp4->unk28 << 5;
   D_hd_code_803EF2F4 = sp4->unk2A << 5;
 }
 
-void func_hd_code_80262238(u8 arg0) {
+void func_hd_code_80262238(u8 level) {
   s32 sp4;
   u8 sp3;
 
   sp4 = 0;
   sp3 = 0;
   D_hd_code_803EFEC8 = 0;
-  while ((sp3 == 0) && (sp4 <= 0)) {
-    if (D_hd_code_802E8F68[sp4].unk0 == (arg0)) {
+  while (!sp3 && sp4 <= 0) {
+    if (D_hd_code_802E8F68[sp4].unk0 == level) {
       sp3 = 1;
     } else {
       sp4 += 1;
     }
   }
-  if (sp3 != 0) {
+  if (sp3) {
     D_hd_code_803EFEC8 = 1;
     D_hd_code_803EFEB0 = D_hd_code_802E8F68[sp4].unk2 << 5;
     D_hd_code_803EFEB4 = D_hd_code_802E8F68[sp4].unk4 << 5;
@@ -1118,39 +1118,35 @@ void func_hd_code_80262238(u8 arg0) {
   }
 }
 
-void func_hd_code_80262320(u8 arg0) {
-  s32 sp34;
-  u8 sp33;
-  s8 sp32;
-  u8 sp31;
+void func_hd_code_80262320(u8 level) {
+  s32 i = 0;
+  u8 sp33 = 0;
+  s8 sp32 = 0;
+  u8 found = 0;
   s32 sp2C;
 
-  sp34 = 0;
-  sp33 = 0;
-  sp32 = 0;
-  sp31 = 0;
-  while ((sp31 == 0) && (sp34 < 4)) {
-    if (D_hd_code_802E8F74[sp34].unk0 == arg0) {
-      sp31 = 1;
+  while (!found && i < 4) {
+    if (D_hd_code_802E8F74[i].level == level) {
+      found = 1;
     } else {
-      sp34 += 1;
+      i += 1;
     }
   }
-  if (sp31 != 0) {
+  if (found) {
     D_hd_code_80364410 = 1;
-    D_hd_code_80364404 = D_hd_code_802E8F74[sp34].unk2 << 0x10;
-    D_hd_code_80364408 = D_hd_code_802E8F74[sp34].unk4 << 0x10;
-    D_hd_code_8036440C = D_hd_code_802E8F74[sp34].unk6 << 0x10;
+    D_hd_code_80364404 = D_hd_code_802E8F74[i].unk2 << 0x10;
+    D_hd_code_80364408 = D_hd_code_802E8F74[i].unk4 << 0x10;
+    D_hd_code_8036440C = D_hd_code_802E8F74[i].unk6 << 0x10;
   } else {
     D_hd_code_80364410 = 0;
   }
-  D_hd_code_80367C04 = &D_hd_code_802E8F94[arg0];
-  D_hd_code_803F7C10 = D_hd_code_802E8F94[arg0].unk1C << 5;
-  D_hd_code_803F7C14 = D_hd_code_802E8F94[arg0].unk1E << 5;
-  D_hd_code_80364424 = D_hd_code_802E8F94[arg0].unk38;
-  D_hd_code_80364428 = D_hd_code_802E8F94[arg0].unk3C << 5;
-  D_hd_code_8036442C = D_hd_code_802E8F94[arg0].unk40;
-  D_hd_code_80364430 = D_hd_code_802E8F94[arg0].unk42 << 5;
+  D_hd_code_80367C04 = &D_hd_code_802E8F94[level];
+  D_hd_code_803F7C10 = D_hd_code_802E8F94[level].unk1C << 5;
+  D_hd_code_803F7C14 = D_hd_code_802E8F94[level].unk1E << 5;
+  D_hd_code_80364424 = D_hd_code_802E8F94[level].unk38;
+  D_hd_code_80364428 = D_hd_code_802E8F94[level].unk3C << 5;
+  D_hd_code_8036442C = D_hd_code_802E8F94[level].unk40;
+  D_hd_code_80364430 = D_hd_code_802E8F94[level].unk42 << 5;
   D_hd_code_80367BC0 = sc.retraceCount;
   D_hd_code_80367BC4 = -1;
   D_hd_code_80367BD0.unk8 = 0;
@@ -1182,8 +1178,8 @@ void func_hd_code_80262320(u8 arg0) {
     sp2C = (s32)&controllertextures_ROM_START - (s32)&traffictextures_ROM_START;
     if ((D_hd_code_80364AA8 != 0x80) && (g_nextGameState == 0x2000)) {
       INITIATE_DMA(&traffictextures_ROM_START, g_heap, &sp2C, 0xAU, 0, 1);
-      for (sp34 = 0; sp34 < 5; sp34++) {
-        D_hd_code_80367BD0.unkC[sp34 + 1] = (sp34 << 0xF) + g_heap;
+      for (i = 0; i < 5; i++) {
+        D_hd_code_80367BD0.unkC[i + 1] = (i << 15) + g_heap;
       }
       g_heap = &g_heap[sp2C];
     }
@@ -1204,7 +1200,7 @@ void func_hd_code_80262320(u8 arg0) {
     D_hd_code_80367BFE = 0;
   }
   D_hd_code_80367BCC = &D_hd_code_802F49F4[sp33];
-  if (D_hd_code_802E8F94[(u8)arg0].unk0 == 0x20) {
+  if (D_hd_code_802E8F94[level].unk0 == 0x20) {
     D_hd_code_80367BD0.unk0 = NULL;
     D_hd_code_80367BD0.unk4 = func_hd_code_80272C5C(D_hd_code_80367BCC->unk6, 0, (s32)D_hd_code_80367BCC->unk4,
                                                     (s32)D_hd_code_80367BCC->unk2C, (s32)D_hd_code_80367BCC->unk2D,
@@ -1220,7 +1216,7 @@ void func_hd_code_80262320(u8 arg0) {
     }
   }
   if (g_nextGameState & 0x440) {
-    func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367C04->unk30[3] - D_hd_code_80367BF6, 0);
+    missionsFormatTime(D_hd_code_80367BB0, D_hd_code_80367C04->unk30[3] - D_hd_code_80367BF6, 0);
     return;
   }
   D_hd_code_80367B54 = 0;
@@ -1243,14 +1239,14 @@ void func_hd_code_80262840(void) {
             break;
           case 0x4:
           case 0x20:
-            if (g_currentLevel == 0x34) {
+            if (g_currentLevel == LEVEL_MAGMA_PEAK) {
               sprintf(D_hd_code_80367C18, "DESTROY TARGETS IN");
             } else {
               sprintf(D_hd_code_80367C18, "DESTROY %s IN", D_hd_code_80367C08);
             }
             break;
           case 0x80:
-            if (g_currentLevel == 0x32) {
+            if (g_currentLevel == LEVEL_SHUTTLE_CLEAR) {
               sprintf(D_hd_code_80367C18, "CLEAR SHUTTLE PATH");
             } else {
               sprintf(D_hd_code_80367C18, "CLEAR CARRIER PATH");
@@ -1299,16 +1295,14 @@ void func_hd_code_80262BF4(void) {
     D_hd_code_80367BF6 = D_hd_code_80367C04->unk30[3] -
                          MIN(D_hd_code_80367C04->unk30[3], func_hd_code_8028604C(sc.unk803156C0 - D_hd_code_80364A58));
   }
-  func_hd_code_80264A34(D_hd_code_80367BB0, D_hd_code_80367BF6, 1);
+  missionsFormatTime(D_hd_code_80367BB0, D_hd_code_80367BF6, 1);
   switch (g_currentGameState) {
     case 0x2000:
       func_hd_code_80262840();
       break;
     case 0x04000000:
       if ((D_hd_code_803643D6 != 0) && (areWeFading() == 0) && (D_hd_code_8036BB1C == 1)) {
-        if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)
-                 ? 1
-                 : 0) != 0) {
+        if ((LEVEL_FINISHED(g_currentLevel)) != 0) {
           fadeTo(0x08000000, 0.25f);
           break;
         }
@@ -1403,7 +1397,7 @@ void func_hd_code_80263140(void) {
       break;
     case 0x80:
       if ((D_hd_code_803F7806 != 0) ||
-          (g_currentLevel == 0x32 && g_statsNew.buildingsDestroyed >= D_hd_code_8036EB92)) {
+          (g_currentLevel == LEVEL_SHUTTLE_CLEAR && g_statsNew.buildingsDestroyed >= D_hd_code_8036EB92)) {
         D_hd_code_803643DA = 1;
       }
       break;
@@ -1421,7 +1415,7 @@ void func_hd_code_80263140(void) {
       sprintf(D_hd_code_80367B60[0], "%d/%d", g_statsNew.buildingsDestroyed, D_hd_code_8036EB92);
       return;
     case 0x80:
-      if (g_currentLevel == 0x32) {
+      if (g_currentLevel == LEVEL_SHUTTLE_CLEAR) {
         sprintf(D_hd_code_80367B60[0], "%d/%d", g_statsNew.buildingsDestroyed, D_hd_code_8036EB92);
         return;
       }
@@ -1510,7 +1504,7 @@ void func_hd_code_802633E0(void) {
     D_hd_code_80367BF9 = (u8)D_hd_code_80367BFA;
   }
   for (sp34 = 0; sp34 < D_hd_code_80367B54 && sp34 < D_hd_code_80367C04->unk18; sp34++) {
-    func_hd_code_80264A34(D_hd_code_80367B60[sp34], D_hd_code_80367B58[sp34], D_hd_code_80367B54 == (sp34 + 1));
+    missionsFormatTime(D_hd_code_80367B60[sp34], D_hd_code_80367B58[sp34], D_hd_code_80367B54 == (sp34 + 1));
   }
 }
 
@@ -1715,7 +1709,7 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
   return entry;
 }
 
-void func_hd_code_80264A34(char* outputBuffer, u16 timeCode, u16 arg2) {
+void missionsFormatTime(char* outputBuffer, u16 timeCode, u16 arg2) {
   outputBuffer[0] = '0' + (timeCode / 6000);
 
   timeCode %= 6000;

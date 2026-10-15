@@ -7,6 +7,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "../levels.h"
 
 // <bss>
 struct S_80367400 D_hd_code_80366C30[4];
@@ -423,7 +424,7 @@ u8 func_hd_code_80261A44(u64 arg0) {
     case 0x100000000000:
       sp27 = D_hd_code_802E8D8C[g_currentLevel];
       sp26 = 1;
-      if (g_currentLevel == 0x26) {
+      if (g_currentLevel == LEVEL_SHUTTLE_ISLAND) {
         D_hd_code_80367710 = 0.7f;
       }
       break;

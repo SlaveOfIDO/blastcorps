@@ -6,6 +6,7 @@
 #include "macros.h"
 #include "structs.h"
 #include "variables.h"
+#include "../levels.h"
 
 // <bss>
 Gfx D_hd_code_803650B0[40];
@@ -244,7 +245,7 @@ void func_hd_code_80258B78(Gfx** arg0, struct FrameContext* arg1) {
           }
 
           gDPPipeSync(entry++);
-          if ((g_currentLevel == 0x10) && (sp66 == 0x19B7) && (sp62 == 0xF99)) {
+          if (g_currentLevel == LEVEL_HAVOC_DISTRICT && sp66 == 0x19B7 && (sp62 == 0xF99)) {
             gSPSetGeometryMode(entry++, G_ZBUFFER);
             gDPSetRenderMode(entry++, G_RM_ZB_CLD_SURF, G_RM_ZB_CLD_SURF2);
           } else {

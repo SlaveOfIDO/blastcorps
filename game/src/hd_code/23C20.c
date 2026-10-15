@@ -1,9 +1,11 @@
 #include "common.h"
 #include "functions.h"
+#include "hd.h"
 #include "stats_perm.h"
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "../levels.h"
 
 extern u16 D_hd_code_80303AF4[];
 extern u16 D_hd_code_80303B00[];
@@ -797,7 +799,7 @@ void func_hd_code_8026A9B4(void) {
   if ((u8)D_hd_code_803A7430 == 0xF) {
     func_hd_code_8026AD30(0x50U);
   }
-  if (g_currentLevel == 0x12) {
+  if (g_currentLevel == LEVEL_BEETON_TRACKS) {
     if ((D_hd_code_803643E0 >> 5 < 0x578) &&
         (func_hd_code_8026A610(D_hd_code_803643E0 >> 5, (s32)D_hd_code_803643E8 >> 5, 0x531, 0x1061) < 0x82)) {
       func_hd_code_8026AD30(0x51U);
@@ -833,16 +835,14 @@ void func_hd_code_8026A9B4(void) {
   if ((D_hd_code_8036B970 != 0) && (sp34 >= 0x191)) {
     D_hd_code_8036B970 = 0;
   }
-  if ((g_currentLevel == 0) && ((s32)D_hd_code_8036C7CC >= 2)) {
+  if ((g_currentLevel == LEVEL_SIMIAN_ACRES) && ((s32)D_hd_code_8036C7CC >= 2)) {
     func_hd_code_8026AD30(0x4DU);
   }
-  if ((g_currentLevel == 0) && (D_hd_code_80364456 == 7) && (((s32)D_hd_code_803643E0 >> 5) >= 0x899)) {
+  if ((g_currentLevel == LEVEL_SIMIAN_ACRES) && (D_hd_code_80364456 == 7) && (((s32)D_hd_code_803643E0 >> 5) >= 0x899)) {
     func_hd_code_8026AD30(0x53U);
   }
   if (D_hd_code_8036B971 != 0) {
-    if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)
-             ? 1
-             : 0) == 0 &&
+    if ((LEVEL_FINISHED(g_currentLevel)) == 0 &&
         (D_hd_code_8036EB98 == 0)) {
       if (func_hd_code_8026AD30(0x4EU) == 0) {
         func_hd_code_8026AD30(0x4FU);

@@ -4,6 +4,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "../levels.h"
 
 void func_hd_code_8028ADF0(u8, u8, OSContPad*, s8*, s8*); /* extern */
 void func_hd_code_8028B190(s8*, s8*);                     /* extern */
@@ -187,7 +188,7 @@ void controllerUpdateInput(void) {
       case 0x400:
       case 0x40:
       case 0x2:
-        if ((g_currentLevel != 0x26) && (g_currentLevel != 0x31)) {
+        if (g_currentLevel != LEVEL_SHUTTLE_ISLAND && g_currentLevel != LEVEL_END_SEQUENCE) {
           do {
             func_hd_code_8025BEF8();
             if (D_hd_code_80370C30 & 0x40) {

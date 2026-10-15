@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "../levels.h"
 
 // <bss>
 u16 D_hd_code_8036C770;
@@ -33,7 +34,7 @@ Gfx* func_hd_code_80274BF0(void* arg0, Gfx* gfx) {
 
   entry = gfx;
   if (g_frameCount == 0) {
-    if ((g_currentGameState & 0x4055800100040000) || (((g_currentGameState & 0x1801)) && (g_currentLevel == 0x32))) {
+    if ((g_currentGameState & 0x4055800100040000) || (((g_currentGameState & 0x1801)) && (g_currentLevel == LEVEL_SHUTTLE_CLEAR))) {
       D_hd_code_8036C784 = 0xFF;
       if ((g_currentGameState & 0x51800100040000)) {
         D_hd_code_8036C770 = func_hd_code_8026B10C();

@@ -132,7 +132,7 @@ s32 func_hd_code_8028653C(void) {
       case 3:
         for (sp34 = 0; sp34 < LEVEL_MAX && sp2F != 0; sp34++) {
           if (D_hd_code_802E8F94[sp34].unk1 == players[playerNumber].unk91) {
-            if ((((players[playerNumber].unk18[sp34] > 0) && (players[playerNumber].unk18[sp34] < 6) ? 1 : 0) == 0) &&
+            if (((LEVEL_FINISHED(sp34)) == 0) &&
                 (D_hd_code_802E8F94[sp34].unk0 == 1)) {
               sp2F = 0;
             }
@@ -145,17 +145,17 @@ s32 func_hd_code_8028653C(void) {
         }
         break;
       case 5:
-        if (!LEVEL_FINISHED(0x31)) {
+        if (!LEVEL_FINISHED(LEVEL_END_SEQUENCE)) {
           sp2F = 0;
         }
         break;
       case 6:
-        if (!LEVEL_FINISHED(0x32)) {
+        if (!LEVEL_FINISHED(LEVEL_SHUTTLE_CLEAR)) {
           sp2F = 0;
         }
         break;
       case 7:
-        if (!LEVEL_FINISHED(0x28)) {
+        if (!LEVEL_FINISHED(LEVEL_MOON)) {
           sp2F = 0;
         }
         break;

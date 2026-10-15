@@ -979,7 +979,7 @@ Gfx* func_hd_front_end_801FA180(Gfx* arg0, struct FrameContext* arg1, f32 arg2, 
 
   for (sp64 = 0; sp64 < LEVEL_MAX; sp64++) {
     sp74 = &D_hd_front_end_8020D810[sp64];
-    if ((players[playerNumber].unk18[sp64] > 0) && (players[playerNumber].unk18[sp64] < 6) ? 1 : 0) {
+    if (LEVEL_FINISHED(sp64)) {
       for (sp60 = 0; sp60 < 8 && sp74->unk1C[sp60] != -1; sp60++) {
         entry = func_hd_front_end_801FA74C(arg1, entry, sp64, sp74->unk1C[sp60], &sp5F, &sp6C, 0, 0, 0, 0, 0, 0, 0);
       }
@@ -1012,7 +1012,7 @@ Gfx* func_hd_front_end_801FA180(Gfx* arg0, struct FrameContext* arg1, f32 arg2, 
 
   for (sp64 = 0; sp64 < 0x3C; sp64++) {
     sp74 = &D_hd_front_end_8020D810[sp64];
-    if ((players[playerNumber].unk18[sp64] > 0) && (players[playerNumber].unk18[sp64] < 6) ? 1 : 0) {
+    if (LEVEL_FINISHED(sp64)) {
       for (sp60 = 0; sp60 < 8 && sp74->unk1C[sp60] != -1; sp60++) {
         entry = func_hd_front_end_801FA74C(arg1, entry, sp64, sp74->unk1C[sp60], &sp5F, &sp6C, 1, 0xFF, 0, 0, 0xFF,
                                            0x80, 0x80);
@@ -1108,7 +1108,7 @@ Gfx* func_hd_front_end_801FA74C(struct FrameContext* arg0, Gfx* gfx, u8 arg2, u8
     if ((D_hd_code_80364A87 != 0 &&
          (players[playerNumber].unk18[arg3] == 0 ||
           (((D_hd_code_80364A87 & 1) && arg2 == D_hd_front_end_8021A905) &&
-           ((players[playerNumber].unk18[arg3] > 0 && (players[playerNumber].unk18[arg3] < 6) ? 1 : 0) == 0))))) {
+           ((LEVEL_FINISHED(arg3)) == 0))))) {
       if (D_hd_front_end_8021A924 != 0) {
         sp110 = MIN(1.0f, MAX(D_hd_front_end_8021AB28,
                               (((f32)(D_hd_code_803156C4 - D_hd_front_end_8021AB24) * 60.0) / 60U) / 90.0));
@@ -1567,7 +1567,7 @@ void func_hd_front_end_801FE018(u8 arg0) {
 
   D_hd_front_end_8021AB30 = &players[playerNumber];
   for (sp34 = 0; sp34 < 0x3C; sp34++) {
-    if ((players[playerNumber].unk18[sp34] > 0) && (players[playerNumber].unk18[sp34] < 6) ? 1 : 0) {
+    if (LEVEL_FINISHED(sp34)) {
       sp2C = &D_hd_front_end_8020D810[sp34];
       sp28 = &D_hd_code_802E8F94[sp34];
       for (sp30 = 0; sp30 < 8 && sp2C->unk1C[sp30] != -1; sp30++) {
@@ -1637,27 +1637,27 @@ s32 func_hd_front_end_801FE760(u8 arg0) {
     sp7 = 1;
   }
   if (arg0 == 0xA) {
-    if (!(((players[playerNumber].unk18[0x37] > 0) && (players[playerNumber].unk18[0x37] < 6)) ? 1 : 0)) {
+    if (!(LEVEL_FINISHED(LEVEL_BACKLASH))) {
       sp7 = 1;
     }
   }
   if (arg0 == 0xF) {
-    if (!(((players[playerNumber].unk18[0x1C] > 0) && (players[playerNumber].unk18[0x1C] < 6)) ? 1 : 0)) {
+    if (!(LEVEL_FINISHED(LEVEL_SIDESWIPE))) {
       sp7 = 1;
     }
   }
   if (arg0 == 0x3A) {
-    if (!(((players[playerNumber].unk18[0x35] > 0) && (players[playerNumber].unk18[0x35] < 6)) ? 1 : 0)) {
+    if (!(LEVEL_FINISHED(LEVEL_THUNDERFIST))) {
       sp7 = 1;
     }
   }
   if (arg0 == 5) {
-    if (!(((players[playerNumber].unk18[7] > 0) && (players[playerNumber].unk18[7] < 6)) ? 1 : 0)) {
+    if (!(LEVEL_FINISHED(LEVEL_SKYFALL))) {
       sp7 = 1;
     }
   }
   if (arg0 == 0x10) {
-    if (!(((players[playerNumber].unk18[0x13] > 0) && (players[playerNumber].unk18[0x13] < 6)) ? 1 : 0)) {
+    if (!(LEVEL_FINISHED(LEVEL_J_BOMB))) {
       sp7 = 1;
     }
   }

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "functions.h"
+#include "hd.h"
 #include "macros.h"
 #include "music.h"
 #include "structs.h"
@@ -448,9 +449,7 @@ void func_hd_code_8025E2CC(Gfx** arg0, struct FrameContext* arg1, u8 arg2) {
       func_hd_code_802C1DD0(D_hd_code_802E8F94[g_currentLevel].unk0 == 0x20 ||
                             D_hd_code_802E8F94[g_currentLevel].unk0 == 0x80);
       D_hd_code_80366BB8 = 0;
-      if (((players[playerNumber].unk18[g_currentLevel] > 0 && players[playerNumber].unk18[g_currentLevel] < 6)
-               ? 1
-               : 0) != 0) {
+      if ((LEVEL_FINISHED(g_currentLevel)) != 0) {
         sndDeactivateAllSfxByFlag_11();
         sndDeactivateAllSfxByFlag_3();
         D_hd_code_80366BC0.unk2 = 5;
@@ -561,10 +560,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct FrameContext* arg1, u8 arg2) {
           break;
         case 50:
           if ((D_hd_code_8036BB1C == 1) && (areWeFading() == 0)) {
-            if ((((s32)players[playerNumber].unk18[g_currentLevel] > 0) &&
-                         ((s32)players[playerNumber].unk18[g_currentLevel] < 6)
-                     ? 1
-                     : 0) != 0) {
+            if ((LEVEL_FINISHED(g_currentLevel)) != 0) {
               fadeToFast(0x08000000);
             } else {
               fadeToFast(0x40);
@@ -601,10 +597,7 @@ void func_hd_code_8025E67C(Gfx** arg0, struct FrameContext* arg1, u8 arg2) {
               if ((g_currentGameState == 0x100000000000)) {
                 g_nextGameState = 0x200000000000;
               } else {
-                if (((((s32)players[playerNumber].unk18[g_currentLevel] > 0) &&
-                      ((s32)players[playerNumber].unk18[g_currentLevel] < 6))
-                         ? 1
-                         : 0) != 0) {
+                if ((LEVEL_FINISHED(g_currentLevel)) != 0) {
                   fadeToFast(0x08000000);
                 } else {
                   fadeToFast(0x40);

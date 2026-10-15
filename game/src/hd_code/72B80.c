@@ -18,9 +18,9 @@ s32 D_hd_code_803EEF3C;
 u8 D_hd_code_803EEF40[0x3A6];
 u16 D_hd_code_803EF2E6;
 s32 D_hd_code_803EF2E8;
-s32 D_hd_code_803EF2EC;
-s32 D_hd_code_803EF2F0;
-s32 D_hd_code_803EF2F4;
+s32 D_hd_code_803EF2EC; // x
+s32 D_hd_code_803EF2F0; // y
+s32 D_hd_code_803EF2F4; // z
 s32 D_hd_code_803EF2F8;
 s32 D_hd_code_803EF2FC;
 s32 D_hd_code_803EF300;

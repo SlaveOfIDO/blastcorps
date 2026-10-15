@@ -101,7 +101,7 @@ extern u8 D_hd_code_80364424;
 extern u32 D_hd_code_80364428;
 extern u16 D_hd_code_8036442C;
 extern s32 D_hd_code_80364430;
-extern f32 D_hd_code_80364438;
+extern f32 g_levelFOV;
 extern s16 D_hd_code_8036443C;
 extern s16 D_hd_code_8036443E;
 extern s16 D_hd_code_80364452;

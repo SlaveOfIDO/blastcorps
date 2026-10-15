@@ -924,12 +924,12 @@ s32 func_hd_front_end_801F1DA8(s32 arg0) {
     return 0;
   }
 
-  if ((((players[playerNumber].unk18[arg0] > 0) && (players[playerNumber].unk18[arg0] < 6) ? 1 : 0) != 0) ||
+  if (((LEVEL_FINISHED(arg0)) != 0) ||
       (arg0 == 0)) {
     return 1;
   }
   for (sp28 = 0; sp28 < LEVEL_MAX; sp28++) {
-    if (((players[playerNumber].unk18[sp28] > 0) && (players[playerNumber].unk18[sp28] < 6) ? 1 : 0) != 0) {
+    if ((LEVEL_FINISHED(sp28)) != 0) {
       sp2C = &D_hd_front_end_8020D810[sp28];
 
       for (sp24 = 0; sp24 < 8 && sp2C->unk1C[sp24] != -1; sp24++) {
@@ -1083,7 +1083,7 @@ Gfx *func_hd_front_end_801F2428(void) {
 
     for (spDC = 0; spDC < LEVEL_MAX; spDC++) {
       spC9 = ((spCA == 6) || (spCA == 7)) &&
-             (((players[playerNumber].unk18[spDC] > 0) && (players[playerNumber].unk18[spDC] < 6)) ? 1 : 0) != 0 &&
+             (LEVEL_FINISHED(spDC)) != 0 &&
              players[playerNumber].unk18[spDC] != 4;
       if ((players->unk18[(playerNumber << 8) + spDC] == spCA) || (spC9 != 0)) {
         spEC = &D_hd_front_end_8020D810[spDC];

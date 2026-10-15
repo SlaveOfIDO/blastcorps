@@ -1021,7 +1021,7 @@ Gfx *func_hd_front_end_801EC770(Gfx *gfx, struct FrameContext *arg1, s32 *arg2) 
   }
   entry = func_hd_code_80274AA4(entry);
   if (D_hd_code_80364AA8 != 1) {
-    func_hd_code_80264A34(D_hd_front_end_80215470, D_hd_code_802E8F94[g_currentLevel].unk30[4 - sp63], 0);
+    missionsFormatTime(D_hd_front_end_80215470, D_hd_code_802E8F94[g_currentLevel].unk30[4 - sp63], 0);
     D_hd_front_end_80215470[5] = 0;
     func_hd_code_80259DC8(arg1, D_hd_front_end_80215470, 0, 0, 0, 0x29, 0x7D, 0x10, 0x10, 1, 0xFF, 0xB4, 0,
                           D_hd_front_end_80215910[1], 0xFF, 0x78, 0, D_hd_front_end_80215910[1]);
@@ -1030,12 +1030,12 @@ Gfx *func_hd_front_end_801EC770(Gfx *gfx, struct FrameContext *arg1, s32 *arg2) 
   return entry;
 }
 
-u64 func_hd_front_end_801ECA50(u8 arg0) {
+u64 func_hd_front_end_801ECA50(u8 level) {
   u64 sp8;
 
-  if ((players[playerNumber].unk18[arg0] > 0) && (players[playerNumber].unk18[arg0] < 6) ? 1 : 0 != 0) {
+  if (LEVEL_FINISHED(level)) {
     sp8 = 0x80;
-  } else if (D_hd_code_802E8F94[arg0].unk0 & 0x81) {
+  } else if (D_hd_code_802E8F94[level].unk0 & 0x81) {
     sp8 = 0x800;
   } else {
     sp8 = 0x20000000;
@@ -1047,9 +1047,7 @@ void func_hd_front_end_801ECB18(void) {
   func_hd_front_end_801FE018(8);
   D_hd_code_80364A87 = 0;
   D_hd_code_803643D5 = 0;
-  if (((players[playerNumber].unk18[g_currentLevel] > 0) && (players[playerNumber].unk18[g_currentLevel] < 6)
-           ? 1
-           : 0) != 0) {
+  if ((LEVEL_FINISHED(g_currentLevel)) != 0) {
     if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
       osSendMesg(&D_hd_front_end_80219EF8, (void *)((g_currentLevel << 8) | 0xC | (playerNumber << 0x10)), 1);
     }
@@ -1121,7 +1119,7 @@ void func_hd_front_end_801ECF5C(void) {
     rmonPrintf(ASSERT_MESSAGE, "saveIt[playerNumber]", "player.c", 0x568);
   }
   for (sp30 = 0; sp30 < LEVEL_MAX; sp30++) {
-    if (((players[playerNumber].unk18[sp30] > 0) && (players[playerNumber].unk18[sp30] < 6) ? 1 : 0) != 0) {
+    if ((LEVEL_FINISHED(sp30)) != 0) {
       if ((D_hd_code_802E8F94[sp30].unk0 == 1) && (sp30 != 0x31) && (sp30 != 0x2F) && (sp30 != 0x26)) {
         sp48 = &D_hd_code_802E8F94[sp30];
         if (saveIt[playerNumber] != (sp30 + 1)) {
@@ -1187,7 +1185,7 @@ void func_hd_front_end_801ED4B8(void) {
     rmonPrintf(ASSERT_MESSAGE, "saveIt[playerNumber]", "player.c", 0x5C0);
   }
   for (sp26 = 0; sp26 < LEVEL_MAX; sp26++) {
-    if ((((players[playerNumber].unk18[sp26] > 0) && (players[playerNumber].unk18[sp26] < 6) ? 1 : 0) != 0) &&
+    if (((LEVEL_FINISHED(sp26)) != 0) &&
         (sp26 != 0x31) && (sp26 != 0x2F) && (sp26 != 0x26)) {
       sp30 = &D_hd_code_802E8F94[sp26];
       if (saveIt[playerNumber] != (sp26 + 1)) {

@@ -7,6 +7,7 @@
 #include "../hd_code/variables.h"
 #include "../hd_code/stats_perm.h"
 #include "structs.h"
+#include "../levels.h"
 
 u8 func_hd_front_end_801EEDB4(u8, u8, u8);         /* extern */
 
@@ -78,7 +79,7 @@ u8 func_hd_front_end_801EE800(s8 *arg0, u8 arg1, u8 arg2) {
     sprintf(D_hd_code_8036B980, "%s", D_hd_front_end_8020D810[g_currentLevel].name);
     *arg0 = 0;
     if ((arg1 != 0) && (arg2 != 0)) {
-        if ((g_currentLevel == 0x31) || (g_currentLevel == 0x2F) || (g_currentLevel == 0x26)) {
+        if ((g_currentLevel == LEVEL_END_SEQUENCE) || (g_currentLevel == LEVEL_CMO_INTRO) || (g_currentLevel == LEVEL_SHUTTLE_ISLAND)) {
             rmonPrintf(ASSERT_MESSAGE, "!DUMMY_LEVELS(levelno)", "stats.c", 0x5E);
         }
         if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
@@ -167,7 +168,7 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
     } else {
         sp6C = 0x480;
     }
-    func_hd_code_80264A34(sp34, g_statsNew.timeCode, 0);
+    missionsFormatTime(sp34, g_statsNew.timeCode, 0);
     sprintf(D_hd_code_8036B9A8 + 0x80, "****%s*", &sp34);
     if (arg1 != 0) {
         sp54 = &D_hd_front_end_8020C070[0x19];
