@@ -1,12 +1,4 @@
 #!/usr/bin/env python3
-"""Recompute and patch the N64 ROM header CRC1/CRC2 checksum in place.
-
-Uses the CIC-NUS-6102 checksum algorithm (verified against baserom.us.v10,
-baserom.us.v11, baserom.eu and baserom.jp), which is what Blast Corps boots
-with. A NON_MATCHING build changes bytes inside the checksummed range, so the
-checksum baked in by the original game no longer matches and real hardware /
-accurate emulators refuse to boot the ROM.
-"""
 
 import argparse
 

@@ -282,27 +282,27 @@ void func_hd_code_8027DA10(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 f32 func_hd_code_8027DB5C(s32* arg0, s32* arg1, s32 arg2) {
-  s32 sp2C;
+  s32 i;
   f32 sp28;
   f32 sp24;
   f32 sp20;
   f32 sp1C;
   s32 sp18;
 
-  sp2C = 0;
+  i = 0;
   sp28 = 0.0f;
-  while (&D_hd_code_80364460[sp2C] != D_hd_code_803649D0) {
-    sp18 = D_hd_code_80364460[sp2C].unk5C;
+  while (&g_vehicles[i] != g_vehiclesEnd) {
+    sp18 = g_vehicles[i].unk5C;
     if ((sp18 != 0xFE) && ((sp18 != 0) || (D_hd_code_803649E8 == 0))) {
-      if (func_hd_code_8027E164(D_hd_code_80364460[sp2C].unk64, D_hd_code_80364460[sp2C].unk6C, arg0, arg1) != 0) {
-        if (D_hd_code_80364460[sp2C].unk70 != 0) {
-          sp1C = func_hd_code_8027DD88(D_hd_code_80364460[sp2C].unk64, D_hd_code_80364460[sp2C].unk6C, arg0, arg1);
+      if (func_hd_code_8027E164(g_vehicles[i].unk64, g_vehicles[i].unk6C, arg0, arg1) != 0) {
+        if (g_vehicles[i].unk70 != 0) {
+          sp1C = func_hd_code_8027DD88(g_vehicles[i].unk64, g_vehicles[i].unk6C, arg0, arg1);
           if (sp1C <= 0.5) {
             sp1C = (f32)(sp1C * 2.0);
           } else {
             sp1C = (f32)((1.0 - (f64)sp1C) * 2.0);
           }
-          sp20 = func_hd_code_8027E228(D_hd_code_80364460[sp2C].unk5C);
+          sp20 = func_hd_code_8027E228(g_vehicles[i].unk5C);
           sp24 = sp1C * sp20;
           if (sp28 < sp24) {
             sp28 = sp24;
@@ -310,7 +310,7 @@ f32 func_hd_code_8027DB5C(s32* arg0, s32* arg1, s32 arg2) {
         }
       }
     }
-    sp2C += 1;
+    i += 1;
   }
   return (f32)arg2 * sp28;
 }

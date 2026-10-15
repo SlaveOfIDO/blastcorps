@@ -1,8 +1,3 @@
-# Shared toolchain and compiler flags for the init/ and game/ Makefiles.
-# Included as `include ../tools/common.mk` - every path here is written
-# relative to that (init/ and game/ are both one level under the content
-# root). Requires NON_MATCHING to already be set by the includer.
-
 CROSS = mips-linux-gnu-
 AS = $(CROSS)as
 LD = $(CROSS)ld

@@ -281,7 +281,7 @@ void func_hd_code_8024B8F4(void*, void*);
 void func_hd_code_8024BDA4(u16*);
 Gfx* func_hd_code_8024C404(Gfx*, struct FrameContext*, s32*);
 Gfx* func_hd_code_8024C414(struct FrameContext*, s32*);
-void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, s32* arg5, s32* arg6,
+void func_hd_code_80258544(struct Shadow* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, Gfx* arg5, s32* arg6,
                            s32* arg7);
 void func_hd_code_8025C5D0();
 Gfx* func_hd_code_8025C878(Gfx* arg0, void* arg1, u8 arg2, s32* arg3);

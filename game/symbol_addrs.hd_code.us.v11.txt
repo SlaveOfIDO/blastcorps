@@ -699,3 +699,6 @@ g_frameCount = 0x80358060; // type:u32
 g_previousButtons = 0x80370C2A;
 yoshiShow = 0x8026AF6C;
 fadeToFast = 0x80275390;
+g_vehicles = 0x80364460; // size:0x570
+g_vehiclesEnd = 0x803649D0;
+g_shadows = 0x803643C8;

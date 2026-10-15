@@ -24,20 +24,20 @@ Vp D_hd_code_802E8C60 = {
 // </data>
 
 void func_hd_code_80258230(u8 arg0, s32 arg1, s16 arg2, s16 arg3) {
-  D_hd_code_803643C8.end->unk1022 = arg0;
-  D_hd_code_803643C8.end->unk1023 = 0;
-  D_hd_code_803643C8.end->unk1000 = (f32)arg1;
-  D_hd_code_803643C8.end->unk1018 = arg2;
-  D_hd_code_803643C8.end->unk101A = arg3;
-  D_hd_code_803643C8.end->unk101C = 0;
-  D_hd_code_803643C8.end->unk101E = 0;
-  D_hd_code_803643C8.end->unk1020 = 0;
-  D_hd_code_803643C8.end++;
+  g_shadows.firstFree->unk1022 = arg0;
+  g_shadows.firstFree->unk1023 = 0;
+  g_shadows.firstFree->unk1000 = (f32)arg1;
+  g_shadows.firstFree->unk1018 = arg2;
+  g_shadows.firstFree->unk101A = arg3;
+  g_shadows.firstFree->unk101C = 0;
+  g_shadows.firstFree->unk101E = 0;
+  g_shadows.firstFree->unk1020 = 0;
+  g_shadows.firstFree++;
 }
 
 void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
   u8 sp37;
-  struct Texture* sp30;
+  struct Shadow* sp30;
   u8 sp2F;
   u8 sp2E;
   u8 sp2D;
@@ -69,7 +69,7 @@ void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
       }
     }
   }
-  sp30 = D_hd_code_803643C8.textures;
+  sp30 = g_shadows.shadows;
   if (sp37 == 0) {
     do {
       if (sp30->unk1022 == arg0) {
@@ -95,9 +95,9 @@ void func_hd_code_802582C4(u8 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 
 }
 
 s32 func_hd_code_802584BC(u8 arg0) {
-  struct Texture* sp4;
+  struct Shadow* sp4;
 
-  sp4 = D_hd_code_803643C8.textures;
+  sp4 = g_shadows.shadows;
   while (1) {  // ... internship?
     if (sp4->unk1022 == arg0) {
       return sp4->unk1008;
@@ -108,9 +108,9 @@ s32 func_hd_code_802584BC(u8 arg0) {
 }
 
 s32 func_hd_code_80258500(u8 arg0) {
-  struct Texture* sp4;
+  struct Shadow* sp4;
 
-  sp4 = D_hd_code_803643C8.textures;
+  sp4 = g_shadows.shadows;
   while (1) {  // ... internship?
     if (sp4->unk1022 == arg0) {
       return sp4->unk1014;
@@ -120,7 +120,7 @@ s32 func_hd_code_80258500(u8 arg0) {
   return 0;
 }
 
-void func_hd_code_80258544(struct Texture* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, s32* arg5, s32* arg6,
+void func_hd_code_80258544(struct Shadow* arg0, s32 arg1, s32 arg2, s32 arg3, f32 arg4, Gfx* arg5, s32* arg6,
                            s32* arg7) {
   Gfx* entry;
   u16 sp9A;

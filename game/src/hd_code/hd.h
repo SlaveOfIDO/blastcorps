@@ -5,28 +5,28 @@
 #include <PR/ultratypes.h>
 #include "structs.h"
 
-struct UnknownStruct_803644BC {
+struct VehicleSlot {
   // size: 0x74
-  /* 0x00 */ s32 unk0;
-  /* 0x04 */ s32 unk4; // D_80364464
-  /* 0x08 */ s32 unk8; // D_80364468
-  /* 0x0C */ void* unkC; // D_8036446C
-  /* 0x10 */ s32 unk10; // D_80364470
-  /* 0x14 */ s32 unk14; // D_80364474
+  /* 0x00 */ Vtx* unk0; // Vertex data for model
+  /* 0x04 */ Mtx** unk4; // Matrix array for even frames
+  /* 0x08 */ Mtx** unk8; // Matrix array for uneven frames
+  /* 0x0C */ Gfx* unkC; // main Displaylist for even frames
+  /* 0x10 */ Gfx* unk10; // D_80364470
+  /* 0x14 */ Gfx* unk14; // D_80364474
   /* 0x18 */ s32 unused18; // D_80364478
   /* 0x1C */ s32 unused1C; // D_8036447C
   /* 0x20 */ s32 unused20; // D_80364480
   /* 0x24 */ s32 unused24; // D_80364484
   /* 0x28 */ s32 unused28; // D_80364488
   /* 0x2C */ s32 unused2C; // D_8036448C
-  /* 0x30 */ s32 unk30; // D_80364490
-  /* 0x34 */ s32 unk34; // D_80364494
-  /* 0x38 */ s32 unk38; // D_80364498
+  /* 0x30 */ Gfx *unk30; // main Displaylist for uneven frames
+  /* 0x34 */ Gfx *unk34; // D_80364494
+  /* 0x38 */ Gfx *unk38; // D_80364498
   /* 0x3C */ s32 unused3C; // D_8036449C
   /* 0x40 */ u8 pad40[0x54 - 0x40];
-  /* 0x54 */ s32 unk54;
-  /* 0x58 */ s32 unk58;
-  /* 0x5C */ s32 unk5C; // Texture Index?
+  /* 0x54 */ Gfx *unk54; // used for shadow rendering
+  /* 0x58 */ s32 unk58; // used for blur rendering
+  /* 0x5C */ s32 unk5C; // Texture Index? or vehicle index?
   /* 0x60 */ s32 unk60; // Some kind of env color?
   /* 0x64 */ s32 unk64;
   /* 0x68 */ s32 unk68;
@@ -77,7 +77,7 @@ extern u32 g_frameCount;
 extern s32 D_hd_code_80358064;
 extern u8* g_heap;
 extern u16 D_hd_code_8035807C;
-extern struct Textures D_hd_code_803643C8;
+extern struct Shadows g_shadows;
 extern u8 D_hd_code_803643D4;
 extern u8 D_hd_code_803643D5;
 extern u8 D_hd_code_803643D6;
@@ -106,8 +106,8 @@ extern s16 D_hd_code_8036443C;
 extern s16 D_hd_code_8036443E;
 extern s16 D_hd_code_80364452;
 extern u8 D_hd_code_80364456;
-extern struct UnknownStruct_803644BC D_hd_code_80364460[12];
-extern struct UnknownStruct_803644BC *D_hd_code_803649D0;
+extern struct VehicleSlot g_vehicles[12];
+extern struct VehicleSlot *g_vehiclesEnd;
 extern s32 D_hd_code_803649E8;
 extern u8 D_hd_code_803649ED;
 extern s8 D_hd_code_80364A50;

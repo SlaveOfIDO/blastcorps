@@ -75,7 +75,7 @@ struct FrameContext {
   /* 0x2147C */ u8 pad2147C[0x21498 - 0x2147C];
 };
 
-struct Texture {
+struct Shadow {
   u8 data[0x1000];
   f32 unk1000;
   s32 unk1004;
@@ -94,15 +94,10 @@ struct Texture {
   // size: 0x1040
 };
 
-struct Textures {
-  struct Texture *textures;
-  struct Texture *end; // D_803643CC
+struct Shadows {
+  struct Shadow *shadows;
+  struct Shadow *firstFree;
 };
-
-
-
-
-
 
 struct vec3 {
   f32 x;

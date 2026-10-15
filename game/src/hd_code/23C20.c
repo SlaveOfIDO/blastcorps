@@ -213,8 +213,8 @@ struct S_802F4224 D_hd_code_802F4224[0x31] = {
 void func_hd_code_802683E0(void) {
   s32 sp3C;
   u8 sp3B;
-  u8 sp3A;
-  struct UnknownStruct_803644BC* sp34;
+  u8 found;
+  struct VehicleSlot* vehicle;
 
   sp3C = 0;
   sp3B = 0;
@@ -225,25 +225,25 @@ void func_hd_code_802683E0(void) {
 
   while (!sp3B && (sp3C <= 0)) {
     if (D_hd_code_802F3C10[sp3C].unk0 == g_currentLevel) {
-      sp34 = D_hd_code_80364460;
-      sp3A = 0;
-      while ((sp3A == 0) && (D_hd_code_803649D0 != sp34)) {
-        if (D_hd_code_802F3C10[sp3C].unk1 == sp34->unk5C) {
-          sp3A = 1;
+      vehicle = g_vehicles;
+      found = 0;
+      while (!found && (g_vehiclesEnd != vehicle)) {
+        if (D_hd_code_802F3C10[sp3C].unk1 == vehicle->unk5C) {
+          found = 1;
         } else {
-          sp34++;
+          vehicle++;
         }
       }
-      if ((sp3A != 0) &&
-          (((func_hd_code_802AC4C4((s32)sp34->unk64 >> 5, (s32)sp34->unk6C >> 5, (s32)D_hd_code_802F3C10[sp3C].unk2,
+      if ((found != 0) &&
+          (((func_hd_code_802AC4C4((s32)vehicle->unk64 >> 5, (s32)vehicle->unk6C >> 5, (s32)D_hd_code_802F3C10[sp3C].unk2,
                                    (s32)D_hd_code_802F3C10[sp3C].unk4, (s32)D_hd_code_802F3C10[sp3C].unk6,
                                    (s32)D_hd_code_802F3C10[sp3C].unk8, (s32)D_hd_code_802F3C10[sp3C].unkA,
                                    (s32)D_hd_code_802F3C10[sp3C].unkC) != 0)) ||
-           ((func_hd_code_802AC4C4((s32)sp34->unk64 >> 5, (s32)sp34->unk6C >> 5, (s32)D_hd_code_802F3C10[sp3C].unk2,
+           ((func_hd_code_802AC4C4((s32)vehicle->unk64 >> 5, (s32)vehicle->unk6C >> 5, (s32)D_hd_code_802F3C10[sp3C].unk2,
                                    (s32)D_hd_code_802F3C10[sp3C].unk4, (s32)D_hd_code_802F3C10[sp3C].unkA,
                                    (s32)D_hd_code_802F3C10[sp3C].unkC, (s32)D_hd_code_802F3C10[sp3C].unkE,
                                    (s32)D_hd_code_802F3C10[sp3C].unk10) != 0)))) {
-        if (func_hd_code_8026A6F0(sp34->unk64, sp34->unk68, sp34->unk6C, D_hd_code_803643E0, D_hd_code_803643E4,
+        if (func_hd_code_8026A6F0(vehicle->unk64, vehicle->unk68, vehicle->unk6C, D_hd_code_803643E0, D_hd_code_803643E4,
                                   D_hd_code_803643E8) < D_hd_code_802F3C10[sp3C].unk12) {
           D_hd_code_803649ED = D_hd_code_802F3C10[sp3C].unk1;
           sp3B = 1;
@@ -788,7 +788,7 @@ void func_hd_code_8026A988(void) {
 }
 
 void func_hd_code_8026A9B4(void) {
-  struct UnknownStruct_803644BC* sp3C;
+  struct VehicleSlot* vehicle;
   u8 sp3B;
   s32 sp34;
   s32 sp30;
@@ -809,26 +809,26 @@ void func_hd_code_8026A9B4(void) {
   if (D_hd_code_80364456 != 0) {
     D_hd_code_8036B979 = D_hd_code_80364456;
   }
-  sp3C = D_hd_code_80364460;
+  vehicle = g_vehicles;
   sp3B = 0;
-  while ((sp3B == 0) && (D_hd_code_803649D0 != sp3C)) {
-    if ((sp3C->unk5C != D_hd_code_8036B978) && (sp3C->unk5C != D_hd_code_80364456) && (D_hd_code_80364456 != 0) &&
-        (sp3C->unk5C != 0) && (sp3C->unk5C != 0xFE) && (sp3C->unk5C != 0xFF) && (sp3C->unk5C != 7) &&
-        (sp3C->unk5C != 6)) {
+  while ((sp3B == 0) && (g_vehiclesEnd != vehicle)) {
+    if ((vehicle->unk5C != D_hd_code_8036B978) && (vehicle->unk5C != D_hd_code_80364456) && (D_hd_code_80364456 != 0) &&
+        (vehicle->unk5C != 0) && (vehicle->unk5C != 0xFE) && (vehicle->unk5C != 0xFF) && (vehicle->unk5C != 7) &&
+        (vehicle->unk5C != 6)) {
       sp30 = func_hd_code_8026A6F0((s32)D_hd_code_803643E0 >> 5, (s32)D_hd_code_803643E4 >> 5,
-                                   (s32)D_hd_code_803643E8 >> 5, (s32)sp3C->unk64 >> 5, (s32)sp3C->unk68 >> 5,
-                                   (s32)sp3C->unk6C >> 5);
+                                   (s32)D_hd_code_803643E8 >> 5, (s32)vehicle->unk64 >> 5, (s32)vehicle->unk68 >> 5,
+                                   (s32)vehicle->unk6C >> 5);
       if (sp30 < sp34) {
         sp34 = sp30;
       }
       if ((sp30 < 0x64) && (D_hd_code_8036B970 == 0) &&
-          ((func_hd_code_802AB3C0(sp3C->unk5C) == 0) || (D_hd_code_803EFECB == 0))) {
+          ((func_hd_code_802AB3C0(vehicle->unk5C) == 0) || (D_hd_code_803EFECB == 0))) {
         func_hd_code_8026AD30(0x4CU);
         D_hd_code_8036B970 = 1;
         sp3B = 1;
       }
     }
-    sp3C++;
+    vehicle++;
   }
   if ((D_hd_code_8036B970 != 0) && (sp34 >= 0x191)) {
     D_hd_code_8036B970 = 0;
