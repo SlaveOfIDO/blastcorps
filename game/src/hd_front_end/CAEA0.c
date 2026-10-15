@@ -112,10 +112,7 @@ extern f32 D_hd_code_802FDAC0[20];
 extern u8 D_hd_code_803643D4;
 extern u16 D_hd_code_80364EF0[][0x10];
 
-struct S_80210F78 {
-  s32 unk0[4];
-};  // Size: 0x10
-extern struct S_80210F78 D_hd_front_end_80210F78[];
+extern Gfx* D_hd_front_end_80210F78[][4];
 extern Mtx D_hd_front_end_802110A8[19];
 extern Mtx D_hd_front_end_80211568[19];
 extern Mtx D_hd_front_end_80211A28;
@@ -338,8 +335,7 @@ void func_hd_front_end_801E7598(void) {
                   D_hd_front_end_802153D8, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
   gSPPerspNormalize(entry++, D_hd_code_8035807C);
-  gSPLookAtX(entry++, (u32)&sp140->lookAt);
-  gSPLookAtY(entry++, (u32)&sp140->lookAt.l[1]);
+  gSPLookAt(entry++, &sp140->lookAt);
   gSPMatrix(entry++, &sp140->unk1240, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
   gSPMatrix(entry++, &sp140->projection2, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
   gDPSetEnvColor(entry++, 0x00, 0x00, 0x00, 0xFF);
@@ -366,7 +362,7 @@ void func_hd_front_end_801E7598(void) {
       gSPMatrix(entry++, &D_hd_front_end_802110A8[sp148], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
       gSPMatrix(entry++, &D_hd_front_end_80211568[sp148], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-      gSPDisplayList(entry++, D_hd_front_end_80210F78[sp148].unk0[D_hd_code_8035805C]);
+      gSPDisplayList(entry++, D_hd_front_end_80210F78[sp148][D_hd_code_8035805C]);
 
       gSPMatrix(entry++, &D_hd_front_end_80211A28, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
