@@ -44,7 +44,7 @@ jobs:
           path: bc-secret
 
       - name: Place ROM
-        run: cp bc-secret/baserom.us.v11.decompressed.z64 ./baserom.us.v11.z64
+        run: cp bc-secret/baserom.us.v11.z64 ./baserom.us.v11.z64
 
       - name: Build and verify
         run: make full
