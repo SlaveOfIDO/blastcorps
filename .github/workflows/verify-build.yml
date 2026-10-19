@@ -1,0 +1,50 @@
+name: verify-build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-22.04
+    name: ubuntu-22.04 (matching build)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install MIPS toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binutils-mips-linux-gnu gcc-mips-linux-gnu
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Checkout ROM
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.BC_REPO_WITH_PAT }}
+          token: ${{ secrets.BC_DECOMP }}
+          path: bc-secret
+
+      - name: Place ROM
+        run: cp bc-secret/baserom.us.v11.decompressed.z64 ./baserom.us.v11.z64
+
+      - name: Build and verify
+        run: make full
