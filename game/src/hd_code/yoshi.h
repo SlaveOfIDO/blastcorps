@@ -24,4 +24,6 @@ Gfx* func_hd_code_8026BBD0(Gfx*, struct FrameContext*, s32*);
 s32 yoshiFFS(u64);
 u8 func_hd_code_8026FA38(char** arg0, s32* arg1);
 
+#define YOSHI_DEMAND_OFF 0x4000
+
 #endif

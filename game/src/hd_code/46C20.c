@@ -1,3 +1,4 @@
+#include "../hd_front_end/pak.h"
 #include "../vram.h"
 #include "common.h"
 #include "functions.h"
@@ -6,7 +7,6 @@
 #include "structs.h"
 #include "variables.h"
 
-void func_hd_front_end_801F57B0();
 void func_hd_code_802C4070(void**, void**, u32, u8);
 void func_hd_code_8025C230(uintptr_t* arg0, uintptr_t* arg1, uintptr_t arg2);
 extern void** D_hd_code_802FDB30;

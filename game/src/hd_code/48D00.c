@@ -6,6 +6,7 @@
 #include "structs.h"
 #include "variables.h"
 #include "yoshi.h"
+#include "../vehicles.h"
 
 struct S_8039B070 {
   s32 unk0;
@@ -395,7 +396,7 @@ void func_hd_code_8028DF14(u8 arg0) {
       if ((D_hd_code_8039B070[sp4C].unk1E > 0) && (D_hd_code_8039B070[sp4C].unk44 == 0) &&
           (D_hd_code_8039B070[sp4C].unk18 != 0)) {
         sndPlaySfx(D_hd_code_80367738, 7, (ALSoundState*)&D_hd_code_8039B070[sp4C].unk44);
-        if (D_hd_code_80364456 == 4) {
+        if (g_currentVehicleType == VEHICLE_RAMDOZER) {
           func_hd_code_8026AD30(0x54);
         }
       }

@@ -713,12 +713,12 @@ void func_hd_front_end_801F8980(void) {
     fadeToFast(0x4000000000000000);
     g_currentLevel = D_hd_front_end_8021A905;
   }
-  sp3C = (D_hd_code_80370C2C * D_hd_code_80370C2C) + (D_hd_code_80370C2D * D_hd_code_80370C2D);
-  if (sp3C < 0x5DC) {
+  sp3C = (g_stickX * g_stickX) + (g_stickY * g_stickY);
+  if (sp3C < 1500) {
     D_hd_front_end_8021A930 = 1;
   }
   if (sp3C != 0) {
-    D_hd_front_end_8020E3D8 = func_hd_code_8028BBF4(0, 0, D_hd_code_80370C2C, -D_hd_code_80370C2D);
+    D_hd_front_end_8020E3D8 = func_hd_code_8028BBF4(0, 0, g_stickX, -g_stickY);
   }
   if ((sp3C >= 0x5DD) && (D_hd_front_end_8021A930 != 0) && (D_hd_front_end_8021A907 >= 0) &&
       (D_hd_front_end_8021AB2C == 0xFF) && (D_hd_front_end_8021A924 == 1) && (D_hd_code_8036BB1C == 1)) {

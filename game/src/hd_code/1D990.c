@@ -1481,7 +1481,7 @@ void func_hd_code_802633E0(void) {
           D_hd_code_803643DA = 1;
         } else {
           sp33 = D_hd_code_80367C04->unk18 - D_hd_code_80367B54;
-          if (D_hd_code_802E8BD0 == 0) {
+          if (!g_gamePaused) {
             yoshiShow(0x8008U);
           }
           if (sp33 == 1) {
@@ -1642,10 +1642,10 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
       }
       break;
     case 3:
-      if (D_hd_code_802E8BD0 == 0) {
+      if (!g_gamePaused) {
         D_hd_code_80367BC8 = 4;
       }
-      if (D_hd_code_80370C1C != 0) {
+      if (g_aButtonPressed != 0) {
         D_hd_code_80367C01 = 1;
       }
       break;
@@ -1661,10 +1661,10 @@ Gfx* func_hd_code_80264264(s32 arg0, Gfx* arg1) {
         D_hd_code_80367BFF = (s8)D_hd_code_80367BFE;
         D_hd_code_80367B50 = D_hd_code_80358064;
       }
-      if ((D_hd_code_80367D52.unk1 == 1) && (D_hd_code_80370C1C == 0)) {
+      if ((D_hd_code_80367D52.unk1 == 1) && (g_aButtonPressed == 0)) {
         D_hd_code_80367BFE = !D_hd_code_80367C01;
       }
-      if ((D_hd_code_80367D52.unk1 == 4) && (D_hd_code_80367D52.unk0 == 5) && (D_hd_code_80370C1C == 0)) {
+      if ((D_hd_code_80367D52.unk1 == 4) && (D_hd_code_80367D52.unk0 == 5) && (g_aButtonPressed == 0)) {
         D_hd_code_80367BFE = 0;
       }
       break;

@@ -229,7 +229,7 @@ void func_hd_front_end_801E8EB8(u8 arg0, s32 arg1) {
   };
   s32 sp24[4] = { (s32)D_hd_code_803043B8, (s32)D_hd_code_80304474, (s32)D_hd_code_80304544, (s32)D_hd_code_80304614 };
 
-  if (!(g_currentGameState & 0x10E18000) && (arg0 != D_hd_code_80364AEA)) {
+  if (!(g_currentGameState & 0x10E18000) && (arg0 != g_playerNumberAtStart)) {
     sp47 = 1;
   }
   D_hd_front_end_802154EC = -1;
@@ -496,13 +496,13 @@ void func_hd_front_end_801EA108(u8 arg0, u8 arg1, u8 arg2) {
   func_hd_front_end_801EA268(sp2C);
   sprintf((u8 *)sp2C, "%s", "NEW GAME");
   D_hd_code_80365060[arg0] = 2;
-  osSendMesg(&D_hd_front_end_80219EF8, (void *)((arg0 << 0x10) | 7), 1);
+  osSendMesg(&g_pakMesgQueue, (void *)((arg0 << 0x10) | 7), 1);
   if (arg1 != 0) {
-    osSendMesg(&D_hd_front_end_80219EF8, (void *)((arg2 ? 0x14 : 0x15) | (arg0 << 0x10) | 0x01000000), 1);
+    osSendMesg(&g_pakMesgQueue, (void *)((arg2 ? 0x14 : 0x15) | (arg0 << 0x10) | 0x01000000), 1);
     osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
     return;
   }
-  osSendMesg(&D_hd_front_end_80219EF8, (void *)((arg2 ? 0x14 : 0x15) | (arg0 << 0x10)), 1);
+  osSendMesg(&g_pakMesgQueue, (void *)((arg2 ? 0x14 : 0x15) | (arg0 << 0x10)), 1);
 }
 
 void func_hd_front_end_801EA268(UnknownData8024C414 *arg0) {
@@ -514,7 +514,7 @@ void func_hd_front_end_801EA278(void) {
   void *sp18;
 
   for (sp1C = 0; sp1C < 4; sp1C++) {
-    osSendMesg(&D_hd_front_end_80219EF8, (void *)((sp1C << 0x10) | 6 | 0x01000000), 1);
+    osSendMesg(&g_pakMesgQueue, (void *)((sp1C << 0x10) | 6 | 0x01000000), 1);
     osRecvMesg(&D_hd_front_end_80219F50, &sp18, 1);
     if (sp18 == NULL) {
       if (func_hd_code_8025B3F0(&players[sp1C], "NEW GAME") != 0) {
@@ -524,7 +524,7 @@ void func_hd_front_end_801EA278(void) {
       }
     } else if (sp18 != (void *)0x6E382) {
       if (sp1C < (s32)D_hd_code_8039C4F8.unk40) {
-        osSendMesg(&D_hd_front_end_80219EF8, (void *)((sp1C << 0x10) | 3 | 0x01000000), 1);
+        osSendMesg(&g_pakMesgQueue, (void *)((sp1C << 0x10) | 3 | 0x01000000), 1);
         osRecvMesg(&D_hd_front_end_80219F50, &sp18, 1);
       }
       if ((sp18 != NULL) || (sp1C >= (s32)D_hd_code_8039C4F8.unk40)) {
@@ -658,8 +658,8 @@ Gfx *func_hd_front_end_801EAA7C(Gfx *gfx, struct FrameContext *arg1, s32 *arg2) 
     sndPlaySfx(D_hd_code_80367738, 0xC, NULL);
   }
   D_hd_front_end_8021546C = D_hd_front_end_8021591A;
-  D_hd_front_end_8021591A = D_hd_code_80370C2C;
-  if ((D_hd_code_80370C2C > 0 ? D_hd_code_80370C2C : -D_hd_front_end_8021591A) < 0xA) {
+  D_hd_front_end_8021591A = g_stickX;
+  if ((g_stickX > 0 ? g_stickX : -D_hd_front_end_8021591A) < 0xA) {
     D_hd_front_end_8021591A = 0;
   } else {
     D_hd_front_end_8021591A *= (D_hd_front_end_8021591A > 0) ? D_hd_front_end_8021591A : -D_hd_front_end_8021591A;
@@ -1049,12 +1049,12 @@ void func_hd_front_end_801ECB18(void) {
   D_hd_code_803643D5 = 0;
   if ((LEVEL_FINISHED(g_currentLevel)) != 0) {
     if (D_hd_code_802E8F94[g_currentLevel].unk0 == 1) {
-      osSendMesg(&D_hd_front_end_80219EF8, (void *)((g_currentLevel << 8) | 0xC | (playerNumber << 0x10)), 1);
+      osSendMesg(&g_pakMesgQueue, (void *)((g_currentLevel << 8) | 0xC | (playerNumber << 0x10)), 1);
     }
-    osSendMesg(&D_hd_front_end_80219EF8, (void *)((g_currentLevel << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
+    osSendMesg(&g_pakMesgQueue, (void *)((g_currentLevel << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
     return;
   }
-  osSendMesg(&D_hd_front_end_80219EF8, (void *)((g_currentLevel << 8) | 0x16 | (playerNumber << 0x10) | 0x01000000), 1);
+  osSendMesg(&g_pakMesgQueue, (void *)((g_currentLevel << 8) | 0x16 | (playerNumber << 0x10) | 0x01000000), 1);
   func_hd_front_end_801F8354(playerNumber);
 }
 
@@ -1069,17 +1069,17 @@ void func_hd_front_end_801ECC8C(void) {
         func_hd_code_80261570(0.0f);
         sp18 = 1;
       }
-      osSendMesg(&D_hd_front_end_80219EF8, (void *)((sp1C << 0x10) | 0x14), 1);
+      osSendMesg(&g_pakMesgQueue, (void *)((sp1C << 0x10) | 0x14), 1);
       rmonPrintf("saving player %d on level %d\n", sp1C, saveIt[sp1C] - 1);
       players[sp1C].levelno = g_currentLevel;
-      osSendMesg(&D_hd_front_end_80219EF8, (void *)(((saveIt[sp1C] - 1) << 8) | 7 | (sp1C << 0x10)), 1);
-      osSendMesg(&D_hd_front_end_80219EF8, (void *)(((saveIt[sp1C] - 1) << 8) | 9 | (sp1C << 0x10)), 1);
-      osSendMesg(&D_hd_front_end_80219EF8, (void *)(((saveIt[sp1C] - 1) << 8) | 0xB | (sp1C << 0x10)), 1);
+      osSendMesg(&g_pakMesgQueue, (void *)(((saveIt[sp1C] - 1) << 8) | 7 | (sp1C << 0x10)), 1);
+      osSendMesg(&g_pakMesgQueue, (void *)(((saveIt[sp1C] - 1) << 8) | 9 | (sp1C << 0x10)), 1);
+      osSendMesg(&g_pakMesgQueue, (void *)(((saveIt[sp1C] - 1) << 8) | 0xB | (sp1C << 0x10)), 1);
       if ((saveLevel != 0) && (playerNumber == sp1C)) {
-        osSendMesg(&D_hd_front_end_80219EF8, (void *)(((saveLevel - 1) << 8) | 0xD | (playerNumber << 0x10)), 1);
+        osSendMesg(&g_pakMesgQueue, (void *)(((saveLevel - 1) << 8) | 0xD | (playerNumber << 0x10)), 1);
         saveLevel = 0;
       }
-      osSendMesg(&D_hd_front_end_80219EF8, (void *)((sp1C << 0x10) | 0x15 | 0x01000000), 1);
+      osSendMesg(&g_pakMesgQueue, (void *)((sp1C << 0x10) | 0x15 | 0x01000000), 1);
       osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
       saveIt[sp1C] = 0;
     }
@@ -1123,7 +1123,7 @@ void func_hd_front_end_801ECF5C(void) {
       if ((D_hd_code_802E8F94[sp30].unk0 == 1) && (sp30 != 0x31) && (sp30 != 0x2F) && (sp30 != 0x26)) {
         sp48 = &D_hd_code_802E8F94[sp30];
         if (saveIt[playerNumber] != (sp30 + 1)) {
-          osSendMesg(&D_hd_front_end_80219EF8, (void *)((sp30 << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
+          osSendMesg(&g_pakMesgQueue, (void *)((sp30 << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
           osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
         } else {
           func_hd_front_end_801ED480(sp4C, D_hd_code_80364EF0[playerNumber]);
@@ -1189,7 +1189,7 @@ void func_hd_front_end_801ED4B8(void) {
         (sp26 != 0x31) && (sp26 != 0x2F) && (sp26 != 0x26)) {
       sp30 = &D_hd_code_802E8F94[sp26];
       if (saveIt[playerNumber] != (sp26 + 1)) {
-        osSendMesg(&D_hd_front_end_80219EF8, (void *)((sp26 << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
+        osSendMesg(&g_pakMesgQueue, (void *)((sp26 << 8) | 8 | (playerNumber << 0x10) | 0x01000000), 1);
         osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
       } else {
         func_hd_front_end_801ED480(sp34, D_hd_code_80364EF0[playerNumber]);

@@ -15,6 +15,7 @@
 #include "../vram.h"
 #include "../hd_front_end/intro.h"
 #include "../levels.h"
+#include "../vehicles.h"
 
 // size: 0x4
 struct UnknownStruct8030F668 {
@@ -127,7 +128,7 @@ s16 D_hd_code_8036444E;
 s16 D_hd_code_80364450;
 s16 D_hd_code_80364452;
 s16 D_hd_code_80364454;
-u8 D_hd_code_80364456;
+u8 g_currentVehicleType;
 s32 D_hd_code_80364458;
 s32 pad_8036445C;
 struct VehicleSlot g_vehicles[12];
@@ -200,7 +201,7 @@ s32 pad_80364AE0;
 s32 pad_80364AE4;
 u8 playerNumber; // 0x80364AE8
 u8 D_hd_code_80364AE9; // nextPlayerNumber?
-u8 D_hd_code_80364AEA;
+u8 g_playerNumberAtStart;
 UnknownData8024C414 players[5]; // size 0xFF
 u8 bss_pad[0x70];
 u8 D_hd_code_80365060[5];
@@ -223,7 +224,7 @@ s16 D_hd_code_803650A0;
 // </bss>
 
 // <data>
-u8 D_hd_code_802E8BD0 = 0;
+u8 g_gamePaused = 0;
 u8 D_hd_code_802E8BD4 = 0;
 u8 D_hd_code_802E8BD8 = 0;
 s32 g_currentLevel = 0;
@@ -302,13 +303,13 @@ void Thread3(void* arg0) {
         // MASTER SWITCH BEGIN
         switch (g_nextGameState)
         {
-          case INTRO_RARE_LOGO:
+          case STATE_RARE_INTRO:
           {
             hdPrepareStateTransition();
             introInitialize(INTRO_MODE_RARE);
             break;
           }
-          case INTRO_NINTENDO_LOGO:
+          case STATE_NINTENDO_INTRO:
           {
             hdPrepareStateTransition();
             introInitialize(INTRO_MODE_NINTENDO);
@@ -331,7 +332,7 @@ void Thread3(void* arg0) {
             hdPrepareStateTransition();
             func_hd_code_8025D184();
             func_hd_front_end_80200714(1);
-            osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000001, OS_MESG_BLOCK);
+            osSendMesg(&g_pakMesgQueue, (OSMesg)0x01000001, OS_MESG_BLOCK);
             yoshiShow(0x8011);
             break;
           }
@@ -346,7 +347,7 @@ void Thread3(void* arg0) {
           }
           case 0x0000000010000000:
           {
-            osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000001, OS_MESG_BLOCK);
+            osSendMesg(&g_pakMesgQueue, (OSMesg)0x01000001, OS_MESG_BLOCK);
             func_hd_front_end_801E8DCC(4U);
             yoshiShow(0x8011);
             break;
@@ -358,7 +359,7 @@ void Thread3(void* arg0) {
             func_hd_code_802A0700();
             func_hd_code_8025D184();
             func_hd_front_end_80200714(1);
-            osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x0100000F, OS_MESG_BLOCK);
+            osSendMesg(&g_pakMesgQueue, (OSMesg)0x0100000F, OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, &sp5C, OS_MESG_BLOCK);
             if (sp5C != 0 || D_hd_code_8039C541 != 0) {
               D_hd_code_802E8BF8 = 1;
@@ -374,14 +375,14 @@ void Thread3(void* arg0) {
             else {
               playerNumber = 0U;
               D_hd_code_80364AE9 = 0U;
-              D_hd_code_80364AEA = 0,
-              osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000010, OS_MESG_BLOCK);
+              g_playerNumberAtStart = 0,
+              osSendMesg(&g_pakMesgQueue, (OSMesg)0x01000010, OS_MESG_BLOCK);
               osRecvMesg(&D_hd_front_end_80219F50, &D_hd_code_8039C4B4, OS_MESG_BLOCK);
               if (D_hd_code_8039C4B4 == 0)
               {
                 rmonPrintf("NO EE PRESENT! - USING DUMMY EE\n");
               }
-              osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000006, OS_MESG_BLOCK);
+              osSendMesg(&g_pakMesgQueue, (OSMesg)0x01000006, OS_MESG_BLOCK);
               osRecvMesg(&D_hd_front_end_80219F50, &sp5C, OS_MESG_BLOCK);
               if (sp5C == 0)
               {
@@ -459,15 +460,15 @@ void Thread3(void* arg0) {
               }
             break;
           }
-          case WORLD_VIEW_GAME_STATE:
+          case STATE_WORLD_VIEW:
           {
-            if (playerNumber != D_hd_code_80364AEA) {
-              D_hd_code_80364AE9 = (u8) D_hd_code_80364AEA;
-              playerNumber = (u8) D_hd_code_80364AEA;
+            if (playerNumber != g_playerNumberAtStart) {
+              D_hd_code_80364AE9 = (u8) g_playerNumberAtStart;
+              playerNumber = (u8) g_playerNumberAtStart;
             }
             func_hd_code_8028B3E0();
             rmonPrintf("World screen centred on level %d\n", g_currentLevel);
-            playerNumber = (u8) D_hd_code_80364AEA;
+            playerNumber = (u8) g_playerNumberAtStart;
             func_hd_front_end_801ECE9C();
             if (D_hd_code_80365065 == 0) {
               D_hd_code_80365065 = 1;
@@ -492,7 +493,7 @@ void Thread3(void* arg0) {
             func_hd_front_end_801F8530(g_currentLevel);
             break;
           }
-          case LEVELS_COMPLETED:
+          case STATE_LEVELS_COMPLETED:
           {
             D_hd_code_80364A70 = func_hd_code_80261A44(g_nextGameState);
             break;
@@ -593,7 +594,7 @@ void Thread3(void* arg0) {
             D_hd_code_80364412 = 1;
             break;
           }
-          case BEFORE_LEVEL_STATS:
+          case STATE_PRELEVEL_STATS:
           {
             sp5B = 0;
             switch (g_currentGameState)
@@ -620,7 +621,7 @@ void Thread3(void* arg0) {
             }
             hdPrepareStateTransition();
             if (sp5B != 0) {
-              osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((g_currentLevel << 8) | 0xD | (playerNumber << 0x10)), OS_MESG_BLOCK);
+              osSendMesg(&g_pakMesgQueue, (OSMesg)((g_currentLevel << 8) | 0xD | (playerNumber << 0x10)), OS_MESG_BLOCK);
             }
 
             D_hd_front_end_8020C070[D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 2].unk0 &= ~1;
@@ -646,7 +647,7 @@ void Thread3(void* arg0) {
             }
             break;
           }
-          case IN_LEVEL_GAME_STATE:
+          case STATE_IN_LEVEL:
           {
             hdPrepareStateTransition();
             if (g_currentGameState == 0x4000) {
@@ -660,7 +661,7 @@ void Thread3(void* arg0) {
             }
             break;
           }
-          case PROMOTION_SCREEN:
+          case STATE_PROMOTION_SCREEN:
           {
             hdPrepareStateTransition();
             sp54 = sc.retraceCount;
@@ -746,7 +747,7 @@ void Thread3(void* arg0) {
 
                 D_hd_code_803643D5 = !(LEVEL_FINISHED(g_currentLevel));
 
-                if (playerNumber == D_hd_code_80364AEA) D_hd_code_80364A87 |= D_hd_code_803643D5;
+                if (playerNumber == g_playerNumberAtStart) D_hd_code_80364A87 |= D_hd_code_803643D5;
 
 
                 if ((D_hd_code_80364AA8 == 1) && (D_hd_code_803643D5 == 0))
@@ -849,7 +850,7 @@ void Thread3(void* arg0) {
               }
             }
 
-            if ((D_hd_code_803643D5 != 0) && (playerNumber == D_hd_code_80364AEA))
+            if ((D_hd_code_803643D5 != 0) && (playerNumber == g_playerNumberAtStart))
             {
               D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk18 = D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unkE + D_hd_code_802F8BDC[D_hd_code_802F4868[yoshiFFS(D_hd_code_80364AA8)]].unk10 - 1;
             }
@@ -921,9 +922,9 @@ void Thread3(void* arg0) {
             }
             break;
           }
-          case ENTER_NAME_GAME_STATE:
+          case STATE_ENTER_NAME:
           {
-            osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)((playerNumber << 0x10) | 0x14 | 0x01000000), OS_MESG_BLOCK);
+            osSendMesg(&g_pakMesgQueue, (OSMesg)((playerNumber << 0x10) | 0x14 | 0x01000000), OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, NULL, OS_MESG_BLOCK);
             func_hd_front_end_801EA93C("ENTER NAME!", D_hd_code_803047A0, 7, 0x1E, &players[playerNumber]);
             yoshiShow(0x800B);
@@ -951,7 +952,7 @@ void Thread3(void* arg0) {
             D_hd_code_802E8BD8 = 1;
             break;
           }
-          case TUTORIAL_GAME_STATE:
+          case STATE_TUTORIAL:
           {
             func_hd_code_80299C0C();
             D_hd_code_80364A70 = func_hd_code_80261A44(g_nextGameState);
@@ -967,7 +968,7 @@ void Thread3(void* arg0) {
           case 0x0040000000000000:
           {
             hdPrepareStateTransition();
-            osSendMesg(&D_hd_front_end_80219EF8, (OSMesg)0x01000010, OS_MESG_BLOCK);
+            osSendMesg(&g_pakMesgQueue, (OSMesg)0x01000010, OS_MESG_BLOCK);
             osRecvMesg(&D_hd_front_end_80219F50, &D_hd_code_8039C4B4, OS_MESG_BLOCK);
             if (D_hd_code_8039C4B4 != 0)
             {
@@ -1058,7 +1059,7 @@ void Thread3(void* arg0) {
         func_hd_code_80255D34();
         g_frameCount += 1;
         D_hd_code_80358064 += 1;
-        if (D_hd_code_802E8BD0 == 0) {
+        if (!g_gamePaused) {
           D_hd_code_80358068 += 1;
         }
       }
@@ -1081,7 +1082,7 @@ void Thread3(void* arg0) {
           func_hd_code_80286330();
           break;
       }
-      if (playerNumber != D_hd_code_80364AEA) {
+      if (playerNumber != g_playerNumberAtStart) {
         continue;
       }
       if (g_nextGameState != 0x4000) {
@@ -1142,7 +1143,7 @@ void hdGameFrame(void) {
             sp68 = 0;
             sp63 = 0;
             while (!sp63) {
-                if (g_vehicles[sp68].unk5C == D_hd_code_80364456) {
+                if (g_vehicles[sp68].type == g_currentVehicleType) {
                     sp63 = 1;
                 } else {
                     sp68 += 1;
@@ -1152,7 +1153,7 @@ void hdGameFrame(void) {
             sp64 = 0;
             sp63 = 0;
             while (!sp63) {
-                if (g_shadows.shadows[sp64].unk1022 == D_hd_code_80364456) {
+                if (g_shadows.shadows[sp64].unk1022 == g_currentVehicleType) {
                     sp63 = 1;
                 } else {
                     sp64 += 1;
@@ -1166,7 +1167,7 @@ void hdGameFrame(void) {
     sp68 = 0;
     sp63 = 0;
     while (!sp63) {
-        if (g_vehicles[sp68].unk5C == D_hd_code_80364456) {
+        if (g_vehicles[sp68].type == g_currentVehicleType) {
             sp63 = 1;
         } else {
             sp68 += 1;
@@ -1182,9 +1183,9 @@ void hdGameFrame(void) {
     gfxSubmitTask(D_hd_code_803156F8[D_hd_code_8035805C].dp, D_hd_code_80358078, 3, 1, GFX_TASK_ID_MAIN, 1);
     func_hd_code_802A5720();
     D_hd_code_8035805C ^= 1;
-    switch (D_hd_code_802E8BD0) {
+    switch (g_gamePaused) {
     case 0: {
-        if (((u8) D_hd_code_802E8BD8 != 0) && ((D_hd_code_802E8BD0 = 1, D_hd_code_802E8BD4 = 0, D_hd_code_802E8BD8 = 0, D_hd_code_803156F4 = D_hd_code_8035805C ^ 1, (0 != 0)) || (g_currentGameState & 0x104))) {
+        if (((u8) D_hd_code_802E8BD8 != 0) && ((g_gamePaused = 1, D_hd_code_802E8BD4 = 0, D_hd_code_802E8BD8 = 0, D_hd_code_803156F4 = D_hd_code_8035805C ^ 1, (0 != 0)) || (g_currentGameState & 0x104))) {
             if (D_hd_code_8036EB99 == 0) {
                 sndSetSfxSlotVolume(0, 0);
             }
@@ -1200,7 +1201,7 @@ void hdGameFrame(void) {
     case 1: {
 
         if (D_hd_code_802E8BD4 != 0 && D_hd_code_8035805C != D_hd_code_803156F4) {
-            D_hd_code_802E8BD8 = 0, D_hd_code_802E8BD4 = 0, D_hd_code_802E8BD0 = 0;
+            D_hd_code_802E8BD8 = 0, D_hd_code_802E8BD4 = 0, g_gamePaused = 0;
             if(g_currentGameState & 0x104) {
                 if (D_hd_code_80358064 != 0) {
                     rmonPrintf("LOCKING KEYS!\n");
@@ -1220,7 +1221,7 @@ void hdGameFrame(void) {
         break;
     }
     }
-    if (D_hd_code_802E8BD0 != 0) {
+    if (g_gamePaused != 0) {
         D_hd_code_803156F5 = D_hd_code_803156F4;
     } else {
         D_hd_code_803156F5 = D_hd_code_8035805C;
@@ -1233,7 +1234,7 @@ void hdGameFrame(void) {
     }
     func_hd_code_802683E0();
     D_hd_code_803649EE = 0;
-    if (D_hd_code_80364456 == 0 && !(g_currentGameState & 0x1801)) {
+    if (g_currentVehicleType == VEHICLE_UNKNOWN_0 && !(g_currentGameState & 0x1801)) {
         func_hd_code_8024AE2C();
     }
     controllerUpdateInput();
@@ -1296,7 +1297,7 @@ void hdGameFrame(void) {
             break;
         }
     }
-    if (g_currentGameState == 0x100 && (D_hd_code_802E8BD0 != 0) && (D_hd_code_8036BB1C == 2) && (D_hd_code_803643DB != 0) && (D_hd_code_8036BB18 == 0)) {
+    if (g_currentGameState == 0x100 && (g_gamePaused != 0) && (D_hd_code_8036BB1C == 2) && (D_hd_code_803643DB != 0) && (D_hd_code_8036BB18 == 0)) {
         if (!(g_currentButtons & Z_TRIG) && !(g_currentButtons & R_TRIG)) {
             D_hd_code_80364A80 = 0;
         } else {
@@ -1353,7 +1354,7 @@ void hdGameFrame(void) {
             D_hd_code_802F8BDC->unk8 |= 0x20;
         }
     }
-    if ((D_hd_code_80370C22 != 0) && (D_hd_code_802E8BD0 == 0) && (D_hd_code_80364456 != 0) && (D_hd_code_8036443C == 0) && ((D_hd_code_80364AA8 == 1) || (D_hd_code_80364AA8 == 0x80))) {
+    if ((g_zButtonPressed != 0) && (!g_gamePaused) && (g_currentVehicleType != VEHICLE_UNKNOWN_0) && (D_hd_code_8036443C == 0) && ((D_hd_code_80364AA8 == 1) || (D_hd_code_80364AA8 == 0x80))) {
         func_hd_code_8024B188();
     }
     func_hd_code_8024B618();
@@ -1384,7 +1385,7 @@ void hdGameFrame(void) {
 
         }
     }
-    if ((D_hd_code_803643DC != 0) && ((D_hd_code_802E8BD0 == 0) || (g_currentGameState & 0x1801))) {
+    if ((D_hd_code_803643DC != 0) && ((!g_gamePaused) || (g_currentGameState & 0x1801))) {
         func_hd_code_802B899C();
         if ((g_currentGameState & 0x1801)) {
             if (areWeFading() == 0) {
@@ -1397,34 +1398,34 @@ void hdGameFrame(void) {
             func_hd_code_8026510C();
         }
     }
-    if ((D_hd_code_802E8BD0 == 0) && (D_hd_code_80364A84 == 0)) {
+    if ((!g_gamePaused) && (D_hd_code_80364A84 == 0)) {
         func_hd_code_8024B7AC();
     }
-    if ((D_hd_code_8039CA62 != 0) && (D_hd_code_802E8BD0 == 0)) {
+    if ((D_hd_code_8039CA62 != 0) && (!g_gamePaused)) {
         func_hd_code_80294F00();
     }
     if ((D_hd_code_803643DB != 0) && (D_hd_code_80364AA8 & 0x81)) {
         if (!(g_currentGameState & 0x1801)) {
             func_hd_code_802BA354();
         }
-        if (((g_currentGameState & 0x104)) && (func_hd_code_8026B10C() == 0) && (D_hd_code_802E8BD0 == 0) && (D_hd_code_803643D7 == 0) && (D_hd_code_803643D6 == 0)) {
+        if (((g_currentGameState & 0x104)) && (func_hd_code_8026B10C() == 0) && (!g_gamePaused) && (D_hd_code_803643D7 == 0) && (D_hd_code_803643D6 == 0)) {
             func_hd_code_8024A92C(sp6C = func_hd_code_802C1B9C());
         }
     }
-    if ((D_hd_code_80364AC1 != 0) && (D_hd_code_802E8BD0 == 0)) {
+    if ((D_hd_code_80364AC1 != 0) && (!g_gamePaused)) {
         func_hd_code_802D291C();
         if ((g_currentLevel == LEVEL_SHUTTLE_CLEAR) && (D_hd_code_8036BB1C == 1) && ((u32) g_frameCount >= 0x33U) && ((0 != 0) || (g_currentGameState & 0x1801)) && (areWeFading() == 0)) {
             fadeToFast(0x2000);
         }
     }
     func_hd_code_8029DDC8();
-    if (D_hd_code_802E8BD0 == 0) {
+    if (!g_gamePaused) {
         D_hd_code_803ED40C = 0;
         D_hd_code_803F7806 = func_hd_code_802C1AA0();
         func_hd_code_802BC5E0();
         func_hd_code_8024B5E8();
-        func_hd_code_8028F794(D_hd_code_80364456);
-        func_hd_code_80291FAC(D_hd_code_80364456);
+        func_hd_code_8028F794(g_currentVehicleType);
+        func_hd_code_80291FAC(g_currentVehicleType);
         func_hd_code_802688C4(g_currentLevel);
         if (!(g_currentGameState & 0x1801)) {
             func_hd_code_8026FEC4();
@@ -1484,15 +1485,15 @@ block_275:
                           D_hd_code_80358048[D_hd_code_8035805C],
                           &D_hd_code_803156F8[D_hd_code_8035805C].unkA4E0);
     func_hd_code_8027E9B8(D_hd_code_8035805C);
-    if ((D_hd_code_802E8BD0 == 0) || ((D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0)) || (D_hd_code_8036EB99 != 0)) {
+    if ((!g_gamePaused) || ((D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0)) || (D_hd_code_8036EB99 != 0)) {
         func_hd_code_802C0574();
         func_hd_code_802BCA2C();
     }
-    if (D_hd_code_802E8BD0 == 0) {
-        func_hd_code_8028DF14(D_hd_code_80364456);
-        func_hd_code_802906C0(D_hd_code_80364456);
+    if (!g_gamePaused) {
+        func_hd_code_8028DF14(g_currentVehicleType);
+        func_hd_code_802906C0(g_currentVehicleType);
         func_hd_code_80292830();
-        func_hd_code_8028C874(D_hd_code_80364456);
+        func_hd_code_8028C874(g_currentVehicleType);
     }
     if (D_hd_code_80364AA8 != 1) {
         if (g_currentGameState & 0x40) {
@@ -1516,14 +1517,14 @@ block_275:
     }
     func_hd_code_802A64A4();
     func_hd_code_802886A0();
-    if (D_hd_code_802E8BD0 == 0) {
+    if (!g_gamePaused) {
         func_hd_code_802CF1A4();
     }
     func_hd_code_80279514(D_hd_code_803643E0, D_hd_code_803643E4, D_hd_code_803643E8, D_hd_code_803643F8, D_hd_code_803643FC, D_hd_code_80364400);
     func_hd_code_80277620(g_frameCount);
     func_hd_code_8027D810(g_currentLevel);
     func_hd_code_802C2054();
-    if (D_hd_code_802E8BD0 == 0) {
+    if (!g_gamePaused) {
         func_hd_code_8026A9B4();
     }
     entry = func_hd_code_8024C414(&D_hd_code_803156F8[D_hd_code_8035805C], &D_hd_code_80358078);
@@ -1649,7 +1650,7 @@ block_275:
                 break;
             case 0x100:
             case 0x4:
-                if ((g_currentButtons & START_BUTTON) && (D_hd_code_802E8BD0 == 0)) {
+                if ((g_currentButtons & START_BUTTON) && (!g_gamePaused)) {
                     if ((LEVEL_FINISHED(g_currentLevel)) && (D_hd_code_80364AA8 == 1)) {
                         D_hd_code_802F5804[2].unk0 |= 1;
                         D_hd_code_802F5804[2].unk18 = 7;
@@ -1923,13 +1924,13 @@ void func_hd_code_8024AE2C(void) {
             func_hd_code_8028B720();
             func_hd_code_802794E4();
             if (func_hd_code_8024AFA8(D_hd_code_803649ED) != 0) {
-                D_hd_code_80364456 = D_hd_code_803649ED;
+                g_currentVehicleType = D_hd_code_803649ED;
                 func_hd_code_802AE860();
-                if ((D_hd_code_802E8BD0 == 0) && ((u32) g_frameCount >= 0xBU) && ((D_hd_code_80364456 == 8) || (D_hd_code_80364456 == 0xF) || (D_hd_code_80364456 == 0xD) || (D_hd_code_80364456 == 0xE))) {
+                if ((!g_gamePaused) && ((u32) g_frameCount >= 0xBU) && ((g_currentVehicleType == VEHICLE_UNKNOWN_8) || (g_currentVehicleType == VEHICLE_UNKNOWN_15) || (g_currentVehicleType == VEHICLE_POLICE_CAR) || (g_currentVehicleType == VEHICLE_UNKNOWN_14))) {
                     func_hd_code_8026AD30(0x4A);
                 }
             }
-            players[playerNumber].unk10 |= 1 << D_hd_code_80364456;
+            players[playerNumber].unk10 |= 1 << g_currentVehicleType;
             D_hd_code_803649E8 = 1;
             D_hd_code_803649EC = 1;
             D_hd_code_803649EE = 1;
@@ -1958,7 +1959,7 @@ u8 func_hd_code_8024AFA8(s32 arg0) {
     case 4: // BULLDOZER
       func_hd_code_802B448C();
       break;
-    case 5:
+    case 5: // TRUCK?
       func_hd_code_802B5CD8();
       break;
     case 6:
@@ -2015,7 +2016,7 @@ void func_hd_code_8024B188(void) {
     sp26 = 0;
     sp27 = func_hd_code_8024B4B8();
     if (sp27 == 1) {
-        sp26 = func_hd_code_802AE888(D_hd_code_802E8BFC[D_hd_code_80364456 - 1]);
+        sp26 = func_hd_code_802AE888(D_hd_code_802E8BFC[g_currentVehicleType - 1]);
     }
     if (sp26 != 0) {
         D_hd_code_803649E8 = 0;
@@ -2023,46 +2024,46 @@ void func_hd_code_8024B188(void) {
         func_hd_code_8028F93C();
         func_hd_code_80292084();
         func_hd_code_8028B720();
-        switch (D_hd_code_80364456) {
-        case 4:
+        switch (g_currentVehicleType) {
+        case VEHICLE_RAMDOZER:
             func_hd_code_802B4658();
             break;
-        case 3:
+        case VEHICLE_SKYFALL:
             func_hd_code_802B2F54();
             break;
-        case 5:
+        case VEHICLE_BACKLASH:
             func_hd_code_802B5F60();
             break;
-        case 2:
+        case VEHICLE_THUNDERFIST:
             func_hd_code_802B11B8();
             break;
-        case 1:
+        case VEHICLE_SIDESWIPE:
             func_hd_code_802B0254();
             break;
-        case 7:
+        case VEHICLE_TRAIN:
             func_hd_code_802BBE2C();
             break;
-        case 8:
+        case VEHICLE_UNKNOWN_8:
             func_hd_code_802B7754();
             break;
-        case 9:
+        case VEHICLE_J_BOMB:
             func_hd_code_802C5688();
             break;
-        case 10:
+        case VEHICLE_BALLISTA:
             func_hd_code_802CA1AC();
             break;
-        case 11:
-        case 17:
-        case 18:
-            func_hd_code_802C8B0C(D_hd_code_80364456);
+        case VEHICLE_UNKNOWN_11:
+        case VEHICLE_UNKNOWN_17:
+        case VEHICLE_UNKNOWN_18:
+            func_hd_code_802C8B0C(g_currentVehicleType);
             break;
-        case 13:
+        case VEHICLE_POLICE_CAR:
             func_hd_code_802CBBBC();
             break;
-        case 14:
+        case VEHICLE_UNKNOWN_14:
             func_hd_code_802CCD34();
             break;
-        case 6:
+        case VEHICLE_UNKNOWN_6:
             func_hd_code_802BB1A0();
             if (func_hd_code_8024B418(4) != 0) {
                 func_hd_code_802B4658();
@@ -2071,14 +2072,14 @@ void func_hd_code_8024B188(void) {
                 func_hd_code_802CBBBC();
             }
             break;
-        case 15:
+        case VEHICLE_UNKNOWN_15:
             func_hd_code_802CFAB4();
             break;
-        case 16:
+        case VEHICLE_CYCLONE_SUIT:
             func_hd_code_802D0BF8();
             break;
         }
-        D_hd_code_80364456 = 0;
+        g_currentVehicleType = 0;
         if ((g_currentGameState & 0x104)) {
             func_hd_code_8025BBE8(players[playerNumber].unkF0 & 1 ? 0x80 : 0x40, 0, 0);
         }
@@ -2092,7 +2093,7 @@ s32 func_hd_code_8024B418(u8 arg0) {
   u32 sp4;
   sp4 = 0;
   while(g_vehiclesEnd != &g_vehicles[sp4]) {
-    if (g_vehicles[sp4].unk5C == arg0) {
+    if (g_vehicles[sp4].type == arg0) {
       return 1;
     }
     sp4++;
@@ -2101,45 +2102,45 @@ s32 func_hd_code_8024B418(u8 arg0) {
 }
 
 u8 func_hd_code_8024B4B8(void) {
-  switch (D_hd_code_80364456) {
-    case 4:
+  switch (g_currentVehicleType) {
+    case VEHICLE_RAMDOZER:
       return func_hd_code_802B45FC();
-    case 3:
+    case VEHICLE_SKYFALL:
       return func_hd_code_802B2EF8();
-    case 5:
+    case VEHICLE_BACKLASH:
       return func_hd_code_802B5F04();
-    case 2:
+    case VEHICLE_THUNDERFIST:
       return func_hd_code_802B1150();
-    case 1:
+    case VEHICLE_SIDESWIPE:
       return func_hd_code_802B01DC();
-    case 6:
+    case VEHICLE_UNKNOWN_6:
       return func_hd_code_802BB170();
-    case 7:
+    case VEHICLE_TRAIN:
       return func_hd_code_802BBE10();
-    case 8:
+    case VEHICLE_UNKNOWN_8:
       return func_hd_code_802B76F8();
-    case 9:
+    case VEHICLE_J_BOMB:
       return func_hd_code_802C5508();
-    case 10:
+    case VEHICLE_BALLISTA:
       return func_hd_code_802CA140();
-    case 11:
-    case 17:
-    case 18:
+    case VEHICLE_UNKNOWN_11:
+    case VEHICLE_UNKNOWN_17:
+    case VEHICLE_UNKNOWN_18:
       return func_hd_code_802C8AF0();
-    case 13:
+    case VEHICLE_POLICE_CAR:
       return func_hd_code_802CBB60();
-    case 14:
+    case VEHICLE_UNKNOWN_14:
       return func_hd_code_802CCCD8();
-    case 15:
+    case VEHICLE_UNKNOWN_15:
       return func_hd_code_802CFA58();
-    case 16:
+    case VEHICLE_CYCLONE_SUIT:
       return func_hd_code_802D0B90();
   }
 }
 
 void func_hd_code_8024B5E8() {
   D_hd_code_803ED3F5 = 1;
-  func_hd_code_802AB670(D_hd_code_80364456);
+  func_hd_code_802AB670(g_currentVehicleType);
 }
 
 void func_hd_code_8024B618(void) {
@@ -2151,8 +2152,8 @@ void func_hd_code_8024B618(void) {
     if (g_vehicles != g_vehiclesEnd) {
         do {
             if (g_vehicles[sp1C].unk70 != 0) {
-                sp18 = g_vehicles[sp1C].unk5C;
-                if ((sp18 != D_hd_code_80364456) && (sp18 != 0xFF) && (sp18 != 0xFE) && (sp18 != 0)) {
+                sp18 = g_vehicles[sp1C].type;
+                if ((sp18 != g_currentVehicleType) && (sp18 != 0xFF) && (sp18 != 0xFE) && (sp18 != 0)) {
                     switch (sp18) {
                     case 5:
                         func_hd_code_802B5FAC();
@@ -2194,56 +2195,56 @@ void func_hd_code_8024B618(void) {
 
 void func_hd_code_8024B7AC(void) {
     D_hd_code_803ED3F5 = 0;
-    switch (D_hd_code_80364456) {
-    case 0:
+    switch (g_currentVehicleType) {
+    case VEHICLE_UNKNOWN_0:
         D_hd_code_803649ED = 0;
         func_hd_code_802AEEC8();
         return;
-    case 1:
+    case VEHICLE_SIDESWIPE:
         func_hd_code_802B03F4();
         return;
-    case 2:
+    case VEHICLE_THUNDERFIST:
         func_hd_code_802B152C();
         return;
-    case 3:
+    case VEHICLE_SKYFALL:
         func_hd_code_802B327C();
         return;
-    case 4:
+    case VEHICLE_RAMDOZER:
         func_hd_code_802B49AC();
         return;
-    case 5:
+    case VEHICLE_BACKLASH:
         func_hd_code_802B6294();
         return;
-    case 6:
+    case VEHICLE_UNKNOWN_6:
         func_hd_code_802BB274();
         return;
-    case 7:
+    case VEHICLE_TRAIN:
         func_hd_code_802BBEB8();
         return;
-    case 8:
+    case VEHICLE_UNKNOWN_8:
         func_hd_code_802B7A88();
         return;
-    case 9:
+    case VEHICLE_J_BOMB:
         func_hd_code_802C5AFC();
         return;
-    case 10:
+    case VEHICLE_BALLISTA:
         func_hd_code_802CA4E0();
         return;
-    case 11:
-    case 17:
-    case 18:
-        func_hd_code_802C8BB8(D_hd_code_80364456);
+    case VEHICLE_UNKNOWN_11:
+    case VEHICLE_UNKNOWN_17:
+    case VEHICLE_UNKNOWN_18:
+        func_hd_code_802C8BB8(g_currentVehicleType);
         return;
-    case 13:
+    case VEHICLE_POLICE_CAR:
         func_hd_code_802CBEF0();
         return;
-    case 14:
+    case VEHICLE_UNKNOWN_14:
         func_hd_code_802CD068();
         return;
-    case 15:
+    case VEHICLE_UNKNOWN_15:
         func_hd_code_802CFDE8();
         return;
-    case 16:
+    case VEHICLE_CYCLONE_SUIT:
         func_hd_code_802D0F98();
         /* fallthrough */
     default:
@@ -2303,7 +2304,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
         case 0x100:
             switch (*arg0) {
             case 0x1:
-                if ((D_hd_code_80364456 == 6) || (D_hd_code_80364456 == 0xB) || (D_hd_code_80364456 == 0x11) || (D_hd_code_80364456 == 0x12)) {
+                if ((g_currentVehicleType == VEHICLE_UNKNOWN_6) || (g_currentVehicleType == VEHICLE_UNKNOWN_11) || (g_currentVehicleType == VEHICLE_UNKNOWN_17) || (g_currentVehicleType == VEHICLE_UNKNOWN_18)) {
                     D_hd_code_802F5804[0x07].unk0 = (u16) (D_hd_code_802F5804[0x07].unk0 & ~1);
                     D_hd_code_802F5804[0x07].unk18 = 8;
                 } else {
@@ -2344,13 +2345,13 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 break;
             case 0x1A7:
             case 0x1A8:
-                if ((((*arg0 - 0x1A7) << D_hd_code_80364456) ^ ((1 << D_hd_code_80364456) & 0x10205)) != 0) {
+                if ((((*arg0 - 0x1A7) << g_currentVehicleType) ^ ((1 << g_currentVehicleType) & 0x10205)) != 0) {
                     rmonPrintf("selected controller mode yes\n");
-                    players[playerNumber].unkF0 = players[playerNumber].unkF0 | (1 << D_hd_code_80364456);
+                    players[playerNumber].unkF0 = players[playerNumber].unkF0 | (1 << g_currentVehicleType);
                     func_hd_code_8025BBE8(0x80, 0, 0);
                 } else {
                     rmonPrintf("selected controller mode no\n");
-                    players[playerNumber].unkF0 = (s32) (players[playerNumber].unkF0 & ~(1 << D_hd_code_80364456));
+                    players[playerNumber].unkF0 = (s32) (players[playerNumber].unkF0 & ~(1 << g_currentVehicleType));
                     func_hd_code_8025BBE8(0x40, 0, 0);
                 }
                 break;
@@ -2361,7 +2362,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
                 switch (D_hd_code_8036BB18) {
                 case 0x1:
                 case 0x6:
-                    rmonPrintf("TESTING PAUSE2 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
+                    rmonPrintf("TESTING PAUSE2 %d %d %d\n", g_gamePaused, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                     yoshiShow(0x8000);
                     if ((D_hd_code_803643DB != 0) || (D_hd_code_80364AC1 != 0)) {
                         g_nextGameState = 0x100;
@@ -2370,7 +2371,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
                     break;
                 case 0xD:
                 case 0x58:
-                    rmonPrintf("TESTING PAUSE3 %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
+                    rmonPrintf("TESTING PAUSE3 %d %d %d\n", g_gamePaused, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                     yoshiShow(0x8001);
                     break;
                 }
@@ -2404,7 +2405,7 @@ void func_hd_code_8024BDA4(u16* arg0) {
             break;
         case 0x2000000000000000:
             if (*arg0 == 0xFFFF) {
-                rmonPrintf("TESTING PAUSE %d %d %d\n", D_hd_code_802E8BD0, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
+                rmonPrintf("TESTING PAUSE %d %d %d\n", g_gamePaused, D_hd_code_802E8BD8, D_hd_code_802E8BD4);
                 yoshiShow(0x8001);
             }
             g_nextGameState = 4;
@@ -2536,7 +2537,7 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     func_hd_code_802502EC();
     func_hd_code_8024E4F4(&entry, arg0, 0);
     func_hd_code_80258B78(&entry, arg0);
-    if ((D_hd_code_802E8BD0 == 0) && (D_hd_code_80364AA8 != 0x40) && !(g_currentGameState & 0x440) && (D_hd_code_80364A84 == 0)) {
+    if ((!g_gamePaused) && (D_hd_code_80364AA8 != 0x40) && !(g_currentGameState & 0x440) && (D_hd_code_80364A84 == 0)) {
         func_hd_code_80279EE8(&entry, arg0, D_hd_code_8035805C);
     }
     gSPClearGeometryMode(entry++, 0xFFFFFFFF);
@@ -2618,7 +2619,7 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
         func_hd_code_8028273C(&entry, D_hd_code_8035805C);
     }
     if ((D_hd_code_80364A68 != 0) && (g_currentGameState & 0x104)) {
-        func_hd_code_80286C60(&entry, arg0, D_hd_code_8035805C, D_hd_code_80364456);
+        func_hd_code_80286C60(&entry, arg0, D_hd_code_8035805C, g_currentVehicleType);
     }
     if ((g_currentGameState & 0x200000000400220C)) {
         func_hd_code_80278324(&entry, arg0, D_hd_code_8035805C);
@@ -2628,19 +2629,19 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     }
     func_hd_code_80259450();
     if ((D_hd_code_80364A6A != 0) && ((g_currentGameState & 0x104))) {
-        func_hd_code_80287530(&entry, arg0, D_hd_code_8035805C, D_hd_code_80364456);
+        func_hd_code_80287530(&entry, arg0, D_hd_code_8035805C, g_currentVehicleType);
     }
     if ((D_hd_code_80364A6C != 0) && ((g_currentGameState & 0x104))) {
-        func_hd_code_80287C68(&entry, arg0, D_hd_code_8035805C, D_hd_code_80364456);
+        func_hd_code_80287C68(&entry, arg0, D_hd_code_8035805C, g_currentVehicleType);
     }
     if ((g_currentGameState & 0x104)) {
-        func_hd_code_80282224(&entry, D_hd_code_80364456);
+        func_hd_code_80282224(&entry, g_currentVehicleType);
     }
     if ((D_hd_code_80364AA8 & 1) && ((g_currentGameState & 0x0400030C))) {
         func_hd_code_8026A378(D_hd_code_803649F4, &sp194[1]);
         sp194[0] = 0x24;
         drawTextSimple(arg0, &sp194, NULL, 1, 0, 0x118, 0x12, 0x14, 0x14, 0, 0xFF, 0xFF, 0xFF, (s32) D_hd_code_80367BD0.unk6);
-        if ((D_hd_code_80364A44 != 0) && (D_hd_code_802E8BD0 == 0)) {
+        if ((D_hd_code_80364A44 != 0) && (!g_gamePaused)) {
             func_hd_code_8026A378(D_hd_code_80364A44, &sp184[1]);
             sp184[0] = 0x24;
             drawTextSimple(arg0, &sp184, NULL, 1, 0, (s32) D_hd_code_80364A4A, (s32) D_hd_code_80364A4C, 0x23, 0x23, (s32) D_hd_code_80364A4E, 0xFF, 0xFF, 0xFF, D_hd_code_80364A48);
@@ -2654,7 +2655,7 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
             drawTextSimple(arg0, "PRESS START", NULL, 1, 0, 0x5C, 0xC4, 0x1A, 0x1A, 1, 0xFF, 0xFF, 0xFF, 0xFF);
         }
         if ((u32) ((u32) (((u32) sc.retraceCount % 40U) * 60) / 60U) >= 16U) {
-            if (D_hd_code_802E8BD0 != 0) {
+            if (g_gamePaused != 0) {
                 if ((g_currentGameState == 0x2000000000000000) && (D_hd_code_8036BB1C == 2)) {
                     drawTextSimple(arg0, "USE Z/R TO TURN PAGES", D_hd_code_8030491C, 0, 0, 0x18, 0x14, 0xF, 0xF, 1, 0xFF, 0xFF, 0xFF, 0xFF);
                 } else if ((g_currentGameState == 0x100) && (D_hd_code_8036BB18 == 0) && (D_hd_code_8036BB1C == 2) && (D_hd_code_803643DB != 0) && !(g_currentButtons & (Z_TRIG | R_TRIG))) {
@@ -2679,7 +2680,7 @@ Gfx* func_hd_code_8024C414(struct FrameContext* arg0, s32* arg1) {
     if (( (g_currentGameState & 0x104)) && (D_hd_code_80364410 != 0)) {
         func_hd_code_80274B40(&entry, arg0, D_hd_code_80364A86, 0x108, 0xBE);
     }
-    if (( (g_currentGameState & 0x104)) && (D_hd_code_80364AA8 == 1) && (D_hd_code_802E8BD0 == 0)) {
+    if (( (g_currentGameState & 0x104)) && (D_hd_code_80364AA8 == 1) && (!g_gamePaused)) {
         func_hd_code_80285CC0();
     }
     if ((D_hd_code_803643DB != 0) && (g_currentGameState == 4)) {
@@ -2760,7 +2761,7 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct FrameContext *arg1, u8 arg2) {
                 sp138 = g_shadows.shadows[sp140].unk100C >> 5;
                 sp136 = g_shadows.shadows[sp140].unk1018; // 2D x
                 sp134 = g_shadows.shadows[sp140].unk101A; // 2D y
-                spAB = g_shadows.shadows[sp140].unk1022 == D_hd_code_80364456 && D_hd_code_803ED40D == 0x65;
+                spAB = g_shadows.shadows[sp140].unk1022 == g_currentVehicleType && D_hd_code_803ED40D == 0x65;
                 if (spAB) {
                     guAlignF(spB0, ((f32) D_hd_code_80364440 * 360.0) / 4096.0f, 0.0f, 1.0f, 0.0f); // Additional rotation around y axis if spAB
                 }
@@ -2795,7 +2796,7 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct FrameContext *arg1, u8 arg2) {
                 SET_COLOR_VERTEX(arg1->unk1580[D_hd_code_8036506C + 4], (s16) -sp136, 0, (s16) -sp134, (s16) ((spAE - 1) << 5), 0, 0xA, 0xA, 0xA, 0x8C);
                 D_hd_code_8036506C++;
 
-                if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81) && (g_shadows.shadows[sp140].unk1022 == D_hd_code_80364456)) {
+                if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81) && (g_shadows.shadows[sp140].unk1022 == g_currentVehicleType)) {
                     gSPMatrix(entry++, &D_2000000.unk1540, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
                 }
                 gSPMatrix(entry++, &D_2000000.unk2C0[sp140], G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
@@ -2804,7 +2805,7 @@ void func_hd_code_8024E4F4(Gfx** arg0, struct FrameContext *arg1, u8 arg2) {
                 gSP1Triangle(entry++, 0, 2, 3, 0);
                 gSPPopMatrix(entry++, G_MTX_MODELVIEW);
 
-                if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81) && (g_shadows.shadows[sp140].unk1022 == D_hd_code_80364456)) {
+                if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81) && (g_shadows.shadows[sp140].unk1022 == g_currentVehicleType)) {
                     gSPPopMatrix(entry++, G_MTX_MODELVIEW);
                 }
                 gDPPipeSync(entry++);
@@ -2926,9 +2927,9 @@ void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
     sp5D = D_hd_code_803649E8 == 0 && (D_hd_code_803649EC != 0 || g_currentGameState & 0x1801);
     i = 0;
     while (&g_vehicles[i] != g_vehiclesEnd) {
-        if (((g_vehicles[i].unk5C != 0) || (sp5D != 0)) && ((g_vehicles[i].unk5C != 0xFF) || (D_hd_code_803EF6FF == 0)) && ((g_vehicles[i].unk5C == 0xFD) || (D_hd_code_80364A84 == 0) || (D_hd_code_80364AC1 == 0))) {
+        if (((g_vehicles[i].type != 0) || (sp5D != 0)) && ((g_vehicles[i].type != 0xFF) || (D_hd_code_803EF6FF == 0)) && ((g_vehicles[i].type == 0xFD) || (D_hd_code_80364A84 == 0) || (D_hd_code_80364AC1 == 0))) {
             gSPSegment(entry++, 0x06, osVirtualToPhysical(g_vehicles[i].unk0));
-            if (((g_currentGameState & 0x1801)) && (((g_vehicles[i].unk5C == 0xFE)) || (g_vehicles[i].unk5C == 0))) {
+            if (((g_currentGameState & 0x1801)) && (((g_vehicles[i].type == 0xFE)) || (g_vehicles[i].type == 0))) {
                 sp5E = D_hd_code_8035805C;
             } else {
                 sp5E = D_hd_code_803156F5;
@@ -2941,7 +2942,7 @@ void func_hd_code_8024FC2C(Gfx** arg0, u8 arg1) {
             gDPPipeSync(entry++);
             gDPSetEnvColor(entry++, 0x00, 0x00, 0x00, g_vehicles[i].unk60);
             gSPClearGeometryMode(entry++, 0xFFFFFFFF);
-            if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81) && (g_vehicles[i].unk5C == D_hd_code_80364456)) {
+            if ((D_hd_code_803643D6 != 0) && !(D_hd_code_80364AA8 & 0x81) && (g_vehicles[i].type == g_currentVehicleType)) {
                 gSPMatrix(entry++, &D_2000000.unk1500, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             }
             if (sp5E != 0) {
@@ -2994,7 +2995,7 @@ void func_hd_code_802502EC(void) {
         guMtxCatF(sp70, sp30, sp70);
         guMtxF2L(sp70, &D_hd_code_803156F8[D_hd_code_8035805C].unk1500);
         sp2C = 0;
-        while (g_shadows.shadows[sp2C].unk1022 != D_hd_code_80364456) {
+        while (g_shadows.shadows[sp2C].unk1022 != g_currentVehicleType) {
             sp2C += 1;
         }
         sp2A = g_shadows.shadows[sp2C].unk1004 >> 5;
@@ -3149,7 +3150,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                 spF8 = 0.03f;
                 spF4 = 0.1f;
             }
-            else if (D_hd_code_80364456 == 9) {
+            else if (g_currentVehicleType == VEHICLE_J_BOMB) {
                 spFC = 0.5f;
                 spF8 = 0.06f;
                 spF4 = 0.5f;
@@ -3185,7 +3186,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
             D_hd_code_8036509E = D_hd_code_80364AC1 != 0 ? 0xFD : 0xFE;
             break;
         default:
-            D_hd_code_8036509E = (s16) D_hd_code_80364456;
+            D_hd_code_8036509E = (s16) g_currentVehicleType;
             break;
     }
     sp96 = D_hd_code_8036443C;
@@ -3367,7 +3368,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
     if (sp96 < D_hd_code_80364A74) {
         sp96 = D_hd_code_80364A74;
     }
-    if (((sp96 > 0) && (D_hd_code_80370C1C != 0) && (D_hd_code_802E8BD0 == 0) && ((g_currentGameState & 0x106))) || ((sp96 < 0) && (D_hd_code_80370C1D != 0) && (D_hd_code_802E8BD0 == 0) && ((g_currentGameState & 0x106)))) {
+    if (((sp96 > 0) && (g_aButtonPressed != 0) && (!g_gamePaused) && ((g_currentGameState & 0x106))) || ((sp96 < 0) && (g_bButtonPressed != 0) && (!g_gamePaused) && ((g_currentGameState & 0x106)))) {
         if (D_hd_code_80364444 < (f32) sp96) {
             D_hd_code_80364444 += spC8;
         }
@@ -3502,7 +3503,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                     D_hd_code_8036509C = D_hd_code_8036443E * 0x10;
                 }
                 D_hd_code_803643EC = (s32) ((hdSin((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f)) + (f32) D_hd_code_803643E0 + (f32) spD8) << 11;
-                D_hd_code_803643F0 = (D_hd_code_8036444E + D_hd_code_803643E4 + (D_hd_code_80370C2D * 0x32)) << 11;
+                D_hd_code_803643F0 = (D_hd_code_8036444E + D_hd_code_803643E4 + (g_stickY * 0x32)) << 11;
                 D_hd_code_803643F4 = (s32) ((hdCos((f32) ((f64) ((f32) (s16) D_hd_code_8036509C / 16384.0f) * 1.5708)) * ((f32) D_hd_code_8036444C * 2.0f)) + (f32) D_hd_code_803643E8 + (f32) spD4) << 11;
                 break;
             case 0x10:                              /* switch 4 */
@@ -3625,7 +3626,7 @@ void func_hd_code_802507C8(Mtx* arg0, LookAt *arg1, void *arg2) {
                             if (sp76 >= 0x168) {
                                 sp76 = (s16) (sp76 % 360);
                             }
-                            if ((D_hd_code_80364456 == 2) || (D_hd_code_80364456 == 9)) {
+                            if ((g_currentVehicleType == VEHICLE_THUNDERFIST) || (g_currentVehicleType == VEHICLE_J_BOMB)) {
                                 func_hd_code_80255034((s32) D_hd_code_8036444C, (f32) sp76, &sp90, &sp8C);
                             } else {
                                 func_hd_code_80255034((s16) D_hd_code_8036444C / 2, (f32) sp76, &sp90, &sp8C);
@@ -3949,55 +3950,55 @@ f32 func_hd_code_80254E54(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
   f32 sp20;
   f32 sp1C;
 
-  switch (D_hd_code_80364456) {
-    case 0:
+  switch (g_currentVehicleType) {
+    case VEHICLE_UNKNOWN_0:
       sp2C = 3.5f;
       break;
-    case 1:
+    case VEHICLE_SIDESWIPE:
       sp2C = 1.4f;
       break;
-    case 2:
+    case VEHICLE_THUNDERFIST:
       sp2C = 1.6f;
       break;
-    case 3:
+    case VEHICLE_SKYFALL:
       sp2C = 4.8f;
       break;
-    case 4:
+    case VEHICLE_RAMDOZER:
       sp2C = 5.0f;
       break;
-    case 5:
+    case VEHICLE_BACKLASH:
       sp2C = 5.0f;
       break;
-    case 6:
+    case VEHICLE_UNKNOWN_6:
       sp2C = 1.6f;
       break;
-    case 7:
+    case VEHICLE_TRAIN:
       sp2C = 1.6f;
       break;
-    case 8:
+    case VEHICLE_UNKNOWN_8:
       sp2C = 4.8f;
       break;
-    case 9:
+    case VEHICLE_J_BOMB:
       sp2C = 1.6f;
       break;
-    case 10:
+    case VEHICLE_BALLISTA:
       sp2C = 5.0f;
       break;
-    case 11:
-    case 17:
-    case 18:
+    case VEHICLE_UNKNOWN_11:
+    case VEHICLE_UNKNOWN_17:
+    case VEHICLE_UNKNOWN_18:
       sp2C = 1.6f;
       break;
-    case 13:
+    case VEHICLE_POLICE_CAR:
       sp2C = 4.8f;
       break;
-    case 14:
+    case VEHICLE_UNKNOWN_14:
       sp2C = 4.8f;
       break;
-    case 15:
+    case VEHICLE_UNKNOWN_15:
       sp2C = 4.8f;
       break;
-    case 16:
+    case VEHICLE_CYCLONE_SUIT:
       sp2C = 1.6f;
       break;
   }
@@ -4045,12 +4046,12 @@ void func_hd_code_80255034(s32 arg0, f32 arg1, s32* arg2, s32* arg3) {
 void func_hd_code_80255190(void) {
     u8 sp1F;
 
-    if (D_hd_code_802E8BD0 == 0) {
+    if (!g_gamePaused) {
         sp1F = func_hd_code_80255628();
-        if ((sp1F != 0) && (((D_hd_code_80370C21 != 0) && (D_hd_code_80370C27 == 0)) || ((D_hd_code_80370C1E != 0) && (D_hd_code_80370C24 == 0))) && ((g_currentGameState & 0x104))) {
+        if ((sp1F != 0) && (((g_cRightButtonPressed != 0) && (D_hd_code_80370C27 == 0)) || ((g_cLeftButtonPressed != 0) && (D_hd_code_80370C24 == 0))) && ((g_currentGameState & 0x104))) {
             sndPlaySfx(D_hd_code_80367738, 0xD0U, NULL);
         }
-        if ((D_hd_code_80370C21 != 0) && (D_hd_code_80370C27 == 0) && (D_hd_code_8036441C == 0) && (D_hd_code_8036441D == 0) && (sp1F == 0) && ((g_currentGameState != 0x2000))) {
+        if ((g_cRightButtonPressed != 0) && (D_hd_code_80370C27 == 0) && (D_hd_code_8036441C == 0) && (D_hd_code_8036441D == 0) && (sp1F == 0) && ((g_currentGameState != 0x2000))) {
             D_hd_code_80364418 = (f32) ((f64) D_hd_code_80364414 + 45.0);
             if (D_hd_code_80364418 >= 360.0) {
                 D_hd_code_80364418 = (f64)D_hd_code_80364418 - 360.0;
@@ -4078,7 +4079,7 @@ void func_hd_code_80255190(void) {
                 }
             }
         }
-        if ((D_hd_code_80370C1E != 0) && (D_hd_code_80370C24 == 0) && (D_hd_code_8036441C == 0) && (D_hd_code_8036441D == 0) && (sp1F == 0) && (g_currentGameState != 0x2000)) {
+        if ((g_cLeftButtonPressed != 0) && (D_hd_code_80370C24 == 0) && (D_hd_code_8036441C == 0) && (D_hd_code_8036441D == 0) && (sp1F == 0) && (g_currentGameState != 0x2000)) {
             D_hd_code_80364418 = D_hd_code_80364414 - 45.0;
             if (D_hd_code_80364418 < 0.0) {
                 D_hd_code_80364418 = (f32) (D_hd_code_80364418 + 360.0);
@@ -4254,7 +4255,7 @@ void hdPrepareStateTransition(void) {
     D_hd_code_80367BD0.unk6 = 0;
     func_hd_code_8026A8BC();
     func_hd_code_8026A974();
-    func_hd_code_8028AE88();
+    controllerInit();
     func_hd_code_8028B720();
     D_hd_code_8035806C = &D_hd_code_803FF600;
     INITIATE_DMA(&D_787F40, &D_hd_code_803FF600, &sp24, 0xA, 0, 2);
@@ -4282,7 +4283,7 @@ void hdPrepareStateTransition(void) {
     D_hd_code_803643D7 = 0;
     D_hd_code_802E8BD8 = 0;
     D_hd_code_802E8BD4 = 0;
-    D_hd_code_802E8BD0 = 0;
+    g_gamePaused = 0;
     D_hd_code_8036EB99 = 0;
     D_hd_code_803669B4 = 0;
     if (g_nextGameState & 0xC9FD8FE7FBFFC0B0) {
@@ -4645,7 +4646,7 @@ void hdInitLevel(s32* pakBuffer) {
     D_hd_code_803A7430 = 0;
     D_hd_code_803649EE = 0;
     D_hd_code_80364A84 = 0;
-    D_hd_code_80364456 = 0;
+    g_currentVehicleType = 0;
 
     if (frontEndPresent) {
         if (g_pakBusy != 0) {
@@ -4722,7 +4723,7 @@ void hdInitLevel(s32* pakBuffer) {
         sp4C = 0;
         sp43 = 0;
         while (sp43 == 0) {
-            if (g_vehicles[sp4C].unk5C == sp44->unk1022) {
+            if (g_vehicles[sp4C].type == sp44->unk1022) {
                 sp43 = 1;
             } else {
                 sp4C += 1;
@@ -4735,7 +4736,7 @@ void hdInitLevel(s32* pakBuffer) {
     func_hd_code_802729F0((s32)g_nextGameState, g_currentLevel);
     D_hd_code_80364452 = 0x2000;
     D_hd_code_80364454 = 0x2000;
-    D_hd_code_80364456 = 0;
+    g_currentVehicleType = 0;
     D_hd_code_803649ED = 0;
     D_hd_code_803643F8 = 0;
     D_hd_code_803643FC = 0;

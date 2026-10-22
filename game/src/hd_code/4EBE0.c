@@ -358,7 +358,7 @@ void func_hd_code_802936AC(f32 (*arg0)[4], s16 arg1, s16 arg2, s16 arg3, s16 arg
   if ((D_hd_code_8036E4C8 == 0) && (D_hd_code_8036DCD8.link.next != NULL)) {
     sndDeactivate(D_hd_code_8036DCD8.link.next);
   }
-  if (D_hd_code_802E8BD0 == 0) {
+  if (!g_gamePaused) {
     if (D_hd_code_8036E4CA != 0) {
       arg8->unk8 = -1;
       switch (arg8->unk0) {
@@ -554,7 +554,7 @@ void func_hd_code_80293F84(f32 (*arg0)[4], s16 arg1, s16 arg2, s16* arg3, s16* a
   f32 sp30;
 
   func_hd_code_802949B0(arg7);
-  if (D_hd_code_802E8BD0 == 0) {
+  if (!g_gamePaused) {
     arg6->unk4 += D_hd_code_802FE980[arg7].unk80;
     if (arg6->unk4 >= 0x3E8) {
       arg6->unk4 = 0;
@@ -685,7 +685,7 @@ void func_hd_code_80294B64(f32 (*arg0)[4], s32 arg1, s16* arg2, s16* arg3, s16* 
   if (arg5->unk0 == 0) {
     arg5->unk0 = arg6 + D_hd_code_803156C4;
   }
-  if (D_hd_code_803156C4 > arg5->unk0 && D_hd_code_802E8BD0 == 0) {
+  if (D_hd_code_803156C4 > arg5->unk0 && !g_gamePaused) {
     arg5->unk4++;
     if (arg5->unk4 > arg1) {
       arg5->unk4 = arg1;
@@ -700,7 +700,7 @@ void func_hd_code_80294B64(f32 (*arg0)[4], s32 arg1, s16* arg2, s16* arg3, s16* 
 void func_hd_code_80294C50(f32 (*arg0)[4], s16* arg1, s16* arg2, s16* arg3, struct S_802936AC* arg4, s32 arg5) {
   f32 sp1C;
 
-  if (D_hd_code_802E8BD0 == 0) {
+  if (!g_gamePaused) {
     arg4->unk0++;
   }
   sp1C = sinf(arg4->unk0 / 5.0f);
@@ -716,7 +716,7 @@ void func_hd_code_80294D24(f32 (*arg0)[4], s16* arg1, s16* arg2, s16* arg3, stru
   f32 sp30;
   f32 sp2C;
 
-  if (D_hd_code_802E8BD0 == 0) {
+  if (!g_gamePaused) {
     arg4->unk0 += arg5;
   }
   guAlignF(sp38, arg4->unk0, 0.2f, 0.7f, 0.1f);

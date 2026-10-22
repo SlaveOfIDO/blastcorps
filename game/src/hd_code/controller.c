@@ -5,6 +5,7 @@
 #include "variables.h"
 #include "yoshi.h"
 #include "../levels.h"
+#include "../vehicles.h"
 
 void func_hd_code_8028ADF0(u8, u8, OSContPad*, s8*, s8*); /* extern */
 void func_hd_code_8028B190(s8*, s8*);                     /* extern */
@@ -12,15 +13,13 @@ void func_hd_code_8028B734(s8*, s8*, u8);                 /* extern */
 void func_hd_code_8028AFA4(u16, s8*, s8*);                /* extern */
 void func_hd_code_8028B0E8(OSContPad*, s8, s8);           /* extern */
 
-extern u8 D_hd_code_80370C15;
-extern u8 D_hd_code_80370C16;
-extern u8 D_hd_code_80370C17;
-extern u8 D_hd_code_80370C18;
-extern u8 D_hd_code_80370C19;
-extern u8 D_hd_code_80370C1A;
-extern u8 D_hd_code_80370C1B;
-extern u8 D_hd_code_80370C1F;
-extern u8 D_hd_code_80370C20;
+extern u8 g_upButtonPressed;
+extern u8 g_downButtonPressed;
+extern u8 g_startButtonPressed;
+extern u8 g_lButtonPressed;
+extern u8 g_rButtonPressed;
+extern u8 g_cDownButtonPressed;
+extern u8 g_cUpButtonPressed;
 extern s8 D_hd_code_80370C23;
 extern u8 D_hd_code_80370C25;
 extern u8 D_hd_code_80370C26;
@@ -58,20 +57,20 @@ s8 D_hd_code_80370C11;
 s8 D_hd_code_80370C12;
 s8 D_hd_code_80370C13;
 s8 D_hd_code_80370C14;
-u8 D_hd_code_80370C15;
-u8 D_hd_code_80370C16;
-u8 D_hd_code_80370C17;
-u8 D_hd_code_80370C18;
-u8 D_hd_code_80370C19;
-u8 D_hd_code_80370C1A;
-u8 D_hd_code_80370C1B;
-u8 D_hd_code_80370C1C;
-u8 D_hd_code_80370C1D;
-u8 D_hd_code_80370C1E;
-u8 D_hd_code_80370C1F;
-u8 D_hd_code_80370C20;
-u8 D_hd_code_80370C21;
-u8 D_hd_code_80370C22;
+u8 g_leftButtonPressed;
+u8 g_rightButtonPressed;
+u8 g_upButtonPressed;
+u8 g_downButtonPressed;
+u8 g_startButtonPressed;
+u8 g_lButtonPressed;
+u8 g_rButtonPressed;
+u8 g_aButtonPressed;
+u8 g_bButtonPressed;
+u8 g_cLeftButtonPressed;
+u8 g_cDownButtonPressed;
+u8 g_cUpButtonPressed;
+u8 g_cRightButtonPressed;
+u8 g_zButtonPressed;
 s8 D_hd_code_80370C23;
 u8 D_hd_code_80370C24;
 u8 D_hd_code_80370C25;
@@ -79,8 +78,8 @@ u8 D_hd_code_80370C26;
 u8 D_hd_code_80370C27;
 u16 g_currentButtons;
 u16 g_previousButtons;
-s8 D_hd_code_80370C2C;
-s8 D_hd_code_80370C2D;
+s8 g_stickX;
+s8 g_stickY;
 s8 D_hd_code_80370C2E;
 s8 D_hd_code_80370C2F;
 u16 D_hd_code_80370C30;
@@ -119,7 +118,7 @@ u8 func_hd_code_8028A370(void) {
   u8 sp1B;
 
   osCreateMesgQueue(&D_hd_code_80370BF8, &D_hd_code_80370BF0, 1);
-  osSetEventMesg(5U, &D_hd_code_80370BF8, NULL);
+  osSetEventMesg(OS_EVENT_SI, &D_hd_code_80370BF8, NULL);
   osContInit(&D_hd_code_80370BF8, &sp1B, &D_hd_code_80370BC8);
   osContSetCh(1U);
   D_hd_code_80370C10 = 0;
@@ -161,8 +160,8 @@ void controllerUpdateInput(void) {
     g_previousButtons = g_currentButtons;
     g_currentButtons = sp44->button;
     if (D_hd_code_80370C38 != 0) {
-      if (sp44->button & 0x4000) {
-        sp44->button = sp44->button & ~0x4000;
+      if (sp44->button & B_BUTTON) {
+        sp44->button = sp44->button & ~B_BUTTON;
       } else {
         D_hd_code_80370C38 = 0;
       }
@@ -178,10 +177,10 @@ void controllerUpdateInput(void) {
     D_hd_code_80370C14 = D_hd_code_80370C12;
     D_hd_code_80370C11 = sp44->stick_x;
     D_hd_code_80370C12 = sp44->stick_y;
-    D_hd_code_80370C24 = D_hd_code_80370C1E;
-    D_hd_code_80370C25 = D_hd_code_80370C1F;
-    D_hd_code_80370C26 = D_hd_code_80370C20;
-    D_hd_code_80370C27 = D_hd_code_80370C21;
+    D_hd_code_80370C24 = g_cLeftButtonPressed;
+    D_hd_code_80370C25 = g_cDownButtonPressed;
+    D_hd_code_80370C26 = g_cUpButtonPressed;
+    D_hd_code_80370C27 = g_cRightButtonPressed;
 
     switch (g_currentGameState) {
       case 0x100000000000:
@@ -201,12 +200,12 @@ void controllerUpdateInput(void) {
         sp44->button = D_hd_code_80370C30;
         sp44->stick_x = D_hd_code_80370C32;
         sp44->stick_y = D_hd_code_80370C33;
-        sp44->button &= ~8;
+        sp44->button &= ~U_CBUTTONS;
         break;
       case 0x100:
       case 0x4:
-        if ((D_hd_code_802E8BD0 == 0) || ((g_currentGameState == 0x2000))) {
-          func_hd_code_8025BBE8(sp44->button & ~0x1000, sp44->stick_x, sp44->stick_y);
+        if ((!g_gamePaused) || ((g_currentGameState == 0x2000))) {
+          func_hd_code_8025BBE8(sp44->button & ~START_BUTTON, sp44->stick_x, sp44->stick_y);
         }
         break;
       case 0x800:
@@ -225,9 +224,9 @@ void controllerUpdateInput(void) {
     if ((g_currentGameState & 0x2000100000002546)) {
       D_hd_code_803ED40A = 0;
       D_hd_code_803F7C34 = 0;
-      if ((g_currentGameState & 0x440)) {
+      if (g_currentGameState & 0x440) {
         sp3C = D_hd_code_80370C40;
-      } else if (players[playerNumber].unkF0 & (1 << D_hd_code_80364456)) {
+      } else if (players[playerNumber].unkF0 & (1 << g_currentVehicleType)) {
         sp3C = 1;
       } else {
         sp3C = 0;
@@ -236,20 +235,20 @@ void controllerUpdateInput(void) {
         sp3C = 0;
       }
       D_hd_code_80370C35 = (u8)sp3C;
-      if (D_hd_code_802E8BD0 != 0) {
+      if (g_gamePaused != 0) {
         func_hd_code_8028ADF0(1, 0, sp44, &sp44->stick_x, &sp44->stick_y);
       } else {
         switch (sp3C) {
           case 0:
-            switch (D_hd_code_80364456) {
-              case 9:
+            switch (g_currentVehicleType) {
+              case VEHICLE_J_BOMB:
                 if (D_hd_code_803F7C3F != 0) {
                   D_hd_code_80370C34 = 1;
                 }
-              case 0:
-              case 2:
-              case 16:
-                func_hd_code_8028B734(&sp44->stick_x, &sp44->stick_y, D_hd_code_80364456);
+              case VEHICLE_UNKNOWN_0:
+              case VEHICLE_THUNDERFIST:
+              case VEHICLE_CYCLONE_SUIT:
+                func_hd_code_8028B734(&sp44->stick_x, &sp44->stick_y, g_currentVehicleType);
                 func_hd_code_8028B190(&sp44->stick_x, &sp44->stick_y);
                 break;
               default:
@@ -259,7 +258,7 @@ void controllerUpdateInput(void) {
             }
             break;
           case 1:
-            if (D_hd_code_80364456 == 9) {
+            if (g_currentVehicleType == VEHICLE_J_BOMB) {
               D_hd_code_80370C75 = 0;
               func_hd_code_8028ADF0(1, 1, sp44, &sp44->stick_x, &sp44->stick_y);
             } else {
@@ -275,148 +274,149 @@ void controllerUpdateInput(void) {
     sp44->stick_x = 0;
     sp44->stick_y = 0;
   }
-  if (sp44->button & 0x200) {
-    D_hd_code_80370C15 = 1;
+
+  if (sp44->button & L_JPAD) {
+    g_leftButtonPressed = 1;
   } else {
-    D_hd_code_80370C15 = 0;
+    g_leftButtonPressed = 0;
   }
-  if (sp44->button & 0x100) {
-    D_hd_code_80370C16 = 1;
+  if (sp44->button & R_JPAD) {
+    g_rightButtonPressed = 1;
   } else {
-    D_hd_code_80370C16 = 0;
+    g_rightButtonPressed = 0;
   }
-  if (sp44->button & 0x800) {
-    D_hd_code_80370C17 = 1;
+  if (sp44->button & U_JPAD) {
+    g_upButtonPressed = 1;
   } else {
-    D_hd_code_80370C17 = 0;
+    g_upButtonPressed = 0;
   }
-  if (sp44->button & 0x400) {
-    D_hd_code_80370C18 = 1;
+  if (sp44->button & D_JPAD) {
+    g_downButtonPressed = 1;
   } else {
-    D_hd_code_80370C18 = 0;
+    g_downButtonPressed = 0;
   }
-  if (sp44->button & 0x1000) {
-    D_hd_code_80370C19 = 1;
+  if (sp44->button & START_BUTTON) {
+    g_startButtonPressed = 1;
   } else {
-    D_hd_code_80370C19 = 0;
+    g_startButtonPressed = 0;
   }
-  if (sp44->button & 0x20) {
-    D_hd_code_80370C1A = 1;
+  if (sp44->button & L_TRIG) {
+    g_lButtonPressed = 1;
   } else {
-    D_hd_code_80370C1A = 0;
+    g_lButtonPressed = 0;
   }
-  if (sp44->button & 0x10) {
-    D_hd_code_80370C1B = 1;
+  if (sp44->button & R_TRIG) {
+    g_rButtonPressed = 1;
   } else {
-    D_hd_code_80370C1B = 0;
+    g_rButtonPressed = 0;
   }
-  if (sp44->button & 0x8000) {
-    D_hd_code_80370C1C = 1;
+  if (sp44->button & A_BUTTON) {
+    g_aButtonPressed = 1;
   } else {
-    D_hd_code_80370C1C = 0;
+    g_aButtonPressed = 0;
   }
-  if (sp44->button & 0x4000) {
-    D_hd_code_80370C1D = 1;
+  if (sp44->button & B_BUTTON) {
+    g_bButtonPressed = 1;
   } else {
-    D_hd_code_80370C1D = 0;
+    g_bButtonPressed = 0;
   }
-  if (sp44->button & 2) {
-    D_hd_code_80370C1E = 1;
+  if (sp44->button & L_CBUTTONS) {
+    g_cLeftButtonPressed = 1;
   } else {
-    D_hd_code_80370C1E = 0;
+    g_cLeftButtonPressed = 0;
   }
-  if (sp44->button & 4) {
-    D_hd_code_80370C1F = 1;
+  if (sp44->button & D_CBUTTONS) {
+    g_cDownButtonPressed = 1;
   } else {
-    D_hd_code_80370C1F = 0;
+    g_cDownButtonPressed = 0;
   }
-  if (sp44->button & 8) {
-    D_hd_code_80370C20 = 1;
+  if (sp44->button & U_CBUTTONS) {
+    g_cUpButtonPressed = 1;
   } else {
-    D_hd_code_80370C20 = 0;
+    g_cUpButtonPressed = 0;
   }
-  if (sp44->button & 1) {
-    D_hd_code_80370C21 = 1;
+  if (sp44->button & R_CBUTTONS) {
+    g_cRightButtonPressed = 1;
   } else {
-    D_hd_code_80370C21 = 0;
+    g_cRightButtonPressed = 0;
   }
-  if (sp44->button & 0x2000) {
-    D_hd_code_80370C22 = 1;
+  if (sp44->button & Z_TRIG) {
+    g_zButtonPressed = 1;
   } else {
-    D_hd_code_80370C22 = 0;
+    g_zButtonPressed = 0;
   }
 
-  D_hd_code_80370C23 = D_hd_code_80370C1D != 0 || D_hd_code_80370C22 != 0;
-  D_hd_code_80370C2E = D_hd_code_80370C2C;
-  D_hd_code_80370C2F = D_hd_code_80370C2D;
-  D_hd_code_80370C2C = sp44->stick_x;
-  D_hd_code_80370C2D = sp44->stick_y;
+  D_hd_code_80370C23 = g_bButtonPressed != 0 || g_zButtonPressed != 0;
+  D_hd_code_80370C2E = g_stickX;
+  D_hd_code_80370C2F = g_stickY;
+  g_stickX = sp44->stick_x;
+  g_stickY = sp44->stick_y;
 }
 
-void func_hd_code_8028ADF0(u8 arg0, u8 arg1, OSContPad* arg2, s8* arg3, s8* arg4) {
-  if ((arg0 == 0) && (D_hd_code_802E8BD0 == 0)) {
-    *arg4 = 0;
+void func_hd_code_8028ADF0(u8 arg0, u8 arg1, OSContPad* pController, s8* pStickX, s8* pStickY) {
+  if (!arg0 && !g_gamePaused) {
+    *pStickY = 0;
   }
-  if (arg1 == 0) {
-    func_hd_code_8028AFA4(arg2->button, arg3, arg4);
+  if (!arg1) {
+    func_hd_code_8028AFA4(pController->button, pStickX, pStickY);
   }
-  func_hd_code_8028B190(arg3, arg4);
-  if (arg1 == 0) {
-    func_hd_code_8028B0E8(arg2, *arg3, *arg4);
+  func_hd_code_8028B190(pStickX, pStickY);
+  if (!arg1) {
+    func_hd_code_8028B0E8(pController, *pStickX, *pStickY);
   }
 }
 
-void func_hd_code_8028AE88(void) {
+void controllerInit(void) {
   D_hd_code_80370C27 = 0;
   D_hd_code_80370C26 = 0;
   D_hd_code_80370C25 = 0;
   D_hd_code_80370C24 = 0;
-  D_hd_code_80370C2D = 0;
-  D_hd_code_80370C2C = 0;
+  g_stickY = 0;
+  g_stickX = 0;
   D_hd_code_80370C23 = 0;
-  D_hd_code_80370C22 = 0;
-  D_hd_code_80370C21 = 0;
-  D_hd_code_80370C20 = 0;
-  D_hd_code_80370C1F = 0;
-  D_hd_code_80370C1E = D_hd_code_80370C1F;
-  D_hd_code_80370C1D = D_hd_code_80370C1E;
-  D_hd_code_80370C1C = D_hd_code_80370C1D;
-  D_hd_code_80370C1B = D_hd_code_80370C1C;
-  D_hd_code_80370C1A = D_hd_code_80370C1B;
-  D_hd_code_80370C19 = D_hd_code_80370C1A;
-  D_hd_code_80370C18 = D_hd_code_80370C19;
-  D_hd_code_80370C17 = D_hd_code_80370C18;
-  D_hd_code_80370C16 = D_hd_code_80370C17;
-  D_hd_code_80370C15 = D_hd_code_80370C16;
+  g_zButtonPressed = 0;
+  g_cRightButtonPressed = 0;
+  g_cUpButtonPressed = 0;
+  g_cDownButtonPressed = 0;
+  g_cLeftButtonPressed = g_cDownButtonPressed;
+  g_bButtonPressed = g_cLeftButtonPressed;
+  g_aButtonPressed = g_bButtonPressed;
+  g_rButtonPressed = g_aButtonPressed;
+  g_lButtonPressed = g_rButtonPressed;
+  g_startButtonPressed = g_lButtonPressed;
+  g_downButtonPressed = g_startButtonPressed;
+  g_upButtonPressed = g_downButtonPressed;
+  g_rightButtonPressed = g_upButtonPressed;
+  g_leftButtonPressed = g_rightButtonPressed;
   g_previousButtons = 0;
   g_currentButtons = 0;
   D_hd_code_80370BC0 = 0;
   D_hd_code_80370C38 = 0;
 }
 
-void func_hd_code_8028AFA4(u16 arg0, s8* arg1, s8* arg2) {
-  if (arg0 & 0x200) {
-    *arg1 = -0x50;
+void func_hd_code_8028AFA4(u16 button, s8* pStickX, s8* pStickY) {
+  if (button & L_JPAD) {
+    *pStickX = -0x50;
   }
-  if (arg0 & 0x100) {
-    *arg1 = 0x50;
+  if (button & R_JPAD) {
+    *pStickX = 0x50;
   }
-  if (arg0 & 0x4000) {
-    *arg2 = -0x50;
+  if (button & B_BUTTON) {
+    *pStickY = -0x50;
   }
-  if (arg0 & 0x8000) {
-    *arg2 = 0x50;
+  if (button & A_BUTTON) {
+    *pStickY = 0x50;
   }
 }
 
 void func_hd_code_8028B000(s8* arg0, s8* arg1) {
-  switch (D_hd_code_80364456) {
-    case 1:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-      if ((*arg0 < 0x33) && (*arg0 >= -0x32)) {
+  switch (g_currentVehicleType) {
+    case VEHICLE_SIDESWIPE:
+    case VEHICLE_SKYFALL:
+    case VEHICLE_RAMDOZER:
+    case VEHICLE_BACKLASH:
+    case VEHICLE_UNKNOWN_6:
+      if (*arg0 < 0x33 && *arg0 >= -0x32) {
         *arg0 = 0;
       } else {
         if (*arg0 >= 0x33) {
@@ -441,39 +441,39 @@ void func_hd_code_8028B000(s8* arg0, s8* arg1) {
   }
 }
 
-void func_hd_code_8028B0E8(OSContPad* arg0, s8 arg1, s8 arg2) {
-  if (!(arg0->button & 0x200) && (arg1 < -0x32)) {
-    arg0->button |= 0x200;
+void func_hd_code_8028B0E8(OSContPad* pController, s8 stickX, s8 stickY) {
+  if (!(pController->button & L_JPAD) && (stickX < -0x32)) {
+    pController->button |= L_JPAD;
   }
-  if (!(arg0->button & 0x100) && (arg1 >= 0x33)) {
-    arg0->button |= 0x100;
+  if (!(pController->button & R_JPAD) && (stickX >= 0x33)) {
+    pController->button |= R_JPAD;
   }
-  if (!(arg0->button & 0x8000) && (arg2 >= 0x33)) {
-    arg0->button |= 0x8000;
+  if (!(pController->button & A_BUTTON) && (stickY >= 0x33)) {
+    pController->button |= A_BUTTON;
   }
-  if (!(arg0->button & 0x4000) && (arg2 < -0x32)) {
-    arg0->button |= 0x4000;
+  if (!(pController->button & B_BUTTON) && (stickY < -0x32)) {
+    pController->button |= B_BUTTON;
   }
 }
 
-void func_hd_code_8028B190(s8* arg0, s8* arg1) {
-  if ((*arg0 < 0xA) && (*arg0 >= -9)) {
-    *arg0 = 0;
+void func_hd_code_8028B190(s8* pStickX, s8* pStickY) {
+  if ((*pStickX < 0xA) && (*pStickX >= -9)) {
+    *pStickX = 0;
   }
-  if (*arg0 >= 0x51) {
-    *arg0 = 0x50;
+  if (*pStickX >= 0x51) {
+    *pStickX = 0x50;
   }
-  if (*arg0 < -0x50) {
-    *arg0 = -0x50;
+  if (*pStickX < -0x50) {
+    *pStickX = -0x50;
   }
-  if ((*arg1 < 0xA) && (*arg1 >= -9)) {
-    *arg1 = 0;
+  if ((*pStickY < 0xA) && (*pStickY >= -9)) {
+    *pStickY = 0;
   }
-  if (*arg1 >= 0x51) {
-    *arg1 = 0x50;
+  if (*pStickY >= 0x51) {
+    *pStickY = 0x50;
   }
-  if (*arg1 < -0x50) {
-    *arg1 = -0x50;
+  if (*pStickY < -0x50) {
+    *pStickY = -0x50;
   }
 }
 
@@ -488,7 +488,7 @@ void func_hd_code_8028B240(void) {
   s32 sp18 = 0;
 
   while (sp18 < 3 && !found) {
-    if (D_hd_code_802FDB24[sp18] & (1 << D_hd_code_80364456)) {
+    if (D_hd_code_802FDB24[sp18] & (1 << g_currentVehicleType)) {
       found = 1;
     } else {
       sp18 += 1;
@@ -501,7 +501,7 @@ void func_hd_code_8028B240(void) {
   D_hd_code_802F5804[0x1A5].unk10 = NULL;
   D_hd_code_802F5804[0x1A6].unkC = sp24[sp18];
   D_hd_code_802F5804[0x1A6].unk6 = 0x13;
-  if ((players[playerNumber].unkF0 ^ 0x10205) & (1 << D_hd_code_80364456)) {
+  if ((players[playerNumber].unkF0 ^ 0x10205) & (1 << g_currentVehicleType)) {
     D_hd_code_802F8BDC[0x58].unk18 = 0x1A8;
   } else {
     D_hd_code_802F8BDC[0x58].unk18 = 0x1A7;

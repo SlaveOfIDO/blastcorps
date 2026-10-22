@@ -209,7 +209,7 @@ void __scRetraceDone(OSSched* scheduler) {
   s32 sp38;
 
   scheduler->retraceCount += 1;
-  if (D_hd_code_802E8BD0 == 0) {
+  if (!g_gamePaused) {
     scheduler->unk803156C0 += 1;
   }
   D_hd_code_8036BF38 = osGetTime();

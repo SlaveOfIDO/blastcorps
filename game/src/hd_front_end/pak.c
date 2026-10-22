@@ -1,3 +1,5 @@
+#include "pak.h"
+
 #include "common.h"
 #include "../hd_code/macros.h"
 #include "../hd_code/structs.h"
@@ -24,7 +26,7 @@ s32 func_hd_front_end_801F6210(u8);                 /* extern */
 s32 func_hd_front_end_801F6264(u8, u8);             /* extern */
 s32 func_hd_front_end_801F76E4(u8*, s32);  /* extern */
 s32 func_hd_front_end_801F65C4(u8, u8, u8);         /* extern */
-s32 func_hd_front_end_801F67E4(u8, u8, s32);         /* extern */
+s32 func_hd_front_end_801F67E4(u8, u8, u8);         /* extern */
 s32 func_hd_front_end_801F6AF4(u8, u64);                 /* extern */
 s32 func_hd_front_end_801F6CA4(u8, u8, u8);         /* extern */
 s32 func_hd_front_end_801F6ED4(u8);                 /* extern */
@@ -71,7 +73,7 @@ OSScClient D_hd_front_end_80218EE0;
 s32 D_hd_front_end_80218EF0;
 s32 D_hd_front_end_80218EF0_pad;
 u8 D_hd_front_end_80218EF8[0x1000];
-OSMesgQueue D_hd_front_end_80219EF8;
+OSMesgQueue g_pakMesgQueue;
 void* D_hd_front_end_80219F10[8];
 OSMesgQueue D_hd_front_end_80219F30;
 void* D_hd_front_end_80219F48;
@@ -121,7 +123,7 @@ u8 D_hd_front_end_8020C01C[69] = {
 void func_hd_front_end_801F57B0(void) {
   s32 sp24 = 0xDE0;
   osCreateThread(&D_hd_front_end_80218D30, 2, func_hd_front_end_801F58E8, NULL, &D_hd_front_end_80218EF8[0x1000], 0xB);
-  osCreateMesgQueue(&D_hd_front_end_80219EF8, &D_hd_front_end_80219F10, 8);
+  osCreateMesgQueue(&g_pakMesgQueue, &D_hd_front_end_80219F10, 8);
   osCreateMesgQueue(&D_hd_front_end_80219F30, &D_hd_front_end_80219F48, 1);
   osCreateMesgQueue(&D_hd_front_end_80219F50, &D_hd_front_end_80219F68, 8);
   func_hd_front_end_801F74B0(D_hd_front_end_8020C000);
@@ -137,13 +139,13 @@ void func_hd_front_end_801F57B0(void) {
 
 void func_hd_front_end_801F58E8() {
     u32 sp3C;
-    s32 sp38;
+    s32 pakResult;
     s32 sp34;
     u8 pad33;
-    u8 sp32;
+    u8 playerNumber;
     u8 sp31;
     u8 sp30;
-    u8 sp2F;
+    u8 pakCommand;
     u8 sp2E;
     u8 sp2D;
     u8 pad2C;
@@ -154,16 +156,16 @@ void func_hd_front_end_801F58E8() {
         g_pakBusy = 0;
         sp24 = 0;
         osSetEventMesg(OS_EVENT_SI, &D_hd_code_80370BF8, NULL);
-        osRecvMesg(&D_hd_front_end_80219EF8, (OSMesg*)&sp3C, 1);
+        osRecvMesg(&g_pakMesgQueue, (OSMesg*)&sp3C, 1);
         osSetEventMesg(OS_EVENT_SI, &D_hd_code_80370BF8, NULL);
         while (D_hd_code_8036BF10 != 0) {
         }
 
-        sp2F = (sp3C >> 0) & 0xFF;
+        pakCommand = (sp3C >> 0) & 0xFF;
         sp31 = (sp3C >> 8) & 0xFF;
-        sp32 = (sp3C >> 0x10) & 0xFF;
+        playerNumber = (sp3C >> 0x10) & 0xFF;
         sp30 = (sp3C >> 0x18) & 0xFF;
-        D_hd_front_end_8020C014[0] = sp32 + 0x11;
+        D_hd_front_end_8020C014[0] = playerNumber + 0x11;
         g_pakBusy = 1;
         func_hd_code_8028A42C();
         func_hd_front_end_801EE390();
@@ -173,78 +175,78 @@ void func_hd_front_end_801F58E8() {
             sp2E = 0;
             sp28 = 0x5B;
             sp34 = 0;
-            switch (sp2F) {                             /* switch 1 */
+            switch (pakCommand) {                             /* switch 1 */
             case 1:                                     /* switch 1 */
             case 2:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F60C8();
+                pakResult = func_hd_front_end_801F60C8();
                 break;
             case 3:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F6160(sp32);
+                pakResult = func_hd_front_end_801F6160(playerNumber);
                 break;
             case 4:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F61C8(sp32);
+                pakResult = func_hd_front_end_801F61C8(playerNumber);
                 break;
             case 5:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F6210(sp32);
+                pakResult = func_hd_front_end_801F6210(playerNumber);
                 break;
             case 6:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F6264(sp32, 0);
+                pakResult = func_hd_front_end_801F6264(playerNumber, 0);
                 break;
             case 7:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F6264(sp32, 1);
+                pakResult = func_hd_front_end_801F6264(playerNumber, 1);
                 break;
             case 8:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F65C4(sp32, sp31, 0);
+                pakResult = func_hd_front_end_801F65C4(playerNumber, sp31, 0);
                 break;
             case 9:                                     /* switch 1 */
-                sp38 = func_hd_front_end_801F65C4(sp32, sp31, 1);
+                pakResult = func_hd_front_end_801F65C4(playerNumber, sp31, 1);
                 break;
             case 10:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F67E4(sp32, sp31, 0);
+                pakResult = func_hd_front_end_801F67E4(playerNumber, sp31, 0);
                 break;
             case 11:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F67E4(sp32, sp31, 1);
+                pakResult = func_hd_front_end_801F67E4(playerNumber, sp31, 1);
                 break;
             case 12:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F6CA4(sp32, sp31, 0);
+                pakResult = func_hd_front_end_801F6CA4(playerNumber, sp31, 0);
                 break;
             case 13:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F6CA4(sp32, sp31, 1);
+                pakResult = func_hd_front_end_801F6CA4(playerNumber, sp31, 1);
                 break;
             case 14:                                    /* switch 1 */
-                sp38 = osPfsFreeBlocks(&D_hd_code_8039B630, &D_hd_front_end_80218EF0);
+                pakResult = osPfsFreeBlocks(&D_hd_code_8039B630, &D_hd_front_end_80218EF0);
                 break;
             case 15:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F5FE4();
+                pakResult = func_hd_front_end_801F5FE4();
                 break;
             case 16:                                    /* switch 1 */
                 sp2D = 1;
-                sp38 = osEepromProbe(&D_hd_code_80370BF8);
+                pakResult = osEepromProbe(&D_hd_code_80370BF8);
                 break;
             case 17:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F6ED4(sp32);
+                pakResult = func_hd_front_end_801F6ED4(playerNumber);
                 break;
             case 18:                                    /* switch 1 */
-                sp38 = osPfsChecker(&D_hd_code_8039B630);
+                pakResult = osPfsChecker(&D_hd_code_8039B630);
                 break;
             case 19:                                    /* switch 1 */
-                sp38 = 0xA;
+                pakResult = 0xA;
                 break;
             case 20:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F6AF4(sp32, 0x2704197125121981);
+                pakResult = func_hd_front_end_801F6AF4(playerNumber, 0x2704197125121981);
                 break;
             case 21:                                    /* switch 1 */
-                sp38 = func_hd_front_end_801F6AF4(sp32, 0x87569ab6cd076aec);
+                pakResult = func_hd_front_end_801F6AF4(playerNumber, 0x87569ab6cd076aec);
                 break;
             case 22:                                    /* switch 1 */
-                sp38 = 0;
+                pakResult = 0;
                 break;
             default:                                    /* switch 1 */
                 rmonPrintf("Nonsense pak message\n");
                 break;
             }
-            rmonPrintf("pak command %d returned %d\n", sp2F, sp38);
-            switch (sp38) {
+            rmonPrintf("pak command %d returned %d\n", pakCommand, pakResult);
+            switch (pakResult) {
             case 0x6E382:
                 if (g_currentGameState & 0x10E18000 || (g_nextGameState & 0x20000000000000)) {
                     sp2D = 1;
@@ -254,13 +256,13 @@ void func_hd_front_end_801F58E8() {
             case 0xA:
             case 0xB:
                 if (sp24 >= 4U) {
-                    if (sp2F != 0x13) {
-                        if (sp38 == 0x6E382) {
+                    if (pakCommand != 0x13) {
+                        if (pakResult == 0x6E382) {
                             D_hd_front_end_80219F88 = 0x5D;
                         } else {
                             D_hd_front_end_80219F88 = 0x5C;
                         }
-                        func_hd_front_end_801F6AF4(sp32, 0x2704197125121981);
+                        func_hd_front_end_801F6AF4(playerNumber, 0x2704197125121981);
                         sp2E = 0x13;
                     }
                     sp28 = D_hd_front_end_80219F88;
@@ -279,20 +281,20 @@ void func_hd_front_end_801F58E8() {
                     break;
                 }
             case 0x7:                               /* switch 2 */
-                D_hd_code_8039C4F8.unk40 = MIN(sp32, D_hd_code_8039C4F8.unk40);
+                D_hd_code_8039C4F8.unk40 = MIN(playerNumber, D_hd_code_8039C4F8.unk40);
                 sp2D = 1;
                 break;
             case 0x3:                                   /* switch 2 */
                 if (sp24 >= 4U) {
-                    if (sp2F != 0x13) {
-                        func_hd_front_end_801F6AF4(sp32, 0x2704197125121981);
+                    if (pakCommand != 0x13) {
+                        func_hd_front_end_801F6AF4(playerNumber, 0x2704197125121981);
                         sp2E = 0x13;
                     }
                     sp28 = 0x5C;
                 } else {
                     rmonPrintf("trying to fix pak ...\n");
-                    if (sp2F != 0x12) {
-                        osSendMesg(&D_hd_front_end_80219EF8, (void* ) (sp2F | (sp31 << 8) | (sp32 << 0x10) | (sp30 << 0x18)), 0);
+                    if (pakCommand != 0x12) {
+                        osSendMesg(&g_pakMesgQueue, (void* ) (pakCommand | (sp31 << 8) | (playerNumber << 0x10) | (sp30 << 0x18)), 0);
                     }
                     sp2E = 0x12;
                     sp30 = 0;
@@ -311,16 +313,16 @@ void func_hd_front_end_801F58E8() {
                 }
                 break;
             case 0x4:
-                if (sp2F && sp2F) {}
+                if (pakCommand && pakCommand) {}
                 // can't have break here
             }
-            sp34 = sp38;
+            sp34 = pakResult;
             if ((D_hd_code_8036BF10 == 0) && (sp28 != 0) && (sp2D == 0) && (sp2E == 0) && (&g_Thread3 == D_hd_front_end_80219F50.mtqueue)) {
                 func_hd_front_end_801EE398(sp28);
                 D_hd_front_end_80218D24 = 1;
             }
             if (sp2E) {
-                sp2F = sp2E;
+                pakCommand = sp2E;
                 sp2E = 0;
             }
             osRecvMesg(&D_hd_front_end_80219F30, NULL, 1);
@@ -331,7 +333,7 @@ void func_hd_front_end_801F58E8() {
             D_hd_code_8036BB18 = -1;
         }
         if (sp30) {
-            osSendMesg(&D_hd_front_end_80219F50, (OSMesg) sp38, 1);
+            osSendMesg(&D_hd_front_end_80219F50, (OSMesg) pakResult, 1);
         }
 
     }
@@ -515,35 +517,35 @@ s32 func_hd_front_end_801F65C4(u8 arg0, u8 arg1, u8 arg2) {
   return sp34;
 }
 
-s32 func_hd_front_end_801F67E4(u8 arg0, u8 arg1, s32 arg2) {
+s32 func_hd_front_end_801F67E4(u8 pn, u8 level, u8 arg2) {
   s32 sp3C = 0;
   s32 sp38;
   u8 sp37;
   u16* sp30;
 
-  sp37 = arg1 * 2;
+  sp37 = level * 2;
   sp30 = &D_hd_code_80364F70[sp37 & ~3];
 
   if (D_hd_code_802E8BF8 != 0) {
-    if (arg0 != D_hd_code_80364AEA) {
+    if (!(pn == g_playerNumberAtStart)) {
       rmonPrintf(ASSERT_MESSAGE, "pn==playerNumberAtStart", "pfsHandler.c", 0x25C);
     }
     if ((u8) arg2 == 1) {
-      D_hd_code_80364F70[sp37] = D_hd_code_80364EF0[arg0][D_hd_code_802E8C44[players[arg0].unk92[arg1]]];
+      D_hd_code_80364F70[sp37] = D_hd_code_80364EF0[pn][D_hd_code_802E8C44[players[pn].unk92[level]]];
       D_hd_code_80364F70[sp37 + 1] = D_hd_code_80364F70[sp37] ^ 0x55AA;
-      rmonPrintf("%d %d EEWRITE %x %x\n", arg1, D_hd_code_80364F70[sp37], (u32) ((sp37 * 2) + 0x100) >> 3, sp30);
+      rmonPrintf("%d %d EEWRITE %x %x\n", level, D_hd_code_80364F70[sp37], (u32) ((sp37 * 2) + 0x100) >> 3, sp30);
       osEepromWrite(&D_hd_code_80370BF8, (u8) ((u32) ((sp37 * 2) + 0x100) >> 3), (u8*) sp30);
     } else {
       osEepromRead(&D_hd_code_80370BF8, (u8) ((u32) ((sp37 * 2) + 0x100) >> 3), (u8*) sp30);
-      for (sp38 = 0; sp38 < 2; sp38++, arg1++) {
-        if (((players[arg0].unk18[arg1] > 0) && (players[arg0].unk18[arg1] < 6)?1:0) != 0 &&
-            (arg1 != 0x31) && (arg1 != 0x2F) && (arg1 != 0x26)) {
-          D_hd_code_80364EF0[arg0][D_hd_code_802E8C44[players[arg0].unk92[arg1]]] = D_hd_code_80364F70[arg1 * 2];
-          rmonPrintf("%d EETIMES: %d %d\n", arg1, D_hd_code_80364F70[arg1 * 2], D_hd_code_80364F70[arg1 * 2 + 1] ^ 0x55AA);
-          if (D_hd_code_80364F70[arg1 * 2] != (D_hd_code_80364F70[arg1 * 2 + 1] ^ 0x55AA)) {
+      for (sp38 = 0; sp38 < 2; sp38++, level++) {
+        if (((players[pn].unk18[level] > 0) && (players[pn].unk18[level] < 6)?1:0) != 0 &&
+            (level != 0x31) && (level != 0x2F) && (level != 0x26)) {
+          D_hd_code_80364EF0[pn][D_hd_code_802E8C44[players[pn].unk92[level]]] = D_hd_code_80364F70[level * 2];
+          rmonPrintf("%d EETIMES: %d %d\n", level, D_hd_code_80364F70[level * 2], D_hd_code_80364F70[level * 2 + 1] ^ 0x55AA);
+          if (D_hd_code_80364F70[level * 2] != (D_hd_code_80364F70[level * 2 + 1] ^ 0x55AA)) {
             sp3C = 0x6E382;
           }
-            }
+        }
       }
     }
   }
@@ -642,7 +644,7 @@ s32 func_hd_front_end_801F6F18(void) {
 
     for (sp44 = 0; sp44 < 0x10; sp44++) {
         do {
-            osSendMesg(&D_hd_front_end_80219EF8, (void*) ((sp44 << 0x10) | 0x11 | 0x01000000), 1);
+            osSendMesg(&g_pakMesgQueue, (void*) ((sp44 << 0x10) | 0x11 | 0x01000000), 1);
             osRecvMesg(&D_hd_front_end_80219F50, &sp38, 1);
             if (sp38 != NULL) {
                 sp44 += 1;
@@ -687,7 +689,7 @@ s32 func_hd_front_end_801F6F18(void) {
 
     D_hd_code_802F8BDC[0x12].unk18 = ((s32) (D_hd_front_end_80218D28 + sp2C + 1) / 2) + 0x24;
     D_hd_code_802F8BDC[0x12].unk10 = D_hd_front_end_80218D28 + sp2C + 4;
-    osSendMesg(&D_hd_front_end_80219EF8, (void*) 0x0100000E, 1);
+    osSendMesg(&g_pakMesgQueue, (void*) 0x0100000E, 1);
     osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
     sprintf(D_hd_front_end_80219F90, "%d PAGES FREE", (D_hd_front_end_80218EF0 / 32) / 8);
     D_hd_front_end_8020C070[35].unkC = D_hd_front_end_80219F90;

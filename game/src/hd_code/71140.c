@@ -1,4 +1,5 @@
 #include "common.h"
+#include <PR/gbi.h>
 
 // <bss>
 // assumed types
@@ -8,8 +9,8 @@ s32 D_hd_code_803EEB38;
 s32 D_hd_code_803EEB3C;
 s32 D_hd_code_803EEB40;
 s32 D_hd_code_803EEB44;
-s32 D_hd_code_803EEB48;
-s32 D_hd_code_803EEB4C;
+Mtx* D_hd_code_803EEB48; // array of vehicles matrices, g_heap allocated
+Mtx* D_hd_code_803EEB4C; // array of vehicles matrices, g_heap allocated
 s32 D_hd_code_803EEB50;
 s32 D_hd_code_803EEB54;
 u16 D_hd_code_803EEB58;
@@ -31,7 +32,7 @@ s32 D_hd_code_80305D20[4] = {
 };
 // </data>
 
-#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/71140/func_hd_code_802B5900.s")
+#pragma GLOBAL_ASM("asm/nonmatchings/hd_code/71140/LoadTruckVehicle.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/hd_code/71140/func_hd_code_802B5CD8.s")
 

@@ -9,6 +9,7 @@
 #include "../hd_code/variables.h"
 #include "../hd_code/yoshi.h"
 #include "common.h"
+#include "pak.h"
 #include "structs.h"
 
 void func_hd_code_80262008(u8 arg0, f32 arg1);
@@ -19,7 +20,6 @@ Gfx* func_hd_front_end_801EAA7C(Gfx*, struct FrameContext*, s32*);
 Gfx* func_hd_front_end_801EC770(Gfx*, struct FrameContext*, s32*);
 Gfx* func_hd_front_end_801ED800(s32, struct FrameContext*, u8, s32*);
 Gfx* func_hd_front_end_801F51C8(struct FrameContext*, Gfx*);
-s32 func_hd_front_end_801F73FC();
 void func_hd_front_end_801F803C(void);
 Gfx* func_hd_front_end_801F8440(struct FrameContext*, Gfx*);
 Gfx* func_hd_front_end_80201364(struct FrameContext*, Gfx*);
@@ -126,7 +126,7 @@ void func_hd_front_end_801FE990(void) {
         break;
       case 0x8000000000ULL:
         if (D_hd_code_8036BB16 == 0xC) {
-          osSendMesg(&D_hd_front_end_80219EF8, (void*)(((s16)D_hd_front_end_8021AB74 << 0x10) | 5), 1);
+          osSendMesg(&g_pakMesgQueue, (void*)(((s16)D_hd_front_end_8021AB74 << 0x10) | 5), 1);
         }
         g_nextGameState = 0x10000000000;
         break;
@@ -166,7 +166,7 @@ void func_hd_front_end_801FE990(void) {
         if (D_hd_code_8036BB16 == 0xFFFF) {
           playerNumber = D_hd_code_80364AE9;
         }
-        if ((playerNumber == D_hd_code_80364AE9) || (playerNumber == D_hd_code_80364AEA) ||
+        if ((playerNumber == D_hd_code_80364AE9) || (playerNumber == g_playerNumberAtStart) ||
             (D_hd_code_8036BB16 == 0xFFFF)) {
           g_nextGameState = D_hd_front_end_8021A830;
         } else {
@@ -243,8 +243,8 @@ void func_hd_front_end_801FE990(void) {
       func_hd_code_80260EE0(0xF);
     }
     if ((D_hd_code_8036BB1E == 0) && (playerNumber == 4)) {
-      playerNumber = D_hd_code_80364AEA;
-      func_hd_front_end_801E8DCC(D_hd_code_80364AEA);
+      playerNumber = g_playerNumberAtStart;
+      func_hd_front_end_801E8DCC(g_playerNumberAtStart);
       D_hd_code_802F8BDC[0x38].unk8 |= 0x20;
     }
   }
@@ -291,7 +291,7 @@ void func_hd_front_end_801FE990(void) {
     }
   }
   controllerUpdateInput();
-  if (g_currentGameState == LEVELS_COMPLETED) {
+  if (g_currentGameState == STATE_LEVELS_COMPLETED) {
     func_hd_code_802862DC();
   }
   if ((g_currentGameState & (0x88000080ULL)) && ((D_hd_code_803156C4 % 20) >= 6) && (D_hd_code_80364A71 != -1) &&
@@ -360,7 +360,7 @@ void func_hd_front_end_801FE990(void) {
         break;
       case 0x2000000ULL:
         D_hd_code_80364AE9 = playerNumber;
-        D_hd_code_80364AEA = playerNumber;
+        g_playerNumberAtStart = playerNumber;
         if (D_hd_code_80365060[playerNumber] == 1) {
           fadeToFast(0x4000ULL);
           return;
@@ -371,8 +371,8 @@ void func_hd_front_end_801FE990(void) {
         fadeToFast(0x0400000000000000ULL);
         return;
       case 0x1000000ULL:
-        osSendMesg(&D_hd_front_end_80219EF8, (void*)((playerNumber << 0x10) | 7), 1);
-        osSendMesg(&D_hd_front_end_80219EF8, (void*)((playerNumber << 0x10) | 0x15 | 0x01000000), 1);
+        osSendMesg(&g_pakMesgQueue, (void*)((playerNumber << 0x10) | 7), 1);
+        osSendMesg(&g_pakMesgQueue, (void*)((playerNumber << 0x10) | 0x15 | 0x01000000), 1);
         func_hd_code_802995F0(4);
         fadeToFast(0x100000000000ULL);
         return;
@@ -409,11 +409,11 @@ void func_hd_front_end_801FE990(void) {
         fadeTo(0x2ULL, 0.5f);
         return;
       case 0x8000000000000ULL:
-        playerNumber = D_hd_code_80364AEA;
+        playerNumber = g_playerNumberAtStart;
         fadeTo(0x4000ULL, 0.6f);
         return;
       case 0x80000000000000ULL:
-        if ((playerNumber == D_hd_code_80364AE9) || (playerNumber == D_hd_code_80364AEA)) {
+        if ((playerNumber == D_hd_code_80364AE9) || (playerNumber == g_playerNumberAtStart)) {
           g_nextGameState = D_hd_front_end_8021A830;
           return;
         }

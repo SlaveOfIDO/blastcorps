@@ -3,11 +3,6 @@
 
 #include "common.h"
 
-// Auto-generated from asm/data/hd_code/glyph_data.data.s (see symbol_data.c).
-// Each array is a str16 glyph/code string terminated by SYMBOL_END (0x0FFE),
-// except the dedicated SYMBOL_NONE (0x0FFF, "no wide text") slots noted in
-// symbol_data.c.
-
 extern u16 D_hd_code_80301040[];
 extern u16 D_hd_code_80301044[];
 extern u16 D_hd_code_80301048[];

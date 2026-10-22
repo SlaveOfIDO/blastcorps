@@ -177,7 +177,7 @@ u8 func_hd_front_end_801EEDB4(u8 arg0, u8 arg1, u8 arg2) {
         sp54->unk14 = g_statsNew.bdn + 0x22;
         sp58 = &D_hd_code_802F49F4[sp54->unk14];
         sp54->unk1A = func_hd_code_80272C5C(&sp58->unk6, 0, sp58->unk4, sp58->unk2C, sp58->unk2D | 4, 1.0f);
-        if (playerNumber != D_hd_code_80364AEA) {
+        if (playerNumber != g_playerNumberAtStart) {
             sp64 = 3;
         } else if (((g_nextGameState == 0x80)) || (D_hd_code_803643D5 != 0)) {
             sp64 = 1;

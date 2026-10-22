@@ -261,7 +261,7 @@ s32 func_hd_code_80285B10(u8 arg0) {
 void func_hd_code_80285B68(s32 arg0) {
   if (g_currentGameState & 0x104) {
     if ((LEVEL_FINISHED(g_currentLevel)) &&
-        (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) && (playerNumber == D_hd_code_80364AEA)) {
+        (D_hd_code_802E8F94[g_currentLevel].unk0 != 1) && (playerNumber == g_playerNumberAtStart)) {
       func_hd_code_802CF5B0();
       D_hd_code_802E8BD8 = 1;
       fadeTo(0x4000, 1.25f);

@@ -26,7 +26,7 @@ struct VehicleSlot {
   /* 0x40 */ u8 pad40[0x54 - 0x40];
   /* 0x54 */ Gfx *unk54; // used for shadow rendering
   /* 0x58 */ s32 unk58; // used for blur rendering
-  /* 0x5C */ s32 unk5C; // Texture Index? or vehicle index?
+  /* 0x5C */ s32 type; /// Vehicle Type ID; see vehicles.h
   /* 0x60 */ s32 unk60; // Some kind of env color?
   /* 0x64 */ s32 unk64;
   /* 0x68 */ s32 unk68;
@@ -44,7 +44,7 @@ typedef struct UnknownData8024C414_s {
   /* 0x0C */ u8 rankLevel; // rank level. e.g. 0 for ROOKIE WRECKER
   /* 0x0D */ u8 padD;
   /* 0x0E */ s16 padE;
-  /* 0x10 */ s32 unk10; // TODO: unlocked vehicles?
+  /* 0x10 */ s32 unk10; // TODO: unlocked vehicles? vehicles bitmask
   /* 0x14 */ s32 unk14;
   /* 0x18 */ u8 unk18[0x3C]; // flags? often check >0 and <6
   /* 0x54 */ u8 unk54[0x3C]; // this is a bitfield
@@ -55,7 +55,7 @@ typedef struct UnknownData8024C414_s {
   /* 0xF4 */ u8 padF4[0xFF - 0xF4];
 } UnknownData8024C414;
 
-extern u8 D_hd_code_802E8BD0;
+extern u8 g_gamePaused;
 extern u8 D_hd_code_802E8BD4;
 extern u8 D_hd_code_802E8BD8;
 extern s32 g_currentLevel;
@@ -105,7 +105,7 @@ extern f32 g_levelFOV;
 extern s16 D_hd_code_8036443C;
 extern s16 D_hd_code_8036443E;
 extern s16 D_hd_code_80364452;
-extern u8 D_hd_code_80364456;
+extern u8 g_currentVehicleType;
 extern struct VehicleSlot g_vehicles[12];
 extern struct VehicleSlot *g_vehiclesEnd;
 extern s32 D_hd_code_803649E8;
@@ -121,7 +121,7 @@ extern u64 g_currentGameState;
 extern u64 g_nextGameState;
 extern u32 D_hd_code_80364AA8;
 extern u8 playerNumber;
-extern u8 D_hd_code_80364AEA;
+extern u8 g_playerNumberAtStart;
 extern UnknownData8024C414 players[];
 extern s32 nextdma; // 0x80358080
 extern s32 no_palette_dmas; // 0x80358084

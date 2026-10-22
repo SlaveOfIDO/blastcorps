@@ -210,9 +210,9 @@ void func_hd_code_8026FEC4(void) {
       sp2C = func_hd_code_8026A6F0((s32)D_hd_code_803643E0 >> 5, (s32)D_hd_code_803643E4 >> 5,
                                    (s32)D_hd_code_803643E8 >> 5, (s32)D_hd_code_8036BED8[sp34].x,
                                    (s32)D_hd_code_8036BED8[sp34].y, (s32)D_hd_code_8036BED8[sp34].z);
-      if (sp2C < D_hd_code_802FA200[D_hd_code_80364456]) {
+      if (sp2C < D_hd_code_802FA200[g_currentVehicleType]) {
         g_statsNew.rdusFound++;
-        if ((g_statsNew.rdusFound >= 4) && D_hd_code_802E8BD0 == 0) {
+        if ((g_statsNew.rdusFound >= 4) && !g_gamePaused) {
           func_hd_code_8026AD30(0x46);
         }
         if (g_currentGameState != 0x40) {

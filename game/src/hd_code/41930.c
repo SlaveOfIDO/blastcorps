@@ -31,7 +31,7 @@ void func_hd_code_802860F0(void) {
   s32 sp28;
 
   if (players[playerNumber].unk91 != 0xD && (players[playerNumber].unk91 != 8) && (players[playerNumber].unk91 != 1)) {
-    g_nextGameState = LEVELS_COMPLETED;
+    g_nextGameState = STATE_LEVELS_COMPLETED;
     hdPrepareStateTransition();
     func_hd_front_end_80200714(D_hd_code_802FDA60[players[playerNumber].unk91]);
     switch (players[playerNumber].unk91) { /* irregular */

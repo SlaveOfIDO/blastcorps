@@ -4,6 +4,7 @@
 #include "music.h"
 #include "structs.h"
 #include "variables.h"
+#include "../vehicles.h"
 
 // <bss>
 struct S_8036C8D0 D_hd_code_8036C8D0[50];
@@ -252,8 +253,8 @@ void func_hd_code_80277620(s32 arg0) {
 }
 
 void func_hd_code_802778FC(void) {
-  switch (D_hd_code_80364456) {
-    case 5:
+  switch (g_currentVehicleType) {
+    case VEHICLE_BACKLASH:
       if (((s32)D_hd_code_8036CB31 >= 0x10) && ((s32)D_hd_code_8036CB30 >= 0x10)) {
         func_hd_code_80277EDC(3, 1, 1, 0x63);
         D_hd_code_8036CB28 = 0;
@@ -262,7 +263,7 @@ void func_hd_code_802778FC(void) {
         return;
       }
       return;
-    case 4:
+    case VEHICLE_RAMDOZER:
       if (((s32)D_hd_code_8036CB31 >= 0x29) && ((s32)D_hd_code_8036CB30 >= 0x29)) {
         func_hd_code_80277EDC(4, 1, 1, func_hd_code_8026205C(4));
         D_hd_code_8036CB28 = 0;
@@ -271,7 +272,7 @@ void func_hd_code_802778FC(void) {
         return;
       }
       break;
-    case 3:
+    case VEHICLE_SKYFALL:
       if (((s32)D_hd_code_8036CB31 >= 0xB) && ((s32)D_hd_code_8036CB30 >= 0xB)) {
         func_hd_code_80277EDC(0, 1, 3, 0xB2);
         D_hd_code_8036CB28 = 0;
@@ -280,7 +281,7 @@ void func_hd_code_802778FC(void) {
         return;
       }
       break;
-    case 9:
+    case VEHICLE_J_BOMB:
       if (((s32)D_hd_code_8036CB31 >= 0x1A) && ((s32)D_hd_code_8036CB30 >= 0x1A)) {
         func_hd_code_80277EDC(4, 1, 1, func_hd_code_8026205C(4));
         D_hd_code_8036CB28 = 0;
@@ -292,11 +293,11 @@ void func_hd_code_802778FC(void) {
 }
 
 void func_hd_code_80277AE0(void) {
-  switch (D_hd_code_80364456) {
-    case 3:
-    case 4:
-    case 5:
-    case 9:
+  switch (g_currentVehicleType) {
+    case VEHICLE_SKYFALL:
+    case VEHICLE_RAMDOZER:
+    case VEHICLE_BACKLASH:
+    case VEHICLE_J_BOMB:
       if (((s32)D_hd_code_8036CB31 >= 6) && ((s32)D_hd_code_8036CB30 < 2)) {
         func_hd_code_80277EDC(1, 1, 3, 0xB3);
         D_hd_code_8036CB28 = 0;
@@ -308,10 +309,10 @@ void func_hd_code_80277AE0(void) {
 }
 
 void func_hd_code_80277B84(void) {
-  switch (D_hd_code_80364456) {
-    case 3:
-    case 4:
-    case 5:
+  switch (g_currentVehicleType) {
+    case VEHICLE_SKYFALL:
+    case VEHICLE_RAMDOZER:
+    case VEHICLE_BACKLASH:
       if (((s32)D_hd_code_8036CB33 >= 0x1F) && ((s32)D_hd_code_8036CB30 < 6)) {
         func_hd_code_80277EDC(2, 1, 2, 0x58);
         D_hd_code_8036CB28 = 0;

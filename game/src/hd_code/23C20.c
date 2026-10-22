@@ -6,6 +6,7 @@
 #include "variables.h"
 #include "yoshi.h"
 #include "../levels.h"
+#include "../vehicles.h"
 
 extern u16 D_hd_code_80303AF4[];
 extern u16 D_hd_code_80303B00[];
@@ -221,7 +222,7 @@ void func_hd_code_802683E0(void) {
   sp3C = 0;
   sp3B = 0;
 
-  if (D_hd_code_80364456 != 0 || D_hd_code_803ED826 != 0) {
+  if (g_currentVehicleType != VEHICLE_UNKNOWN_0 || D_hd_code_803ED826 != 0) {
     return;
   }
 
@@ -230,7 +231,7 @@ void func_hd_code_802683E0(void) {
       vehicle = g_vehicles;
       found = 0;
       while (!found && (g_vehiclesEnd != vehicle)) {
-        if (D_hd_code_802F3C10[sp3C].unk1 == vehicle->unk5C) {
+        if (D_hd_code_802F3C10[sp3C].unk1 == vehicle->type) {
           found = 1;
         } else {
           vehicle++;
@@ -805,18 +806,18 @@ void func_hd_code_8026A9B4(void) {
       func_hd_code_8026AD30(0x51U);
     }
   }
-  if (D_hd_code_80364456 != D_hd_code_8036B979) {
+  if (g_currentVehicleType != D_hd_code_8036B979) {
     D_hd_code_8036B978 = D_hd_code_8036B979;
   }
-  if (D_hd_code_80364456 != 0) {
-    D_hd_code_8036B979 = D_hd_code_80364456;
+  if (g_currentVehicleType != VEHICLE_UNKNOWN_0) {
+    D_hd_code_8036B979 = g_currentVehicleType;
   }
   vehicle = g_vehicles;
   sp3B = 0;
   while ((sp3B == 0) && (g_vehiclesEnd != vehicle)) {
-    if ((vehicle->unk5C != D_hd_code_8036B978) && (vehicle->unk5C != D_hd_code_80364456) && (D_hd_code_80364456 != 0) &&
-        (vehicle->unk5C != 0) && (vehicle->unk5C != 0xFE) && (vehicle->unk5C != 0xFF) && (vehicle->unk5C != 7) &&
-        (vehicle->unk5C != 6)) {
+    if ((vehicle->type != D_hd_code_8036B978) && (vehicle->type != g_currentVehicleType) && (g_currentVehicleType != VEHICLE_UNKNOWN_0) &&
+        (vehicle->type != 0) && (vehicle->type != 0xFE) && (vehicle->type != 0xFF) && (vehicle->type != VEHICLE_TRAIN) &&
+        (vehicle->type != VEHICLE_UNKNOWN_6)) {
       sp30 = func_hd_code_8026A6F0((s32)D_hd_code_803643E0 >> 5, (s32)D_hd_code_803643E4 >> 5,
                                    (s32)D_hd_code_803643E8 >> 5, (s32)vehicle->unk64 >> 5, (s32)vehicle->unk68 >> 5,
                                    (s32)vehicle->unk6C >> 5);
@@ -824,7 +825,7 @@ void func_hd_code_8026A9B4(void) {
         sp34 = sp30;
       }
       if ((sp30 < 0x64) && (D_hd_code_8036B970 == 0) &&
-          ((func_hd_code_802AB3C0(vehicle->unk5C) == 0) || (D_hd_code_803EFECB == 0))) {
+          ((func_hd_code_802AB3C0(vehicle->type) == 0) || (D_hd_code_803EFECB == 0))) {
         func_hd_code_8026AD30(0x4CU);
         D_hd_code_8036B970 = 1;
         sp3B = 1;
@@ -838,7 +839,7 @@ void func_hd_code_8026A9B4(void) {
   if ((g_currentLevel == LEVEL_SIMIAN_ACRES) && ((s32)D_hd_code_8036C7CC >= 2)) {
     func_hd_code_8026AD30(0x4DU);
   }
-  if ((g_currentLevel == LEVEL_SIMIAN_ACRES) && (D_hd_code_80364456 == 7) && (((s32)D_hd_code_803643E0 >> 5) >= 0x899)) {
+  if ((g_currentLevel == LEVEL_SIMIAN_ACRES) && (g_currentVehicleType == VEHICLE_TRAIN) && (((s32)D_hd_code_803643E0 >> 5) >= 0x899)) {
     func_hd_code_8026AD30(0x53U);
   }
   if (D_hd_code_8036B971 != 0) {

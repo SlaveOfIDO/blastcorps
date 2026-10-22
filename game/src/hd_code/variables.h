@@ -26,7 +26,7 @@ extern struct FrameContext D_hd_code_803156F8[];
 
 
 extern OSMesg D_hd_code_8039C4B4;
-extern OSMesgQueue D_hd_front_end_80219EF8;
+extern OSMesgQueue g_pakMesgQueue;
 extern OSMesgQueue D_hd_front_end_80219F50;
 
 extern f32 D_hd_code_8036BB34; // safe type
@@ -219,10 +219,10 @@ extern s32 maxCharacters;
 extern s32* D_hd_code_803F7820;
 extern s32* D_hd_code_803F7824;
 extern u64 D_hd_code_8036BF38;
-extern s8 D_hd_code_803669A6;
-extern s8 D_hd_code_803669A7;
+extern s8 g_previousStickX;
+extern s8 g_previousStickY;
 extern s8 D_hd_code_80367BFF;
-extern s8 D_hd_code_80370C2D;
+extern s8 g_stickY;
 extern s8 D_hd_code_80370C32;
 extern s8 D_hd_code_80370C32;
 extern s8 D_hd_code_80370C33;
@@ -300,11 +300,11 @@ extern u8 D_hd_code_8036EB92;
 extern u8 D_hd_code_8036EB93;
 extern u8 D_hd_code_8036EB98;
 extern u8 D_hd_code_8036EB99;
-extern u8 D_hd_code_80370C1C;
-extern u8 D_hd_code_80370C1D;
-extern u8 D_hd_code_80370C1E;
-extern u8 D_hd_code_80370C21;
-extern u8 D_hd_code_80370C22;
+extern u8 g_aButtonPressed;
+extern u8 g_bButtonPressed;
+extern u8 g_cLeftButtonPressed;
+extern u8 g_cRightButtonPressed;
+extern u8 g_zButtonPressed;
 extern u8 D_hd_code_80370C24;
 extern u8 D_hd_code_80370C27;
 extern u8 frontEndPresent;
@@ -386,7 +386,7 @@ extern u8 snd_seqfile_ROM_START;
 extern u8 D_hd_code_80370C80[0x2A280];
 extern s16 D_hd_code_8036BB18;
 extern struct S_80367BD0 D_hd_code_80367BD0;
-extern u16 D_hd_code_8036BB14;
+extern u16 g_yoshiDemandV;
 
 extern u8 D_hd_code_8036CB38;
 extern Vtx* D_hd_code_8036CB40;
@@ -461,7 +461,7 @@ extern u8 D_hd_code_8036E4CA;
 extern s32 D_hd_code_803156C0;
 extern struct S_802E8F38 D_hd_code_802E8F38[6];
 extern u8 D_hd_code_8039CAB6;
-extern s8 D_hd_code_80370C2C;
+extern s8 g_stickX;
 typedef struct {
   u8 data[0x40];
   u8 unk40;

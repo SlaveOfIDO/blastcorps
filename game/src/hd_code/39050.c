@@ -292,7 +292,7 @@ f32 func_hd_code_8027DB5C(s32* arg0, s32* arg1, s32 arg2) {
   i = 0;
   sp28 = 0.0f;
   while (&g_vehicles[i] != g_vehiclesEnd) {
-    sp18 = g_vehicles[i].unk5C;
+    sp18 = g_vehicles[i].type;
     if ((sp18 != 0xFE) && ((sp18 != 0) || (D_hd_code_803649E8 == 0))) {
       if (func_hd_code_8027E164(g_vehicles[i].unk64, g_vehicles[i].unk6C, arg0, arg1) != 0) {
         if (g_vehicles[i].unk70 != 0) {
@@ -302,7 +302,7 @@ f32 func_hd_code_8027DB5C(s32* arg0, s32* arg1, s32 arg2) {
           } else {
             sp1C = (f32)((1.0 - (f64)sp1C) * 2.0);
           }
-          sp20 = func_hd_code_8027E228(g_vehicles[i].unk5C);
+          sp20 = func_hd_code_8027E228(g_vehicles[i].type);
           sp24 = sp1C * sp20;
           if (sp28 < sp24) {
             sp28 = sp24;
@@ -527,7 +527,7 @@ void func_hd_code_8027E9B8(u8 arg0) {
   s32 sp2C;
   s32 sp28;
 
-  if (((u8)D_hd_code_8036DCD4 != 0) && (D_hd_code_802E8BD0 == 0)) {
+  if (((u8)D_hd_code_8036DCD4 != 0) && (!g_gamePaused)) {
     D_hd_code_8036DCB0 += 1;
     D_hd_code_8036DCD2 += 0xF;
     if (D_hd_code_8036DCD2 >= 0xFF) {

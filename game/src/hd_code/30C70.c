@@ -116,7 +116,7 @@ void func_hd_code_80275478(struct FrameContext* arg0, Gfx** arg1, s32 arg2) {
   foundTarget = func_hd_code_802BCE40();
   D_hd_code_8036C7CC = 0;
   sp54 = D_hd_code_8036C790;
-  if ((D_hd_code_8036EB98 == 0) && (foundTarget == 0) && (D_hd_code_80364AA8 == 1) && (D_hd_code_802E8BD0 == 0)) {
+  if ((D_hd_code_8036EB98 == 0) && (foundTarget == 0) && (D_hd_code_80364AA8 == 1) && (!g_gamePaused)) {
     if (func_hd_code_8026AD30(0x4B) == 0) {
       yoshiShow(0x803DU);
       func_hd_code_80277EDC(3, 1, 2, 0x82);

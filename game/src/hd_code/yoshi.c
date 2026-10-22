@@ -65,7 +65,7 @@ s16 D_hd_code_8036BB0C;
 s8 D_hd_code_8036BB0E;
 s8 bss_pad_8036BB0F;
 struct S_8020C070* D_hd_code_8036BB10;
-u16 D_hd_code_8036BB14;
+u16 g_yoshiDemandV;
 u16 D_hd_code_8036BB16;
 s16 D_hd_code_8036BB18;
 s16 D_hd_code_8036BB1A;
@@ -2025,41 +2025,39 @@ s32 func_hd_code_8026AD30(s16 arg0) {
 }
 
 void yoshiShow(u16 yd) {
-  u16 sp1E;
-  u16 sp1C;
+  u16 previousMessage = g_yoshiDemandV & 0xFF;
+  u16 newMessage = yd & 0xFF;
 
-  sp1E = D_hd_code_8036BB14 & 0xFF;
-  sp1C = yd & 0xFF;
-  if (D_hd_code_8036BB14) {
-    if (D_hd_code_8036BB14) {
+  if (g_yoshiDemandV) {
+    if (g_yoshiDemandV) {
       rmonPrintf(ASSERT_MESSAGE, "!yoshiDemandV", "yoshi.c", 0x520);
     }
-    rmonPrintf("NEW: %x OLD:%x\n", yd, D_hd_code_8036BB14);
+    rmonPrintf("NEW: %x OLD:%x\n", yd, g_yoshiDemandV);
   }
-  if ((yd & 0x4000)) {
-    if (!(yd == 0x4000)) {
+  if (yd & YOSHI_DEMAND_OFF) {
+    if (!(yd == YOSHI_DEMAND_OFF)) {
       rmonPrintf(ASSERT_MESSAGE, "yd==YOSHI_DEMAND_OFF", "yoshi.c", 0x525);
     }
   }
-  if ((sp1C == 0x1E) || (sp1C == 0x23) || (sp1C == 5) || (sp1C == 0xE)) {
+  if (newMessage == 0x1E || newMessage == 0x23 || newMessage == 5 || newMessage == 0xE) {
     D_hd_code_8036BB1A = -1;
   }
-  if ((sp1E == 0x1E) || (sp1E == 0x23) || (sp1E == 5) || (sp1E == 0xE)) {
+  if (previousMessage == 0x1E || previousMessage == 0x23 || previousMessage == 5 || previousMessage == 0xE) {
     rmonPrintf(ASSERT_MESSAGE, "1==0", "yoshi.c", 0x52C);
     rmonPrintf("OH MY GOD!\n");
     return;
   }
-  if (D_hd_code_8036BB14) {
-    if (D_hd_code_8036BB14 != 0) {
+  if (g_yoshiDemandV) {
+    if (g_yoshiDemandV) {
       rmonPrintf(ASSERT_MESSAGE, "!yoshiDemandV", "yoshi.c", 0x533);
     }
-    rmonPrintf("GOING FOR NEW: %x OLD:%x\n", yd, D_hd_code_8036BB14);
+    rmonPrintf("GOING FOR NEW: %x OLD:%x\n", yd, g_yoshiDemandV);
   }
-  D_hd_code_8036BB14 = yd;
+  g_yoshiDemandV = yd;
 }
 
 u16 func_hd_code_8026B10C() {
-  return D_hd_code_8036BB14;
+  return g_yoshiDemandV;
 }
 
 void func_hd_code_8026B118(s32 arg0) {
@@ -2071,7 +2069,7 @@ void func_hd_code_8026B118(s32 arg0) {
 
   D_hd_code_8036BB1C = 1;
   D_hd_code_8036BB16 = 0;
-  D_hd_code_8036BB14 = 0;
+  g_yoshiDemandV = 0;
   D_hd_code_8036BB1A = -1;
   D_hd_code_8036BB18 = -1;
   D_hd_code_8036BB0C = 0;
@@ -2274,7 +2272,7 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
   u16 sp130;
   u8* sp12C;
   f32 sp128;
-  u16 sp126;
+  u16 messageId;
   u16 sp124;
   s32 sp120;
   u8 sp11F;  // correct
@@ -2316,34 +2314,34 @@ Gfx* func_hd_code_8026BCE0(Gfx* gfx, struct FrameContext* arg1, s32* arg2) {
   if ((g_currentGameState == 0x200) && (D_hd_code_803643DB != 0) && (D_hd_code_803643D6 != 0) &&
       ((D_hd_code_8036BB1A = -1, (D_hd_code_8036BB1C == 4)) || (D_hd_code_8036BB1C == 2))) {
     rmonPrintf("putting off!\n");
-    yoshiShow(0x4000U);
+    yoshiShow(YOSHI_DEMAND_OFF);
   }
-  if ((D_hd_code_8036BB18 == -1) && (D_hd_code_8036BB14 & 0x4000)) {
+  if ((D_hd_code_8036BB18 == -1) && g_yoshiDemandV & YOSHI_DEMAND_OFF) {
     rmonPrintf(ASSERT_MESSAGE, "1==0", "yoshi.c", 0x65B);
-    D_hd_code_8036BB14 = 0;
+    g_yoshiDemandV = 0;
     return gfx;
   }
-  if (D_hd_code_8036BB14 != 0) {
-    sp126 = D_hd_code_8036BB14 & 0xFF;
-    sp124 = D_hd_code_8036BB14 & 0x2000;
+  if (g_yoshiDemandV) {
+    messageId = g_yoshiDemandV & 0xFF;
+    sp124 = g_yoshiDemandV & 0x2000;
     sp120 = 0;
-    rmonPrintf("yoshiDemand=%x\n", D_hd_code_8036BB14);
-    if (D_hd_code_8036BB14 & 0x8000) {
+    rmonPrintf("yoshiDemand=%x\n", g_yoshiDemandV);
+    if (g_yoshiDemandV & 0x8000) {
       D_hd_code_8036BB1A = -1;
       if (D_hd_code_8036BB18 != -1) {
         sp120 = D_hd_code_802F8BDC[D_hd_code_8036BB18].unk8 & 0x08000000;
       }
-      if ((D_hd_code_8036BB1C == 1) || (sp124 != 0) || (sp120 != 0)) {
-        D_hd_code_8036BB18 = (s16)sp126;
+      if ((D_hd_code_8036BB1C == 1) || sp124 || (sp120 != 0)) {
+        D_hd_code_8036BB18 = (s16)messageId;
         D_hd_code_8036BB1C = 1;
       } else {
-        D_hd_code_8036BB1A = (s16)sp126;
+        D_hd_code_8036BB1A = (s16)messageId;
       }
     }
     if (D_hd_code_8036BB1C != 8) {
       sp130 = 1;
     }
-    D_hd_code_8036BB14 = 0;
+    g_yoshiDemandV = 0;
   }
   if (D_hd_code_8036BB18 == -1) {
     D_hd_code_8036BB18 = D_hd_code_8036BB1A;

@@ -21,19 +21,19 @@ void* func_hd_front_end_80201E80(void) {
   rmonPrintf("restoring from EE memory\n");
   for (sp2F = 0; (sp2F < 0x3C) && (sp28 == NULL); sp2F++) {
     if (!(sp2F & 1)) {
-      osSendMesg(&D_hd_front_end_80219EF8, (void*) ((sp2F << 8) | 0xA | (playerNumber << 0x10) | 0x01000000), 1);
+      osSendMesg(&g_pakMesgQueue, (void*) ((sp2F << 8) | 0xA | (playerNumber << 0x10) | 0x01000000), 1);
       osRecvMesg(&D_hd_front_end_80219F50, &sp28, 1);
     }
     if ((LEVEL_FINISHED(sp2F)) &&
         (sp2F != 0x31) && (sp2F != 0x2F) && (sp2F != 0x26) && (sp28 == NULL)) {
       if (D_hd_code_802E8F94[sp2F].unk0 == 1) {
         *((u64*)pakBuffer) = 0x1234567887654321;
-        osSendMesg(&D_hd_front_end_80219EF8, (void*) ((sp2F << 8) | 0xD | (playerNumber << 0x10) | 0x01000000), 1);
+        osSendMesg(&g_pakMesgQueue, (void*) ((sp2F << 8) | 0xD | (playerNumber << 0x10) | 0x01000000), 1);
         osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
       }
       func_hd_front_end_801F8354(playerNumber);
       D_hd_code_80364EF0[playerNumber][D_hd_code_802E8C44[players[playerNumber].unk92[sp2F]]] = D_hd_code_80364F70[sp2F * 2];
-      osSendMesg(&D_hd_front_end_80219EF8, (void*) ((sp2F << 8) | 9 | (playerNumber << 0x10) | 0x01000000), 1);
+      osSendMesg(&g_pakMesgQueue, (void*) ((sp2F << 8) | 9 | (playerNumber << 0x10) | 0x01000000), 1);
       osRecvMesg(&D_hd_front_end_80219F50, NULL, 1);
         }
   }

@@ -438,7 +438,7 @@ u8 func_hd_code_80261A44(u64 arg0) {
 
     case 0x4000000000000000:
       break;
-    case LEVELS_COMPLETED:
+    case STATE_LEVELS_COMPLETED:
       func_hd_code_80261570(0.0f);
       break;
   }

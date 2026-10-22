@@ -104,7 +104,7 @@ void func_hd_code_80264CB4(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, s32 
   sp1C = 0;
   sp20 = 0;
   g_statsNew.civiliansRescued += arg5;
-  if ((arg5 != 0) && (D_hd_code_802E8BD0 == 0)) {
+  if ((arg5 != 0) && (!g_gamePaused)) {
     func_hd_code_8026AD30(0x48U);
   }
   if (arg3 >= 0xC9) {
